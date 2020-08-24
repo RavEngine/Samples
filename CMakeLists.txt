@@ -3,6 +3,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(RavEngine-AirHockey)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory("RavEngine")
 include_directories("RavEngine/include")
@@ -24,14 +26,9 @@ if (WIN32)
 	if(NOT PX_GENERATE_STATIC_LIBRARIES)
 		add_custom_command(TARGET "${PROJECT_NAME}" POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_directory
-				"${CMAKE_CURRENT_BINARY_DIR}/RavEngine/bin/win.x86_64.vc142.md/$<CONFIGURATION>"
+				"${CMAKE_BINARY_DIR}/RavEngine/bin/win.x86_64.vc142.md/$<CONFIGURATION>"
 				"$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 	endif()
-
-	add_custom_command(TARGET "${PROJECT_NAME}" POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_directory
-		"${CMAKE_CURRENT_BINARY_DIR}/RavEngine/deps/filament/samples/$<CONFIGURATION>"
-		"$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 endif()
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${PROJECT_NAME}")
