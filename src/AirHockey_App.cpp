@@ -13,6 +13,7 @@ void AirHockey::OnStartup(int argc, char** argv)
 	GameplayStatics::VideoSettings.height = 480;
 
 	GameplayStatics::currentWorld = new GameWorld();
+	GameplayStatics::inputManager = new InputSystem();
 }
 
 int AirHockey::OnShutdown()

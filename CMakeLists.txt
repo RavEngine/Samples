@@ -33,4 +33,5 @@ if (WIN32)
 		"${CMAKE_CURRENT_BINARY_DIR}/RavEngine/deps/filament/samples/$<CONFIGURATION>"
 		"$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 endif()
-# link tes
+
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${PROJECT_NAME}")
