@@ -1,14 +1,8 @@
 // HLSL shader version 4.0 (for Direct3D 11/ 12)
 
-static float4x4 wvpMatrix = {
-	{ 1, 0, 0, 0 },
-	{ 0, 1, 0, 0 },
-	{ 0, 0, 1, 0 },
-	{ 0, 0, 0, 1 }
+cbuffer Settings : register(b0) {
+	float4x4 wvpMatrix;
 };
-//cbuffer Settings : register(b0) {
-//	
-//};
 
 struct InputVS
 {
