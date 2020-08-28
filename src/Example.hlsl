@@ -1,8 +1,18 @@
 // HLSL shader version 4.0 (for Direct3D 11/ 12)
 
+static float4x4 wvpMatrix = {
+	{ 1, 0, 0, 0 },
+	{ 0, 1, 0, 0 },
+	{ 0, 0, 1, 0 },
+	{ 0, 0, 0, 1 }
+};
+//cbuffer Settings : register(b0) {
+//	
+//};
+
 struct InputVS
 {
-	float2 position : POSITION;
+	float3 position : POSITION;
 	float3 color : COLOR;
 };
 
@@ -16,7 +26,7 @@ struct OutputVS
 OutputVS VS(InputVS inp)
 {
 	OutputVS outp;
-	outp.position = float4(inp.position, 0, 1);
+	outp.position = mul(wvpMatrix,float4(inp.position, 1));
 	outp.color = inp.color;
 	return outp;
 }
