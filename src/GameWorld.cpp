@@ -13,7 +13,7 @@ GameWorld::GameWorld()
 	Ref<Entity> cube = new Entity();
 	auto staticMesh = cube->AddComponent<StaticMesh>(new StaticMesh());
 	staticMesh->SetMaterial(new Material());
-	cube->transform()->LocalTranslateDelta(vector3(0,0,10));
+	cube->transform()->LocalTranslateDelta(vector3(0,0,-5));
 	Spawn(cube);
 }
 
