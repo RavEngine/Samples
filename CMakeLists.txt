@@ -8,7 +8,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory("RavEngine")
-include_directories("RavEngine/include")
 
 # create the test executable
 file(GLOB TEST_SOURCES "src/*.cpp")
@@ -19,8 +18,7 @@ file(GLOB TEST_CHEADERS "src/*.h")
 add_executable("${PROJECT_NAME}" MACOSX_BUNDLE ${TEST_SOURCES} ${TEST_HEADERS} ${TEST_CHEADERS})
 set_target_properties("${PROJECT_NAME}" PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/src/Info.plist")
 
-
-target_link_libraries("${PROJECT_NAME}" "RavEngine" )
+target_link_libraries("${PROJECT_NAME}" PUBLIC "RavEngine" )
 
 # copy DLLs
 if (WIN32)
