@@ -10,14 +10,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 add_subdirectory("RavEngine")
 
 # create the test executable
-file(GLOB TEST_SOURCES "src/*.cpp")
-file(GLOB TEST_HEADERS "src/*.hpp")
-file(GLOB TEST_CHEADERS "src/*.h")
+file(GLOB TEST_SOURCES "src/*.cpp" "src/*.hpp" "src/*.h")
 
 # creates a mac app if applicable
-add_executable("${PROJECT_NAME}" MACOSX_BUNDLE ${TEST_SOURCES} ${TEST_HEADERS} ${TEST_CHEADERS})
+add_executable("${PROJECT_NAME}" MACOSX_BUNDLE ${TEST_SOURCES})
 set_target_properties("${PROJECT_NAME}" PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/src/Info.plist")
-
 target_link_libraries("${PROJECT_NAME}" PUBLIC "RavEngine" )
 
 # copy DLLs
