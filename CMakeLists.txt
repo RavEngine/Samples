@@ -14,9 +14,9 @@ file(GLOB TEST_SOURCES "src/*.cpp" "src/*.hpp" "src/*.h")
 
 # creates a mac app if applicable
 add_executable("${PROJECT_NAME}" MACOSX_BUNDLE ${TEST_SOURCES})
-set_target_properties("${PROJECT_NAME}" PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/src/Info.plist")
+set_target_properties("${PROJECT_NAME}" PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/src/Info.plist"
+	VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 target_link_libraries("${PROJECT_NAME}" PUBLIC "RavEngine" )
-
 # copy DLLs
 if (WIN32)
 	if(NOT PX_GENERATE_STATIC_LIBRARIES)
