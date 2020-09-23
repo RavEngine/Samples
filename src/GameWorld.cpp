@@ -1,6 +1,7 @@
 #include "GameWorld.hpp"
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/StaticMesh.hpp>
+#include <RavEngine/BuiltinMaterials.hpp>
 
 Ref<Entity> cube = new Entity();
 
@@ -15,7 +16,7 @@ GameWorld::GameWorld()
 
 	
 	auto staticMesh = cube->AddComponent<StaticMesh>(new StaticMesh());
-	staticMesh->SetMaterial(new Material());
+	staticMesh->SetMaterial(Ref<DefaultMaterialInstance>(new DefaultMaterialInstance(new DefaultMaterial())));
 	Spawn(cube);
 }
 
