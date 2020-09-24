@@ -15,7 +15,7 @@ GameWorld::GameWorld()
 	Spawn(cameraActor);
 
 	
-	auto staticMesh = cube->AddComponent<StaticMesh>(new StaticMesh());
+	auto staticMesh = cube->AddComponent<StaticMesh>(new StaticMesh(new MeshAsset()));
 	staticMesh->SetMaterial(Ref<DefaultMaterialInstance>(new DefaultMaterialInstance(new DefaultMaterial())));
 	Spawn(cube);
 }
