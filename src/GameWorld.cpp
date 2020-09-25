@@ -15,7 +15,7 @@ GameWorld::GameWorld()
 	Spawn(cameraActor);
 
 	
-	auto staticMesh = cube->AddComponent<StaticMesh>(new StaticMesh(new MeshAsset()));
+	auto staticMesh = cube->AddComponent<StaticMesh>(new StaticMesh(new MeshAsset("bunny_decimated.obj")));
 	staticMesh->SetMaterial(Ref<DefaultMaterialInstance>(new DefaultMaterialInstance(new DefaultMaterial())));
 	Spawn(cube);
 }
