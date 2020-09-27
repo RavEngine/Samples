@@ -3,34 +3,38 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(RavEngine-AirHockey)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory("RavEngine")
 
-# create the test executable
-file(GLOB TEST_SOURCES "src/*.cpp" "src/*.hpp" "src/*.h")
+project("RavEngine_Samples")
 
-# creates a mac app if applicable
-add_executable("${PROJECT_NAME}" MACOSX_BUNDLE ${TEST_SOURCES})
-set_target_properties("${PROJECT_NAME}" PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/src/Info.plist"
-	VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
-target_link_libraries("${PROJECT_NAME}" PUBLIC "RavEngine" )
-# copy DLLs
-if (WIN32)
-	if(NOT PX_GENERATE_STATIC_LIBRARIES)
-		add_custom_command(TARGET "${PROJECT_NAME}" POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_directory
-				"${CMAKE_BINARY_DIR}/RavEngine/bin/win.x86_64.vc142.md/$<CONFIGURATION>"
-				"$<TARGET_FILE_DIR:${PROJECT_NAME}>")
-	endif()
-endif()
+macro (add_sample sample_dir)
+	# create the test executable
+	SET(APPNAME "RavEngine_Sample_${sample_dir}")
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${PROJECT_NAME}")
+	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h")
 
-# fixup mac bundle
-INSTALL(CODE "
-	include(BundleUtilities)
-	fixup_bundle(\"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${PROJECT_NAME}.app\" \"\" \"\")
-	" COMPONENT Runtime)
+	# creates a mac app if applicable
+	add_executable("${APPNAME}" MACOSX_BUNDLE ${TEST_SOURCES})
+	set_target_properties("${APPNAME}" 
+		PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist"
+		VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>"
+	)
+	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" )
+
+	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
+
+	# fixup mac bundle
+	INSTALL(CODE "
+		include(BundleUtilities)
+		fixup_bundle(\"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.app\" \"\" \"\")
+		" COMPONENT Runtime)
+endmacro()
+
+#startup project	
+#set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${PROJECT_NAME}_Test")
+
+add_sample("AirHockey")
+add_sample("Playground")
