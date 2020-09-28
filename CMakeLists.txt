@@ -26,11 +26,15 @@ macro (add_sample sample_dir)
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 
+	pack_resources("${APPNAME}")
+
 	# fixup mac bundle
-	INSTALL(CODE "
-		include(BundleUtilities)
+	INSTALL(CODE 
+		"include(BundleUtilities)
 		fixup_bundle(\"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.app\" \"\" \"\")
-		" COMPONENT Runtime)
+		" 
+		COMPONENT Runtime
+	)
 endmacro()
 
 #startup project	
@@ -38,3 +42,5 @@ endmacro()
 
 add_sample("AirHockey")
 add_sample("Playground")
+
+add_meshes("RavEngine_Sample_AirHockey" "${CMAKE_CURRENT_SOURCE_DIR}/AirHockey/GameWorld.hpp")
