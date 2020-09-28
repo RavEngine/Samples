@@ -19,6 +19,9 @@ class TestApp : public RavEngine::App{
 			assert(w.get() == nullptr);
 		}
 
+		//load resources
+		RavEngine::App::Resources = new RavEngine::VirtualFilesystem("RavEngine_Sample_Playground_Resources.zip");
+
 		//setup video settings
 		RavEngine::GameplayStatics::VideoSettings.vsync = true;
 		RavEngine::GameplayStatics::VideoSettings.width = 800;
@@ -29,8 +32,6 @@ class TestApp : public RavEngine::App{
 	}
 
 	int OnShutdown() override {
-
-
 		return 0;
 	}
 };
