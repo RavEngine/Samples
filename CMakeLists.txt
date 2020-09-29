@@ -17,7 +17,7 @@ macro (add_sample sample_dir)
 	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h")
 
 	# creates a mac app if applicable
-	add_executable("${APPNAME}" MACOSX_BUNDLE ${TEST_SOURCES})
+	add_executable("${APPNAME}" ${TEST_SOURCES})
 	set_target_properties("${APPNAME}" 
 		PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist"
 		VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>"
