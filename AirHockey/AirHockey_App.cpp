@@ -12,6 +12,8 @@ void AirHockey::OnStartup(int argc, char** argv)
 	GameplayStatics::VideoSettings.width = 800;
 	GameplayStatics::VideoSettings.height = 480;
 
+	App::Resources = new VirtualFilesystem("RavEngine_Sample_AirHockey.zip");
+
 	GameplayStatics::currentWorld = new GameWorld();
 	GameplayStatics::inputManager = new InputManager();
 }

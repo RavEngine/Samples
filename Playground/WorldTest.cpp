@@ -109,8 +109,8 @@ TestWorld::TestWorld() : World() {
 
     Ref<DefaultMaterialInstance> material(new DefaultMaterialInstance(new DefaultMaterial()));
 
-	Ref<MeshAsset> sharedMesh = new MeshAsset("cube.obj");
-	
+    Ref<MeshAsset> sharedMesh = new MeshAsset("cube.obj");
+
     anonymous = new RavEngine::Entity();
     anonymous->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);
     Spawn(anonymous);

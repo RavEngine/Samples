@@ -20,7 +20,7 @@ class TestApp : public RavEngine::App{
 		}
 
 		//load resources
-		RavEngine::App::Resources = new RavEngine::VirtualFilesystem("RavEngine_Sample_Playground_Resources.zip");
+		RavEngine::App::Resources = new RavEngine::VirtualFilesystem("RavEngine_Sample_Playground.zip");
 
 		//setup video settings
 		RavEngine::GameplayStatics::VideoSettings.vsync = true;
