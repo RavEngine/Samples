@@ -26,6 +26,9 @@ macro (add_sample sample_dir)
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 
+	file(GLOB meshes "${sample_dir}/meshes/*.obj")
+	add_meshes("${APPNAME}" "${meshes}")
+
 	pack_resources("${APPNAME}")
 
 	# fixup mac bundle
@@ -43,5 +46,4 @@ endmacro()
 add_sample("AirHockey")
 add_sample("Playground")
 
-add_meshes("RavEngine_Sample_AirHockey" "${CMAKE_CURRENT_SOURCE_DIR}/AirHockey/GameWorld.hpp")
 compile_shader_dir("RavEngine_Sample_Playground" "${CMAKE_CURRENT_SOURCE_DIR}/Playground/shaders")

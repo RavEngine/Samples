@@ -3,24 +3,31 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/BuiltinMaterials.hpp>
 
-Ref<Entity> cube = new Entity();
+Ref<DefaultMaterialInstance> Puck::material;
 
 GameWorld::GameWorld()
 {
 	Ref<Entity> cameraActor = new Entity();
 	cameraActor->AddComponent<CameraComponent>(new CameraComponent())->setActive(true);
-	cameraActor->transform()->LocalTranslateDelta(vector3(0,0,5));
-	//cameraActor->transform()->LocalRotateDelta(vector3(0,glm::radians(30.0),0));
+	cameraActor->transform()->LocalTranslateDelta(vector3(0,5,10));
+	cameraActor->transform()->LocalRotateDelta(vector3(glm::radians(-30.0),0,0));
 
 	Spawn(cameraActor);
+    
+    auto debugMat = Ref<DefaultMaterialInstance>(new DefaultMaterialInstance(Material::Manager::GetMaterialByName("cubes")));
 
-	
-	auto staticMesh = cube->AddComponent<StaticMesh>(new StaticMesh(new MeshAsset("bunny_decimated.obj")));
-	staticMesh->SetMaterial(Ref<DefaultMaterialInstance>(new DefaultMaterialInstance(new DefaultMaterial())));
-	Spawn(cube);
+    //create the table
+	auto tablemesh = hockeytable->AddComponent<StaticMesh>(new StaticMesh(new MeshAsset("HockeyTable.obj")));
+	tablemesh->SetMaterial(debugMat);
+	Spawn(hockeytable);
+    
+    //create the puck
+    puck->transform()->LocalTranslateDelta(vector3(0,2,0));
+    Spawn(puck);
+
 }
 
 void GameWorld::posttick(float f)
 {
-	cube->transform()->LocalRotateDelta(vector3(0, glm::radians(2.0 * f), 0));
+	hockeytable->transform()->LocalRotateDelta(vector3(0, glm::radians(1.0 * f), 0));
 }
