@@ -44,3 +44,4 @@ add_sample("AirHockey")
 add_sample("Playground")
 
 add_meshes("RavEngine_Sample_AirHockey" "${CMAKE_CURRENT_SOURCE_DIR}/AirHockey/GameWorld.hpp")
+compile_shader_dir("${CMAKE_CURRENT_SOURCE_DIR}/Playground/shaders" "RavEngine_Sample_Playground")
