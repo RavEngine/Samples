@@ -4,6 +4,7 @@
 #include <RavEngine/BuiltinMaterials.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/ScriptComponent.hpp>
+#include <RavEngine/Material.hpp>
 
 class BasicScript : public RavEngine::ScriptComponent{
 public:

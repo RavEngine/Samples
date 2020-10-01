@@ -107,7 +107,7 @@ TestWorld::TestWorld() : World() {
 
     player->transform()->LocalTranslateDelta(vector3(0,-10,50));
 
-    Ref<DefaultMaterialInstance> material(new DefaultMaterialInstance(new DefaultMaterial()));
+    Ref<DefaultMaterialInstance> material = new DefaultMaterialInstance(Material::Manager::AccessMaterialOfType<DefaultMaterial>());
 
     Ref<MeshAsset> sharedMesh = new MeshAsset("cube.obj");
 
