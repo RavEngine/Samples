@@ -11,12 +11,7 @@ public:
     Puck(){
         auto puckmesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyPuck.obj")));
         if(material == nullptr){
-            if (RavEngine::Material::Manager::HasMaterialByName("cubes")){
-                material = new RavEngine::DefaultMaterialInstance(RavEngine::Material::Manager::GetMaterialByName("cubes"));
-            }
-            else{
-                material = new RavEngine::DefaultMaterialInstance(new RavEngine::DefaultMaterial());
-            }
+			material = new RavEngine::DefaultMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::DefaultMaterial>());
         }
         puckmesh->SetMaterial(material);
         transform()->SetLocalScale(vector3(0.05,0.05,0.05));

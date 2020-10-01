@@ -14,7 +14,7 @@ GameWorld::GameWorld()
 
 	Spawn(cameraActor);
     
-    auto debugMat = Ref<DefaultMaterialInstance>(new DefaultMaterialInstance(Material::Manager::GetMaterialByName("cubes")));
+	auto debugMat = new DefaultMaterialInstance(Material::Manager::AccessMaterialOfType<DefaultMaterial>());
 
     //create the table
 	auto tablemesh = hockeytable->AddComponent<StaticMesh>(new StaticMesh(new MeshAsset("HockeyTable.obj")));
