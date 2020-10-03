@@ -79,25 +79,26 @@ TestWorld::TestWorld() : World() {
     is->AddActionMap("ResetCam", ControllerButton::SDL_CONTROLLER_BUTTON_START);
     is->AddActionMap("SampleFPS", ControllerButton::SDL_CONTROLLER_BUTTON_Y);
 
+	auto con = CID::C0;
 
 	//bind controls
     auto playerscript = player->Components().GetComponent<PlayerScript>().get();
-	is->BindAxis("MoveForward", playerscript, &PlayerScript::MoveForward);
-	is->BindAxis("MoveRight", playerscript, &PlayerScript::MoveRight);
-	is->BindAxis("MoveUp", playerscript,&PlayerScript::MoveUp);
-	is->BindAxis("LookUp", playerscript,&PlayerScript::LookUp);
-	is->BindAxis("LookRight", playerscript, &PlayerScript::LookRight);
+	is->BindAxis("MoveForward", playerscript, &PlayerScript::MoveForward,con);
+	is->BindAxis("MoveRight", playerscript, &PlayerScript::MoveRight,con);
+	is->BindAxis("MoveUp", playerscript,&PlayerScript::MoveUp,con);
+	is->BindAxis("LookUp", playerscript,&PlayerScript::LookUp,con);
+	is->BindAxis("LookRight", playerscript, &PlayerScript::LookRight,con);
 	
-	is->BindAxis("SpawnTest", this, &TestWorld::SpawnEntities);
-	is->BindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed);
+	is->BindAxis("SpawnTest", this, &TestWorld::SpawnEntities,con);
+	is->BindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed,con);
 	
     //test unbinding
-	is->UnbindAxis("SpawnTest", this, &TestWorld::SpawnEntities);
-	is->UnbindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed);
+	is->UnbindAxis("SpawnTest", this, &TestWorld::SpawnEntities,con);
+	is->UnbindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed,con);
 
-    is->BindAxis("SpawnTest", this, &TestWorld::SpawnEntities);
-    is->BindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed);
-	is->BindAction("SampleFPS",this, &TestWorld::SampleFPS,ActionState::Pressed);
+    is->BindAxis("SpawnTest", this, &TestWorld::SpawnEntities,con);
+    is->BindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed,con);
+	is->BindAction("SampleFPS",this, &TestWorld::SampleFPS,ActionState::Pressed,con);
 	//is->BindAction("Click", click, ActionState::Released);
 	RavEngine::GameplayStatics::inputManager = is;
 	InputManager::SetRelativeMouseMode(true);
