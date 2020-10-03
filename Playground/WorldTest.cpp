@@ -79,7 +79,7 @@ TestWorld::TestWorld() : World() {
     is->AddActionMap("ResetCam", ControllerButton::SDL_CONTROLLER_BUTTON_START);
     is->AddActionMap("SampleFPS", ControllerButton::SDL_CONTROLLER_BUTTON_Y);
 
-	auto con = CID::C0;
+	auto con = CID::ANY;
 
 	//bind controls
     auto playerscript = player->Components().GetComponent<PlayerScript>().get();
