@@ -2,8 +2,12 @@
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/BuiltinMaterials.hpp>
+#include <RavEngine/Tween.hpp>
 
 Ref<DefaultMaterialInstance> Puck::material;
+using namespace std;
+
+Tween t;
 
 GameWorld::GameWorld()
 {
@@ -24,10 +28,14 @@ GameWorld::GameWorld()
     //create the puck
     puck->transform()->LocalTranslateDelta(vector3(0,2,0));
     Spawn(puck);
+	
+	t = Tween([=](decimalType d) -> bool{
+		hockeytable->transform()->SetLocalRotation(vector3(0,d*0.01,0));
+	});
+	t.AddKeyframe(100, 5, tweeny::easing::linear).AddKeyframe(-100, 5, tweeny::easing::quadraticOut);
 
 }
-
 void GameWorld::posttick(float f)
 {
-	hockeytable->transform()->LocalRotateDelta(vector3(0, glm::radians(1.0 * f), 0));
+	t.step(f);
 }
