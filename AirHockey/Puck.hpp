@@ -18,12 +18,11 @@ public:
     virtual ~Puck(){};
     static Ref<RavEngine::DefaultMaterialInstance> material;
     Puck(){
-        auto puckmesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyPuck.obj")));
+        auto puckmesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyPuck.obj",0.03)));
         if(material == nullptr){
 			material = new RavEngine::DefaultMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::DefaultMaterial>());
         }
         puckmesh->SetMaterial(material);
 		AddComponent<BasicScript>(new BasicScript());
-        transform()->SetLocalScale(vector3(0.05,0.05,0.05));
     }
 };
