@@ -38,6 +38,7 @@ GameWorld::GameWorld()
 	t = Tween<decimalType,decimalType>([=](decimalType d, decimalType p) -> bool{
 		cameraBoom->transform()->SetLocalRotation(vector3(glm::radians(d),glm::radians(90.0),0));
 		cameraActor->transform()->SetLocalPosition(vector3(0,p,p));
+		return false;
 	},90,10);
 	t.AddKeyframe(3, tweeny::easing::quadraticOut,0,3.5);
 
