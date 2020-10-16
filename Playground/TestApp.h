@@ -7,7 +7,9 @@
 #include "WorldTest.hpp"
 
 class TestApp : public RavEngine::App{
-	
+public:
+	TestApp() : App("RavEngine_Sample_Playground"){}
+private:
 	void OnStartup(int argc, char** argv) override{
 		{
 			WeakRef<RavEngine::SharedObject> w;
@@ -19,13 +21,10 @@ class TestApp : public RavEngine::App{
 			assert(w.get() == nullptr);
 		}
 
-		//load resources
-		RavEngine::App::Resources = new RavEngine::VirtualFilesystem("RavEngine_Sample_Playground.zip");
-
 		//setup video settings
-		RavEngine::GameplayStatics::VideoSettings.vsync = true;
-		RavEngine::GameplayStatics::VideoSettings.width = 800;
-		RavEngine::GameplayStatics::VideoSettings.height = 480;
+		RavEngine::RenderEngine::VideoSettings.vsync = true;
+		RavEngine::RenderEngine::VideoSettings.width = 800;
+		RavEngine::RenderEngine::VideoSettings.height = 480;
 
 		//create a world
 		RavEngine::GameplayStatics::currentWorld = new TestWorld();
