@@ -39,7 +39,7 @@ GameWorld::GameWorld()
 		cameraBoom->transform()->SetLocalRotation(vector3(glm::radians(d),glm::radians(90.0),0));
 		cameraActor->transform()->SetLocalPosition(vector3(0,p,p));
 	},90,10);
-	t.AddKeyframe(3, tweeny::easing::quadraticOut,0,3.5);
+	t.AddKeyframe(3, QuinticInOutCurve,0,3.5);
 
 }
 void GameWorld::posttick(float f)
