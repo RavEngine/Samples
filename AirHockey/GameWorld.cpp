@@ -37,9 +37,9 @@ GameWorld::GameWorld()
 	
 	t = Tween<decimalType,decimalType>([=](decimalType d, decimalType p){
 		cameraBoom->transform()->SetLocalRotation(vector3(glm::radians(d),glm::radians(90.0),0));
-		cameraActor->transform()->SetLocalPosition(vector3(0,p,p));
-	},90,10);
-	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,3.5);
+		cameraActor->transform()->SetLocalPosition(vector3(0,p,0));
+	},90,15);
+	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,7);
 
 }
 void GameWorld::posttick(float f)
