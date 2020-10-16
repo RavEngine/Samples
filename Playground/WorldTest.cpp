@@ -105,9 +105,8 @@ TestWorld::TestWorld() : World() {
 	
     //spawn player (it will make its camera active)
     Spawn(player);
-
-    player->transform()->LocalTranslateDelta(vector3(0,-10,50));
-
+	ResetCam();
+	
     Ref<DefaultMaterialInstance> material = new DefaultMaterialInstance(Material::Manager::AccessMaterialOfType<DefaultMaterial>());
 
     Ref<MeshAsset> sharedMesh = new MeshAsset("cube.obj");

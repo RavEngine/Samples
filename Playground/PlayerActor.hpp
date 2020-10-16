@@ -47,7 +47,7 @@ public:
 		trans->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
 	}
 
-	virtual void Tick(float scale) {
+	virtual void Tick(float scale) override{
 		dt = scale;
 	}
 };
@@ -57,17 +57,15 @@ public:
 	Ref<PlayerScript> script;
 	PlayerActor() : Entity() {
 		script = AddComponent<PlayerScript>(new PlayerScript());
-	}
-
-	void Start() override {
+		
 		//create a child entity for the camera
 		auto cameraEntity = new Entity();
 		auto cam = cameraEntity->AddComponent<RavEngine::CameraComponent>(new RavEngine::CameraComponent());
 		script->cameraEntity = cameraEntity;
-
+		
 		//set the active camera
 		cam->setActive(true);
-
+		
 		transform()->AddChild(cameraEntity->transform());
 	}
 
