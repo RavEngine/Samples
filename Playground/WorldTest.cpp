@@ -125,15 +125,7 @@ TestWorld::TestWorld() : World() {
     //register the systems that are allowed to run in this World
     //RegisterSystem(Ref<Skate>(new Skate()));
 
-    Ref<PhysicsLinkSystemWrite> plsw = new PhysicsLinkSystemWrite();
-    RegisterSystem(plsw);
-
-    Ref<PhysicsLinkSystemRead> plsr = new PhysicsLinkSystemRead();
-    RegisterSystem(plsr);
-
-    //dynamics world must be set in these so that locks can be managed correctly
-    plsr->dynamicsWorld = Solver->scene;
-    plsw->dynamicsWorld = Solver->scene;
+    InitPhysics();
 
     floorplane = new RavEngine::Entity();
     floorplane->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);

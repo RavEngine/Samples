@@ -5,6 +5,8 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/ScriptComponent.hpp>
 #include <RavEngine/Material.hpp>
+#include <RavEngine/PhysicsCollider.hpp>
+#include <RavEngine/PhysicsBodyComponent.hpp>
 
 class BasicScript : public RavEngine::ScriptComponent{
 public:
@@ -24,5 +26,7 @@ public:
         }
         puckmesh->SetMaterial(material);
 		AddComponent<BasicScript>(new BasicScript());
+        AddComponent<RavEngine::RigidBodyDynamicComponent>(new RavEngine::RigidBodyDynamicComponent());
+        AddComponent<RavEngine::BoxCollider>(new RavEngine::BoxCollider(vector3(0.5,0.5,0.5),new RavEngine::PhysicsMaterial(0.5,0.5,0.5)));
     }
 };

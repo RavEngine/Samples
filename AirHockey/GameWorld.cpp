@@ -23,24 +23,22 @@ GameWorld::GameWorld()
 	
 	Spawn(cameraActor);
 	Spawn(cameraBoom);
-    
-	auto debugMat = new DefaultMaterialInstance(Material::Manager::AccessMaterialOfType<DefaultMaterial>());
-
-    //create the table
-	auto tablemesh = hockeytable->AddComponent<StaticMesh>(new StaticMesh(new MeshAsset("HockeyTable.obj")));
-	tablemesh->SetMaterial(debugMat);
 	Spawn(hockeytable);
     
     //create the puck
     puck->transform()->LocalTranslateDelta(vector3(0,2,0));
     Spawn(puck);
+
+	InitPhysics();
 	
+	//intro animation
 	t = Tween<decimalType,decimalType>([=](decimalType d, decimalType p){
 		cameraBoom->transform()->SetLocalRotation(vector3(glm::radians(d),glm::radians(90.0),0));
 		cameraActor->transform()->SetLocalPosition(vector3(0,p,0));
 	},90,15);
 	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,7);
 
+	puck->Components().GetComponent<RigidBodyDynamicComponent>()->SetLinearVelocity(vector3(10, 7, 0), true);
 }
 void GameWorld::posttick(float f)
 {
