@@ -3,6 +3,7 @@
 #include "RavEngine/GameplayStatics.hpp"
 #include "RavEngine/IInputListener.hpp"
 #include "RavEngine/ScriptComponent.hpp"
+#include <algorithm>
 
 class PlayerActor;
 
@@ -10,7 +11,6 @@ class PlayerActor;
 class PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInputListener {
 public:
 	Ref<RavEngine::Entity> cameraEntity;
-	Ref<RavEngine::Transform> trans;
 	decimalType dt = 0;
 	decimalType movementSpeed = 0.3;
 	decimalType sensitivity = 0.1;
@@ -25,30 +25,33 @@ public:
 
 	void Start() override {
 		Ref<RavEngine::Entity> owner(getOwner());
-		trans = transform();
 		Ref<RavEngine::World>(GetWorld())->Spawn(cameraEntity);
 	}
 
 	void MoveForward(float amt) {
-		trans->LocalTranslateDelta(scaleMovement(amt) * trans->Forward());
+		transform()->LocalTranslateDelta(scaleMovement(amt) * transform()->Forward());
 	}
 	void MoveRight(float amt) {
-		trans->LocalTranslateDelta(scaleMovement(amt) * trans->Right());
+		transform()->LocalTranslateDelta(scaleMovement(amt) * transform()->Right());
 	}
 
 	void MoveUp(float amt) {
-		trans->LocalTranslateDelta(scaleMovement(amt) * trans->Up());
+		transform()->LocalTranslateDelta(scaleMovement(amt) * transform()->Up());
 	}
 
 	void LookUp(float amt) {
 		cameraEntity->transform()->LocalRotateDelta(vector3(scaleRotation(amt), 0, 0));
 	}
 	void LookRight(float amt) {
-		trans->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
+		transform()->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
 	}
 
 	virtual void Tick(float scale) override{
 		dt = scale;
+		//prevent camera from flipping over
+		vector3 rotation = glm::eulerAngles(cameraEntity->transform()->GetLocalRotation());
+		rotation.x = std::clamp(rotation.x, -M_PI/2.0, M_PI/2.0);
+		cameraEntity->transform()->SetLocalRotation(rotation);
 	}
 };
 
