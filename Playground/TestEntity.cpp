@@ -13,6 +13,7 @@
 #include "RavEngine/PhysicsSolver.hpp"
 #include <iostream>
 #include "RavEngine/StaticMesh.hpp"
+#include <RavEngine/Debug.hpp>
 
 using namespace std;
 using namespace physx;
@@ -51,6 +52,7 @@ TestEntity::TestEntity() : Entity(){
 
 void TestEntityController::Tick(float scale) {
 
+	DebugDraw::DrawSphere(transform()->CalculateWorldMatrix(), color, 1);
     //delete entities below y=-30
     if (transform()->GetWorldPosition().y < -30) {
         Destroy();
@@ -59,5 +61,9 @@ void TestEntityController::Tick(float scale) {
 
 void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other)
 {
-    //cout << "hit" << endl;
+	color = 0xFFFFFFFF;
+}
+
+void TestEntityController::OnColliderExit(const WeakRef<PhysicsBodyComponent>& other){
+	color = 0x0000FFFF;
 }

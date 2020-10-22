@@ -16,12 +16,17 @@
 #include "RavEngine/ScriptComponent.hpp"
 #include "RavEngine/BuiltinMaterials.hpp"
 #include <RavEngine/MeshAsset.hpp>
+#include <RavEngine/Common3D.hpp>
 
 class TestEntityController : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor {
 public:
     void Tick(float scale) override;
 
     void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&) override;
+	void OnColliderExit(const WeakRef<RavEngine::PhysicsBodyComponent>&) override;
+	
+private:
+	RavEngine::color_t color = 0x00FFFFFF;
 };
 
 class TestEntity : public RavEngine::Entity, public RavEngine::IPhysicsActor{
