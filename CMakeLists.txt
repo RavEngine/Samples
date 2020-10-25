@@ -27,9 +27,12 @@ macro (add_sample sample_dir)
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 
 	file(GLOB meshes "${sample_dir}/meshes/*.obj")
-	add_meshes("${APPNAME}" "${meshes}")
+	file(GLOB shaders "${sample_dir}/shaders/*.cmake")
 
-	pack_resources("${APPNAME}")
+	pack_resources(TARGET "${APPNAME}" 
+		MESHES ${meshes}
+		SHADERS ${shaders}
+	)
 
 	# fixup mac bundle
 	INSTALL(CODE 
@@ -45,5 +48,3 @@ endmacro()
 
 add_sample("AirHockey")
 add_sample("Playground")
-
-compile_shader_dir("RavEngine_Sample_Playground" "${CMAKE_CURRENT_SOURCE_DIR}/Playground/shaders")
