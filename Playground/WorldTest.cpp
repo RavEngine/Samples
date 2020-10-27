@@ -25,7 +25,8 @@ Ref<RavEngine::Entity> floorplane;
 
 void TestWorld::SpawnEntities(float f) {
     if (f > 0.99) {
-       Spawn(new TestEntity());
+		Ref<TestEntity> e = new TestEntity();
+		Spawn(e);
     }
 }
 

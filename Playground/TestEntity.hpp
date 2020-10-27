@@ -25,6 +25,8 @@ public:
     void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&) override;
 	void OnColliderExit(const WeakRef<RavEngine::PhysicsBodyComponent>&) override;
 	
+	void Start() override;
+	
 private:
 	RavEngine::color_t color = 0x00FFFFFF;
 };
