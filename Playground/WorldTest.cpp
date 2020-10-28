@@ -9,13 +9,13 @@
 #include "RavEngine/System.hpp"
 #include "SkateSystem.h"
 #include "TestEntity.hpp"
-#include "RavEngine/GameplayStatics.hpp"
 #include "RavEngine/PhysicsLinkSystem.hpp"
 #include "RavEngine/PhysicsBodyComponent.hpp"
 #include "RavEngine/StaticMesh.hpp"
 #include "RavEngine/PhysicsMaterial.hpp"
 #include "RavEngine/ScriptSystem.hpp"
 #include "RavEngine/BuiltinMaterials.hpp"
+#include "RavEngine/InputManager.hpp"
 
 using namespace RavEngine;
 using namespace std;
@@ -101,7 +101,7 @@ TestWorld::TestWorld() : World() {
     is->BindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed,con);
 	is->BindAction("SampleFPS",this, &TestWorld::SampleFPS,ActionState::Pressed,con);
 	//is->BindAction("Click", click, ActionState::Released);
-	RavEngine::GameplayStatics::inputManager = is;
+	RavEngine::App::inputManager = is;
 	InputManager::SetRelativeMouseMode(true);
 	
     //spawn player (it will make its camera active)

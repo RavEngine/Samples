@@ -14,7 +14,6 @@
 	#pragma comment(lib, "xinput")
 	#pragma comment(lib,"Ws2_32")
 #endif
-#include "RavEngine/GameplayStatics.hpp"
 #include "TestEntity.hpp"
 #include "TestApp.h"
 

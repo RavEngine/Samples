@@ -1,6 +1,5 @@
 #include "RavEngine/Entity.hpp"
 #include "RavEngine/CameraComponent.hpp"
-#include "RavEngine/GameplayStatics.hpp"
 #include "RavEngine/IInputListener.hpp"
 #include "RavEngine/ScriptComponent.hpp"
 #include <algorithm>

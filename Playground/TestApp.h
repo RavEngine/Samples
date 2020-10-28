@@ -3,7 +3,6 @@
 #include <RavEngine/WeakRef.hpp>
 #include <RavEngine/SharedObject.hpp>
 #include <cassert>
-#include <RavEngine/GameplayStatics.hpp>
 #include "WorldTest.hpp"
 
 class TestApp : public RavEngine::App{
@@ -27,7 +26,7 @@ private:
 		RavEngine::RenderEngine::VideoSettings.height = 480;
 
 		//create a world
-		RavEngine::GameplayStatics::currentWorld = new TestWorld();
+		currentWorld = new TestWorld();
 	}
 
 	int OnShutdown() override {
