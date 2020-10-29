@@ -133,6 +133,6 @@ TestWorld::TestWorld() : World() {
     floorplane->transform()->LocalScaleDelta(vector3(10, 0.5, 10));
     floorplane->transform()->LocalTranslateDelta(vector3(0, -20, 0));
     floorplane->AddComponent<RigidBodyStaticComponent>(new RigidBodyStaticComponent());
-    floorplane->AddComponent<BoxCollider>(new BoxCollider(vector3(10, 0.5, 10), new PhysicsMaterial(0.5,0.5,0.5)));
+    floorplane->AddComponent<BoxCollider>(new BoxCollider(vector3(10, 1, 10), new PhysicsMaterial(0.5,0.5,0.5)));
     Spawn(floorplane);
 };
