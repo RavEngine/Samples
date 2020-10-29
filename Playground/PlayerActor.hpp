@@ -1,3 +1,4 @@
+#pragma once
 #include "RavEngine/Entity.hpp"
 #include "RavEngine/CameraComponent.hpp"
 #include "RavEngine/IInputListener.hpp"
@@ -5,8 +6,6 @@
 #include <algorithm>
 
 class PlayerActor;
-
-
 class PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInputListener {
 public:
 	Ref<RavEngine::Entity> cameraEntity;
@@ -49,7 +48,7 @@ public:
 		dt = scale;
 		//prevent camera from flipping over
 		vector3 rotation = glm::eulerAngles(cameraEntity->transform()->GetLocalRotation());
-		rotation.x = std::clamp(rotation.x, -M_PI/2.0, M_PI/2.0);
+		rotation.x = std::clamp(rotation.x, -RavEngine::PI/2.0, RavEngine::PI /2.0);
 		cameraEntity->transform()->SetLocalRotation(rotation);
 	}
 };

@@ -5,8 +5,7 @@
 //  Copyright © 2020 Ravbug. All rights reserved.
 //
 
-#include "WorldTest.hpp"
-#include <iostream>
+#include "TestApp.h"
 
 #ifdef _WIN32
 	#include <Windows.h>
@@ -14,7 +13,5 @@
 	#pragma comment(lib, "xinput")
 	#pragma comment(lib,"Ws2_32")
 #endif
-#include "TestEntity.hpp"
-#include "TestApp.h"
 
 START_APP(TestApp)
