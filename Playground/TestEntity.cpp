@@ -37,7 +37,7 @@ TestEntity::TestEntity() : Entity(){
     if (sharedMat.isNull()) {
         sharedMat = new PhysicsMaterial(0.5, 0.5, 0.5);
     }
-	AddComponent<CapsuleCollider>(new CapsuleCollider(1,1,sharedMat,vector3(0,0,0), vector3(0,0,PI/2)));
+	AddComponent<CapsuleCollider>(new CapsuleCollider(1,1,sharedMat));
     //AddComponent<BoxCollider>(new BoxCollider(vector3(1, 1, 1),sharedMat));
 	
 	if (sharedMesh.isNull()){
@@ -53,10 +53,8 @@ TestEntity::TestEntity() : Entity(){
 }
 
 void TestEntityController::Tick(float scale) {
-
-	DebugDraw::DrawCapsule(transform()->CalculateWorldMatrix(), color, 1, 2);
-	//DebugDraw::DrawSphere(transform()->CalculateWorldMatrix(), color, 1);
-    //delete entities below y=-30
+	
+	GetEntity()->Components().GetComponent<PhysicsCollider>()->DebugDraw(color);
     if (transform()->GetWorldPosition().y < -30) {
         Destroy();
     }
