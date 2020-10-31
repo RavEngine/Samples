@@ -23,6 +23,7 @@ using namespace RavEngine;
 Ref<RavEngine::PhysicsMaterial> TestEntity::sharedMat;
 Ref<RavEngine::DefaultMaterialInstance> TestEntity::sharedMatInst;
 Ref<MeshAsset> TestEntity::sharedMesh;
+atomic<int> TestEntityController::objectcount;
 
 TestEntity::TestEntity() : Entity(){
 
@@ -57,6 +58,7 @@ void TestEntityController::Tick(float scale) {
 	GetEntity()->Components().GetComponent<PhysicsCollider>()->DebugDraw(color);
     if (transform()->GetWorldPosition().y < -30) {
         Destroy();
+        objectcount--;
     }
 }
 
@@ -71,4 +73,5 @@ void TestEntityController::OnColliderExit(const WeakRef<PhysicsBodyComponent>& o
 
 void TestEntityController::Start(){
 	transform()->SetWorldPosition(vector3(rand()%10-5,rand()%10-5,rand()%10-5));
+    objectcount++;
 }

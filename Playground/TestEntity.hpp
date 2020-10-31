@@ -17,6 +17,7 @@
 #include "RavEngine/BuiltinMaterials.hpp"
 #include <RavEngine/MeshAsset.hpp>
 #include <RavEngine/Common3D.hpp>
+#include <atomic>
 
 class TestEntityController : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor {
 public:
@@ -26,7 +27,7 @@ public:
 	void OnColliderExit(const WeakRef<RavEngine::PhysicsBodyComponent>&) override;
 	
 	void Start() override;
-	
+	static std::atomic<int> objectcount;
 private:
 	RavEngine::color_t color = 0x00FFFFFF;
 };

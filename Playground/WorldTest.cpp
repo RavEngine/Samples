@@ -16,6 +16,7 @@
 #include "RavEngine/ScriptSystem.hpp"
 #include "RavEngine/BuiltinMaterials.hpp"
 #include "RavEngine/InputManager.hpp"
+#include <bgfx/bgfx.h>
 
 using namespace RavEngine;
 using namespace std;
@@ -38,8 +39,11 @@ void TestWorld::ResetCam() {
 void TestWorld::posttick(float fpsScale){
     auto rotation = quaternion(vector3(0, 0, 0.01 * fpsScale));
     anonymous->transform()->LocalRotateDelta(rotation);
-    //anonymous->transform()->LocalScaleDelta(vector3(0.01 * fpsScale,0,0));
     scale = fpsScale;
+
+    bgfx::dbgTextPrintf(0, 1, 0x4f, "FPS: %f", round(App::evalNormal/fpsScale));
+    bgfx::dbgTextPrintf(0, 2, 0x4f, "FPS Scale: %lf", fpsScale);
+    bgfx::dbgTextPrintf(0, 3, 0x4f, "Physics Bodies: %d", TestEntityController::objectcount.load());
 }
 
 TestWorld::TestWorld() : World() {
