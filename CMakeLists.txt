@@ -27,11 +27,13 @@ macro (add_sample sample_dir)
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 
 	file(GLOB meshes "${sample_dir}/meshes/*.obj")
+	file(GLOB textures "${sample_dir}/textures/*")
 	file(GLOB shaders "${sample_dir}/shaders/*.cmake")
 
 	pack_resources(TARGET "${APPNAME}" 
 		MESHES ${meshes}
 		SHADERS ${shaders}
+		TEXTURES ${textures}
 	)
 
 	# fixup mac bundle
