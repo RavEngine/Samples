@@ -3,6 +3,7 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/PhysicsCollider.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
+#include <RavEngine/Texture.hpp>
 
 class Table : public RavEngine::Entity{
 public:
@@ -29,5 +30,6 @@ public:
         AddComponent<RavEngine::BoxCollider>(new RavEngine::BoxCollider(vector3(0.194/2, 2.162/2, 9.877/2), physmat, vector3(xdist, height, 0)));
         AddComponent<RavEngine::BoxCollider>(new RavEngine::BoxCollider(vector3(0.194/2, 2.162/2, 9.877/2), physmat, vector3(-xdist, height, 0)));
 
+		Ref<RavEngine::Texture> t = new RavEngine::Texture("HockeyTable.png");
     }
 };
