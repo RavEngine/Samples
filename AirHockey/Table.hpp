@@ -4,6 +4,7 @@
 #include <RavEngine/PhysicsCollider.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/Texture.hpp>
+#include <RavEngine/BuiltinMaterials.hpp>
 
 class Table : public RavEngine::Entity{
 public:
@@ -11,7 +12,8 @@ public:
     Table(){
         //create the table
         auto tablemesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyTable.obj")));
-        tablemesh->SetMaterial(new RavEngine::DefaultMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::DefaultMaterial>()));
+        Ref<RavEngine::DefaultMaterialInstance> matinst = new RavEngine::DefaultMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::DefaultMaterial>());
+        tablemesh->SetMaterial(matinst);
 
         //low-friction
         Ref<RavEngine::PhysicsMaterial> physmat = new RavEngine::PhysicsMaterial(0.01, 0.01, 0.01);
@@ -31,5 +33,6 @@ public:
         AddComponent<RavEngine::BoxCollider>(new RavEngine::BoxCollider(vector3(0.194/2, 2.162/2, 9.877/2), physmat, vector3(-xdist, height, 0)));
 
 		Ref<RavEngine::Texture> t = new RavEngine::Texture("HockeyTable.png");
+        matinst->SetAlbedoTexture(t);
     }
 };
