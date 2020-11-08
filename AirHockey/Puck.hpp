@@ -28,5 +28,8 @@ public:
 		AddComponent<BasicScript>(new BasicScript());
         AddComponent<RavEngine::RigidBodyDynamicComponent>(new RavEngine::RigidBodyDynamicComponent());
         AddComponent<RavEngine::BoxCollider>(new RavEngine::BoxCollider(vector3(0.5,0.5,0.5),new RavEngine::PhysicsMaterial(0.5,0.5,0.5)));
+		
+		Ref<RavEngine::Texture> t = new RavEngine::Texture("HockeyTable.png");
+		material->SetAlbedoTexture(t);
     }
 };
