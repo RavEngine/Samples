@@ -1,0 +1,1 @@
+./build-mac.sh && ctest -C release

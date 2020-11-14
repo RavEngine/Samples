@@ -47,16 +47,6 @@ void TestWorld::posttick(float fpsScale){
 }
 
 TestWorld::TestWorld() : World() {
-    //weak ref test
-    {
-        WeakRef<SharedObject> weak;
-        {
-            Ref<SharedObject> obj(new SharedObject());
-            weak = obj;
-        }
-        assert(weak.isNull());
-    }
-
 
 	//setup inputs
 	Ref<RavEngine::InputManager> is = new RavEngine::InputManager();

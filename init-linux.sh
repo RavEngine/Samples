@@ -1,1 +1,1 @@
-mkdir -p build && cd build && cmake ..
+mkdir -p build && cd build && cmake -G "Ninja" ..
