@@ -1,1 +1,1 @@
-./build-mac.sh && ctest -C release
+./build-mac.sh && cd build && ctest -C release
