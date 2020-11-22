@@ -23,6 +23,7 @@ public:
         auto puckmesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyPuck.obj",0.03)));
         if(material == nullptr){
 			material = new RavEngine::DefaultMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::DefaultMaterial>());
+			material->SetAlbedoColor({0.2,0.2,0.2,1});
         }
         puckmesh->SetMaterial(material);
 		AddComponent<BasicScript>(new BasicScript());

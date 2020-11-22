@@ -103,6 +103,9 @@ TestWorld::TestWorld() : World() {
 	ResetCam();
 	
     Ref<DefaultMaterialInstance> material = new DefaultMaterialInstance(Material::Manager::AccessMaterialOfType<DefaultMaterial>());
+	
+	Ref<Texture> t = new Texture("youcantrun.png");
+	material->SetAlbedoTexture(t);
 
     Ref<MeshAsset> sharedMesh = new MeshAsset("cube.obj");
 
