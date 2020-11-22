@@ -46,6 +46,9 @@ macro (add_sample sample_dir)
 		TEXTURES ${textures}
 	)
 
+	# strip symbols in release
+	set_target_properties("${APPNAME}"  PROPERTIES LINK_FLAGS_RELEASE -s)
+
 	# fixup mac bundle
 	INSTALL(CODE 
 		"include(BundleUtilities)
