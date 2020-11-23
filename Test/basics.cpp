@@ -25,6 +25,11 @@ int main(int argc, const char** argv) {
         {"SharedObject",&Test_SharedObject}
     };
 
+	if (argc < 2){
+		cerr << "No test provided - use ctest" << endl;
+		return;
+	}
+	
     const std::string test = argv[1];
     if (tests.find(test) != tests.end()) {
        return tests.at(test)();
