@@ -16,6 +16,7 @@
 #include "RavEngine/ScriptSystem.hpp"
 #include "RavEngine/BuiltinMaterials.hpp"
 #include "RavEngine/InputManager.hpp"
+#include "RavEngine/Light.hpp"
 #include <bgfx/bgfx.h>
 
 using namespace RavEngine;
@@ -132,4 +133,11 @@ TestWorld::TestWorld() : World() {
     floorplane->AddComponent<RigidBodyStaticComponent>(new RigidBodyStaticComponent());
     floorplane->AddComponent<BoxCollider>(new BoxCollider(vector3(10, 1, 10), new PhysicsMaterial(0.5,0.5,0.5)));
     Spawn(floorplane);
+	
+	Ref<Entity> dl = new Entity();
+	dl->AddComponent<DirectionalLight>(new DirectionalLight());
+	dl->transform()->LocalRotateDelta(quaternion(1,1,1,1));
+	dl->transform()->LocalTranslateDelta(vector3(0,1,1));
+	Spawn(dl);
+	
 };
