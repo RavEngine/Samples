@@ -27,7 +27,7 @@ int main(int argc, const char** argv) {
 
 	if (argc < 2){
 		cerr << "No test provided - use ctest" << endl;
-		return;
+		return -1;
 	}
 	
     const std::string test = argv[1];
@@ -38,4 +38,5 @@ int main(int argc, const char** argv) {
         cerr << "No test with name: " << test << endl;
         return -1;
     }
+    return 0;
 }
