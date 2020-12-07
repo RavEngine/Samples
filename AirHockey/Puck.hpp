@@ -18,11 +18,11 @@ public:
 class Puck : public RavEngine::Entity{
 public:
     virtual ~Puck(){};
-    static Ref<RavEngine::DefaultMaterialInstance> material;
+    static Ref<RavEngine::PBRMaterialInstance> material;
     Puck(){
         auto puckmesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyPuck.obj",0.03)));
         if(material == nullptr){
-			material = new RavEngine::DefaultMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::DefaultMaterial>());
+			material = new RavEngine::PBRMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
 			material->SetAlbedoColor({0.2,0.2,0.2,1});
         }
         puckmesh->SetMaterial(material);

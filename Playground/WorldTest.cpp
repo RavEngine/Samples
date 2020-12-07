@@ -2,7 +2,7 @@
 //  WorldTest.cpp
 //  RavEngine_Test
 //
-//  Copyright © 2020 Ravbug. All rights reserved.
+//  Copyright © 2020 Ravbug.
 //
 
 #include "WorldTest.hpp"
@@ -103,7 +103,7 @@ TestWorld::TestWorld() : World() {
     Spawn(player);
 	ResetCam();
 	
-    Ref<DefaultMaterialInstance> material = new DefaultMaterialInstance(Material::Manager::AccessMaterialOfType<DefaultMaterial>());
+    Ref<PBRMaterialInstance> material = new PBRMaterialInstance(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 	
 	Ref<Texture> t = new Texture("youcantrun.png");
 	material->SetAlbedoTexture(t);

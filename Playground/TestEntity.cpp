@@ -2,7 +2,7 @@
 //  TestEntity.cpp
 //  RavEngine_Test
 //
-//  Copyright © 2020 Ravbug. All rights reserved.
+//  Copyright © 2020 Ravbug. 
 //
 
 #include "TestEntity.hpp"
@@ -21,7 +21,7 @@ using namespace physx;
 using namespace RavEngine;
 
 Ref<RavEngine::PhysicsMaterial> TestEntity::sharedMat;
-Ref<RavEngine::DefaultMaterialInstance> TestEntity::sharedMatInst;
+Ref<RavEngine::PBRMaterialInstance> TestEntity::sharedMatInst;
 Ref<MeshAsset> TestEntity::sharedMesh;
 atomic<int> TestEntityController::objectcount;
 
@@ -48,7 +48,7 @@ TestEntity::TestEntity() : Entity(){
     //default staticmesh
     auto mesh = AddComponent<StaticMesh>(new StaticMesh(sharedMesh));
     if (sharedMatInst.isNull()) {
-        sharedMatInst = new DefaultMaterialInstance(Material::Manager::AccessMaterialOfType<DefaultMaterial>());
+        sharedMatInst = new PBRMaterialInstance(Material::Manager::AccessMaterialOfType<PBRMaterial>());
     }
     mesh->SetMaterial(sharedMatInst);
 }

@@ -12,7 +12,7 @@ public:
     Table(){
         //create the table
         auto tablemesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyTable.obj")));
-        Ref<RavEngine::DefaultMaterialInstance> matinst = new RavEngine::DefaultMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::DefaultMaterial>());
+        Ref<RavEngine::PBRMaterialInstance> matinst = new RavEngine::PBRMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
         tablemesh->SetMaterial(matinst);
 
         //low-friction

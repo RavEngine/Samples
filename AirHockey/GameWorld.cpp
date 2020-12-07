@@ -4,7 +4,7 @@
 #include <RavEngine/BuiltinMaterials.hpp>
 #include <RavEngine/Tween.hpp>
 
-Ref<DefaultMaterialInstance> Puck::material;
+Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
 
 Tween<decimalType,decimalType> t;

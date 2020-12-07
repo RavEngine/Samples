@@ -2,7 +2,7 @@
 //  TestEntity.hpp
 //  RavEngine_Test
 //
-//  Copyright © 2020 Ravbug. All rights reserved.
+//  Copyright © 2020 Ravbug.
 //
 
 #pragma once
@@ -35,7 +35,7 @@ private:
 class TestEntity : public RavEngine::Entity, public RavEngine::IPhysicsActor{
 protected:
     static Ref<RavEngine::PhysicsMaterial> sharedMat;
-    static Ref<RavEngine::DefaultMaterialInstance> sharedMatInst;
+    static Ref<RavEngine::PBRMaterialInstance> sharedMatInst;
 	static Ref<RavEngine::MeshAsset> sharedMesh;
 public:
     TestEntity();
