@@ -3,6 +3,7 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/BuiltinMaterials.hpp>
 #include <RavEngine/Tween.hpp>
+#include <RavEngine/Light.hpp>
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
@@ -10,6 +11,8 @@ using namespace std;
 Tween<decimalType,decimalType> t;
 
 Ref<Entity> cameraBoom = new Entity();
+
+static Ref<Entity> pointLight;
 
 GameWorld::GameWorld()
 {
@@ -39,6 +42,12 @@ GameWorld::GameWorld()
 	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,7);
 
 	puck->Components().GetComponent<RigidBodyDynamicComponent>()->SetLinearVelocity(vector3(10, 7, 0), true);
+	
+	pointLight = new Entity();
+	pointLight->AddComponent<PointLight>(new PointLight())->radius = 2;
+	pointLight->transform()->LocalTranslateDelta(vector3(0,1,0));
+	Spawn(pointLight);
+	
 }
 void GameWorld::posttick(float f)
 {
