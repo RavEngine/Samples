@@ -10,9 +10,10 @@ using namespace std;
 
 Tween<decimalType,decimalType> t;
 
-Ref<Entity> cameraBoom = new Entity();
+static Ref<Entity> cameraBoom = new Entity();
 
 static Ref<Entity> pointLight;
+static Ref<Entity> pointLight2;
 
 GameWorld::GameWorld()
 {
@@ -45,9 +46,13 @@ GameWorld::GameWorld()
 	
 	pointLight = new Entity();
 	pointLight->AddComponent<PointLight>(new PointLight())->radius = 2;
-	pointLight->transform()->LocalTranslateDelta(vector3(0,1,0));
+	pointLight->transform()->LocalTranslateDelta(vector3(0,1,1));
+    
+    pointLight2 = new Entity();
+    pointLight2->AddComponent<PointLight>(new PointLight())->radius=1.5;
+    pointLight2->transform()->LocalTranslateDelta(vector3(0,1.5,-1));
 	Spawn(pointLight);
-	
+    Spawn(pointLight2);
 }
 void GameWorld::posttick(float f)
 {
