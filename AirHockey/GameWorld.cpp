@@ -15,6 +15,8 @@ static Ref<Entity> cameraBoom = new Entity();
 static Ref<Entity> pointLight;
 static Ref<Entity> pointLight2;
 
+static float currentTime = 0;
+
 GameWorld::GameWorld()
 {
 	Ref<Entity> cameraActor = new Entity();
@@ -56,5 +58,8 @@ GameWorld::GameWorld()
 }
 void GameWorld::posttick(float f)
 {
+	currentTime += f;
 	t.step(f);
+	pointLight->transform()->SetLocalPosition(vector3(0,0,sin(currentTime/50)*5));
+	pointLight2->transform()->SetLocalPosition(vector3(0,0,cos(currentTime/70)*5));
 }
