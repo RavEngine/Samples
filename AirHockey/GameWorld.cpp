@@ -14,6 +14,7 @@ static Ref<Entity> cameraBoom = new Entity();
 
 static Ref<Entity> pointLight;
 static Ref<Entity> pointLight2;
+static Ref<Entity> ambientLight1;
 
 static float currentTime = 0;
 
@@ -55,8 +56,13 @@ GameWorld::GameWorld()
     pointLight2->AddComponent<PointLight>(new PointLight())->Intensity=2;
     pointLight2->transform()->LocalTranslateDelta(vector3(0,1.5,-1));
 	pointLight2->Components().GetComponent<PointLight>()->color = ColorRGBA{1,0.5,0,1};
+	
+	ambientLight1 = new Entity();
+	ambientLight1->AddComponent<AmbientLight>(new AmbientLight())->Intensity=0.4;
+	
 	Spawn(pointLight);
     Spawn(pointLight2);
+	Spawn(ambientLight1);
 }
 void GameWorld::posttick(float f)
 {

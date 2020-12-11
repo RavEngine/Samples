@@ -24,6 +24,7 @@ using namespace std;
 static Ref<RavEngine::Entity> anonymous;
 static Ref<RavEngine::Entity> anonymousChild;
 static Ref<RavEngine::Entity> floorplane;
+static Ref<Entity> ambientLight1;
 static int ct = 0;
 
 void TestWorld::SpawnEntities(float f) {
@@ -148,5 +149,11 @@ TestWorld::TestWorld() : World() {
 	dl->transform()->LocalRotateDelta(quaternion(1,1,1,1));
 	dl->transform()->LocalTranslateDelta(vector3(0,1,1));
 	Spawn(dl);
+	
+	ambientLight1 = new Entity();
+	auto light = ambientLight1->AddComponent<AmbientLight>(new AmbientLight());
+	light->Intensity = 1;
+	light->color = {0.1, 0.2, 0.4};
+	Spawn(ambientLight1);
 	
 };
