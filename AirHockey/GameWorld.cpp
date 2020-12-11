@@ -47,12 +47,14 @@ GameWorld::GameWorld()
 	puck->Components().GetComponent<RigidBodyDynamicComponent>()->SetLinearVelocity(vector3(10, 7, 0), true);
 	
 	pointLight = new Entity();
-	pointLight->AddComponent<PointLight>(new PointLight())->radius = 2;
+	pointLight->AddComponent<PointLight>(new PointLight())->Intensity = 3;
+	pointLight->Components().GetComponent<PointLight>()->color = ColorRGBA{0,0.5,1,1};
 	pointLight->transform()->LocalTranslateDelta(vector3(0,1,1));
     
     pointLight2 = new Entity();
-    pointLight2->AddComponent<PointLight>(new PointLight())->radius=1.5;
+    pointLight2->AddComponent<PointLight>(new PointLight())->Intensity=2;
     pointLight2->transform()->LocalTranslateDelta(vector3(0,1.5,-1));
+	pointLight2->Components().GetComponent<PointLight>()->color = ColorRGBA{1,0.5,0,1};
 	Spawn(pointLight);
     Spawn(pointLight2);
 }
