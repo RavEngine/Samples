@@ -21,15 +21,23 @@
 
 using namespace RavEngine;
 using namespace std;
-Ref<RavEngine::Entity> anonymous;
-Ref<RavEngine::Entity> anonymousChild;
-Ref<RavEngine::Entity> floorplane;
+static Ref<RavEngine::Entity> anonymous;
+static Ref<RavEngine::Entity> anonymousChild;
+static Ref<RavEngine::Entity> floorplane;
+static int ct = 0;
 
 void TestWorld::SpawnEntities(float f) {
     if (f > 0.99) {
 		Ref<TestEntity> e = new TestEntity();
 		Spawn(e);
     }
+//	if (f > 0.99){
+//		for(int i = 0; i < 8; i++){
+//			Ref<Entity> e = new Entity();
+//			Spawn(e);
+//		}
+//		TestEntityController::objectcount+=8;
+//	}
 }
 
 void TestWorld::ResetCam() {
@@ -41,7 +49,7 @@ void TestWorld::posttick(float fpsScale){
     auto rotation = quaternion(vector3(0, 0, 0.01 * fpsScale));
     anonymous->transform()->LocalRotateDelta(rotation);
     scale = fpsScale;
-
+	
     bgfx::dbgTextPrintf(0, 1, 0x4f, "FPS: %f", round(App::evalNormal/fpsScale));
     bgfx::dbgTextPrintf(0, 2, 0x4f, "FPS Scale: %lf", fpsScale);
     bgfx::dbgTextPrintf(0, 3, 0x4f, "Physics Bodies: %d", TestEntityController::objectcount.load());
@@ -105,13 +113,14 @@ TestWorld::TestWorld() : World() {
 	
     Ref<PBRMaterialInstance> material = new PBRMaterialInstance(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 	
-	Ref<Texture> t = new Texture("youcantrun.png");
-	material->SetAlbedoTexture(t);
+//	Ref<Texture> t = new Texture("youcantrun.png");
+//	material->SetAlbedoTexture(t);
 
     Ref<MeshAsset> sharedMesh = new MeshAsset("cube.obj");
 
     anonymous = new RavEngine::Entity();
     anonymous->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);
+	anonymous->AddComponent<PointLight>(new PointLight())->Intensity = 4;
     Spawn(anonymous);
     anonymous->transform()->LocalTranslateDelta(vector3(0, 1, 0));
 
