@@ -145,9 +145,10 @@ TestWorld::TestWorld() : World() {
     Spawn(floorplane);
 	
 	Ref<Entity> dl = new Entity();
-	dl->AddComponent<DirectionalLight>(new DirectionalLight());
+	auto dll = dl->AddComponent<DirectionalLight>(new DirectionalLight());
 	dl->transform()->LocalRotateDelta(quaternion(1,1,1,1));
 	dl->transform()->LocalTranslateDelta(vector3(0,1,1));
+	dll->color = {1,0.5,0};
 	Spawn(dl);
 	
 	ambientLight1 = new Entity();
