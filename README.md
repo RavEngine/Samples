@@ -16,6 +16,7 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
 4. Navigate your terminal into the `RavEngine-Samples` directory, and execute the build script for your system.
    - macOS: `./build-mac.sh`
    - Windows: `build-win.bat`
+   - Linux: `./build-linux.sh`
 5. Navigate your terminal to the `build/release` directory, and run the samples.
 
 Note: There are build scripts for Linux, but they currently do not work.
