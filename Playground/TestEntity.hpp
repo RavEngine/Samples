@@ -29,7 +29,7 @@ public:
 	void Start() override;
 	static std::atomic<int> objectcount;
 private:
-	RavEngine::color_t color = 0x00FFFFFF;
+	std::atomic<int> contactCount;
 };
 
 class TestEntity : public RavEngine::Entity, public RavEngine::IPhysicsActor{

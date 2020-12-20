@@ -54,9 +54,9 @@ TestEntity::TestEntity() : Entity(){
 }
 
 void TestEntityController::Tick(float scale) {
-	
-	GetEntity()->Components().GetComponent<PhysicsCollider>()->DebugDraw(color);
-    if (transform()->GetWorldPosition().y < -30) {
+
+	GetEntity()->Components().GetComponent<PhysicsCollider>()->DebugDraw(contactCount == 0 ? 0x0000FFFF : 0xFFFFFFFF);
+    if (transform()->GetWorldPosition().y < -40) {
         Destroy();
         objectcount--;
     }
@@ -64,11 +64,11 @@ void TestEntityController::Tick(float scale) {
 
 void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other)
 {
-	color = 0xFFFFFFFF;
+	contactCount++;
 }
 
 void TestEntityController::OnColliderExit(const WeakRef<PhysicsBodyComponent>& other){
-	color = 0x0000FFFF;
+	contactCount--;
 }
 
 void TestEntityController::Start(){

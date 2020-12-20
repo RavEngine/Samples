@@ -25,7 +25,10 @@ static Ref<RavEngine::Entity> anonymous;
 static Ref<RavEngine::Entity> anonymousChild;
 static Ref<RavEngine::Entity> floorplane;
 static Ref<Entity> ambientLight1;
+static Ref<Entity> dl;
 static int ct = 0;
+
+float currentTime = 0;
 
 void TestWorld::SpawnEntities(float f) {
     if (f > 0.99) {
@@ -47,6 +50,7 @@ void TestWorld::ResetCam() {
 }
 
 void TestWorld::posttick(float fpsScale){
+	currentTime += fpsScale;
     auto rotation = quaternion(vector3(0, 0, 0.01 * fpsScale));
     anonymous->transform()->LocalRotateDelta(rotation);
     scale = fpsScale;
@@ -54,6 +58,15 @@ void TestWorld::posttick(float fpsScale){
     bgfx::dbgTextPrintf(0, 1, 0x4f, "FPS: %f", round(App::evalNormal/fpsScale));
     bgfx::dbgTextPrintf(0, 2, 0x4f, "FPS Scale: %lf", fpsScale);
     bgfx::dbgTextPrintf(0, 3, 0x4f, "Physics Bodies: %d", TestEntityController::objectcount.load());
+	
+	dl->transform()->LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
+	
+	//floorplane->transform()->SetLocalPosition(anonymousChild->transform()->GetWorldPosition());
+	
+	//floorplane->transform()->SetLocalPosition(vector3(0,-20+sin(currentTime/50)*3,0));
+	
+	//anonymousChild->Components().GetComponent<PhysicsCollider>()->DebugDraw(0xFFFFFFFF);
+
 }
 
 TestWorld::TestWorld() : World() {
@@ -121,20 +134,22 @@ TestWorld::TestWorld() : World() {
 
     anonymous = new RavEngine::Entity();
     anonymous->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);
-	anonymous->AddComponent<PointLight>(new PointLight())->Intensity = 4;
     Spawn(anonymous);
     anonymous->transform()->LocalTranslateDelta(vector3(0, 1, 0));
+	
+	InitPhysics();
 
     anonymousChild = new RavEngine::Entity();
     anonymousChild->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);;
     anonymous->transform()->AddChild(anonymousChild->transform());
-    anonymousChild->transform()->LocalTranslateDelta(vector3(3,0,0));
+    anonymousChild->transform()->LocalTranslateDelta(vector3(17,0,0));
+	anonymousChild->AddComponent<PointLight>(new PointLight())->Intensity = 4;
+	anonymousChild->AddComponent<RigidBodyStaticComponent>(new RigidBodyStaticComponent());
+	anonymousChild->AddComponent<BoxCollider>(new BoxCollider(vector3(1,1,1),new PhysicsMaterial(0.5,0.5,0.5)));
     Spawn(anonymousChild);
 
     //register the systems that are allowed to run in this World
     //RegisterSystem(Ref<Skate>(new Skate()));
-
-    InitPhysics();
 
     floorplane = new RavEngine::Entity();
     floorplane->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);
@@ -142,11 +157,13 @@ TestWorld::TestWorld() : World() {
     floorplane->transform()->LocalTranslateDelta(vector3(0, -20, 0));
     floorplane->AddComponent<RigidBodyStaticComponent>(new RigidBodyStaticComponent());
     floorplane->AddComponent<BoxCollider>(new BoxCollider(vector3(10, 1, 10), new PhysicsMaterial(0.5,0.5,0.5)));
+	anonymous->transform()->AddChild(floorplane->transform());
     Spawn(floorplane);
 	
-	Ref<Entity> dl = new Entity();
+	dl = new Entity();
 	auto dll = dl->AddComponent<DirectionalLight>(new DirectionalLight());
-	dl->transform()->LocalRotateDelta(quaternion(1,1,1,1));
+	auto amt = glm::radians(45.0);
+	dl->transform()->LocalRotateDelta(vector3(amt,0,0));
 	dl->transform()->LocalTranslateDelta(vector3(0,1,1));
 	dll->color = {1,0.5,0};
 	Spawn(dl);
