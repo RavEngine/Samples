@@ -4,6 +4,7 @@
 #include <RavEngine/BuiltinMaterials.hpp>
 #include <RavEngine/Tween.hpp>
 #include <RavEngine/Light.hpp>
+#include "Paddle.hpp"
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
@@ -12,11 +13,11 @@ Tween<decimalType,decimalType> t;
 
 static Ref<Entity> cameraBoom = new Entity();
 
-static Ref<Entity> pointLight;
-static Ref<Entity> pointLight2;
-static Ref<Entity> directionalLight;
+static Ref<Paddle> p1;
 
 static float currentTime = 0;
+
+Ref<PBRMaterialInstance> Paddle::material;
 
 GameWorld::GameWorld()
 {
@@ -33,7 +34,7 @@ GameWorld::GameWorld()
 	Spawn(hockeytable);
     
     //create the puck
-    puck->transform()->LocalTranslateDelta(vector3(0,2,0));
+    puck->transform()->LocalTranslateDelta(vector3(0,3,0));
     Spawn(puck);
 
 	InitPhysics();
@@ -44,32 +45,30 @@ GameWorld::GameWorld()
 		cameraActor->transform()->SetLocalPosition(vector3(0,p,0));
 	},90,15);
 	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,7);
+	
+	Ref<Entity> lightmain = new Entity();
+	auto key = lightmain->AddComponent<DirectionalLight>(new DirectionalLight());
+	key->Intensity = 0.8;
+	key->color = {1,0.6,0.404,1};
+	auto fill = lightmain->AddComponent<AmbientLight>(new AmbientLight());
+	fill->Intensity=0.4;
+	fill->color = {0.7,1,1,1};
+	lightmain->transform()->LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
 
-	puck->Components().GetComponent<RigidBodyDynamicComponent>()->SetLinearVelocity(vector3(10, 7, 0), true);
+	Spawn(lightmain);
 	
-	pointLight = new Entity();
-	pointLight->AddComponent<PointLight>(new PointLight())->Intensity = 1;
-	pointLight->Components().GetComponent<PointLight>()->color = ColorRGBA{0,0.5,1,1};
-    
-    pointLight2 = new Entity();
-    pointLight2->AddComponent<PointLight>(new PointLight())->Intensity=1;
-    pointLight2->transform()->LocalTranslateDelta(vector3(0,3,-1));
-	
-	directionalLight = new Entity();
-	directionalLight->AddComponent<DirectionalLight>(new DirectionalLight())->Intensity=0.4;
-	
-	Spawn(pointLight);
-    Spawn(pointLight2);
-	Spawn(directionalLight);
+	p1 = new Paddle();
+	p1->transform()->LocalTranslateDelta(vector3(0,1.4,1));
+	Spawn(p1);
 }
 void GameWorld::posttick(float f)
 {
 	currentTime += f;
 	t.step(f);
-	pointLight->transform()->SetLocalPosition(vector3(cos(currentTime/50)*3,2,sin(currentTime/50)*5));
-	pointLight2->transform()->SetLocalPosition(vector3(sin(currentTime/70)*3,2,cos(currentTime/70)*5));
 	
-	//directionalLight->transform()->SetWorldRotation(vector3(0,0,glm::radians(currentTime)));
+	p1->Components().GetComponent<CapsuleCollider>()->DebugDraw();
+	puck->Components().GetComponent<PhysicsCollider>()->DebugDraw();
 	
-	directionalLight->transform()->SetLocalRotation(vector3(glm::radians(cos(currentTime/80)*30),0,glm::radians(sin(currentTime/60)*30)));
+	p1->transform()->SetLocalPosition(vector3(sin(currentTime/50)*3,1.4,cos(currentTime/40)*2));
+
 }

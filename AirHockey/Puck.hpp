@@ -28,6 +28,6 @@ public:
         puckmesh->SetMaterial(material);
 		AddComponent<BasicScript>(new BasicScript());
         AddComponent<RavEngine::RigidBodyDynamicComponent>(new RavEngine::RigidBodyDynamicComponent());
-        AddComponent<RavEngine::BoxCollider>(new RavEngine::BoxCollider(vector3(0.5,0.5,0.5),new RavEngine::PhysicsMaterial(0.5,0.5,0.5)));
+		AddComponent<RavEngine::SphereCollider>(new RavEngine::SphereCollider(0.3,new RavEngine::PhysicsMaterial(0.5,0.5,0.5)));
     }
 };
