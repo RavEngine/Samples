@@ -1,1 +1,1 @@
-mkdir -p build && cd build && cmake -G "Xcode" ..
+mkdir -p build && cd build && cmake -Wno-dev -G "Xcode" ..

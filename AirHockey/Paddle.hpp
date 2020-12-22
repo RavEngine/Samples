@@ -17,7 +17,14 @@ public:
 		}
 		mesh->SetMaterial(material);
 		
-		AddComponent<RavEngine::RigidBodyStaticComponent>(new RavEngine::RigidBodyStaticComponent());
-		AddComponent<RavEngine::CapsuleCollider>(new RavEngine::CapsuleCollider(0.5,0.1,new RavEngine::PhysicsMaterial(0.5,0.5,0.5),vector3(0,0,0),vector3(0,0,glm::radians(90.0))));
+		auto dyn = AddComponent<RavEngine::RigidBodyDynamicComponent>(new RavEngine::RigidBodyDynamicComponent());
+		AddComponent<RavEngine::CapsuleCollider>(new RavEngine::CapsuleCollider(0.5,0.1,new RavEngine::PhysicsMaterial(0.3,0.3,1),vector3(0,0.3,0),vector3(0,0,glm::radians(90.0))));
+		
+		dyn->SetMass(2);
+		dyn->SetAxisLock(
+						 RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_X |
+						 RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_Z
+						 //| RavEngine::RigidBodyDynamicComponent::AxisLock::Linear_Y
+						 );
 	}
 };

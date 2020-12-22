@@ -12,8 +12,9 @@ void AirHockey::OnStartup(int argc, char** argv)
 	RenderEngine::VideoSettings.width = 800;
 	RenderEngine::VideoSettings.height = 480;
 
-	currentWorld = new GameWorld();
 	inputManager = new InputManager();
+	
+	currentWorld = new GameWorld();
 }
 
 int AirHockey::OnShutdown()

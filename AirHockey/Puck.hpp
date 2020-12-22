@@ -8,13 +8,6 @@
 #include <RavEngine/PhysicsCollider.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 
-class BasicScript : public RavEngine::ScriptComponent{
-public:
-	void Tick(float scale) override{
-		//puck logic goes here
-	}
-};
-
 class Puck : public RavEngine::Entity{
 public:
     virtual ~Puck(){};
@@ -26,8 +19,11 @@ public:
 			material->SetAlbedoColor({0.2,0.2,0.2,1});
         }
         puckmesh->SetMaterial(material);
-		AddComponent<BasicScript>(new BasicScript());
-        AddComponent<RavEngine::RigidBodyDynamicComponent>(new RavEngine::RigidBodyDynamicComponent());
-		AddComponent<RavEngine::SphereCollider>(new RavEngine::SphereCollider(0.3,new RavEngine::PhysicsMaterial(0.5,0.5,0.5)));
+        auto dyn = AddComponent<RavEngine::RigidBodyDynamicComponent>(new RavEngine::RigidBodyDynamicComponent());
+		AddComponent<RavEngine::SphereCollider>(new RavEngine::SphereCollider(0.3,new RavEngine::PhysicsMaterial(0,0,1)));
+		
+		//prevent puck from falling over
+		dyn->SetAxisLock(RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_X | RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_Z);
+		dyn->SetMass(1.0);
     }
 };

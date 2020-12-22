@@ -5,6 +5,8 @@
 #include <RavEngine/Tween.hpp>
 #include <RavEngine/Light.hpp>
 #include "Paddle.hpp"
+#include "Player.hpp"
+#include <RavEngine/InputManager.hpp>
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
@@ -57,9 +59,20 @@ GameWorld::GameWorld()
 
 	Spawn(lightmain);
 	
+	//inputs
+	Ref<InputManager> is = App::inputManager;
+	is->AddAxisMap("P1MoveUD", SDL_SCANCODE_W,-1);
+	is->AddAxisMap("P1MoveUD", SDL_SCANCODE_S);
+	is->AddAxisMap("P1MoveLR", SDL_SCANCODE_D,-1);
+	is->AddAxisMap("P1MoveLR", SDL_SCANCODE_A);
+	
 	p1 = new Paddle();
-	p1->transform()->LocalTranslateDelta(vector3(0,1.4,1));
+	p1->transform()->LocalTranslateDelta(vector3(0,1.5,1));
+	auto p1s = p1->AddComponent<Player>(new Player());
 	Spawn(p1);
+	
+	is->BindAxis("P1MoveUD", p1s.get(), &Player::MoveUpDown, CID::ANY);
+	is->BindAxis("P1MoveLR", p1s.get(), &Player::MoveLeftRight, CID::ANY);
 }
 void GameWorld::posttick(float f)
 {
@@ -69,6 +82,6 @@ void GameWorld::posttick(float f)
 	p1->Components().GetComponent<CapsuleCollider>()->DebugDraw();
 	puck->Components().GetComponent<PhysicsCollider>()->DebugDraw();
 	
-	p1->transform()->SetLocalPosition(vector3(sin(currentTime/50)*3,1.4,cos(currentTime/40)*2));
+	//p1->transform()->SetLocalPosition(vector3(sin(currentTime/50)*3,1.4,cos(currentTime/40)*2));
 
 }

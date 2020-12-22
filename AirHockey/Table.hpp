@@ -16,10 +16,11 @@ public:
         tablemesh->SetMaterial(matinst);
 
         //low-friction
-        Ref<RavEngine::PhysicsMaterial> physmat = new RavEngine::PhysicsMaterial(0.01, 0.01, 1);
+        Ref<RavEngine::PhysicsMaterial> physmat = new RavEngine::PhysicsMaterial(0, 0, 1);
+		Ref<RavEngine::PhysicsMaterial> floorphysmat = new RavEngine::PhysicsMaterial(0.03, 0.03, 0);	//version for floor that is not bouncy
 
         AddComponent<RavEngine::RigidBodyStaticComponent>(new RavEngine::RigidBodyStaticComponent());
-		AddComponent<RavEngine::BoxCollider>(new RavEngine::BoxCollider(vector3(3, 1.3, 5),physmat));
+		AddComponent<RavEngine::BoxCollider>(new RavEngine::BoxCollider(vector3(3, 1.3, 5),floorphysmat));
 
         constexpr float height = 2.326;
         constexpr float zdist = 5;
