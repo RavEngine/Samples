@@ -19,7 +19,9 @@ public:
 	}
 	
 	virtual void Tick(float scale) override{
-		GetEntity()->Components().GetComponent<RigidBodyDynamicComponent>()->AddForce(glm::normalize(dir) * sensitivity * (decimalType)scale);
+		if (glm::length(dir) > 0.1){
+			GetEntity()->Components().GetComponent<RavEngine::RigidBodyDynamicComponent>()->AddForce(glm::normalize(dir) * sensitivity * (decimalType)scale);
+		}
 		dir.x = dir.z = 0;
 	}
 };

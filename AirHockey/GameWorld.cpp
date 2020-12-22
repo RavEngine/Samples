@@ -4,22 +4,12 @@
 #include <RavEngine/BuiltinMaterials.hpp>
 #include <RavEngine/Tween.hpp>
 #include <RavEngine/Light.hpp>
-#include "Paddle.hpp"
-#include "Player.hpp"
 #include <RavEngine/InputManager.hpp>
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
 
 Tween<decimalType,decimalType> t;
-
-static Ref<Entity> cameraBoom = new Entity();
-
-static Ref<Paddle> p1;
-
-static float currentTime = 0;
-
-Ref<PBRMaterialInstance> Paddle::material;
 
 GameWorld::GameWorld()
 {
@@ -50,7 +40,7 @@ GameWorld::GameWorld()
 	
 	Ref<Entity> lightmain = new Entity();
 	auto key = lightmain->AddComponent<DirectionalLight>(new DirectionalLight());
-	key->Intensity = 0.8;
+	key->Intensity = 1;
 	key->color = {1,0.6,0.404,1};
 	auto fill = lightmain->AddComponent<AmbientLight>(new AmbientLight());
 	fill->Intensity=0.4;
@@ -66,22 +56,60 @@ GameWorld::GameWorld()
 	is->AddAxisMap("P1MoveLR", SDL_SCANCODE_D,-1);
 	is->AddAxisMap("P1MoveLR", SDL_SCANCODE_A);
 	
+	is->AddAxisMap("P2MoveUD", SDL_SCANCODE_UP,-1);
+	is->AddAxisMap("P2MoveUD", SDL_SCANCODE_DOWN);
+	is->AddAxisMap("P2MoveLR", SDL_SCANCODE_RIGHT,-1);
+	is->AddAxisMap("P2MoveLR", SDL_SCANCODE_LEFT);
+	
 	p1 = new Paddle();
-	p1->transform()->LocalTranslateDelta(vector3(0,1.5,1));
+	p1->Components().GetComponent<StaticMesh>()->GetMaterial()->SetAlbedoColor({1,0,0,1});
 	auto p1s = p1->AddComponent<Player>(new Player());
 	Spawn(p1);
 	
+	p2 = new Paddle();
+	p2->Components().GetComponent<StaticMesh>()->GetMaterial()->SetAlbedoColor({0,1,0,1});
+	auto p2s = p2->AddComponent<Player>(new Player());
+	Spawn(p2);
+	
+	//bind inputs
 	is->BindAxis("P1MoveUD", p1s.get(), &Player::MoveUpDown, CID::ANY);
 	is->BindAxis("P1MoveLR", p1s.get(), &Player::MoveLeftRight, CID::ANY);
+	
+	is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
+	is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
+	
+	Reset();
 }
 void GameWorld::posttick(float f)
 {
-	currentTime += f;
 	t.step(f);
 	
-	p1->Components().GetComponent<CapsuleCollider>()->DebugDraw();
-	puck->Components().GetComponent<PhysicsCollider>()->DebugDraw();
-	
-	//p1->transform()->SetLocalPosition(vector3(sin(currentTime/50)*3,1.4,cos(currentTime/40)*2));
+	//if the puck's z position > 6 then the right side must have scored
+	auto pos = puck->transform()->GetWorldPosition();
+	if (pos.z > 6){
+		cout << "Right won!" << endl;
+		p1score++;
+		Reset();
+	}
+	else if (pos.z < -6){
+		cout << "Left won!" << endl;
+		p2score++;
+		Reset();
+		
+	}
+}
 
+void GameWorld::Reset(){
+	puck->transform()->SetWorldPosition(vector3(0,2,0));
+	p1->transform()->SetWorldPosition(vector3(2,2,3));
+	p2->transform()->SetWorldPosition(vector3(-2,2,-3));
+
+	//clear velocities
+	auto zerovel = [](Ref<Entity> e){
+		e->Components().GetComponent<RigidBodyDynamicComponent>()->SetLinearVelocity(vector3(0,0,0), false);
+	};
+	
+	zerovel(p1);
+	zerovel(p2);
+	zerovel(puck);
 }
