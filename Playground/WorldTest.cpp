@@ -28,8 +28,6 @@ static Ref<Entity> ambientLight1;
 static Ref<Entity> dl;
 static int ct = 0;
 
-float currentTime = 0;
-
 void TestWorld::SpawnEntities(float f) {
     if (f > 0.99) {
 		Ref<TestEntity> e = new TestEntity();
@@ -50,7 +48,6 @@ void TestWorld::ResetCam() {
 }
 
 void TestWorld::posttick(float fpsScale){
-	currentTime += fpsScale;
     auto rotation = quaternion(vector3(0, 0, 0.01 * fpsScale));
     anonymous->transform()->LocalRotateDelta(rotation);
     scale = fpsScale;
@@ -60,13 +57,6 @@ void TestWorld::posttick(float fpsScale){
     bgfx::dbgTextPrintf(0, 3, 0x4f, "Physics Bodies: %d", TestEntityController::objectcount.load());
 	
 	dl->transform()->LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
-	
-	//floorplane->transform()->SetLocalPosition(anonymousChild->transform()->GetWorldPosition());
-	
-	//floorplane->transform()->SetLocalPosition(vector3(0,-20+sin(currentTime/50)*3,0));
-	
-	//anonymousChild->Components().GetComponent<PhysicsCollider>()->DebugDraw(0xFFFFFFFF);
-
 }
 
 TestWorld::TestWorld() : World() {

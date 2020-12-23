@@ -39,11 +39,13 @@ macro (add_sample sample_dir)
 	file(GLOB meshes "${sample_dir}/meshes/*.obj")
 	file(GLOB textures "${sample_dir}/textures/*")
 	file(GLOB shaders "${sample_dir}/shaders/*.cmake")
+	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/uis/*.rcss")
 
 	pack_resources(TARGET "${APPNAME}" 
 		MESHES ${meshes}
 		SHADERS ${shaders}
 		TEXTURES ${textures}
+		UIS ${uis}
 	)
 
 	# strip symbols in release

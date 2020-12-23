@@ -5,6 +5,7 @@
 #include <RavEngine/Tween.hpp>
 #include <RavEngine/Light.hpp>
 #include <RavEngine/InputManager.hpp>
+#include <RavEngine/GUI.hpp>
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
@@ -77,6 +78,10 @@ GameWorld::GameWorld()
 	
 	is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
 	is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
+	
+	Ref<Entity> gamegui = new Entity();
+	gamegui->AddComponent<GUIComponent>(new GUIComponent("demo-ui"))->AddDocument("demo.rml");
+	Spawn(gamegui);
 	
 	Reset();
 }
