@@ -79,6 +79,7 @@ GameWorld::GameWorld()
 	is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
 	is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
 	
+	GUIComponent::LoadFont("Roboto","","");
 	Ref<Entity> gamegui = new Entity();
 	gamegui->AddComponent<GUIComponent>(new GUIComponent("demo-ui"))->AddDocument("demo.rml");
 	Spawn(gamegui);
