@@ -63,12 +63,12 @@ GameWorld::GameWorld()
 	is->AddAxisMap("P2MoveLR", SDL_SCANCODE_LEFT);
 	
 	p1 = new Paddle();
-	p1->Components().GetComponent<StaticMesh>()->GetMaterial()->SetAlbedoColor({1,0,0,1});
+	p1->GetComponent<StaticMesh>()->GetMaterial()->SetAlbedoColor({1,0,0,1});
 	auto p1s = p1->AddComponent<Player>(new Player());
 	Spawn(p1);
 	
 	p2 = new Paddle();
-	p2->Components().GetComponent<StaticMesh>()->GetMaterial()->SetAlbedoColor({0,1,0,1});
+	p2->GetComponent<StaticMesh>()->GetMaterial()->SetAlbedoColor({0,1,0,1});
 	auto p2s = p2->AddComponent<Player>(new Player());
 	Spawn(p2);
 	
@@ -111,7 +111,7 @@ void GameWorld::Reset(){
 
 	//clear velocities
 	auto zerovel = [](Ref<Entity> e){
-		e->Components().GetComponent<RigidBodyDynamicComponent>()->SetLinearVelocity(vector3(0,0,0), false);
+		e->GetComponent<RigidBodyDynamicComponent>()->SetLinearVelocity(vector3(0,0,0), false);
 	};
 	
 	zerovel(p1);

@@ -61,7 +61,7 @@ public:
 	 Displays the table's collision shapes as wireframes. Note that in release mode, debug draws are stubbed out.
 	 */
 	void DrawAllDebug(){
-		auto boxes = Components().GetAllComponentsOfType<RavEngine::BoxCollider>();
+		auto boxes = GetAllComponentsOfType<RavEngine::BoxCollider>();
 		for(const auto& box : boxes){
 			box->DebugDraw();
 		}

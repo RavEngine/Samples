@@ -90,7 +90,7 @@ TestWorld::TestWorld() : World() {
 	auto con = CID::ANY;
 
 	//bind controls
-    auto playerscript = player->Components().GetComponent<PlayerScript>().get();
+    auto playerscript = player->GetComponent<PlayerScript>().get();
 	is->BindAxis("MoveForward", playerscript, &PlayerScript::MoveForward,con);
 	is->BindAxis("MoveRight", playerscript, &PlayerScript::MoveRight,con);
 	is->BindAxis("MoveUp", playerscript,&PlayerScript::MoveUp,con);

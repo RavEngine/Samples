@@ -55,7 +55,7 @@ TestEntity::TestEntity() : Entity(){
 
 void TestEntityController::Tick(float scale) {
 
-	GetEntity()->Components().GetComponent<PhysicsCollider>()->DebugDraw(contactCount == 0 ? 0x0000FFFF : 0xFFFFFFFF);
+	GetEntity()->GetComponent<PhysicsCollider>()->DebugDraw(contactCount == 0 ? 0x0000FFFF : 0xFFFFFFFF);
     if (transform()->GetWorldPosition().y < -40) {
         Destroy();
         objectcount--;
