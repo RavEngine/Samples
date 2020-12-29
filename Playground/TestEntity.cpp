@@ -13,7 +13,6 @@
 #include "RavEngine/PhysicsSolver.hpp"
 #include <iostream>
 #include "RavEngine/StaticMesh.hpp"
-#include <RavEngine/Debug.hpp>
 #include <RavEngine/mathtypes.hpp>
 
 using namespace std;
