@@ -6,7 +6,9 @@
 			}
 			p{
 				display: block;
-				background-color: #FF00FFFF
+				background-color: #FF00FFFF;
+				width:100%;
+				text-align:center;
 			}
 			#scoreboard{
 				font-size:80px;

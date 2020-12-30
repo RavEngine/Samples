@@ -94,15 +94,12 @@ void GameWorld::posttick(float f)
 	//if the puck's z position > 6 then the right side must have scored
 	auto pos = puck->transform()->GetWorldPosition();
 	if (pos.z > 6){
-		cout << "Right won!" << endl;
-		p1score++;
+		p2score++;
 		Reset();
 	}
 	else if (pos.z < -6){
-		cout << "Left won!" << endl;
-		p2score++;
+		p1score++;
 		Reset();
-		
 	}
 }
 
@@ -120,4 +117,13 @@ void GameWorld::Reset(){
 	zerovel(p2);
 	zerovel(puck);
 	Scoreboard->SetInnerRML(fmt::format("Score: {} - {}", p1score, p2score).c_str());
+	
+	if (p1score >= numToWin){
+		Scoreboard->SetInnerRML("Player 1 Wins!");
+		App::inputManager = new InputManager();		//this stops inputs
+	}
+	else if (p2score >= numToWin){
+		Scoreboard->SetInnerRML("Player 2 Wins!");
+		App::inputManager = new InputManager();
+	}
 }
