@@ -3,6 +3,7 @@
 #include "Table.hpp"
 #include "Paddle.hpp"
 #include "Player.hpp"
+#include <RavEngine/GUI.hpp>
 
 using namespace RavEngine;
 
@@ -22,6 +23,8 @@ protected:
 	Ref<Paddle> p2;
 
 	int p1score = 0, p2score = 0, numToWin = 3;
+	
+	Rml::Element* Scoreboard = nullptr;
 	
 	void Reset();
 };

@@ -8,24 +8,14 @@
 				display: block;
 				background-color: #FF00FFFF
 			}
-			p2{
-				display:block;
-				font-size: 80px;
-				margin: 20px;
-			}
-			button{
-				background-color: #555555FF;
-				color: black;
-				border: 5px solid #000;
-				border-radius: 5px;
+			#scoreboard{
+				font-size:80px;
 			}
 		</style>
 	</head>
 	<body>
-		<p style="font-size:50px">Hello world!</p>
-		Smaller text
-		<p2>
-			<button>A button!</button>
-		</p2>
+		<p>
+			<span id="scoreboard">Scores:</span>
+		</p>
 	</body>
 </rml>
