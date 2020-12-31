@@ -1,8 +1,22 @@
 #include <RavEngine/SharedObject.hpp>
+#include <RavEngine/CTTI.hpp>
 #include <unordered_map>
 
 using namespace RavEngine;
 using namespace std;
+
+int Test_CTTI(){
+	
+	auto t1 = CTTI<int>;
+	auto t2 = CTTI<float>;
+	auto t3 = CTTI<int>;
+	
+	assert(t1 == t3);
+	assert(t1 != t2);
+	assert(t2 != t3);
+	
+	return 0;
+}
 
 /**
 * Test shared object
@@ -22,9 +36,10 @@ int Test_SharedObject() {
 
 int main(int argc, const char** argv) {
     const unordered_map <string, std::function<int(void)>> tests = {
-        {"SharedObject",&Test_SharedObject}
+        {"SharedObject",&Test_SharedObject},
+		{"CTTI",&Test_CTTI}
     };
-
+	
 	if (argc < 2){
 		cerr << "No test provided - use ctest" << endl;
 		return -1;

@@ -6,9 +6,9 @@
 //
 
 #pragma once
-#include "RavEngine/System.hpp"
-#include "RavEngine/Transform.hpp"
-
+#include <RavEngine/System.hpp>
+#include <RavEngine/Transform.hpp>
+#include <RavEngine/CTTI.hpp>
 /**
  This system simply moves an entity along one axis
  */
@@ -22,7 +22,7 @@ public:
         e->transform()->SetLocalPosition(newPos);
     }
 
-    plf::list<std::type_index> QueryTypes() const override {
-        return { typeid(RavEngine::Transform) };
+	plf::list<RavEngine::ctti_t> QueryTypes() const override {
+		return { RavEngine::CTTI<RavEngine::Transform>() };
     }
 };
