@@ -23,6 +23,6 @@ public:
     }
 
 	plf::list<RavEngine::ctti_t> QueryTypes() const override {
-		return { RavEngine::CTTI<RavEngine::Transform>() };
+		return { RavEngine::CTTI<RavEngine::Transform> };
     }
 };
