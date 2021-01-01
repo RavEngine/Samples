@@ -51,7 +51,7 @@ GameWorld::GameWorld()
 	Spawn(lightmain);
 	
 	//inputs
-	Ref<InputManager> is = App::inputManager;
+	Ref<InputManager> is = new InputManager();
 	is->AddAxisMap("P1MoveUD", SDL_SCANCODE_W,-1);
 	is->AddAxisMap("P1MoveUD", SDL_SCANCODE_S);
 	is->AddAxisMap("P1MoveLR", SDL_SCANCODE_D,-1);
@@ -78,12 +78,14 @@ GameWorld::GameWorld()
 	
 	is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
 	is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
-	
+		
 	Ref<Entity> gamegui = new Entity();
 	auto context = gamegui->AddComponent<GUIComponent>(new GUIComponent("demo-ui"));
 	auto doc = context->AddDocument("demo.rml");
 	Scoreboard = doc->GetElementById("scoreboard");
 	Spawn(gamegui);
+	
+	App::inputManager = is;
 	
 	Reset();
 }

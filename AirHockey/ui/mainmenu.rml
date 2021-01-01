@@ -1,0 +1,44 @@
+<rml>
+    <head>
+        <style>
+        *{
+            font-family: Roboto;
+        }
+        tagline, gamename, button{
+            display:block;
+            text-align:center;
+            width:100%;
+        }
+        header, menu{
+            width:100%;
+            margin: 50px;
+        }
+        tagline, button{
+            font-size:40px;
+        }
+        gamename{
+            font-size:100px;
+        }
+        button{
+            background-color:blue;
+        }
+        button:hover{
+            color:red;
+        }
+        </style> 
+    </head>
+    <body>
+        <header>
+            <tagline>
+                RavEngine
+            </tagline>
+            <gamename>
+                AirHockey
+            </gamename>
+        </header>
+        <menu>
+            <button>Play</button>
+            <button>Quit</button>
+        </menu>
+    </body>
+</rml>

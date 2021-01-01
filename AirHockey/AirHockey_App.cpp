@@ -2,6 +2,7 @@
 #include <RavEngine/World.hpp>
 #include "GameWorld.hpp"
 #include <RavEngine/InputManager.hpp>
+#include "MainMenu.hpp"
 
 using namespace RavEngine;
 
@@ -11,10 +12,8 @@ void AirHockey::OnStartup(int argc, char** argv)
 	RenderEngine::VideoSettings.vsync = true;
 	RenderEngine::VideoSettings.width = 800;
 	RenderEngine::VideoSettings.height = 480;
-
-	inputManager = new InputManager();
 	
-	currentWorld = new GameWorld();
+	currentWorld = new MainMenu();
 }
 
 int AirHockey::OnShutdown()
