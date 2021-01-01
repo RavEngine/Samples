@@ -9,10 +9,18 @@
 using namespace RavEngine;
 
 MainMenu::MainMenu(){
-	Ref<Entity> mainMenu = new Entity();
+	mainMenu = new Entity();
 	
 	auto menu = mainMenu->AddComponent<GUIComponent>(new GUIComponent("main-menu"));
-	menu->AddDocument("mainmenu.rml");
+	auto doc = menu->AddDocument("mainmenu.rml");
+	
+	struct EventListener: public Rml::EventListener{
+		void ProcessEvent(Rml::Event& event) override{
+			App::Quit();
+		}
+	};
+	doc->GetElementById("quitbtn")->AddEventListener("click", new EventListener());
+	
 	Spawn(mainMenu);
 	
 	Ref<InputManager> im = new InputManager();
@@ -30,8 +38,10 @@ MainMenu::MainMenu(){
 }
 
 void MainMenu::LoadGame(){
+	auto gui = mainMenu->GetComponent<GUIComponent>();
+	gui->GetDocument("mainmenu.rml")->Hide();
+	gui->AddDocument("loading.rml");
 	std::thread worker([&]{
-		Debug::Log("Background loading main game");
 		Ref<GameWorld> g = new GameWorld();
 
 		App::DispatchMainThread([=]{

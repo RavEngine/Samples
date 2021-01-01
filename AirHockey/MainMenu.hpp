@@ -8,4 +8,5 @@ public:
 	MainMenu();
 private:
 	void LoadGame();
+	Ref<RavEngine::Entity> mainMenu;
 };

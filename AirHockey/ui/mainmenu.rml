@@ -1,10 +1,8 @@
 <rml>
     <head>
+        <link type="text/rcss" href="style.rcss"></link>
         <style>
-        *{
-            font-family: Roboto;
-        }
-        tagline, gamename, button{
+        tagline, gamename{
             display:block;
             text-align:center;
             width:100%;
@@ -20,7 +18,8 @@
             font-size:100px;
         }
         button{
-            background-color:blue;
+            background-color: #FF00FFFF;
+            display:block;
         }
         button:hover{
             color:red;
@@ -38,7 +37,7 @@
         </header>
         <menu>
             <button>Play</button>
-            <button>Quit</button>
+            <button onclick="exit" id="quitbtn">Quit</button>
         </menu>
     </body>
 </rml>

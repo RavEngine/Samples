@@ -1,9 +1,7 @@
 <rml>
 	<head>
+        <link type="text/rcss" href="style.rcss"></link>
 		<style>
-			*{
-				font-family: Roboto;
-			}
 			p{
 				display: block;
 				background-color: #FF00FFFF;
