@@ -20,9 +20,21 @@
         button{
             background-color: #FF00FFFF;
             display:block;
+            width: 200px;
+            text-align: center;
+            margin:auto;
+            margin-top: 50px;
+            padding: 10px;
+            transition: font-size color 1.6s elastic-out;
         }
         button:hover{
             color:red;
+            font-size: 50px;
+            transition: font-size color 1.6s elastic-out;
+        }
+        button:active{
+            font-size: 45px;
+            transition: font-size color 0.7s elastic-out;
         }
         </style> 
     </head>
@@ -36,7 +48,7 @@
             </gamename>
         </header>
         <menu>
-            <button>Play</button>
+            <button onclick="play" id="playbtn">Play</button>
             <button onclick="exit" id="quitbtn">Quit</button>
         </menu>
     </body>

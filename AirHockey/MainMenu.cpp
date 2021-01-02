@@ -14,12 +14,24 @@ MainMenu::MainMenu(){
 	auto menu = mainMenu->AddComponent<GUIComponent>(new GUIComponent("main-menu"));
 	auto doc = menu->AddDocument("mainmenu.rml");
 	
-	struct EventListener: public Rml::EventListener{
+	struct QuitEventListener: public Rml::EventListener{
 		void ProcessEvent(Rml::Event& event) override{
 			App::Quit();
 		}
 	};
-	doc->GetElementById("quitbtn")->AddEventListener("click", new EventListener());
+	struct StartEventListener: public Rml::EventListener{
+		WeakRef<MainMenu> menu;
+		StartEventListener(const WeakRef<MainMenu>& m) : menu(m) {};
+		void ProcessEvent(Rml::Event& event) override{
+			if (menu){
+				menu.get()->LoadGame();
+			}
+		}
+	};
+	doc->GetElementById("quitbtn")->AddEventListener("click", new QuitEventListener());
+	doc->GetElementById("playbtn")->AddEventListener("click", new StartEventListener(this));
+	
+	InitGUIDebugger();
 	
 	Spawn(mainMenu);
 	
@@ -27,14 +39,17 @@ MainMenu::MainMenu(){
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
 		
-	im->BindAxis("MouseX", menu.get(), &GUIComponent::MouseX, CID::ANY);
-	im->BindAxis("MouseY", menu.get(), &GUIComponent::MouseY, CID::ANY);
+	im->BindAxis("MouseX", menu.get(), &GUIComponent::MouseX, CID::ANY, 0);
+	im->BindAxis("MouseY", menu.get(), &GUIComponent::MouseY, CID::ANY, 0);
 	im->BindAnyAction(menu.get());
 	
 	im->AddActionMap("LoadGame", SDL_SCANCODE_G);
 	im->BindAction("LoadGame", this, &MainMenu::LoadGame,  ActionState::Pressed, CID::ANY);
 	
 	App::inputManager = im;
+	
+	BindGUIDebuggerControls(im);
+	menu->Debug();
 }
 
 void MainMenu::LoadGame(){
