@@ -27,4 +27,5 @@ protected:
 	Rml::Element* Scoreboard = nullptr;
 	
 	void Reset();
+	void GameOver();
 };

@@ -1,3 +1,43 @@
 *{
     font-family: Roboto;
 }
+
+tagline, gamename{
+    display:block;
+    text-align:center;
+    width:100%;
+}
+header, menu{
+    width:100%;
+    margin: 50px;
+}
+tagline, button{
+    font-size:40px;
+}
+tagline{
+    margin-top: 40px;
+}
+gamename{
+    font-size:100px;
+}
+button{
+    background-color: #AAAAAAFF;
+    border: 2px #DDDDDDFF;
+    border-radius: 5px;
+    display:block;
+    width: 200px;
+    text-align: center;
+    margin:auto;
+    margin-top: 50px;
+    padding: 10px;
+    transition: font-size color 1.6s elastic-out;
+}
+button:hover{
+    color:red;
+    font-size: 50px;
+    transition: font-size color 1.6s elastic-out;
+}
+button:active{
+    font-size: 45px;
+    transition: font-size color 0.7s elastic-out;
+}

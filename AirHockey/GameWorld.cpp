@@ -6,6 +6,7 @@
 #include <RavEngine/Light.hpp>
 #include <RavEngine/InputManager.hpp>
 #include <fmt/format.h>
+#include "MainMenu.hpp"
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
@@ -80,7 +81,7 @@ GameWorld::GameWorld()
 	is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
 		
 	Ref<Entity> gamegui = new Entity();
-	auto context = gamegui->AddComponent<GUIComponent>(new GUIComponent("demo-ui"));
+	auto context = gamegui->AddComponent<GUIComponent>(new GUIComponent());
 	auto doc = context->AddDocument("demo.rml");
 	Scoreboard = doc->GetElementById("scoreboard");
 	Spawn(gamegui);
@@ -122,10 +123,52 @@ void GameWorld::Reset(){
 	
 	if (p1score >= numToWin){
 		Scoreboard->SetInnerRML("Player 1 Wins!");
-		App::inputManager = new InputManager();		//this stops inputs
+		GameOver();
 	}
 	else if (p2score >= numToWin){
 		Scoreboard->SetInnerRML("Player 2 Wins!");
-		App::inputManager = new InputManager();
+		GameOver();
 	}
+}
+
+void GameWorld::GameOver(){
+	
+	Ref<Entity> gameOverMenu = new Entity();
+	auto ctx = gameOverMenu->AddComponent<GUIComponent>(new GUIComponent());
+	auto doc = ctx->AddDocument("gameover.rml");
+	
+	struct MenuEventListener: public Rml::EventListener{
+		void ProcessEvent(Rml::Event& event) override{
+			App::DispatchMainThread([=]{
+				App::currentWorld = new MainMenu();
+			});
+		}
+	};
+	struct ReplayEventListener: public Rml::EventListener{
+		bool isLoading = false;
+		void ProcessEvent(Rml::Event& event) override{
+			if (!isLoading){
+				isLoading = true;
+				App::DispatchMainThread([=]{
+					App::currentWorld = new GameWorld();
+				});
+			}
+		}
+	};
+	doc->GetElementById("mainmenu")->AddEventListener("click", new MenuEventListener());
+	doc->GetElementById("replay")->AddEventListener("click", new ReplayEventListener());
+	
+	//create a new input manager to stop game inputs and enable UI inputs
+	Ref<InputManager> im = new InputManager();
+	
+	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
+	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
+	
+	im->BindAxis("MouseX", ctx.get(), &GUIComponent::MouseX, CID::ANY, 0);
+	im->BindAxis("MouseY", ctx.get(), &GUIComponent::MouseY, CID::ANY, 0);
+	im->BindAnyAction(ctx.get());
+	
+	App::inputManager = im;
+
+	Spawn(gameOverMenu);
 }

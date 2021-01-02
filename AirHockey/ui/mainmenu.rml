@@ -1,42 +1,6 @@
 <rml>
     <head>
         <link type="text/rcss" href="style.rcss"></link>
-        <style>
-        tagline, gamename{
-            display:block;
-            text-align:center;
-            width:100%;
-        }
-        header, menu{
-            width:100%;
-            margin: 50px;
-        }
-        tagline, button{
-            font-size:40px;
-        }
-        gamename{
-            font-size:100px;
-        }
-        button{
-            background-color: #FF00FFFF;
-            display:block;
-            width: 200px;
-            text-align: center;
-            margin:auto;
-            margin-top: 50px;
-            padding: 10px;
-            transition: font-size color 1.6s elastic-out;
-        }
-        button:hover{
-            color:red;
-            font-size: 50px;
-            transition: font-size color 1.6s elastic-out;
-        }
-        button:active{
-            font-size: 45px;
-            transition: font-size color 0.7s elastic-out;
-        }
-        </style> 
     </head>
     <body>
         <header>

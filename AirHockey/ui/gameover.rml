@@ -1,0 +1,16 @@
+<rml>
+    <head>
+        <link type="text/rcss" href="style.rcss"></link>
+        <style>
+            menu{
+                margin-top: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <menu>
+            <button onclick="play" id="replay">Replay</button>
+            <button onclick="menu" id="mainmenu">Main Menu</button>
+        </menu>
+    </body>
+</rml>
