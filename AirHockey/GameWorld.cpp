@@ -166,7 +166,7 @@ void GameWorld::GameOver(){
 	
 	im->BindAxis("MouseX", ctx.get(), &GUIComponent::MouseX, CID::ANY, 0);
 	im->BindAxis("MouseY", ctx.get(), &GUIComponent::MouseY, CID::ANY, 0);
-	im->BindAnyAction(ctx.get());
+	im->BindAnyAction<GUIComponent>(ctx.get());
 	
 	App::inputManager = im;
 

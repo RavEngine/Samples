@@ -41,7 +41,7 @@ MainMenu::MainMenu(){
 		
 	im->BindAxis("MouseX", menu.get(), &GUIComponent::MouseX, CID::ANY, 0);
 	im->BindAxis("MouseY", menu.get(), &GUIComponent::MouseY, CID::ANY, 0);
-	im->BindAnyAction(menu.get());
+	im->BindAnyAction<GUIComponent>(menu.get());
 	
 	im->AddActionMap("LoadGame", SDL_SCANCODE_G);
 	im->BindAction("LoadGame", this, &MainMenu::LoadGame,  ActionState::Pressed, CID::ANY);
