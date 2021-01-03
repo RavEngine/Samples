@@ -2,5 +2,5 @@
 
 mkdir build
 cd build
-cmake ..
+cmake -Wno-dev ..
 cd ..
