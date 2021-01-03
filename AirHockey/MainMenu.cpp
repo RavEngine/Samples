@@ -31,7 +31,7 @@ MainMenu::MainMenu(){
 	doc->GetElementById("quitbtn")->AddEventListener("click", new QuitEventListener());
 	doc->GetElementById("playbtn")->AddEventListener("click", new StartEventListener(this));
 	
-	//InitGUIDebugger();
+	InitGUIDebugger();
 	
 	Spawn(mainMenu);
 	
@@ -48,8 +48,8 @@ MainMenu::MainMenu(){
 	
 	App::inputManager = im;
 	
-	//BindGUIDebuggerControls(im);
-	//menu->Debug();
+	BindGUIDebuggerControls(im);
+	menu->Debug();
 }
 
 void MainMenu::LoadGame(){
