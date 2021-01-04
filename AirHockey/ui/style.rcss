@@ -9,35 +9,35 @@ tagline, gamename{
 }
 header, menu{
     width:100%;
-    margin: 50px;
+    margin: 50dp;
 }
 tagline, button{
-    font-size:40px;
+    font-size:40dp;
 }
 tagline{
-    margin-top: 40px;
+    margin-top: 40dp;
 }
 gamename{
-    font-size:100px;
+    font-size:100dp;
 }
 button{
     background-color: #AAAAAAFF;
-    border: 2px #DDDDDDFF;
-    border-radius: 5px;
+    border: 2dp #DDDDDDFF;
+    border-radius: 5dp;
     display:block;
-    width: 200px;
+    width: 200dp;
     text-align: center;
     margin:auto;
-    margin-top: 50px;
-    padding: 10px;
+    margin-top: 50dp;
+    padding: 10dp;
     transition: font-size color 1.6s elastic-out;
 }
 button:hover{
     color:red;
-    font-size: 50px;
+    font-size: 50dp;
     transition: font-size color 1.6s elastic-out;
 }
 button:active{
-    font-size: 45px;
+    font-size: 45dp;
     transition: font-size color 0.7s elastic-out;
 }

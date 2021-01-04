@@ -3,7 +3,7 @@
         <link type="text/rcss" href="style.rcss"></link>
         <style>
             *{
-                font-size: 50px;
+                font-size: 50dp;
             }
         </style>
     </head>

@@ -9,7 +9,7 @@
 				text-align:center;
 			}
 			#scoreboard{
-				font-size:80px;
+				font-size:40dp;
 			}
 		</style>
 	</head>
