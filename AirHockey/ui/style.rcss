@@ -12,7 +12,7 @@ header, menu{
     margin: 50dp;
 }
 tagline, button{
-    font-size:40dp;
+    font-size:30dp;
 }
 tagline{
     margin-top: 40dp;
@@ -25,7 +25,7 @@ button{
     border: 2dp #DDDDDDFF;
     border-radius: 5dp;
     display:block;
-    width: 200dp;
+    max-width: 300dp;
     text-align: center;
     margin:auto;
     margin-top: 50dp;

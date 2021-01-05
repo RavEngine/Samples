@@ -12,8 +12,9 @@
             </gamename>
         </header>
         <menu>
-            <button onclick="play" id="playbtn">Play</button>
-            <button onclick="exit" id="quitbtn">Quit</button>
+            <button onclick="play" id="playsingle">Singleplayer</button>
+            <button onclick="play" id="playmulti">Multiplayer</button>
+            <button onclick="exit" id="quitbtn">Exit Game</button>
         </menu>
     </body>
 </rml>

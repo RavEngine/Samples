@@ -7,11 +7,11 @@
 
 class Paddle : public RavEngine::Entity{
 public:
-	Paddle(){
+	Paddle(const RavEngine::ColorRGBA& color){
 		auto mesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyPaddle.obj",0.5)));
 		
 		Ref<RavEngine::PBRMaterialInstance> material = new RavEngine::PBRMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
-		
+		material->SetAlbedoColor(color);
 		mesh->SetMaterial(material);
 		
 		//PhysX doesn't have a cylinder primitive, so we use a sphere offset upwards and lock the axes
@@ -24,5 +24,9 @@ public:
 						 RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_Z
 						 //| RavEngine::RigidBodyDynamicComponent::AxisLock::Linear_Y
 						 );
+		
+		
+		auto light = AddComponent<RavEngine::PointLight>(new RavEngine::PointLight());
+		light->color = color;
 	}
 };

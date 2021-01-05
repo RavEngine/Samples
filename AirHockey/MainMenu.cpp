@@ -29,7 +29,8 @@ MainMenu::MainMenu(){
 		}
 	};
 	doc->GetElementById("quitbtn")->AddEventListener("click", new QuitEventListener());
-	doc->GetElementById("playbtn")->AddEventListener("click", new StartEventListener(this));
+	doc->GetElementById("playsingle")->AddEventListener("click", new StartEventListener(this));
+	doc->GetElementById("playmulti")->AddEventListener("click", new StartEventListener(this));
 	
 	InitGUIDebugger();
 	

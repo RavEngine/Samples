@@ -46,7 +46,7 @@ GameWorld::GameWorld()
 	key->color = {1,0.6,0.404,1};
 	auto fill = lightmain->AddComponent<AmbientLight>(new AmbientLight());
 	fill->Intensity=0.4;
-	fill->color = {0.7,1,1,1};
+	fill->color = {0,0,1,1};
 	lightmain->transform()->LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
 
 	Spawn(lightmain);
@@ -63,13 +63,11 @@ GameWorld::GameWorld()
 	is->AddAxisMap("P2MoveLR", SDL_SCANCODE_RIGHT,-1);
 	is->AddAxisMap("P2MoveLR", SDL_SCANCODE_LEFT);
 	
-	p1 = new Paddle();
-	p1->GetComponent<StaticMesh>()->GetMaterial()->SetAlbedoColor({1,0,0,1});
+	p1 = new Paddle({1,0,0,1});
 	auto p1s = p1->AddComponent<Player>(new Player());
 	Spawn(p1);
 	
-	p2 = new Paddle();
-	p2->GetComponent<StaticMesh>()->GetMaterial()->SetAlbedoColor({0,1,0,1});
+	p2 = new Paddle({0,1,0,1});
 	auto p2s = p2->AddComponent<Player>(new Player());
 	Spawn(p2);
 	

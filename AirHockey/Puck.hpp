@@ -7,6 +7,8 @@
 #include <RavEngine/Material.hpp>
 #include <RavEngine/PhysicsCollider.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
+#include <RavEngine/ChildEntityComponent.hpp>
+#include <RavEngine/Light.hpp>
 
 class Puck : public RavEngine::Entity{
 public:
@@ -25,5 +27,16 @@ public:
 		//prevent puck from falling over
 		dyn->SetAxisLock(RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_X | RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_Z);
 		dyn->SetMass(1.0);
+		
+		Ref<Entity> lightEntity = new Entity();
+		
+		AddComponent<RavEngine::ChildEntityComponent>(new RavEngine::ChildEntityComponent(lightEntity));
+		
+		auto light = lightEntity->AddComponent<RavEngine::PointLight>(new RavEngine::PointLight());
+		light->color = {0,0,1,1};
+		
+		transform()->AddChild(lightEntity->transform());
+		
+		lightEntity->transform()->LocalTranslateDelta(vector3(0,1,0));
     }
 };
