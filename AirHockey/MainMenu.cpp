@@ -32,7 +32,6 @@ MainMenu::MainMenu(){
 	doc->GetElementById("playsingle")->AddEventListener("click", new StartEventListener(this));
 	doc->GetElementById("playmulti")->AddEventListener("click", new StartEventListener(this));
 	
-	InitGUIDebugger();
 	
 	Spawn(mainMenu);
 	
@@ -49,7 +48,6 @@ MainMenu::MainMenu(){
 	
 	App::inputManager = im;
 	
-	BindGUIDebuggerControls(im);
 	menu->Debug();
 }
 

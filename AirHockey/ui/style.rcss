@@ -34,10 +34,11 @@ button{
 }
 button:hover{
     color:red;
-    font-size: 50dp;
+    font-size: 35dp;
     transition: font-size color 1.6s elastic-out;
 }
 button:active{
-    font-size: 45dp;
+    font-size: 32dp;
+    color:darkred;
     transition: font-size color 0.7s elastic-out;
 }
