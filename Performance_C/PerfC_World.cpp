@@ -4,23 +4,26 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/Light.hpp>
 #include <RavEngine/ChildEntityComponent.hpp>
-#include "Systems.hpp"
+#include <RavEngine/InputManager.hpp>
+#include <RavEngine/App.hpp>
+#include <fmt/format.h>
 
 using namespace RavEngine;
 using namespace std;
 
 std::array<Ref<MeshAsset>,PerfC_World::num_meshes> PerfC_World::meshes;
+std::array<Ref<Texture>,PerfC_World::num_textures> PerfC_World::textures;
 
 static std::random_device rd; // obtain a random number from hardware
 static std::mt19937 gen(rd()); // seed the generator
 static std::uniform_int_distribution<> rng(-40, 40);
-static std::uniform_int_distribution<> meshrng(0, PerfC_World::num_meshes);
-static std::uniform_real_distribution<> spinrng(glm::radians(-2.0), glm::radians(2.0));
-static std::uniform_real_distribution<> colorrng(0,1);
-
+static std::uniform_int_distribution<> meshrng(0, PerfC_World::num_meshes - 1);
+static std::uniform_int_distribution<> texturerng(0,PerfC_World::num_textures - 1);
+static std::uniform_real_distribution<> spinrng(glm::radians(-1.0), glm::radians(1.0));
+static std::uniform_real_distribution<> colorrng(0.5,1);
 
 struct DemoObject : public RavEngine::Entity{
-	DemoObject(){
+	DemoObject(bool isLight = false){
 		Ref<Entity> child = new Entity();
 		
 		AddComponent<ChildEntityComponent>(new ChildEntityComponent(child));
@@ -28,7 +31,16 @@ struct DemoObject : public RavEngine::Entity{
 		
 		auto mesh = child->AddComponent<StaticMesh>(new StaticMesh(PerfC_World::meshes[meshrng(gen)]));
 		Ref<PBRMaterialInstance> inst = new PBRMaterialInstance(Material::Manager::AccessMaterialOfType<PBRMaterial>());
-		inst->SetAlbedoColor({(float)colorrng(gen),(float)colorrng(gen),(float)colorrng(gen),1});
+		
+		if (!isLight){
+			inst->SetAlbedoColor({(float)colorrng(gen),(float)colorrng(gen),(float)colorrng(gen),1});
+			inst->SetAlbedoTexture(PerfC_World::textures[texturerng(gen)]);
+		}
+		else{
+			auto light = child->AddComponent<PointLight>(new PointLight());
+			inst->SetAlbedoColor({1,1,1,1});
+			light->Intensity = 5;
+		}
 		mesh->SetMaterial(inst);
 		
 		transform()->AddChild(child->transform());
@@ -46,7 +58,6 @@ PerfC_World::PerfC_World(){
 	meshes[3] = new MeshAsset("cylinder.obj");
 	
 	Ref<Camera> cam = new Camera();
-	cam->transform()->LocalTranslateDelta(vector3(0,0,50));
 	
 	Spawn(cam);
 	
@@ -57,16 +68,77 @@ PerfC_World::PerfC_World(){
 	auto dl = lightEntity->AddComponent<DirectionalLight>(new DirectionalLight());
 	dl->color = {0.7,1,1,1};
 	
+	//load textures
+	for(int i = 0; i < textures.size(); i++){
+		textures[i] = new Texture("tx2.png");
+	}
 	
-	for(int i = 0; i < 20; i++){
+	//spawn the polygons
+	for(int i = 0; i < 1000; i++){
 		Spawn(new DemoObject());
+	}
+	
+	//spawn the lights
+	for(int i = 0; i < 5; i++){
+		Spawn(new DemoObject(true));
 	}
 	
 	Spawn(lightEntity);
 	
-	RegisterSystem<SpinSystem>(new SpinSystem());
+	spinsys = new SpinSystem();
+	
+	RegisterSystem<SpinSystem>(spinsys);
+	
+	//bind inputs
+	Ref<InputManager> im = new InputManager();
+	im->AddAxisMap("ZOOM", SDL_SCANCODE_UP);
+	im->AddAxisMap("ZOOM", SDL_SCANCODE_DOWN, -1);
+	im->AddAxisMap("ROTATE_Y", SDL_SCANCODE_A, -1);
+	im->AddAxisMap("ROTATE_Y", SDL_SCANCODE_D);
+	im->AddAxisMap("ROTATE_X", SDL_SCANCODE_W, -1);
+	im->AddAxisMap("ROTATE_X", SDL_SCANCODE_S);
+	
+	im->AddAxisMap("ROTATE_Y", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
+	im->AddAxisMap("ROTATE_X", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTX);
+	im->AddAxisMap("ZOOM", ControllerAxis::SDL_CONTROLLER_AXIS_RIGHTY);
+
+	auto player = cam->GetComponent<Player>();
+	
+	im->BindAxis("ZOOM", player.get(), &Player::Zoom, CID::ANY);
+	im->BindAxis("ROTATE_Y", player.get(), &Player::RotateLR, CID::ANY);
+	im->BindAxis("ROTATE_X", player.get(), &Player::RotateUD, CID::ANY);
+	
+	App::inputManager = im;
+	
+	//create HUD
+	Ref<Entity> hudentity = new Entity();
+	auto hud = hudentity->AddComponent<GUIComponent>(new GUIComponent());
+	auto doc = hud->AddDocument("main.rml");
+	fpslabel = doc->GetElementById("fps");
+	
+	struct PauseEvtListener : public Rml::EventListener{
+		
+		WeakRef<SpinSystem> spinsys;
+		PauseEvtListener(Ref<SpinSystem> s) : spinsys(s){}
+		
+		void ProcessEvent(Rml::Event& evt) override{
+			spinsys.get()->paused = !spinsys.get()->paused;
+		}
+	};
+	
+	doc->GetElementById("pause")->AddEventListener("click", new PauseEvtListener(spinsys));
+	
+	Spawn(hudentity);
+	
+	im->BindAnyAction<GUIComponent>(hud);
+	
+	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
+	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
+	
+	im->BindAxis("MouseX", hud.get(), &GUIComponent::MouseX, CID::ANY,0);
+	im->BindAxis("MouseY", hud.get(), &GUIComponent::MouseY, CID::ANY,0);
 }
 
 void PerfC_World::posttick(float scale){
-	
+	fpslabel->SetInnerRML(fmt::format("FPS: {}",round(App::evalNormal/scale)));
 }
