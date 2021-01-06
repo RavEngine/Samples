@@ -86,9 +86,11 @@ PerfC_World::PerfC_World(){
 	
 	lightEntity = new Entity();
 	auto al = lightEntity->AddComponent<AmbientLight>(new AmbientLight());
+	al->Intensity = 0.3;
 	
 	auto dl = lightEntity->AddComponent<DirectionalLight>(new DirectionalLight());
 	dl->color = {0.7,1,1,1};
+	dl->Intensity = 0.5;
 	
 	//load textures
 	Debug::Log("Loading {} textures", textures.size());
@@ -108,7 +110,6 @@ PerfC_World::PerfC_World(){
 	}
 	
 	Spawn(lightEntity);
-	ToggleFullbright();
 	
 	spinsys = new SpinSystem();
 	
