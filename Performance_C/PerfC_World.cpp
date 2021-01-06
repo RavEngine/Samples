@@ -6,6 +6,7 @@
 #include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/App.hpp>
+#include <RavEngine/BuiltinMaterials.hpp>
 #include <fmt/format.h>
 
 using namespace RavEngine;
@@ -13,6 +14,7 @@ using namespace std;
 
 std::array<Ref<MeshAsset>,PerfC_World::num_meshes> PerfC_World::meshes;
 std::array<Ref<Texture>,PerfC_World::num_textures> PerfC_World::textures;
+bool PerfC_World::TexturesEnabled = true;
 
 static std::random_device rd; // obtain a random number from hardware
 static std::mt19937 gen(rd()); // seed the generator
@@ -22,6 +24,26 @@ static std::uniform_int_distribution<> texturerng(0,PerfC_World::num_textures - 
 static std::uniform_real_distribution<> spinrng(glm::radians(-1.0), glm::radians(1.0));
 static std::uniform_real_distribution<> colorrng(0.5,1);
 
+struct DemoMaterialInstance : public RavEngine::PBRMaterialInstance{
+
+	DemoMaterialInstance(Ref<PBRMaterial> m) : PBRMaterialInstance(m){}
+	
+	void DrawHook() override {
+		if (albedo.isNull()) {
+			albedo = TextureManager::defaultTexture;
+		}
+
+		if (PerfC_World::TexturesEnabled){
+			albedo->Bind(0, mat->albedoTxUniform);
+		}
+		else{
+			TextureManager::defaultTexture->Bind(0, mat->albedoTxUniform);
+		}
+		
+		mat->albedoColorUniform.SetValues(&color, 1);
+	}
+};
+
 struct DemoObject : public RavEngine::Entity{
 	DemoObject(bool isLight = false){
 		Ref<Entity> child = new Entity();
@@ -30,7 +52,7 @@ struct DemoObject : public RavEngine::Entity{
 		AddComponent<SpinComponent>(new SpinComponent(vector3(spinrng(gen)/3,spinrng(gen)/3,spinrng(gen)/3)));
 		
 		auto mesh = child->AddComponent<StaticMesh>(new StaticMesh(PerfC_World::meshes[meshrng(gen)]));
-		Ref<PBRMaterialInstance> inst = new PBRMaterialInstance(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		Ref<DemoMaterialInstance> inst = new DemoMaterialInstance(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 		
 		if (!isLight){
 			inst->SetAlbedoColor({(float)colorrng(gen),(float)colorrng(gen),(float)colorrng(gen),1});
@@ -70,7 +92,7 @@ PerfC_World::PerfC_World(){
 	
 	//load textures
 	for(int i = 0; i < textures.size(); i++){
-		textures[i] = new Texture("tx2.png");
+		textures[i] = new Texture(fmt::format("tx{}.png",i+1));
 	}
 	
 	//spawn the polygons
@@ -126,7 +148,14 @@ PerfC_World::PerfC_World(){
 		}
 	};
 	
+	struct ToggleTxEvtListener : public Rml::EventListener{
+		void ProcessEvent(Rml::Event& evt) override{
+			PerfC_World::TexturesEnabled = !PerfC_World::TexturesEnabled;
+		}
+	};
+	
 	doc->GetElementById("pause")->AddEventListener("click", new PauseEvtListener(spinsys));
+	doc->GetElementById("toggletex")->AddEventListener("click", new ToggleTxEvtListener());
 	
 	Spawn(hudentity);
 	

@@ -16,8 +16,10 @@ public:
 	static constexpr size_t num_meshes = 4;
 	static std::array<Ref<RavEngine::MeshAsset>,num_meshes> meshes;
 	
-	static constexpr size_t num_textures = 1;
+	static constexpr size_t num_textures = 114;
 	static std::array<Ref<RavEngine::Texture>, num_textures> textures;
+	
+	static bool TexturesEnabled;
 	
 protected:
 
