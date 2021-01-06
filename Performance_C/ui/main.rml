@@ -7,6 +7,7 @@
             <p id="fps">FPS:</p>
             <button id="pause" onclick="pausevt">Pause Animation</button>
             <button id="toggletex" onclick="toggletex">Toggle Textures</button>
+            <button id="toggleLighting" onclick="togglelight">Toggle Lighting</button>
         </main>
     </body>
 </rml>

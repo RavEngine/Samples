@@ -101,7 +101,7 @@ PerfC_World::PerfC_World(){
 	}
 	
 	//spawn the lights
-	for(int i = 0; i < 2; i++){
+	for(int i = 0; i < 3; i++){
 		Spawn(new DemoObject(true));
 	}
 	
@@ -154,8 +154,32 @@ PerfC_World::PerfC_World(){
 		}
 	};
 	
+	struct ToggleLightListener : public Rml::EventListener{
+		WeakRef<PerfC_World> world;
+		
+		ToggleLightListener(WeakRef<PerfC_World> w) : world(w){}
+		
+		void ProcessEvent(Rml::Event& evt) override{
+			if(world){
+				Ref<PerfC_World> owning(world);
+				owning->fullbright = !owning->fullbright;
+				
+				auto dls = owning->GetAllComponentsOfTypeFastPath<AmbientLight>();
+				auto als = owning->GetAllComponentsOfTypeFastPath<DirectionalLight>();
+				
+				for(Ref<DirectionalLight> dl : dls){
+					dl->Intensity = owning->fullbright ? 0.7 : 0.2;
+				}
+				for(Ref<AmbientLight> al : als){
+					al->Intensity = owning->fullbright ? 1 : 0.2;
+				}
+			}
+		}
+	};
+	
 	doc->GetElementById("pause")->AddEventListener("click", new PauseEvtListener(spinsys));
 	doc->GetElementById("toggletex")->AddEventListener("click", new ToggleTxEvtListener());
+	doc->GetElementById("toggleLighting")->AddEventListener("click", new ToggleLightListener(this));
 	
 	Spawn(hudentity);
 	

@@ -21,6 +21,8 @@ public:
 	
 	static bool TexturesEnabled;
 	
+	bool fullbright = false;
+	
 protected:
 
 	Rml::Element* fpslabel = nullptr;
