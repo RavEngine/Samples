@@ -8,6 +8,7 @@
 #include <RavEngine/App.hpp>
 #include <RavEngine/BuiltinMaterials.hpp>
 #include <fmt/format.h>
+#include <RavEngine/Debug.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -85,16 +86,17 @@ PerfC_World::PerfC_World(){
 	
 	lightEntity = new Entity();
 	auto al = lightEntity->AddComponent<AmbientLight>(new AmbientLight());
-	al->Intensity = 0.3;
 	
 	auto dl = lightEntity->AddComponent<DirectionalLight>(new DirectionalLight());
 	dl->color = {0.7,1,1,1};
 	
 	//load textures
+	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
 		textures[i] = new Texture(fmt::format("tx{}.png",i+1));
 	}
 	
+	Debug::Log("Loading {} objects", num_objects);
 	//spawn the polygons
 	for(int i = 0; i < 3000; i++){
 		Spawn(new DemoObject());
@@ -106,6 +108,7 @@ PerfC_World::PerfC_World(){
 	}
 	
 	Spawn(lightEntity);
+	ToggleFullbright();
 	
 	spinsys = new SpinSystem();
 	
@@ -120,9 +123,9 @@ PerfC_World::PerfC_World(){
 	im->AddAxisMap("ROTATE_X", SDL_SCANCODE_W, -1);
 	im->AddAxisMap("ROTATE_X", SDL_SCANCODE_S);
 	
-	im->AddAxisMap("ROTATE_Y", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
-	im->AddAxisMap("ROTATE_X", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTX);
-	im->AddAxisMap("ZOOM", ControllerAxis::SDL_CONTROLLER_AXIS_RIGHTY);
+	im->AddAxisMap("ROTATE_Y", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTX);
+	im->AddAxisMap("ROTATE_X", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
+	im->AddAxisMap("ZOOM", ControllerAxis::SDL_CONTROLLER_AXIS_RIGHTY,-1);
 
 	auto player = cam->GetComponent<Player>();
 	
@@ -138,19 +141,24 @@ PerfC_World::PerfC_World(){
 	auto doc = hud->AddDocument("main.rml");
 	fpslabel = doc->GetElementById("fps");
 	
+	//button event listeners
 	struct PauseEvtListener : public Rml::EventListener{
 		
-		WeakRef<SpinSystem> spinsys;
-		PauseEvtListener(Ref<SpinSystem> s) : spinsys(s){}
+		WeakRef<PerfC_World> world;
+		PauseEvtListener(WeakRef<PerfC_World> s) : world(s){}
 		
 		void ProcessEvent(Rml::Event& evt) override{
-			spinsys.get()->paused = !spinsys.get()->paused;
+			world.get()->TogglePause();
 		}
 	};
 	
 	struct ToggleTxEvtListener : public Rml::EventListener{
+		
+		WeakRef<PerfC_World> world;
+		ToggleTxEvtListener(WeakRef<PerfC_World> w) : world(w){}
+		
 		void ProcessEvent(Rml::Event& evt) override{
-			PerfC_World::TexturesEnabled = !PerfC_World::TexturesEnabled;
+			world.get()->ToggleTextures();
 		}
 	};
 	
@@ -161,37 +169,47 @@ PerfC_World::PerfC_World(){
 		
 		void ProcessEvent(Rml::Event& evt) override{
 			if(world){
-				Ref<PerfC_World> owning(world);
-				owning->fullbright = !owning->fullbright;
-				
-				auto dls = owning->GetAllComponentsOfTypeFastPath<AmbientLight>();
-				auto als = owning->GetAllComponentsOfTypeFastPath<DirectionalLight>();
-				
-				for(Ref<DirectionalLight> dl : dls){
-					dl->Intensity = owning->fullbright ? 0.7 : 0.2;
-				}
-				for(Ref<AmbientLight> al : als){
-					al->Intensity = owning->fullbright ? 1 : 0.2;
-				}
+				world.get()->ToggleFullbright();
 			}
 		}
 	};
 	
-	doc->GetElementById("pause")->AddEventListener("click", new PauseEvtListener(spinsys));
-	doc->GetElementById("toggletex")->AddEventListener("click", new ToggleTxEvtListener());
+	doc->GetElementById("pause")->AddEventListener("click", new PauseEvtListener(this));
+	doc->GetElementById("toggletex")->AddEventListener("click", new ToggleTxEvtListener(this));
 	doc->GetElementById("toggleLighting")->AddEventListener("click", new ToggleLightListener(this));
 	
 	Spawn(hudentity);
 	
+	// GUI bindings for mouse
 	im->BindAnyAction<GUIComponent>(hud);
-	
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
-	
 	im->BindAxis("MouseX", hud.get(), &GUIComponent::MouseX, CID::ANY,0);
 	im->BindAxis("MouseY", hud.get(), &GUIComponent::MouseY, CID::ANY,0);
+	
+	//gamepad bindings
+	im->AddActionMap("PauseSim", ControllerButton::SDL_CONTROLLER_BUTTON_A);
+	im->AddActionMap("ToggleTex", ControllerButton::SDL_CONTROLLER_BUTTON_B);
+	im->AddActionMap("ToggleLight", ControllerButton::SDL_CONTROLLER_BUTTON_X);
+	im->BindAction("PauseSim", this, &PerfC_World::TogglePause, ActionState::Pressed, CID::ANY);
+	im->BindAction("ToggleTex", this, &PerfC_World::ToggleTextures, ActionState::Pressed, CID::ANY);
+	im->BindAction("ToggleLight", this, &PerfC_World::ToggleFullbright, ActionState::Pressed, CID::ANY);
 }
 
 void PerfC_World::posttick(float scale){
 	fpslabel->SetInnerRML(fmt::format("FPS: {}",round(App::evalNormal/scale)));
+}
+
+void PerfC_World::ToggleFullbright(){
+	fullbright = !fullbright;
+	
+	auto dls = GetAllComponentsOfTypeFastPath<AmbientLight>();
+	auto als = GetAllComponentsOfTypeFastPath<DirectionalLight>();
+	
+	for(Ref<DirectionalLight> dl : dls){
+		dl->Intensity = fullbright ? 1 : 0.5;
+	}
+	for(Ref<AmbientLight> al : als){
+		al->Intensity = fullbright ? 1 : 0.3;
+	}
 }
