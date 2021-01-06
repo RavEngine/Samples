@@ -14,6 +14,8 @@ MainMenu::MainMenu(){
 	auto menu = mainMenu->AddComponent<GUIComponent>(new GUIComponent());
 	auto doc = menu->AddDocument("mainmenu.rml");
 	
+	// shown here is an example of how to bind separate event listeners
+	// You can also share event listeners by reading data from the event object
 	struct QuitEventListener: public Rml::EventListener{
 		void ProcessEvent(Rml::Event& event) override{
 			App::Quit();
@@ -24,13 +26,23 @@ MainMenu::MainMenu(){
 		StartEventListener(const WeakRef<MainMenu>& m) : menu(m) {};
 		void ProcessEvent(Rml::Event& event) override{
 			if (menu){
-				menu.get()->LoadGame();
+				menu.get()->LoadGame(false);
 			}
 		}
 	};
+	struct StartMultiplayerEventListener : public Rml::EventListener{
+		WeakRef<MainMenu> menu;
+		StartMultiplayerEventListener(const WeakRef<MainMenu>& m) : menu(m) {};
+		void ProcessEvent(Rml::Event& event) override{
+			if (menu){
+				menu.get()->LoadGame(true);
+			}
+		}
+	};
+	
 	doc->GetElementById("quitbtn")->AddEventListener("click", new QuitEventListener());
 	doc->GetElementById("playsingle")->AddEventListener("click", new StartEventListener(this));
-	doc->GetElementById("playmulti")->AddEventListener("click", new StartEventListener(this));
+	doc->GetElementById("playmulti")->AddEventListener("click", new StartMultiplayerEventListener(this));
 	
 	
 	Spawn(mainMenu);
@@ -42,21 +54,18 @@ MainMenu::MainMenu(){
 	im->BindAxis("MouseX", menu.get(), &GUIComponent::MouseX, CID::ANY, 0);
 	im->BindAxis("MouseY", menu.get(), &GUIComponent::MouseY, CID::ANY, 0);
 	im->BindAnyAction<GUIComponent>(menu.get());
-	
-	im->AddActionMap("LoadGame", SDL_SCANCODE_G);
-	im->BindAction("LoadGame", this, &MainMenu::LoadGame,  ActionState::Pressed, CID::ANY);
-	
+		
 	App::inputManager = im;
 	
 	menu->Debug();
 }
 
-void MainMenu::LoadGame(){
+void MainMenu::LoadGame(bool multiplayer){
 	auto gui = mainMenu->GetComponent<GUIComponent>();
 	gui->GetDocument("mainmenu.rml")->Hide();
 	gui->AddDocument("loading.rml");
-	std::thread worker([&]{
-		Ref<GameWorld> g = new GameWorld();
+	std::thread worker([=]{
+		Ref<GameWorld> g = new GameWorld(multiplayer);
 
 		App::DispatchMainThread([=]{
 			App::currentWorld = g;

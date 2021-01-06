@@ -13,7 +13,7 @@ using namespace std;
 
 Tween<decimalType,decimalType> t;
 
-GameWorld::GameWorld()
+GameWorld::GameWorld(bool multiplayer) : isMultiplayer(multiplayer)
 {
 	Ref<Entity> cameraActor = new Entity();
 	cameraActor->AddComponent<CameraComponent>(new CameraComponent())->setActive(true);
@@ -68,15 +68,22 @@ GameWorld::GameWorld()
 	Spawn(p1);
 	
 	p2 = new Paddle({0,1,0,1});
-	auto p2s = p2->AddComponent<Player>(new Player());
+	
+	if (multiplayer){
+		//create a second human player
+		auto p2s = p2->AddComponent<Player>(new Player());
+		is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
+		is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
+	}
+	else{
+		//create a bot player
+	}
+	
 	Spawn(p2);
 	
 	//bind inputs
 	is->BindAxis("P1MoveUD", p1s.get(), &Player::MoveUpDown, CID::ANY);
 	is->BindAxis("P1MoveLR", p1s.get(), &Player::MoveLeftRight, CID::ANY);
-	
-	is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
-	is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
 		
 	Ref<Entity> gamegui = new Entity();
 	auto context = gamegui->AddComponent<GUIComponent>(new GUIComponent());
@@ -148,7 +155,7 @@ void GameWorld::GameOver(){
 			if (!isLoading){
 				isLoading = true;
 				App::DispatchMainThread([=]{
-					App::currentWorld = new GameWorld();
+					App::currentWorld = new GameWorld(this);
 				});
 			}
 		}
@@ -170,3 +177,5 @@ void GameWorld::GameOver(){
 
 	Spawn(gameOverMenu);
 }
+
+GameWorld::GameWorld(const GameWorld& other) : GameWorld(other.isMultiplayer){}

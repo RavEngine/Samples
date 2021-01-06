@@ -1,0 +1,11 @@
+<rml>
+    <head>
+        <link type="text/rcss" href="style.rcss"></link>
+    </head>
+    <body>
+        <main>
+            <p id="fps">FPS:</p>
+            <button id="pause" onclick="pausevt">Pause Animation</button>
+        </main>
+    </body>
+</rml>

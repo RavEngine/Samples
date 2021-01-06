@@ -1,0 +1,31 @@
+*{
+    font-family: Roboto;
+    font-size: 20dp;
+}
+p{
+    display:block;
+}
+main{
+    padding: 10dp;
+}
+button{
+    background-color: #AAAAAAFF;
+    border: 2dp #DDDDDDFF;
+    border-radius: 5dp;
+    display:block;
+    text-align: center;
+    margin:auto;
+    margin-top: 50dp;
+    padding: 10dp;
+    transition: font-size color 1.6s elastic-out;
+}
+button:hover{
+    color:red;
+    font-size: 25dp;
+    transition: font-size color 1.6s elastic-out;
+}
+button:active{
+    font-size: 22dp;
+    color:darkred;
+    transition: font-size color 0.7s elastic-out;
+}
