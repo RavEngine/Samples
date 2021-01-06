@@ -74,12 +74,12 @@ PerfC_World::PerfC_World(){
 	}
 	
 	//spawn the polygons
-	for(int i = 0; i < 1000; i++){
+	for(int i = 0; i < 3000; i++){
 		Spawn(new DemoObject());
 	}
 	
 	//spawn the lights
-	for(int i = 0; i < 5; i++){
+	for(int i = 0; i < 2; i++){
 		Spawn(new DemoObject(true));
 	}
 	
