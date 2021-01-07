@@ -1,14 +1,14 @@
 #pragma once
 
 #include "Paddle.hpp"
+#include <RavEngine/ScriptComponent.hpp>
 #include <RavEngine/IInputListener.hpp>
-#include <cmath>
 
-class Player : public RavEngine::ScriptComponent, public RavEngine::IInputListener{
+class Player : public RavEngine::ScriptComponent{
 protected:
 	decimalType sensitivity = 15;
-	vector3 dir;
 public:
+	vector3 dir;
 	
 	void MoveUpDown(float amt){
 		dir.x = amt;
@@ -24,4 +24,19 @@ public:
 		}
 		dir.x = dir.z = 0;
 	}
+};
+
+class BotPlayer : public RavEngine::ScriptComponent{
+protected:
+	Ref<Player> pl;
+	Ref<RavEngine::World> world;
+public:
+
+	BotPlayer(Ref<Player> p) : pl(p){}
+	
+	void Start() override{
+		world = GetWorld();
+	}
+	
+	void Tick(float scale) override;
 };

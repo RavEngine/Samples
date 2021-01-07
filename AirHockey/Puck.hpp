@@ -10,6 +10,9 @@
 #include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/Light.hpp>
 
+//marker for querying
+class PuckComponent : public RavEngine::Component, public RavEngine::Queryable<PuckComponent>{};
+
 class Puck : public RavEngine::Entity{
 public:
     virtual ~Puck(){};
@@ -38,5 +41,7 @@ public:
 		transform()->AddChild(lightEntity->transform());
 		
 		lightEntity->transform()->LocalTranslateDelta(vector3(0,1,0));
+		
+		AddComponent<PuckComponent>(new PuckComponent());
     }
 };

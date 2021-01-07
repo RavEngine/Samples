@@ -4,6 +4,7 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/Material.hpp>
 #include <RavEngine/PhysicsCollider.hpp>
+#include <RavEngine/Light.hpp>
 
 class Paddle : public RavEngine::Entity{
 public:

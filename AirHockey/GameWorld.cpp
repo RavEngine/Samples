@@ -68,15 +68,16 @@ GameWorld::GameWorld(bool multiplayer) : isMultiplayer(multiplayer)
 	Spawn(p1);
 	
 	p2 = new Paddle({0,1,0,1});
+	auto p2s = p2->AddComponent<Player>(new Player());
 	
 	if (multiplayer){
 		//create a second human player
-		auto p2s = p2->AddComponent<Player>(new Player());
 		is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
 		is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
 	}
 	else{
 		//create a bot player
+		p2->AddComponent<BotPlayer>(new BotPlayer(p2s));
 	}
 	
 	Spawn(p2);
