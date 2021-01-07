@@ -15,7 +15,7 @@ struct SpinSystem : public RavEngine::System{
 		return {RavEngine::CTTI<SpinComponent>};
 	}
 	
-	void Tick(float fpsScale, Ref<RavEngine::Entity> e) const override{
+	void Tick(float fpsScale, Ref<RavEngine::Entity> e) override{
 		//get the entity and spin it based on the component data
 		if (!paused){
 			e->transform()->LocalRotateDelta((double)fpsScale * e->GetComponent<SpinComponent>()->spinamt);

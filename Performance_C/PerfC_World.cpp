@@ -100,7 +100,7 @@ PerfC_World::PerfC_World(){
 	
 	Debug::Log("Loading {} objects", num_objects);
 	//spawn the polygons
-	for(int i = 0; i < 3000; i++){
+	for(int i = 0; i < num_objects; i++){
 		Spawn(new DemoObject());
 	}
 	

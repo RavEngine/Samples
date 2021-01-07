@@ -19,7 +19,11 @@ public:
 	static constexpr size_t num_textures = 80;
 	static std::array<Ref<RavEngine::Texture>, num_textures> textures;
 	
+#ifdef _DEBUG
+	static constexpr size_t num_objects = 1000;	//reduced for demo because debug builds are slower
+#else
 	static constexpr size_t num_objects = 3000;
+#endif
 	
 	static bool TexturesEnabled;
 	

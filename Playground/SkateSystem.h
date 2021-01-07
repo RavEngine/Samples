@@ -16,7 +16,7 @@ class Skate : public RavEngine::System{
 public:
     virtual ~Skate(){}
     
-    virtual void Tick(float fpsScale, Ref<RavEngine::Entity> e) const override{
+    virtual void Tick(float fpsScale, Ref<RavEngine::Entity> e) override{
         auto newPos = e->transform()->GetLocalPosition();
         newPos += 5 * fpsScale;
         e->transform()->SetLocalPosition(newPos);
