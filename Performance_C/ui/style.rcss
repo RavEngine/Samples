@@ -26,6 +26,5 @@ button:hover{
 }
 button:active{
     font-size: 22dp;
-    color:darkred;
     transition: font-size color 0.7s elastic-out;
 }

@@ -29,5 +29,6 @@ public:
 		
 		auto light = AddComponent<RavEngine::PointLight>(new RavEngine::PointLight());
 		light->color = color;
+		light->Intensity = 2;
 	}
 };

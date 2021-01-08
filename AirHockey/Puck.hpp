@@ -37,6 +37,7 @@ public:
 		
 		auto light = lightEntity->AddComponent<RavEngine::PointLight>(new RavEngine::PointLight());
 		light->color = {0,0,1,1};
+		light->Intensity = 2;
 		
 		transform()->AddChild(lightEntity->transform());
 		
