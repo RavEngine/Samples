@@ -16,7 +16,7 @@ public:
         tablemesh->SetMaterial(matinst);
 
         //low-friction
-        Ref<RavEngine::PhysicsMaterial> physmat = new RavEngine::PhysicsMaterial(0, 0, 1);
+        Ref<RavEngine::PhysicsMaterial> physmat = new RavEngine::PhysicsMaterial(0, 0, 1.5);
 		Ref<RavEngine::PhysicsMaterial> floorphysmat = new RavEngine::PhysicsMaterial(0.03, 0.03, 0);	//version for floor that is not bouncy
 
         AddComponent<RavEngine::RigidBodyStaticComponent>(new RavEngine::RigidBodyStaticComponent());

@@ -28,7 +28,7 @@ button{
     max-width: 300dp;
     text-align: center;
     margin:auto;
-    margin-top: 50dp;
+    margin-top: 20dp;
     padding: 10dp;
     transition: font-size color 1.6s elastic-out;
 }

@@ -2,7 +2,7 @@
     <head>
         <link type="text/rcss" href="style.rcss"></link>
         <style>
-            menu{
+            #replay{
                 margin-top: 200px;
             }
         </style>

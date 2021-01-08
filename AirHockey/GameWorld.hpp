@@ -9,7 +9,7 @@ using namespace RavEngine;
 
 class GameWorld : public RavEngine::World {
 public:
-	GameWorld(bool multiplayer);
+	GameWorld(int numplayers);
 	
 	GameWorld(const GameWorld& other);
 
@@ -25,7 +25,7 @@ protected:
 	Ref<Paddle> p1;
 	Ref<Paddle> p2;
 
-	bool isMultiplayer;
+	int numplayers;
 	
 	int p1score = 0, p2score = 0, numToWin = 3;
 	

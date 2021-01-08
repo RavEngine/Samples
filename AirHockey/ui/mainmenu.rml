@@ -14,6 +14,7 @@
         <menu>
             <button onclick="play" id="playsingle">Singleplayer</button>
             <button onclick="play" id="playmulti">Multiplayer</button>
+            <button onclick="play" id="playzero">Zeroplayer</button>
             <button onclick="exit" id="quitbtn">Exit Game</button>
         </menu>
     </body>

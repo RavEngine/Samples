@@ -26,7 +26,7 @@ MainMenu::MainMenu(){
 		StartEventListener(const WeakRef<MainMenu>& m) : menu(m) {};
 		void ProcessEvent(Rml::Event& event) override{
 			if (menu){
-				menu.get()->LoadGame(false);
+				menu.get()->LoadGame(1);
 			}
 		}
 	};
@@ -35,7 +35,16 @@ MainMenu::MainMenu(){
 		StartMultiplayerEventListener(const WeakRef<MainMenu>& m) : menu(m) {};
 		void ProcessEvent(Rml::Event& event) override{
 			if (menu){
-				menu.get()->LoadGame(true);
+				menu.get()->LoadGame(2);
+			}
+		}
+	};
+	struct StartZeroplayerEventListener : public Rml::EventListener{
+		WeakRef<MainMenu> menu;
+		StartZeroplayerEventListener(const WeakRef<MainMenu>& m) : menu(m) {};
+		void ProcessEvent(Rml::Event& event) override{
+			if (menu){
+				menu.get()->LoadGame(0);
 			}
 		}
 	};
@@ -43,6 +52,7 @@ MainMenu::MainMenu(){
 	doc->GetElementById("quitbtn")->AddEventListener("click", new QuitEventListener());
 	doc->GetElementById("playsingle")->AddEventListener("click", new StartEventListener(this));
 	doc->GetElementById("playmulti")->AddEventListener("click", new StartMultiplayerEventListener(this));
+	doc->GetElementById("playzero")->AddEventListener("click", new StartZeroplayerEventListener(this));
 	
 	
 	Spawn(mainMenu);
@@ -60,12 +70,12 @@ MainMenu::MainMenu(){
 	menu->Debug();
 }
 
-void MainMenu::LoadGame(bool multiplayer){
+void MainMenu::LoadGame(int numplayers){
 	auto gui = mainMenu->GetComponent<GUIComponent>();
 	gui->GetDocument("mainmenu.rml")->Hide();
 	gui->AddDocument("loading.rml");
 	std::thread worker([=]{
-		Ref<GameWorld> g = new GameWorld(multiplayer);
+		Ref<GameWorld> g = new GameWorld(numplayers);
 
 		App::DispatchMainThread([=]{
 			App::currentWorld = g;

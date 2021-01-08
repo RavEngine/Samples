@@ -7,13 +7,14 @@
 #include <RavEngine/InputManager.hpp>
 #include <fmt/format.h>
 #include "MainMenu.hpp"
+#include <RavEngine/Debug.hpp>
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
 
 Tween<decimalType,decimalType> t;
 
-GameWorld::GameWorld(bool multiplayer) : isMultiplayer(multiplayer)
+GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 {
 	Ref<Entity> cameraActor = new Entity();
 	cameraActor->AddComponent<CameraComponent>(new CameraComponent())->setActive(true);
@@ -65,26 +66,36 @@ GameWorld::GameWorld(bool multiplayer) : isMultiplayer(multiplayer)
 	
 	p1 = new Paddle({1,0,0,1});
 	auto p1s = p1->AddComponent<Player>(new Player());
-	Spawn(p1);
 	
 	p2 = new Paddle({0,1,0,1});
 	auto p2s = p2->AddComponent<Player>(new Player());
 	
-	if (multiplayer){
-		//create a second human player
-		is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
-		is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
-	}
-	else{
-		//create a bot player
-		p2->AddComponent<BotPlayer>(new BotPlayer(p2s));
+	switch(numplayers){
+		case 2:
+			is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
+			is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
+			break;
+		case 0:
+			//set p1 as a bot
+			p1->AddComponent<BotPlayer>(new BotPlayer(p1s, true));
+			// no break here, want to create a bot for p2 in either case
+		case 1:
+			//create a bot player
+			p2->AddComponent<BotPlayer>(new BotPlayer(p2s, false));
+			break;
+		default:
+			Debug::Fatal("Invalid number of players: {}", numplayers);
 	}
 	
+	if (numplayers > 0){
+		//bind inputs
+		is->BindAxis("P1MoveUD", p1s.get(), &Player::MoveUpDown, CID::ANY);
+		is->BindAxis("P1MoveLR", p1s.get(), &Player::MoveLeftRight, CID::ANY);
+	}
+	
+	Spawn(p1);
 	Spawn(p2);
 	
-	//bind inputs
-	is->BindAxis("P1MoveUD", p1s.get(), &Player::MoveUpDown, CID::ANY);
-	is->BindAxis("P1MoveLR", p1s.get(), &Player::MoveLeftRight, CID::ANY);
 		
 	Ref<Entity> gamegui = new Entity();
 	auto context = gamegui->AddComponent<GUIComponent>(new GUIComponent());
@@ -110,6 +121,7 @@ void GameWorld::posttick(float f)
 		p1score++;
 		Reset();
 	}
+	hockeytable->DrawAllDebug();
 }
 
 void GameWorld::Reset(){
@@ -151,18 +163,20 @@ void GameWorld::GameOver(){
 		}
 	};
 	struct ReplayEventListener: public Rml::EventListener{
+		WeakRef<GameWorld> gm;
+		ReplayEventListener(WeakRef<GameWorld>g) : gm(g){}
 		bool isLoading = false;
 		void ProcessEvent(Rml::Event& event) override{
 			if (!isLoading){
 				isLoading = true;
 				App::DispatchMainThread([=]{
-					App::currentWorld = new GameWorld(this);
+					App::currentWorld = new GameWorld(gm.get()->numplayers);
 				});
 			}
 		}
 	};
 	doc->GetElementById("mainmenu")->AddEventListener("click", new MenuEventListener());
-	doc->GetElementById("replay")->AddEventListener("click", new ReplayEventListener());
+	doc->GetElementById("replay")->AddEventListener("click", new ReplayEventListener(this));
 	
 	//create a new input manager to stop game inputs and enable UI inputs
 	Ref<InputManager> im = new InputManager();
@@ -179,4 +193,4 @@ void GameWorld::GameOver(){
 	Spawn(gameOverMenu);
 }
 
-GameWorld::GameWorld(const GameWorld& other) : GameWorld(other.isMultiplayer){}
+GameWorld::GameWorld(const GameWorld& other) : GameWorld(other.numplayers){}

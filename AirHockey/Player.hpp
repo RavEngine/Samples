@@ -30,9 +30,10 @@ class BotPlayer : public RavEngine::ScriptComponent{
 protected:
 	Ref<Player> pl;
 	Ref<RavEngine::World> world;
+	bool leftSide;
 public:
 
-	BotPlayer(Ref<Player> p) : pl(p){}
+	BotPlayer(Ref<Player> p, bool leftSide) : pl(p), leftSide(leftSide){}
 	
 	void Start() override{
 		world = GetWorld();

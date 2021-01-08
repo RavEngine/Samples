@@ -7,6 +7,6 @@ class MainMenu : public RavEngine::World, public RavEngine::IInputListener{
 public:
 	MainMenu();
 private:
-	void LoadGame(bool);
+	void LoadGame(int);
 	Ref<RavEngine::Entity> mainMenu;
 };

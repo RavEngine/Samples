@@ -6,17 +6,19 @@
 using namespace std;
 using namespace RavEngine;
 
+
 void BotPlayer::Tick(float scale){
 	//get all the pucks
 	auto& pucks = world->GetAllComponentsOfTypeFastPath<PuckComponent>();
 	
+	//define the goal position
+	vector3 goalpos(0,0, leftSide? 3 : -3);
+
 	//find the closest puck to the goal
 	
 	Ref<Entity> closestPuck = (*pucks.begin())->getOwner();
+	auto worldpos = Ref<Entity>(getOwner())->transform()->GetWorldPosition();
 	float closestDist = 1000;
-	
-	constexpr vector3 goalpos(0,0,-3);
-	
 	for(Ref<PuckComponent> p : pucks){
 		Ref<Entity> e = p->getOwner();
 		
@@ -29,12 +31,17 @@ void BotPlayer::Tick(float scale){
 	
 	//if puck is on bot's side of the field, move towards that puck
 	auto pos = closestPuck->transform()->GetWorldPosition();
-	if (pos.z < 0){
-		pl->dir = glm::normalize( pos - Ref<Entity>(getOwner())->transform()->GetWorldPosition() );
+	
+	bool shouldChase = (!leftSide && pos.z < 0) || (leftSide && pos.z >= 0);
+	
+	vector3 dir;
+	if (shouldChase){
+		dir = glm::normalize(pos - worldpos);
 	}
 	else{
 		//otherwise, move towards the puck's goal to guard it
-		pl->dir = glm::normalize( goalpos - Ref<Entity>(getOwner())->transform()->GetWorldPosition() );
+		dir = glm::normalize(goalpos - worldpos);
 	}
-		
+	
+	pl->dir = dir;
 }
