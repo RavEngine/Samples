@@ -11,8 +11,8 @@ struct SpinComponent : public RavEngine::Component, public RavEngine::Queryable<
 struct SpinSystem : public RavEngine::System{
 	bool paused = false;
 	
-	plf::list<RavEngine::ctti_t> QueryTypes() const override{
-		return {RavEngine::CTTI<SpinComponent>};
+	const list_type& QueryTypes() const override{
+		return queries;
 	}
 	
 	void Tick(float fpsScale, Ref<RavEngine::Entity> e) override{
@@ -21,4 +21,10 @@ struct SpinSystem : public RavEngine::System{
 			e->transform()->LocalRotateDelta((double)fpsScale * e->GetComponent<SpinComponent>()->spinamt);
 		}
 	}
+	
+	RavEngine::ctti_t ID() const override{
+		return RavEngine::CTTI<SpinSystem>;
+	}
+protected:
+	static const list_type queries;
 };

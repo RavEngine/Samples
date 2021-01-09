@@ -16,6 +16,7 @@ using namespace std;
 std::array<Ref<MeshAsset>,PerfC_World::num_meshes> PerfC_World::meshes;
 std::array<Ref<Texture>,PerfC_World::num_textures> PerfC_World::textures;
 bool PerfC_World::TexturesEnabled = true;
+const System::list_type SpinSystem::queries = {RavEngine::CTTI<SpinComponent>};
 
 static std::random_device rd; // obtain a random number from hardware
 static std::mt19937 gen(rd()); // seed the generator
@@ -113,7 +114,7 @@ PerfC_World::PerfC_World(){
 	
 	spinsys = new SpinSystem();
 	
-	RegisterSystem<SpinSystem>(spinsys);
+	systemManager.RegisterSystem<SpinSystem>(spinsys);
 	
 	//bind inputs
 	Ref<InputManager> im = new InputManager();
