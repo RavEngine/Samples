@@ -137,16 +137,12 @@ TestWorld::TestWorld() : World() {
 	anonymousChild->AddComponent<BoxCollider>(new BoxCollider(vector3(1,1,1),new PhysicsMaterial(0.5,0.5,0.5)));
     Spawn(anonymousChild);
 
-    //register the systems that are allowed to run in this World
-    //RegisterSystem(Ref<Skate>(new Skate()));
-
     floorplane = new RavEngine::Entity();
     floorplane->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);
     floorplane->transform()->LocalScaleDelta(vector3(10, 0.5, 10));
     floorplane->transform()->LocalTranslateDelta(vector3(0, -20, 0));
     floorplane->AddComponent<RigidBodyStaticComponent>(new RigidBodyStaticComponent());
     floorplane->AddComponent<BoxCollider>(new BoxCollider(vector3(10, 1, 10), new PhysicsMaterial(0.5,0.5,0.5)));
-	anonymous->transform()->AddChild(floorplane->transform());
     Spawn(floorplane);
 	
 	dl = new Entity();
