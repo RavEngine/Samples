@@ -139,7 +139,7 @@ PerfC_World::PerfC_World(){
 	
 	//create HUD
 	Ref<Entity> hudentity = new Entity();
-	auto hud = hudentity->AddComponent<GUIComponent>(new GUIComponent());
+	hud = hudentity->AddComponent<GUIComponent>(new GUIComponent());
 	auto doc = hud->AddDocument("main.rml");
 	fpslabel = doc->GetElementById("fps");
 	
@@ -199,7 +199,9 @@ PerfC_World::PerfC_World(){
 }
 
 void PerfC_World::posttick(float scale){
-	fpslabel->SetInnerRML(fmt::format("FPS: {}",round(App::evalNormal/scale)));
+	hud->ExclusiveAccess([&] {
+		fpslabel->SetInnerRML(fmt::format("FPS: {}", round(App::evalNormal / scale)));
+	});
 }
 
 void PerfC_World::ToggleFullbright(){

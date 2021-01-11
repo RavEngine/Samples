@@ -51,6 +51,7 @@ public:
 protected:
 
 	Rml::Element* fpslabel = nullptr;
+	Ref<RavEngine::GUIComponent> hud;
 	
 	Ref<SpinSystem> spinsys;
 	
