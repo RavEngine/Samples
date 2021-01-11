@@ -15,6 +15,11 @@ if(LINUX)
 	set(CMAKE_CXX_STANDARD_LIBRARIES -latomic) # need libatomic on linux
 endif()
 
+if(MSVC)
+  add_definitions(/MP)
+  add_definitions(/Qpar)
+endif()
+
 
 add_subdirectory("RavEngine")
 
