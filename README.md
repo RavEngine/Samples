@@ -7,6 +7,8 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - A simple air hockey game demonstrating RavEngine fundamentals (WIP)
 2. Playground
    - A testing zone, subject to change
+3. Performance_C
+   - A stress test for high object count with animated lights
 
 ## How to build
 1. Ensure RavEngine supports your platform.

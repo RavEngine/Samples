@@ -20,7 +20,8 @@ public:
 	
 	virtual void Tick(float scale) override{
 		if (glm::length(dir) > 0.1){
-			GetEntity()->GetComponent<RavEngine::RigidBodyDynamicComponent>()->AddForce(glm::normalize(dir) * sensitivity * (decimalType)scale);
+			//forces do not need to be framerate scaled
+			GetEntity()->GetComponent<RavEngine::RigidBodyDynamicComponent>()->AddForce(glm::normalize(dir) * sensitivity);
 		}
 		dir.x = dir.z = 0;
 	}
