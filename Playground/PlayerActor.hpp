@@ -3,6 +3,7 @@
 #include "RavEngine/CameraComponent.hpp"
 #include "RavEngine/IInputListener.hpp"
 #include "RavEngine/ScriptComponent.hpp"
+#include "RavEngine/ChildEntityComponent.hpp"
 #include <algorithm>
 
 class PlayerActor;
@@ -19,11 +20,6 @@ public:
 
 	decimalType scaleRotation(decimalType f) {
 		return glm::radians(sensitivity * dt * f);
-	}
-
-	void Start() override {
-		Ref<RavEngine::Entity> owner(getOwner());
-		Ref<RavEngine::World>(GetWorld())->Spawn(cameraEntity);
 	}
 
 	void MoveForward(float amt) {
@@ -68,6 +64,7 @@ public:
 		cam->setActive(true);
 		
 		transform()->AddChild(cameraEntity->transform());
+		AddComponent<RavEngine::ChildEntityComponent>(new RavEngine::ChildEntityComponent(cameraEntity));
 	}
 
 	virtual ~PlayerActor(){}

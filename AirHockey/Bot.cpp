@@ -9,7 +9,7 @@ using namespace RavEngine;
 
 void BotPlayer::Tick(float scale){
 	//get all the pucks
-	auto& pucks = world->GetAllComponentsOfTypeFastPath<PuckComponent>();
+	auto pucks = world->GetAllComponentsOfTypeFastPath<PuckComponent>();
 	
 	//define the goal position
 	vector3 goalpos(0,0, leftSide? 3 : -3);

@@ -73,7 +73,7 @@ MainMenu::MainMenu(){
 void MainMenu::LoadGame(int numplayers){
 	auto gui = mainMenu->GetComponent<GUIComponent>();
 	gui->GetDocument("mainmenu.rml")->Hide();
-	gui->AddDocument("loading.rml");
+//	gui->AddDocument("loading.rml");
 	std::thread worker([=]{
 		Ref<GameWorld> g = new GameWorld(numplayers);
 

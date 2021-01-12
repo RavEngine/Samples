@@ -51,9 +51,9 @@ void TestWorld::posttick(float fpsScale){
     anonymous->transform()->LocalRotateDelta(rotation);
     scale = fpsScale;
 	
-    bgfx::dbgTextPrintf(0, 1, 0x4f, "FPS: %f", round(App::evalNormal/fpsScale));
-    bgfx::dbgTextPrintf(0, 2, 0x4f, "FPS Scale: %lf", fpsScale);
-    bgfx::dbgTextPrintf(0, 3, 0x4f, "Physics Bodies: %d", TestEntityController::objectcount.load());
+    //bgfx::dbgTextPrintf(0, 1, 0x4f, "FPS: %f", round(App::evalNormal/fpsScale));
+    //bgfx::dbgTextPrintf(0, 2, 0x4f, "FPS Scale: %lf", fpsScale);
+    //bgfx::dbgTextPrintf(0, 3, 0x4f, "Physics Bodies: %d", TestEntityController::objectcount.load());
 	
 	dl->transform()->LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
 }
@@ -109,7 +109,7 @@ TestWorld::TestWorld() : World() {
 	//is->BindAction("Click", click, ActionState::Released);
 	RavEngine::App::inputManager = is;
 	InputManager::SetRelativeMouseMode(true);
-	
+
     //spawn player (it will make its camera active)
     Spawn(player);
 	ResetCam();
