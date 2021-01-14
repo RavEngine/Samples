@@ -13,6 +13,7 @@ MainMenu::MainMenu(){
 	
 	auto menu = mainMenu->AddComponent<GUIComponent>(new GUIComponent());
 	auto doc = menu->AddDocument("mainmenu.rml");
+	menu->AddDocument("loading.rml")->Hide();
 	
 	// shown here is an example of how to bind separate event listeners
 	// You can also share event listeners by reading data from the event object
@@ -73,7 +74,8 @@ MainMenu::MainMenu(){
 void MainMenu::LoadGame(int numplayers){
 	auto gui = mainMenu->GetComponent<GUIComponent>();
 	gui->GetDocument("mainmenu.rml")->Hide();
-//	gui->AddDocument("loading.rml");
+	gui->GetDocument("loading.rml")->Show();
+	
 	std::thread worker([=]{
 		Ref<GameWorld> g = new GameWorld(numplayers);
 
