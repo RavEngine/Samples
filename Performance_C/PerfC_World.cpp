@@ -83,6 +83,8 @@ PerfC_World::PerfC_World(){
 	
 	Ref<Camera> cam = make_shared<Camera>();
 	
+	const auto shared_ptr_hack = std::shared_ptr<PerfC_World>(this, [](PerfC_World*){});
+	
 	Spawn(cam);
 	
 	lightEntity = make_shared<Entity>();
