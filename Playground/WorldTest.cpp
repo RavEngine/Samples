@@ -96,6 +96,9 @@ TestWorld::TestWorld() : World() {
 	is->BindAxis("LookUp", playerscript,&PlayerScript::LookUp,con);
 	is->BindAxis("LookRight", playerscript, &PlayerScript::LookRight,con);
 	
+	//allow shared_from_this to work
+	auto wptr = std::shared_ptr<TestWorld>(this, [](TestWorld*){});	//custom deleter that does nothing
+	
 	is->BindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
 	is->BindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
 	
