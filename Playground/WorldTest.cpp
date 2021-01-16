@@ -29,7 +29,7 @@ static int ct = 0;
 
 void TestWorld::SpawnEntities(float f) {
     if (f > 0.99) {
-		Ref<TestEntity> e = new TestEntity();
+		Ref<TestEntity> e = std::make_shared<TestEntity>();
 		Spawn(e);
     }
 //	if (f > 0.99){
@@ -61,7 +61,7 @@ void TestWorld::posttick(float fpsScale){
 TestWorld::TestWorld() : World() {
 
 	//setup inputs
-	Ref<RavEngine::InputManager> is = new RavEngine::InputManager();
+	Ref<RavEngine::InputManager> is = make_shared<RavEngine::InputManager>();
 	//setup control mappings
 	is->AddAxisMap("MoveForward", SDL_SCANCODE_W);
 	is->AddAxisMap("MoveForward", SDL_SCANCODE_S, -1);  //go backwards
@@ -89,23 +89,23 @@ TestWorld::TestWorld() : World() {
 	auto con = CID::ANY;
 
 	//bind controls
-    auto playerscript = player->GetComponent<PlayerScript>().get();
+    auto playerscript = player->GetComponent<PlayerScript>();
 	is->BindAxis("MoveForward", playerscript, &PlayerScript::MoveForward,con);
 	is->BindAxis("MoveRight", playerscript, &PlayerScript::MoveRight,con);
 	is->BindAxis("MoveUp", playerscript,&PlayerScript::MoveUp,con);
 	is->BindAxis("LookUp", playerscript,&PlayerScript::LookUp,con);
 	is->BindAxis("LookRight", playerscript, &PlayerScript::LookRight,con);
 	
-	is->BindAxis("SpawnTest", this, &TestWorld::SpawnEntities,con);
-	is->BindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed,con);
+	is->BindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
+	is->BindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
 	
     //test unbinding
-	is->UnbindAxis("SpawnTest", this, &TestWorld::SpawnEntities,con);
-	is->UnbindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed,con);
+	is->UnbindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
+	is->UnbindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
 
-    is->BindAxis("SpawnTest", this, &TestWorld::SpawnEntities,con);
-    is->BindAction("ResetCam", this, &TestWorld::ResetCam, ActionState::Pressed,con);
-	is->BindAction("SampleFPS",this, &TestWorld::SampleFPS,ActionState::Pressed,con);
+    is->BindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
+    is->BindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
+	is->BindAction("SampleFPS",std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SampleFPS,ActionState::Pressed,con);
 	//is->BindAction("Click", click, ActionState::Released);
 	RavEngine::App::inputManager = is;
 	InputManager::SetRelativeMouseMode(true);
@@ -114,47 +114,47 @@ TestWorld::TestWorld() : World() {
     Spawn(player);
 	ResetCam();
 	
-    Ref<PBRMaterialInstance> material = new PBRMaterialInstance(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+    Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 	
 //	Ref<Texture> t = new Texture("youcantrun.png");
 //	material->SetAlbedoTexture(t);
 
-    Ref<MeshAsset> sharedMesh = new MeshAsset("cube.obj");
+    Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("cube.obj");
 
-    anonymous = new RavEngine::Entity();
-    anonymous->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);
+    anonymous = make_shared<RavEngine::Entity>();
+    anonymous->AddComponent<StaticMesh>(make_shared<StaticMesh>(sharedMesh))->SetMaterial(material);
     Spawn(anonymous);
     anonymous->transform()->LocalTranslateDelta(vector3(0, 1, 0));
 	
 	InitPhysics();
 
-    anonymousChild = new RavEngine::Entity();
-    anonymousChild->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);;
+    anonymousChild = make_shared<RavEngine::Entity>();
+    anonymousChild->AddComponent<StaticMesh>(make_shared<StaticMesh>(sharedMesh))->SetMaterial(material);;
     anonymous->transform()->AddChild(anonymousChild->transform());
     anonymousChild->transform()->LocalTranslateDelta(vector3(17,0,0));
-	anonymousChild->AddComponent<PointLight>(new PointLight())->Intensity = 4;
-	anonymousChild->AddComponent<RigidBodyStaticComponent>(new RigidBodyStaticComponent());
-	anonymousChild->AddComponent<BoxCollider>(new BoxCollider(vector3(1,1,1),new PhysicsMaterial(0.5,0.5,0.5)));
+	anonymousChild->AddComponent<PointLight>(make_shared<PointLight>())->Intensity = 4;
+	anonymousChild->AddComponent<RigidBodyStaticComponent>(make_shared<RigidBodyStaticComponent>());
+	anonymousChild->AddComponent<BoxCollider>(make_shared<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5)));
     Spawn(anonymousChild);
 
-    floorplane = new RavEngine::Entity();
-    floorplane->AddComponent<StaticMesh>(new StaticMesh(sharedMesh))->SetMaterial(material);
+    floorplane = make_shared<RavEngine::Entity>();
+    floorplane->AddComponent<StaticMesh>(make_shared<StaticMesh>(sharedMesh))->SetMaterial(material);
     floorplane->transform()->LocalScaleDelta(vector3(10, 0.5, 10));
     floorplane->transform()->LocalTranslateDelta(vector3(0, -20, 0));
-    floorplane->AddComponent<RigidBodyStaticComponent>(new RigidBodyStaticComponent());
-    floorplane->AddComponent<BoxCollider>(new BoxCollider(vector3(10, 1, 10), new PhysicsMaterial(0.5,0.5,0.5)));
+    floorplane->AddComponent<RigidBodyStaticComponent>(make_shared<RigidBodyStaticComponent>());
+    floorplane->AddComponent<BoxCollider>(make_shared<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5)));
     Spawn(floorplane);
 	
-	dl = new Entity();
-	auto dll = dl->AddComponent<DirectionalLight>(new DirectionalLight());
+	dl = make_shared<Entity>();
+	auto dll = dl->AddComponent<DirectionalLight>(make_shared<DirectionalLight>());
 	auto amt = glm::radians(45.0);
 	dl->transform()->LocalRotateDelta(vector3(amt,0,0));
 	dl->transform()->LocalTranslateDelta(vector3(0,1,1));
 	dll->color = {1,0.5,0};
 	Spawn(dl);
 	
-	ambientLight1 = new Entity();
-	auto light = ambientLight1->AddComponent<AmbientLight>(new AmbientLight());
+	ambientLight1 = make_shared<Entity>();
+	auto light = ambientLight1->AddComponent<AmbientLight>(make_shared<AmbientLight>());
 	light->Intensity = 1;
 	light->color = {0.1, 0.2, 0.4};
 	Spawn(ambientLight1);

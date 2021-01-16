@@ -53,18 +53,18 @@ class PlayerActor : public RavEngine::Entity, public RavEngine::IInputListener {
 public:
 	Ref<PlayerScript> script;
 	PlayerActor() : Entity() {
-		script = AddComponent<PlayerScript>(new PlayerScript());
+		script = AddComponent<PlayerScript>(std::make_shared<PlayerScript>());
 		
 		//create a child entity for the camera
-		auto cameraEntity = new Entity();
-		auto cam = cameraEntity->AddComponent<RavEngine::CameraComponent>(new RavEngine::CameraComponent());
+		auto cameraEntity = std::make_shared<Entity>();
+		auto cam = cameraEntity->AddComponent<RavEngine::CameraComponent>(std::make_shared<RavEngine::CameraComponent>());
 		script->cameraEntity = cameraEntity;
 		
 		//set the active camera
 		cam->setActive(true);
 		
 		transform()->AddChild(cameraEntity->transform());
-		AddComponent<RavEngine::ChildEntityComponent>(new RavEngine::ChildEntityComponent(cameraEntity));
+		AddComponent<RavEngine::ChildEntityComponent>(std::make_shared<RavEngine::ChildEntityComponent>(cameraEntity));
 	}
 
 	virtual ~PlayerActor(){}

@@ -12,11 +12,11 @@
 #include "RavEngine/IInputListener.hpp"
 #include "RavEngine/App.hpp"
 
-class TestWorld : public RavEngine::World, public RavEngine::IInputListener{
+class TestWorld : public RavEngine::World{
 public:
     void posttick(float fpsScale) override;
     TestWorld();
-    Ref<PlayerActor> player = new PlayerActor();
+    Ref<PlayerActor> player = std::make_shared<PlayerActor>();
 
     virtual ~TestWorld() {
 

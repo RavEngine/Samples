@@ -9,15 +9,15 @@
 class Paddle : public RavEngine::Entity{
 public:
 	Paddle(const RavEngine::ColorRGBA& color){
-		auto mesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyPaddle.obj",0.5)));
+		auto mesh = EmplaceComponent<RavEngine::StaticMesh>(std::make_shared<RavEngine::MeshAsset>("HockeyPaddle.obj",0.5));
 		
-		Ref<RavEngine::PBRMaterialInstance> material = new RavEngine::PBRMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
+		Ref<RavEngine::PBRMaterialInstance> material = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
 		material->SetAlbedoColor(color);
 		mesh->SetMaterial(material);
 		
 		//PhysX doesn't have a cylinder primitive, so we use a sphere offset upwards and lock the axes
-		auto dyn = AddComponent<RavEngine::RigidBodyDynamicComponent>(new RavEngine::RigidBodyDynamicComponent());
-		AddComponent<RavEngine::SphereCollider>(new RavEngine::SphereCollider(0.5,new RavEngine::PhysicsMaterial(0.3,0.3,0.1),vector3(0,0.4,0)));
+		auto dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>();
+        EmplaceComponent<RavEngine::SphereCollider>(0.5,std::make_shared<RavEngine::PhysicsMaterial>(0.3,0.3,0.1),vector3(0,0.4,0));
 		
 		dyn->SetMass(2);
 		dyn->SetAxisLock(
@@ -27,7 +27,7 @@ public:
 						 );
 		
 		
-		auto light = AddComponent<RavEngine::PointLight>(new RavEngine::PointLight());
+		auto light = EmplaceComponent<RavEngine::PointLight>();
 		light->color = color;
 		light->Intensity = 2;
 	}

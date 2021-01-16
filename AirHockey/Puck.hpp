@@ -18,24 +18,24 @@ public:
     virtual ~Puck(){};
     static Ref<RavEngine::PBRMaterialInstance> material;
     Puck(){
-        auto puckmesh = AddComponent<RavEngine::StaticMesh>(new RavEngine::StaticMesh(new RavEngine::MeshAsset("HockeyPuck.obj",0.03)));
+        auto puckmesh = EmplaceComponent<RavEngine::StaticMesh>(std::make_shared<RavEngine::MeshAsset>("HockeyPuck.obj",0.03));
         if(material == nullptr){
-			material = new RavEngine::PBRMaterialInstance(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
+			material = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
 			material->SetAlbedoColor({0.2,0.2,0.2,1});
         }
         puckmesh->SetMaterial(material);
-        auto dyn = AddComponent<RavEngine::RigidBodyDynamicComponent>(new RavEngine::RigidBodyDynamicComponent());
-		AddComponent<RavEngine::SphereCollider>(new RavEngine::SphereCollider(0.3,new RavEngine::PhysicsMaterial(0,0,1),vector3(0,0.3,0)));
+        auto dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>();
+        EmplaceComponent<RavEngine::SphereCollider>(0.3,std::make_shared<RavEngine::PhysicsMaterial>(0,0,1),vector3(0,0.3,0));
 		
 		//prevent puck from falling over
 		dyn->SetAxisLock(RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_X | RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_Z);
 		dyn->SetMass(1.0);
 		
-		Ref<Entity> lightEntity = new Entity();
+		Ref<Entity> lightEntity = std::make_shared<Entity>();
 		
-		AddComponent<RavEngine::ChildEntityComponent>(new RavEngine::ChildEntityComponent(lightEntity));
+        EmplaceComponent<RavEngine::ChildEntityComponent>(lightEntity);
 		
-		auto light = lightEntity->AddComponent<RavEngine::PointLight>(new RavEngine::PointLight());
+		auto light = lightEntity->EmplaceComponent<RavEngine::PointLight>();
 		light->color = {0,0,1,1};
 		light->Intensity = 2;
 		
@@ -43,6 +43,6 @@ public:
 		
 		lightEntity->transform()->LocalTranslateDelta(vector3(0,1,0));
 		
-		AddComponent<PuckComponent>(new PuckComponent());
+        EmplaceComponent<PuckComponent>();
     }
 };

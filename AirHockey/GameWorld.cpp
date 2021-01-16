@@ -16,8 +16,8 @@ Tween<decimalType,decimalType> t;
 
 GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 {
-	Ref<Entity> cameraActor = new Entity();
-	cameraActor->AddComponent<CameraComponent>(new CameraComponent())->setActive(true);
+	Ref<Entity> cameraActor = make_shared<Entity>();
+	cameraActor->EmplaceComponent<CameraComponent>()->setActive(true);
 	cameraBoom->transform()->SetWorldPosition(vector3(0,0,0));
 	
 	cameraBoom->transform()->AddChild(cameraActor->transform());
@@ -41,11 +41,11 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 	},90,15);
 	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,7);
 	
-	Ref<Entity> lightmain = new Entity();
-	auto key = lightmain->AddComponent<DirectionalLight>(new DirectionalLight());
+	Ref<Entity> lightmain = make_shared<Entity>();
+	auto key = lightmain->EmplaceComponent<DirectionalLight>();
 	key->Intensity = 1;
 	key->color = {1,0.6,0.404,1};
-	auto fill = lightmain->AddComponent<AmbientLight>(new AmbientLight());
+	auto fill = lightmain->EmplaceComponent<AmbientLight>();
 	fill->Intensity=0.4;
 	fill->color = {0,0,1,1};
 	lightmain->transform()->LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
@@ -53,7 +53,7 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 	Spawn(lightmain);
 	
 	//inputs
-	Ref<InputManager> is = new InputManager();
+	Ref<InputManager> is = make_shared<InputManager>();
 	is->AddAxisMap("P1MoveUD", SDL_SCANCODE_W,-1);
 	is->AddAxisMap("P1MoveUD", SDL_SCANCODE_S);
 	is->AddAxisMap("P1MoveLR", SDL_SCANCODE_D,-1);
@@ -64,24 +64,24 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 	is->AddAxisMap("P2MoveLR", SDL_SCANCODE_RIGHT,-1);
 	is->AddAxisMap("P2MoveLR", SDL_SCANCODE_LEFT);
 	
-	p1 = new Paddle({1,0,0,1});
-	auto p1s = p1->AddComponent<Player>(new Player());
+	p1 = make_shared<Paddle>(ColorRGBA{1,0,0,1});
+	auto p1s = p1->EmplaceComponent<Player>();
 	
-	p2 = new Paddle({0,1,0,1});
-	auto p2s = p2->AddComponent<Player>(new Player());
+	p2 = make_shared<Paddle>(ColorRGBA{0,1,0,1});
+	auto p2s = p2->EmplaceComponent<Player>();
 	
 	switch(numplayers){
 		case 2:
-			is->BindAxis("P2MoveUD", p2s.get(), &Player::MoveUpDown, CID::ANY);
-			is->BindAxis("P2MoveLR", p2s.get(), &Player::MoveLeftRight, CID::ANY);
+			is->BindAxis("P2MoveUD", p2s, &Player::MoveUpDown, CID::ANY);
+			is->BindAxis("P2MoveLR", p2s, &Player::MoveLeftRight, CID::ANY);
 			break;
 		case 0:
 			//set p1 as a bot
-			p1->AddComponent<BotPlayer>(new BotPlayer(p1s, true));
+			p1->EmplaceComponent<BotPlayer>(p1s, true);
 			// no break here, want to create a bot for p2 in either case
 		case 1:
 			//create a bot player
-			p2->AddComponent<BotPlayer>(new BotPlayer(p2s, false));
+			p2->EmplaceComponent<BotPlayer>(p2s, false);
 			break;
 		default:
 			Debug::Fatal("Invalid number of players: {}", numplayers);
@@ -89,16 +89,16 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 	
 	if (numplayers > 0){
 		//bind inputs
-		is->BindAxis("P1MoveUD", p1s.get(), &Player::MoveUpDown, CID::ANY);
-		is->BindAxis("P1MoveLR", p1s.get(), &Player::MoveLeftRight, CID::ANY);
+		is->BindAxis("P1MoveUD", p1s, &Player::MoveUpDown, CID::ANY);
+		is->BindAxis("P1MoveLR", p1s, &Player::MoveLeftRight, CID::ANY);
 	}
 	
 	Spawn(p1);
 	Spawn(p2);
 	
 		
-	Ref<Entity> gamegui = new Entity();
-	auto context = gamegui->AddComponent<GUIComponent>(new GUIComponent());
+	Ref<Entity> gamegui = make_shared<Entity>();
+	auto context = gamegui->EmplaceComponent<GUIComponent>();
 	auto doc = context->AddDocument("demo.rml");
 	Scoreboard = doc->GetElementById("scoreboard");
 	Spawn(gamegui);
@@ -151,14 +151,14 @@ void GameWorld::Reset(){
 
 void GameWorld::GameOver(){
 	
-	Ref<Entity> gameOverMenu = new Entity();
-	auto ctx = gameOverMenu->AddComponent<GUIComponent>(new GUIComponent());
+	Ref<Entity> gameOverMenu = make_shared<Entity>();
+	auto ctx = gameOverMenu->EmplaceComponent<GUIComponent>();
 	auto doc = ctx->AddDocument("gameover.rml");
 	
 	struct MenuEventListener: public Rml::EventListener{
 		void ProcessEvent(Rml::Event& event) override{
 			App::DispatchMainThread([=]{
-				App::currentWorld = new MainMenu();
+				App::currentWorld = make_shared<MainMenu>();
 			});
 		}
 	};
@@ -170,23 +170,23 @@ void GameWorld::GameOver(){
 			if (!isLoading){
 				isLoading = true;
 				App::DispatchMainThread([=]{
-					App::currentWorld = new GameWorld(gm.get()->numplayers);
+					App::currentWorld = make_shared<GameWorld>(gm.lock()->numplayers);
 				});
 			}
 		}
 	};
 	doc->GetElementById("mainmenu")->AddEventListener("click", new MenuEventListener());
-	doc->GetElementById("replay")->AddEventListener("click", new ReplayEventListener(this));
+	doc->GetElementById("replay")->AddEventListener("click", new ReplayEventListener(static_pointer_cast<GameWorld>(shared_from_this())));
 	
 	//create a new input manager to stop game inputs and enable UI inputs
-	Ref<InputManager> im = new InputManager();
+	Ref<InputManager> im = make_shared<InputManager>();
 	
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
 	
-	im->BindAxis("MouseX", ctx.get(), &GUIComponent::MouseX, CID::ANY, 0);
-	im->BindAxis("MouseY", ctx.get(), &GUIComponent::MouseY, CID::ANY, 0);
-	im->BindAnyAction<GUIComponent>(ctx.get());
+	im->BindAxis("MouseX", ctx, &GUIComponent::MouseX, CID::ANY, 0);
+	im->BindAxis("MouseY", ctx, &GUIComponent::MouseY, CID::ANY, 0);
+	im->BindAnyAction(ctx);
 	
 	App::inputManager = im;
 

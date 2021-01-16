@@ -26,27 +26,27 @@ atomic<int> TestEntityController::objectcount;
 TestEntity::TestEntity() : Entity(){
 
     //attach the script
-    auto script = AddComponent<TestEntityController>(new TestEntityController());
+    auto script = AddComponent<TestEntityController>(make_shared<TestEntityController>());
 
     //set the filter layers
-    auto r = AddComponent<RigidBodyDynamicComponent>(new RigidBodyDynamicComponent(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1));
+    auto r = AddComponent<RigidBodyDynamicComponent>(make_shared<RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1));
     r->AddReceiver(script.get());
 
     //add a box collision to the PhysX component
-    if (sharedMat.isNull()) {
-        sharedMat = new PhysicsMaterial(0.5, 0.5, 0.5);
+    if (!sharedMat) {
+        sharedMat = make_shared<PhysicsMaterial>(0.5, 0.5, 0.5);
     }
-	AddComponent<CapsuleCollider>(new CapsuleCollider(1,1,sharedMat));
+	AddComponent<CapsuleCollider>(make_shared<CapsuleCollider>(1,1,sharedMat));
     //AddComponent<BoxCollider>(new BoxCollider(vector3(1, 1, 1),sharedMat));
 	
-	if (sharedMesh.isNull()){
-		sharedMesh = new MeshAsset("bunny_decimated.obj");
+	if (!sharedMesh){
+		sharedMesh = make_shared<MeshAsset>("bunny_decimated.obj");
 	}
 
     //default staticmesh
-    auto mesh = AddComponent<StaticMesh>(new StaticMesh(sharedMesh));
-    if (sharedMatInst.isNull()) {
-        sharedMatInst = new PBRMaterialInstance(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+    auto mesh = AddComponent<StaticMesh>(make_shared<StaticMesh>(sharedMesh));
+    if (!sharedMatInst) {
+        sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
     }
     mesh->SetMaterial(sharedMatInst);
 }

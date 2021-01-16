@@ -40,15 +40,15 @@ struct Player : public RavEngine::ScriptComponent{
 struct Camera : public RavEngine::Entity{
 	Camera(){
 		
-		Ref<Entity> cameraBoom = new Entity();
+		Ref<Entity> cameraBoom = std::make_shared<Entity>();
 		
-		AddComponent<RavEngine::ChildEntityComponent>(new RavEngine::ChildEntityComponent(cameraBoom));
-		AddComponent<Player>(new Player());
+		AddComponent<RavEngine::ChildEntityComponent>(std::make_shared<RavEngine::ChildEntityComponent>(cameraBoom));
+		AddComponent<Player>(std::make_shared<Player>());
 		
 		cameraBoom->transform()->LocalTranslateDelta(vector3(0,0,50));
 		transform()->AddChild(cameraBoom->transform());
 		
-		auto camera = cameraBoom->AddComponent<RavEngine::CameraComponent>(new RavEngine::CameraComponent());
+		auto camera = cameraBoom->AddComponent<RavEngine::CameraComponent>(std::make_shared<RavEngine::CameraComponent>());
 		camera->setActive(true);
 		camera->farClip = 500;
 	}

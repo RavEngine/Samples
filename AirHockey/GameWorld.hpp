@@ -17,10 +17,10 @@ public:
 	
     
 protected:
-    Ref<Table> hockeytable = new Table();
-    Ref<Puck> puck = new Puck();
+    Ref<Table> hockeytable = std::make_shared<Table>();
+    Ref<Puck> puck = std::make_shared<Puck>();
 	
-	Ref<Entity> cameraBoom = new Entity();
+	Ref<Entity> cameraBoom = std::make_shared<Entity>();
 	
 	Ref<Paddle> p1;
 	Ref<Paddle> p2;
