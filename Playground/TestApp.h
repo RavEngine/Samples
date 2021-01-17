@@ -18,7 +18,9 @@ private:
 		RavEngine::RenderEngine::VideoSettings.height = 480;
 
 		//create a world
-		currentWorld = std::make_shared<TestWorld>();
+		auto world = std::make_shared<TestWorld>();
+		world->SetupInputs();
+		currentWorld = world;
 	}
 
 	int OnShutdown() override {

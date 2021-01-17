@@ -11,6 +11,7 @@
 #include "PlayerActor.hpp"
 #include "RavEngine/IInputListener.hpp"
 #include "RavEngine/App.hpp"
+#include "RavEngine/Debug.hpp"
 
 class TestWorld : public RavEngine::World{
 public:
@@ -18,15 +19,17 @@ public:
     TestWorld();
     Ref<PlayerActor> player = std::make_shared<PlayerActor>();
 
-    virtual ~TestWorld() {
-
-    }
 	void ResetCam();
 	void SpawnEntities(float);
-
+	
+	/**
+	 Because you can't call shared_from_this in a constructor, to bind inputs to functions on the World, you must
+	 use an external function. See TestApp.h
+	 */
+	void SetupInputs();
 
     void SampleFPS() {
-        std::cout << "FPS: " << RavEngine::App::evalNormal / scale << std::endl;
+		RavEngine::Debug::Log("TPS: {}", RavEngine::App::CurrentTPS());
     }
 protected: 
        float scale = 1;

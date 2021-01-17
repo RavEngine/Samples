@@ -30,7 +30,7 @@ TestEntity::TestEntity() : Entity(){
 
     //set the filter layers
     auto r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
-    r->AddReceiver(script.get());
+    r->AddReceiver(script);
 
     //add a box collision to the PhysX component
     if (!sharedMat) {
