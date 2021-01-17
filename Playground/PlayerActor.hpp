@@ -4,7 +4,6 @@
 #include "RavEngine/IInputListener.hpp"
 #include "RavEngine/ScriptComponent.hpp"
 #include "RavEngine/ChildEntityComponent.hpp"
-#include <algorithm>
 
 class PlayerActor;
 class PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInputListener {
