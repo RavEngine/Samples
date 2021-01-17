@@ -56,7 +56,7 @@ public:
 		
 		//create a child entity for the camera
 		auto cameraEntity = std::make_shared<Entity>();
-		auto cam = cameraEntity->EmplaceComponent<RavEngine::CameraComponent>);
+		auto cam = cameraEntity->EmplaceComponent<RavEngine::CameraComponent>();
 		script->cameraEntity = cameraEntity;
 		
 		//set the active camera
