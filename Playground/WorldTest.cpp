@@ -99,16 +99,18 @@ TestWorld::TestWorld() : World() {
 	//allow shared_from_this to work
 	auto wptr = std::shared_ptr<TestWorld>(this, [](TestWorld*){});	//custom deleter that does nothing
 	
-	is->BindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
-	is->BindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
+	auto ptr = shared_from_this();
+	
+	is->BindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(ptr), &TestWorld::SpawnEntities,con);
+	is->BindAction("ResetCam", std::static_pointer_cast<TestWorld>(ptr), &TestWorld::ResetCam, ActionState::Pressed,con);
 	
     //test unbinding
-	is->UnbindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
-	is->UnbindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
+//	is->UnbindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
+//	is->UnbindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
 
-    is->BindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
-    is->BindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
-	is->BindAction("SampleFPS",std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SampleFPS,ActionState::Pressed,con);
+    is->BindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(ptr), &TestWorld::SpawnEntities,con);
+    is->BindAction("ResetCam", std::static_pointer_cast<TestWorld>(ptr), &TestWorld::ResetCam, ActionState::Pressed,con);
+	is->BindAction("SampleFPS",std::static_pointer_cast<TestWorld>(ptr), &TestWorld::SampleFPS,ActionState::Pressed,con);
 	//is->BindAction("Click", click, ActionState::Released);
 	RavEngine::App::inputManager = is;
 	InputManager::SetRelativeMouseMode(true);

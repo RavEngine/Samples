@@ -178,9 +178,11 @@ PerfC_World::PerfC_World(){
 		}
 	};
 	
-	doc->GetElementById("pause")->AddEventListener("click", new PauseEvtListener(static_pointer_cast<PerfC_World>(shared_from_this())));
-	doc->GetElementById("toggletex")->AddEventListener("click", new ToggleTxEvtListener(static_pointer_cast<PerfC_World>(shared_from_this())));
-	doc->GetElementById("toggleLighting")->AddEventListener("click", new ToggleLightListener(static_pointer_cast<PerfC_World>(shared_from_this())));
+	auto ptr = shared_from_this();
+	
+	doc->GetElementById("pause")->AddEventListener("click", new PauseEvtListener(static_pointer_cast<PerfC_World>(ptr)));
+	doc->GetElementById("toggletex")->AddEventListener("click", new ToggleTxEvtListener(static_pointer_cast<PerfC_World>(ptr)));
+	doc->GetElementById("toggleLighting")->AddEventListener("click", new ToggleLightListener(static_pointer_cast<PerfC_World>(ptr)));
 	
 	Spawn(hudentity);
 	
@@ -195,9 +197,9 @@ PerfC_World::PerfC_World(){
 	im->AddActionMap("PauseSim", ControllerButton::SDL_CONTROLLER_BUTTON_A);
 	im->AddActionMap("ToggleTex", ControllerButton::SDL_CONTROLLER_BUTTON_B);
 	im->AddActionMap("ToggleLight", ControllerButton::SDL_CONTROLLER_BUTTON_X);
-	im->BindAction("PauseSim", static_pointer_cast<PerfC_World>(shared_from_this()), &PerfC_World::TogglePause, ActionState::Pressed, CID::ANY);
-	im->BindAction("ToggleTex", static_pointer_cast<PerfC_World>(shared_from_this()), &PerfC_World::ToggleTextures, ActionState::Pressed, CID::ANY);
-	im->BindAction("ToggleLight", static_pointer_cast<PerfC_World>(shared_from_this()), &PerfC_World::ToggleFullbright, ActionState::Pressed, CID::ANY);
+	im->BindAction("PauseSim", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::TogglePause, ActionState::Pressed, CID::ANY);
+	im->BindAction("ToggleTex", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::ToggleTextures, ActionState::Pressed, CID::ANY);
+	im->BindAction("ToggleLight", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::ToggleFullbright, ActionState::Pressed, CID::ANY);
 }
 
 void PerfC_World::posttick(float scale){

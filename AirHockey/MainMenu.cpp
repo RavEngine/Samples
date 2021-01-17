@@ -48,10 +48,12 @@ MainMenu::MainMenu(){
 	//this must be here, allows shared_from_this to work in constructor
 	const auto shared_ptr_hack = std::shared_ptr<MainMenu>(this, [](MainMenu*){});
 	
+	auto ptr = shared_from_this();
+	
 	doc->GetElementById("quitbtn")->AddEventListener("click", new QuitEventListener());
-	doc->GetElementById("playsingle")->AddEventListener("click", new StartEventListener(static_pointer_cast<MainMenu>(shared_from_this())));
-	doc->GetElementById("playmulti")->AddEventListener("click", new StartMultiplayerEventListener(static_pointer_cast<MainMenu>(shared_from_this())));
-	doc->GetElementById("playzero")->AddEventListener("click", new StartZeroplayerEventListener(static_pointer_cast<MainMenu>(shared_from_this())));
+	doc->GetElementById("playsingle")->AddEventListener("click", new StartEventListener(static_pointer_cast<MainMenu>(ptr)));
+	doc->GetElementById("playmulti")->AddEventListener("click", new StartMultiplayerEventListener(static_pointer_cast<MainMenu>(ptr)));
+	doc->GetElementById("playzero")->AddEventListener("click", new StartZeroplayerEventListener(static_pointer_cast<MainMenu>(ptr)));
 	
 	
 	Spawn(mainMenu);
