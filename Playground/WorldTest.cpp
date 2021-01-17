@@ -127,31 +127,31 @@ TestWorld::TestWorld() : World() {
     Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("cube.obj");
 
     anonymous = make_shared<RavEngine::Entity>();
-    anonymous->AddComponent<StaticMesh>(make_shared<StaticMesh>(sharedMesh))->SetMaterial(material);
+    anonymous->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
     Spawn(anonymous);
     anonymous->transform()->LocalTranslateDelta(vector3(0, 1, 0));
 	
 	InitPhysics();
 
     anonymousChild = make_shared<RavEngine::Entity>();
-    anonymousChild->AddComponent<StaticMesh>(make_shared<StaticMesh>(sharedMesh))->SetMaterial(material);;
+    anonymousChild->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);;
     anonymous->transform()->AddChild(anonymousChild->transform());
     anonymousChild->transform()->LocalTranslateDelta(vector3(17,0,0));
-	anonymousChild->AddComponent<PointLight>(make_shared<PointLight>())->Intensity = 4;
-	anonymousChild->AddComponent<RigidBodyStaticComponent>(make_shared<RigidBodyStaticComponent>());
-	anonymousChild->AddComponent<BoxCollider>(make_shared<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5)));
+	anonymousChild->EmplaceComponent<PointLight>()->Intensity = 4;
+	anonymousChild->EmplaceComponent<RigidBodyStaticComponent>();
+	anonymousChild->EmplaceComponent<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5));
     Spawn(anonymousChild);
 
     floorplane = make_shared<RavEngine::Entity>();
-    floorplane->AddComponent<StaticMesh>(make_shared<StaticMesh>(sharedMesh))->SetMaterial(material);
+    floorplane->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
     floorplane->transform()->LocalScaleDelta(vector3(10, 0.5, 10));
     floorplane->transform()->LocalTranslateDelta(vector3(0, -20, 0));
-    floorplane->AddComponent<RigidBodyStaticComponent>(make_shared<RigidBodyStaticComponent>());
-    floorplane->AddComponent<BoxCollider>(make_shared<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5)));
+    floorplane->EmplaceComponent<RigidBodyStaticComponent>();
+    floorplane->EmplaceComponent<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5));
     Spawn(floorplane);
 	
 	dl = make_shared<Entity>();
-	auto dll = dl->AddComponent<DirectionalLight>(make_shared<DirectionalLight>());
+	auto dll = dl->EmplaceComponent<DirectionalLight>();
 	auto amt = glm::radians(45.0);
 	dl->transform()->LocalRotateDelta(vector3(amt,0,0));
 	dl->transform()->LocalTranslateDelta(vector3(0,1,1));
@@ -159,7 +159,7 @@ TestWorld::TestWorld() : World() {
 	Spawn(dl);
 	
 	ambientLight1 = make_shared<Entity>();
-	auto light = ambientLight1->AddComponent<AmbientLight>(make_shared<AmbientLight>());
+	auto light = ambientLight1->EmplaceComponent<AmbientLight>();
 	light->Intensity = 1;
 	light->color = {0.1, 0.2, 0.4};
 	Spawn(ambientLight1);

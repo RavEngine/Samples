@@ -26,25 +26,24 @@ atomic<int> TestEntityController::objectcount;
 TestEntity::TestEntity() : Entity(){
 
     //attach the script
-    auto script = AddComponent<TestEntityController>(make_shared<TestEntityController>());
+    auto script = EmplaceComponent<TestEntityController>();
 
     //set the filter layers
-    auto r = AddComponent<RigidBodyDynamicComponent>(make_shared<RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1));
+    auto r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
     r->AddReceiver(script.get());
 
     //add a box collision to the PhysX component
     if (!sharedMat) {
         sharedMat = make_shared<PhysicsMaterial>(0.5, 0.5, 0.5);
     }
-	AddComponent<CapsuleCollider>(make_shared<CapsuleCollider>(1,1,sharedMat));
-    //AddComponent<BoxCollider>(new BoxCollider(vector3(1, 1, 1),sharedMat));
+    EmplaceComponent<CapsuleCollider>(1,1,sharedMat);
 	
 	if (!sharedMesh){
 		sharedMesh = make_shared<MeshAsset>("bunny_decimated.obj");
 	}
 
     //default staticmesh
-    auto mesh = AddComponent<StaticMesh>(make_shared<StaticMesh>(sharedMesh));
+    auto mesh = EmplaceComponent<StaticMesh>(sharedMesh);
     if (!sharedMatInst) {
         sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
     }

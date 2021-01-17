@@ -50,10 +50,10 @@ struct DemoObject : public RavEngine::Entity{
 	DemoObject(bool isLight = false){
 		Ref<Entity> child = make_shared<Entity>();
 		
-		AddComponent<ChildEntityComponent>(make_shared<ChildEntityComponent>(child));
-		AddComponent<SpinComponent>(make_shared<SpinComponent>(vector3(spinrng(gen)/3,spinrng(gen)/3,spinrng(gen)/3)));
+		EmplaceComponent<ChildEntityComponent>(child);
+        EmplaceComponent<SpinComponent>(vector3(spinrng(gen)/3,spinrng(gen)/3,spinrng(gen)/3));
 		
-		auto mesh = child->AddComponent<StaticMesh>(make_shared<StaticMesh>(PerfC_World::meshes[meshrng(gen)]));
+		auto mesh = child->EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)]);
 		Ref<DemoMaterialInstance> inst = make_shared< DemoMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 		
 		if (!isLight){
@@ -61,7 +61,7 @@ struct DemoObject : public RavEngine::Entity{
 			inst->SetAlbedoTexture(PerfC_World::textures[texturerng(gen)]);
 		}
 		else{
-			auto light = child->AddComponent<PointLight>(make_shared<PointLight>());
+			auto light = child->EmplaceComponent<PointLight>();
 			inst->SetAlbedoColor({1,1,1,1});
 			light->Intensity = 5;
 		}
@@ -71,7 +71,7 @@ struct DemoObject : public RavEngine::Entity{
 		
 		child->transform()->LocalTranslateDelta(vector3(rng(gen),rng(gen),rng(gen)));
 		
-		child->AddComponent<SpinComponent>(make_shared<SpinComponent>(vector3(spinrng(gen),spinrng(gen),spinrng(gen))));
+		child->EmplaceComponent<SpinComponent>(vector3(spinrng(gen),spinrng(gen),spinrng(gen)));
 	}
 };
 
@@ -88,10 +88,10 @@ PerfC_World::PerfC_World(){
 	Spawn(cam);
 	
 	lightEntity = make_shared<Entity>();
-	auto al = lightEntity->AddComponent<AmbientLight>(make_shared<AmbientLight>());
+	auto al = lightEntity->EmplaceComponent<AmbientLight>();
 	al->Intensity = 0.3;
 	
-	auto dl = lightEntity->AddComponent<DirectionalLight>(make_shared<DirectionalLight>());
+	auto dl = lightEntity->EmplaceComponent<DirectionalLight>();
 	dl->color = {0.7,1,1,1};
 	dl->Intensity = 0.5;
 	
@@ -141,7 +141,7 @@ PerfC_World::PerfC_World(){
 	
 	//create HUD
 	Ref<Entity> hudentity = make_shared<Entity>();
-	hud = hudentity->AddComponent<GUIComponent>(make_shared<GUIComponent>());
+	hud = hudentity->EmplaceComponent<GUIComponent>();
 	auto doc = hud->AddDocument("main.rml");
 	fpslabel = doc->GetElementById("fps");
 	
