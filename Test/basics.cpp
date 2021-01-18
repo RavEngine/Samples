@@ -1,6 +1,8 @@
-#include <RavEngine/SharedObject.hpp>
 #include <RavEngine/CTTI.hpp>
 #include <unordered_map>
+#include <iostream>
+#include <cassert>
+#include <functional>
 
 using namespace RavEngine;
 using namespace std;
@@ -18,25 +20,8 @@ int Test_CTTI(){
 	return 0;
 }
 
-/**
-* Test shared object
-*/
-int Test_SharedObject() {
-    //weak ref test
-    {
-        WeakRef<SharedObject> weak;
-        {
-            Ref<SharedObject> obj(new SharedObject());
-            weak = obj;
-        }
-        assert(weak.isNull());
-    }
-    return 0;
-}
-
 int main(int argc, const char** argv) {
-    const unordered_map <string, std::function<int(void)>> tests = {
-        {"SharedObject",&Test_SharedObject},
+    const unordered_map <string, std::function<int(void)>> tests{
 		{"CTTI",&Test_CTTI}
     };
 	
