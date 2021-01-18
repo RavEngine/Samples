@@ -16,7 +16,7 @@ Tween<decimalType,decimalType> t;
 
 GameWorld::GameWorld(int numplayers) : numplayers(numplayers){}
 
-void GameWorld::Init(){
+void GameWorld::OnActivate(){
 	Ref<Entity> cameraActor = make_shared<Entity>();
 	cameraActor->EmplaceComponent<CameraComponent>()->setActive(true);
 	cameraBoom->transform()->SetWorldPosition(vector3(0,0,0));
@@ -160,9 +160,7 @@ void GameWorld::GameOver(){
 	struct MenuEventListener: public Rml::EventListener{
 		void ProcessEvent(Rml::Event& event) override{
 			App::DispatchMainThread([=]{
-				auto menu = make_shared<MainMenu>();
-				menu->Init();
-				App::currentWorld = menu;
+				App::SetWorld(make_shared<MainMenu>());
 			});
 		}
 	};
@@ -175,7 +173,7 @@ void GameWorld::GameOver(){
 				isLoading = true;
 				App::DispatchMainThread([=]{
 					auto world = make_shared<GameWorld>(gm.lock()->numplayers);
-					App::currentWorld = world;
+					App::SetWorld(world);
 				});
 			}
 		}

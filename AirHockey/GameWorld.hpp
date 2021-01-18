@@ -13,7 +13,7 @@ public:
 	
 	GameWorld(const GameWorld& other);
 	
-	void Init();
+	void OnActivate() override;
 
 	void posttick(float) override;
 	

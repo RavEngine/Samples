@@ -20,7 +20,7 @@ private:
 		//create a world
 		auto world = std::make_shared<TestWorld>();
 		world->SetupInputs();
-		currentWorld = world;
+		SetWorld(world);
 	}
 
 	int OnShutdown() override {
