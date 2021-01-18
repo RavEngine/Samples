@@ -12,6 +12,8 @@ public:
 	GameWorld(int numplayers);
 	
 	GameWorld(const GameWorld& other);
+	
+	void Init();
 
 	void posttick(float) override;
 	

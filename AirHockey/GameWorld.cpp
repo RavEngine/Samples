@@ -14,8 +14,9 @@ using namespace std;
 
 Tween<decimalType,decimalType> t;
 
-GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
-{
+GameWorld::GameWorld(int numplayers) : numplayers(numplayers){}
+
+void GameWorld::Init(){
 	Ref<Entity> cameraActor = make_shared<Entity>();
 	cameraActor->EmplaceComponent<CameraComponent>()->setActive(true);
 	cameraBoom->transform()->SetWorldPosition(vector3(0,0,0));
@@ -27,11 +28,11 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 	Spawn(cameraActor);
 	Spawn(cameraBoom);
 	Spawn(hockeytable);
-    
-    //create the puck
-    puck->transform()->LocalTranslateDelta(vector3(0,3,0));
-    Spawn(puck);
-
+	
+	//create the puck
+	puck->transform()->LocalTranslateDelta(vector3(0,3,0));
+	Spawn(puck);
+	
 	InitPhysics();
 	
 	//intro animation
@@ -49,7 +50,7 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 	fill->Intensity=0.4;
 	fill->color = {0,0,1,1};
 	lightmain->transform()->LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
-
+	
 	Spawn(lightmain);
 	
 	//inputs
@@ -96,7 +97,7 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 	Spawn(p1);
 	Spawn(p2);
 	
-		
+	
 	Ref<Entity> gamegui = make_shared<Entity>();
 	auto context = gamegui->EmplaceComponent<GUIComponent>();
 	auto doc = context->AddDocument("demo.rml");
@@ -107,6 +108,7 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers)
 	
 	Reset();
 }
+
 void GameWorld::posttick(float f)
 {
 	t.step(f);
@@ -158,7 +160,9 @@ void GameWorld::GameOver(){
 	struct MenuEventListener: public Rml::EventListener{
 		void ProcessEvent(Rml::Event& event) override{
 			App::DispatchMainThread([=]{
-				App::currentWorld = make_shared<MainMenu>();
+				auto menu = make_shared<MainMenu>();
+				menu->Init();
+				App::currentWorld = menu;
 			});
 		}
 	};
@@ -170,7 +174,8 @@ void GameWorld::GameOver(){
 			if (!isLoading){
 				isLoading = true;
 				App::DispatchMainThread([=]{
-					App::currentWorld = make_shared<GameWorld>(gm.lock()->numplayers);
+					auto world = make_shared<GameWorld>(gm.lock()->numplayers);
+					App::currentWorld = world;
 				});
 			}
 		}

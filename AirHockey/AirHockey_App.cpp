@@ -13,7 +13,9 @@ void AirHockey::OnStartup(int argc, char** argv)
 	RenderEngine::VideoSettings.width = 800;
 	RenderEngine::VideoSettings.height = 480;
 	
-	currentWorld = std::make_shared<MainMenu>();
+	auto world = std::make_shared<MainMenu>();
+	world->Init();
+	currentWorld = world;
 }
 
 int AirHockey::OnShutdown()

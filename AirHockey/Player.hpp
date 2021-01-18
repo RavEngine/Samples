@@ -3,42 +3,32 @@
 #include "Paddle.hpp"
 #include <RavEngine/ScriptComponent.hpp>
 #include <RavEngine/IInputListener.hpp>
+#include <RavEngine/Debug.hpp>
 
-class Player : public RavEngine::ScriptComponent{
+class Player : public RavEngine::Component, public RavEngine::Queryable<Player>{
 protected:
 	decimalType sensitivity = 15;
-public:
-	vector3 dir;
-	
+public:	
 	void MoveUpDown(float amt){
-		dir.x = amt;
+		if (std::abs(amt) > 0.1){
+			getOwner().lock()->GetComponent<RavEngine::RigidBodyDynamicComponent>()->AddForce(vector3(amt,0,0) * sensitivity);
+		}
 	}
 	
 	void MoveLeftRight(float amt){
-		dir.z = amt;
-	}
-	
-	virtual void Tick(float scale) override{
-		if (glm::length(dir) > 0.1){
-			//forces do not need to be framerate scaled
-			GetEntity()->GetComponent<RavEngine::RigidBodyDynamicComponent>()->AddForce(glm::normalize(dir) * sensitivity);
+		if (std::abs(amt) > 0.1){
+			getOwner().lock()->GetComponent<RavEngine::RigidBodyDynamicComponent>()->AddForce(vector3(0,0,amt) * sensitivity);
 		}
-		dir.x = dir.z = 0;
 	}
 };
 
 class BotPlayer : public RavEngine::ScriptComponent{
 protected:
 	Ref<Player> pl;
-	Ref<RavEngine::World> world;
 	bool leftSide;
 public:
 
 	BotPlayer(Ref<Player> p, bool leftSide) : pl(p), leftSide(leftSide){}
-	
-	void Start() override{
-		world = GetWorld();
-	}
 	
 	void Tick(float scale) override;
 };
