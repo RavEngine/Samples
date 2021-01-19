@@ -9,7 +9,7 @@
 using namespace RavEngine;
 using namespace std;
 
-void MainMenu::Init(){
+void MainMenu::OnActivate(){
 	mainMenu = make_shared<Entity>();
 	
 	auto menu = mainMenu->EmplaceComponent<GUIComponent>();
@@ -75,10 +75,9 @@ void MainMenu::LoadGame(int numplayers){
 	
 	std::thread worker([=]{
 		Ref<GameWorld> g = make_shared<GameWorld>(numplayers);
-		g->Init();
 
 		App::DispatchMainThread([=]{
-			App::currentWorld = g;
+			App::SetWorld(g);
 		});
 	});
 	worker.detach();

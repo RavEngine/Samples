@@ -11,7 +11,7 @@ void Performance_C::OnStartup(int argc, char **argv){
 	
 	Renderer->SyncVideoSettings();
 	
-	currentWorld = std::make_shared<PerfC_World>();
+	SetWorld(std::make_shared<PerfC_World>());
 }
 
 START_APP(Performance_C);

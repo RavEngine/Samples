@@ -75,7 +75,7 @@ struct DemoObject : public RavEngine::Entity{
 	}
 };
 
-PerfC_World::PerfC_World(){
+void PerfC_World::OnActivate(){
 	meshes[0] = make_shared<MeshAsset>("cube.obj");
 	meshes[1] = make_shared<MeshAsset>("sphere.obj");
 	meshes[2] = make_shared<MeshAsset>("cone.obj");
