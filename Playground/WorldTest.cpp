@@ -125,6 +125,9 @@ void TestWorld::SetupInputs(){
 	
 	anonymous = make_shared<RavEngine::Entity>();
 	anonymous->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
+	auto spotlight = anonymous->EmplaceComponent<SpotLight>();
+	spotlight->Intensity = 4;
+	spotlight->radius = 10;
 	Spawn(anonymous);
 	anonymous->transform()->LocalTranslateDelta(vector3(0, 1, 0));
 	
