@@ -50,10 +50,12 @@ void TestWorld::posttick(float fpsScale){
     auto rotation = quaternion(vector3(0, 0, 0.01 * fpsScale));
     anonymous->transform()->LocalRotateDelta(rotation);
     scale = fpsScale;
-	
-    //bgfx::dbgTextPrintf(0, 1, 0x4f, "FPS: %f", round(App::evalNormal/fpsScale));
-    //bgfx::dbgTextPrintf(0, 2, 0x4f, "FPS Scale: %lf", fpsScale);
-    //bgfx::dbgTextPrintf(0, 3, 0x4f, "Physics Bodies: %d", TestEntityController::objectcount.load());
+    
+    RenderEngine::DebugPrint(1, 0x4f, "TPS: {}", round(App::CurrentTPS()));
+    RenderEngine::DebugPrint(2, 0x4f, "TPS Scale: {}", fpsScale);
+    RenderEngine::DebugPrint(3, 0x4f, "FPS: {}", round(App::Renderer->GetCurrentFPS()));
+    RenderEngine::DebugPrint(4, 0x4f, "Frame Time: {} ms", App::Renderer->GetLastFrameTime());
+    RenderEngine::DebugPrint(5, 0x4f, "Physics Bodies: {}", TestEntityController::objectcount.load());
 	
 	dl->transform()->LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
 }
