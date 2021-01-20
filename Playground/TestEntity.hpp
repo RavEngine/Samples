@@ -8,6 +8,7 @@
 #pragma once
 
 #include "RavEngine/Entity.hpp"
+#include "RavEngine/PhysicsCollider.hpp"
 #include "RavEngine/PhysicsBodyComponent.hpp"
 #include "RavEngine/WeakRef.hpp"
 #include "RavEngine/PhysicsMaterial.hpp"
@@ -17,6 +18,7 @@
 #include "RavEngine/BuiltinMaterials.hpp"
 #include <RavEngine/MeshAsset.hpp>
 #include <RavEngine/Common3D.hpp>
+#include <RavEngine/DebugDraw.hpp>
 #include <atomic>
 
 class TestEntityController : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor {
@@ -28,7 +30,6 @@ public:
 	
 	void Start() override;
 	static std::atomic<int> objectcount;
-private:
 	std::atomic<int> contactCount;
 };
 
@@ -39,4 +40,14 @@ protected:
 	static Ref<RavEngine::MeshAsset> sharedMesh;
 public:
     TestEntity();
+};
+
+struct TestEntityDebugRenderer : public RavEngine::IDebugRenderer{
+	void DrawDebug(RavEngine::DebugDraw& dbg) const override{
+		auto owner = std::static_pointer_cast<TestEntity>(getOwner().lock());
+		if (owner){
+			auto script = owner->GetComponent<TestEntityController>();
+			owner->GetComponent<RavEngine::PhysicsCollider>()->DebugDraw(dbg, script->contactCount == 0 ? 0x0000FFFF : 0xFFFFFFFF);
+		}
+	}
 };

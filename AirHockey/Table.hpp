@@ -5,6 +5,9 @@
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/Texture.hpp>
 #include <RavEngine/BuiltinMaterials.hpp>
+#include <RavEngine/DebugDraw.hpp>
+
+struct TableDebugRenderer;
 
 class Table : public RavEngine::Entity{
 public:
@@ -55,15 +58,19 @@ public:
 		//load texture
 		Ref<RavEngine::Texture> t = std::make_shared<RavEngine::Texture>("HockeyTable.png");
         matinst->SetAlbedoTexture(t);
+		
+		//add the debug renderer
+		EmplaceComponent<TableDebugRenderer>();
     }
-	
-	/**
-	 Displays the table's collision shapes as wireframes. Note that in release mode, debug draws are stubbed out.
-	 */
-	void DrawAllDebug(){
-		auto boxes = GetAllComponentsOfType<RavEngine::BoxCollider>();
+};
+
+struct TableDebugRenderer : public RavEngine::IDebugRenderer{
+		
+	void DrawDebug(RavEngine::DebugDraw& dbg) const override{
+		auto boxes = std::static_pointer_cast<Table>(getOwner().lock())->GetAllComponentsOfType<RavEngine::BoxCollider>();
 		for(const auto& box : boxes){
-			box->DebugDraw();
+			box->DebugDraw(dbg);
 		}
 	}
 };
+

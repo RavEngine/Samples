@@ -123,7 +123,6 @@ void GameWorld::posttick(float f)
 		p1score++;
 		Reset();
 	}
-	hockeytable->DrawAllDebug();
 }
 
 void GameWorld::Reset(){

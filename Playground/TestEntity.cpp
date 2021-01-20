@@ -48,11 +48,12 @@ TestEntity::TestEntity() : Entity(){
         sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
     }
     mesh->SetMaterial(sharedMatInst);
+	
+	EmplaceComponent<TestEntityDebugRenderer>();
 }
 
 void TestEntityController::Tick(float scale) {
 
-	GetEntity()->GetComponent<PhysicsCollider>()->DebugDraw(contactCount == 0 ? 0x0000FFFF : 0xFFFFFFFF);
     if (transform()->GetWorldPosition().y < -40) {
         Destroy();
         objectcount--;
