@@ -13,6 +13,8 @@ void AirHockey::OnStartup(int argc, char** argv)
 	RenderEngine::VideoSettings.width = 800;
 	RenderEngine::VideoSettings.height = 480;
 
+    SetMinTickTime(std::chrono::duration<double,std::milli>(1.0/120 * 1000));
+    
 	SetWorld(std::make_shared<MainMenu>());
 }
 
