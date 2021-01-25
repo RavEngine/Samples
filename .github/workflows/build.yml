@@ -1,9 +1,7 @@
 name: Build-Samples
 
-on: 
-   workflow_dispatch:
-     tags:
-        description: 'Execute cloud build' 
+on: workflow_dispatch
+   
 
 jobs:
   build-linux:
