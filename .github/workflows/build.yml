@@ -15,12 +15,12 @@ jobs:
       - name: Build
         run: ./build-linux.sh
       - name: Compress Samples
-        run: cd build/Release && zip -r -9 RavEngine_Samples_linux64.zip RavEngine_Sample_*
+        run: cd build/Release && zip -r -9 RavEngine_Samples_Linux64.zip RavEngine_Sample_*
       - name: Archive and upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name:  RavEngine_Samples_linux64
-          path:  build/release/RavEngine_Samples_linux64.zip
+          path:  build/Release/RavEngine_Samples_Linux64.zip
 
   build-mac:
     name: Build Samples for macOS
