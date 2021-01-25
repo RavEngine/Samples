@@ -11,12 +11,18 @@ jobs:
         with:
           submodules: true
       - name: Install Dependencies
-        run: sudo apt-get install cmake clang -y --no-install-recommends 
+        run: sudo apt-get install cmake clang ninja-build -y --no-install-recommends 
       - name: Build
         run: ./build-linux.sh
+      - name: Archive and upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-without-markdown
+          path: build/Release/
+                !build/Release/bin    
 
   build-mac:
-    name: Build samples for macOS
+    name: Build Samples for macOS
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -25,6 +31,12 @@ jobs:
           submodules: true
       - name: Build
         run: ./build-mac.sh
+      - name: Archive and upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-without-markdown
+          path: build/release/
+                !build/release/bin
         
   build-windows:
     name: Build samples for Windows
@@ -35,4 +47,12 @@ jobs:
         with:
           submodules: true
       - name: Build
-        run: .\build-win.bat      
+        run: .\build-win.bat    
+      - name: Build For Real
+        run: .\build-win.bat
+      - name: Archive and upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-without-markdown
+          path: build/release/
+                !build/release/bin    
