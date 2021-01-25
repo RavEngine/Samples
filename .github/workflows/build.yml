@@ -11,7 +11,7 @@ jobs:
         with:
           submodules: true
       - name: Install Dependencies
-        run: sudo apt-get install cmake clang ninja-build libgl1-mesa-dev libegl1-mesa-dev -y --no-install-recommends 
+        run: sudo apt-get update && sudo apt-get install cmake clang ninja-build libgl1-mesa-dev -y --no-install-recommends 
       - name: Build
         run: ./build-linux.sh
       - name: Compress Samples
