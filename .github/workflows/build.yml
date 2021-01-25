@@ -11,7 +11,7 @@ jobs:
         with:
           submodules: true
       - name: Install Dependencies
-        run: sudo apt-get install cmake clang ninja-build -y --no-install-recommends 
+        run: sudo apt-get install cmake clang ninja-build libgl1-mesa-dev libegl1-mesa-dev -y --no-install-recommends 
       - name: Build
         run: ./build-linux.sh
       - name: Archive and upload artifacts
@@ -47,9 +47,7 @@ jobs:
         with:
           submodules: true
       - name: Build
-        run: .\build-win.bat    
-      - name: Build For Real
-        run: .\build-win.bat
+        run: .\build-win.bat ; .\build-win.bat  
       - name: Archive and upload artifacts
         uses: actions/upload-artifact@v2
         with:
