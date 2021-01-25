@@ -1,47 +1,38 @@
 name: Build-Samples
-
 on: workflow_dispatch
-   
 
 jobs:
   build-linux:
     name: Build Samples for Linux x64
     runs-on: ubuntu-20.04
-
     steps:
-      name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        submodules: true
-
-      name: Install dependencies
-      run: sudo apt install libatomic cmake clang++ 
-      
-      name: Build
-      run: cd RavEngine-Samples && ./build-linux.sh
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install Dependencies
+        run: sudo apt install libatomic cmake clang++ -y --no-install-recommends 
+      - name: Build
+        run: cd RavEngine-Samples && ./build-linux.sh
 
   build-mac:
     name: Build samples for macOS
     runs-on: macos-latest
-
     steps:
-      name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        submodules: true
-
-      name: Build
-      run: cd RavEngine-Samples && ./build-mac.sh
-
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build
+        run: cd RavEngine-Samples && ./build-mac.sh
+        
   build-windows:
     name: Build samples for Windows
     runs-on: windows-latest
-
     steps:
-      name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        submodules: true
-
-      name: Build
-      run: cd RavEngine-Samples & build-win.bat      
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build
+        run: cd RavEngine-Samples & build-win.bat      
