@@ -16,6 +16,7 @@
 #include "RavEngine/BuiltinMaterials.hpp"
 #include "RavEngine/InputManager.hpp"
 #include "RavEngine/Light.hpp"
+#include <RavEngine/AudioRoom.hpp>
 #include <bgfx/bgfx.h>
 
 using namespace RavEngine;
@@ -142,6 +143,9 @@ void TestWorld::SetupInputs(){
 	anonymousChild->EmplaceComponent<PointLight>()->Intensity = 4;
 	anonymousChild->EmplaceComponent<RigidBodyStaticComponent>();
 	anonymousChild->EmplaceComponent<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5));
+	auto audioAsset = std::make_shared<RavEngine::AudioAsset>("vgaudio2.wav");
+	//auto audiosource = anonymousChild->EmplaceComponent<RavEngine::AudioSourceComponent>(audioAsset);
+	PlaySound(InstantaneousAudioSource(audioAsset,vector3(0,0,0),2));
 	Spawn(anonymousChild);
 	
 	floorplane = make_shared<RavEngine::Entity>();
@@ -150,6 +154,22 @@ void TestWorld::SetupInputs(){
 	floorplane->transform()->LocalTranslateDelta(vector3(0, -20, 0));
 	floorplane->EmplaceComponent<RigidBodyStaticComponent>();
 	floorplane->EmplaceComponent<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5));
+	
+	auto room = floorplane->EmplaceComponent<AudioRoom>();
+	RoomMaterial testMat({1,2,3,4,5,6,7,8});
+	room->SetRoomDimensions(vector3(100,100,100));
+	room->WallMaterials()[0] = RoomMat::kMarble;
+//	room->WallMaterials()[1] = RoomMat::kMarble;
+//	room->WallMaterials()[2] = RoomMat::kMarble;
+//	room->WallMaterials()[3] = RoomMat::kMarble;
+//	room->WallMaterials()[4] = RoomMat::kMarble;
+//	room->WallMaterials()[5] = RoomMat::kMarble;
+
+	//room->SetRoomMaterial(testMat);
+	
+//	audiosource->Play();
+//	audiosource->SetLoop(true);
+//	audiosource->SetVolume(5);
 	Spawn(floorplane);
 	
 	dl = make_shared<Entity>();

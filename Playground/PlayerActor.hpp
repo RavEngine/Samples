@@ -4,6 +4,7 @@
 #include "RavEngine/IInputListener.hpp"
 #include "RavEngine/ScriptComponent.hpp"
 #include "RavEngine/ChildEntityComponent.hpp"
+#include <RavEngine/AudioSource.hpp>
 
 class PlayerActor;
 class PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInputListener {
@@ -64,6 +65,8 @@ public:
 		
 		transform()->AddChild(cameraEntity->transform());
         EmplaceComponent<RavEngine::ChildEntityComponent>(cameraEntity);
+		
+		EmplaceComponent<RavEngine::AudioListener>();
 	}
 
 	virtual ~PlayerActor(){}
