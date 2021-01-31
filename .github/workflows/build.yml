@@ -1,0 +1,59 @@
+name: Build-Samples
+on: workflow_dispatch
+
+jobs:
+  build-linux:
+    name: Build Samples for Linux x64
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install cmake clang ninja-build libgl1-mesa-dev -y --no-install-recommends 
+      - name: Build
+        run: ./build-linux.sh
+      - name: Compress Samples
+        run: cd build/Release && zip -r -9 RavEngine_Samples_Linux64.zip RavEngine_Sample_*
+      - name: Archive and upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name:  RavEngine_Samples_linux64
+          path:  build/Release/RavEngine_Samples_Linux64.zip
+
+  build-mac:
+    name: Build Samples for macOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build
+        run: ./build-mac.sh
+      - name: Compress Samples
+        run: cd build/release && zip -r -9 RavEngine_Samples_macOS.zip *.app
+      - name: Archive and upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_macOS
+          path: build/release/RavEngine_Samples_macOS.zip
+                
+  build-windows:
+    name: Build samples for Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build
+        run: .\build-win.bat ; .\build-win.bat
+      - name: Compress Samples
+        run: cd build\release ; Compress-Archive -Path .\RavEngine_Sample_* -DestinationPath RavEngine_Samples_win64.zip
+      - name: Archive and upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_win64
+          path: build\release\RavEngine_Samples_win64.zip
