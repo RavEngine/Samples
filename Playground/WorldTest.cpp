@@ -157,7 +157,7 @@ void TestWorld::SetupInputs(){
 	
 	auto room = floorplane->EmplaceComponent<AudioRoom>();
 	RoomMaterial testMat({1,2,3,4,5,6,7,8});
-	room->SetRoomDimensions(vector3(100,100,100));
+	room->SetRoomDimensions(vector3(5,30,5));
 	room->WallMaterials()[0] = RoomMat::kMarble;
 //	room->WallMaterials()[1] = RoomMat::kMarble;
 //	room->WallMaterials()[2] = RoomMat::kMarble;
@@ -170,6 +170,20 @@ void TestWorld::SetupInputs(){
 //	audiosource->Play();
 //	audiosource->SetLoop(true);
 //	audiosource->SetVolume(5);
+	
+	struct RoomDebugRenderer : public IDebugRenderer{
+		void DrawDebug(RavEngine::DebugDraw& dbg) const override{
+			auto owner = std::static_pointer_cast<TestEntity>(getOwner().lock());
+			if (owner){
+				auto room = owner->GetComponent<AudioRoom>();
+				if (room){
+					room->DrawDebug(dbg);
+				}
+			}
+		}
+	};
+	floorplane->EmplaceComponent<RoomDebugRenderer>();
+	
 	Spawn(floorplane);
 	
 	dl = make_shared<Entity>();
