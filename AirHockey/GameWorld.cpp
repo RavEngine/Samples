@@ -8,6 +8,7 @@
 #include <fmt/format.h>
 #include "MainMenu.hpp"
 #include <RavEngine/Debug.hpp>
+#include <RavEngine/AudioRoom.hpp>
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
@@ -19,6 +20,7 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers){}
 void GameWorld::OnActivate(){
 	Ref<Entity> cameraActor = make_shared<Entity>();
 	cameraActor->EmplaceComponent<CameraComponent>()->setActive(true);
+	cameraActor->EmplaceComponent<AudioListener>();
 	cameraBoom->transform()->SetWorldPosition(vector3(0,0,0));
 	
 	cameraBoom->transform()->AddChild(cameraActor->transform());
@@ -50,6 +52,9 @@ void GameWorld::OnActivate(){
 	fill->Intensity=0.4;
 	fill->color = {0,0,1,1};
 	lightmain->transform()->LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
+	auto room = lightmain->EmplaceComponent<AudioRoom>();
+	room->SetRoomDimensions(vector3(30,30,30));
+	room->WallMaterials()[0] = RoomMat::kMarble;
 	
 	Spawn(lightmain);
 	

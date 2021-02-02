@@ -9,9 +9,24 @@
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/Light.hpp>
+#include <RavEngine/Debug.hpp>
+#include <RavEngine/AudioSource.hpp>
 
 //marker for querying
 class PuckComponent : public RavEngine::Component, public RavEngine::Queryable<PuckComponent>{};
+
+struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor{
+	std::array<Ref<RavEngine::AudioAsset>,4> sounds{
+		std::make_shared<RavEngine::AudioAsset>("hockeyhit1.wav"),
+		std::make_shared<RavEngine::AudioAsset>("hockeyhit2.wav"),
+		std::make_shared<RavEngine::AudioAsset>("hockeyhit3.wav"),
+		std::make_shared<RavEngine::AudioAsset>("hockeyhit4.wav")
+	};
+	void Tick(float scale) override{}
+	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&) override{
+		GetWorld()->PlaySound(RavEngine::InstantaneousAudioSource(sounds[std::rand() % 4],transform()->GetWorldPosition(),3));
+	}
+};
 
 class Puck : public RavEngine::Entity{
 public:
@@ -24,7 +39,7 @@ public:
 			material->SetAlbedoColor({0.2,0.2,0.2,1});
         }
         puckmesh->SetMaterial(material);
-        auto dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>();
+        auto dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
         EmplaceComponent<RavEngine::SphereCollider>(0.3,std::make_shared<RavEngine::PhysicsMaterial>(0,0,1),vector3(0,0.3,0));
 		
 		//prevent puck from falling over
@@ -44,5 +59,8 @@ public:
 		lightEntity->transform()->LocalTranslateDelta(vector3(0,1,0));
 		
         EmplaceComponent<PuckComponent>();
+		
+		auto scr = EmplaceComponent<PuckScript>();
+		dyn->AddReceiver(scr);
     }
 };

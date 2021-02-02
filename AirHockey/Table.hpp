@@ -22,7 +22,7 @@ public:
         Ref<RavEngine::PhysicsMaterial> physmat = std::make_shared<RavEngine::PhysicsMaterial>(0, 0, 1.5);
 		Ref<RavEngine::PhysicsMaterial> floorphysmat = std::make_shared<RavEngine::PhysicsMaterial>(0.03, 0.03, 0);	//version for floor that is not bouncy
 
-        EmplaceComponent<RavEngine::RigidBodyStaticComponent>();
+        EmplaceComponent<RavEngine::RigidBodyStaticComponent>(/*FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1*/);
         EmplaceComponent<RavEngine::BoxCollider>(vector3(3, 1.3, 5),floorphysmat);
 
         constexpr float height = 2.326;

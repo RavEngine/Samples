@@ -5,6 +5,7 @@
 #include <RavEngine/Material.hpp>
 #include <RavEngine/PhysicsCollider.hpp>
 #include <RavEngine/Light.hpp>
+#include <RavEngine/PhysicsSolver.hpp>
 
 class Paddle : public RavEngine::Entity{
 public:
@@ -16,7 +17,7 @@ public:
 		mesh->SetMaterial(material);
 		
 		//PhysX doesn't have a cylinder primitive, so we use a sphere offset upwards and lock the axes
-		auto dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>();
+		auto dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
         EmplaceComponent<RavEngine::SphereCollider>(0.5,std::make_shared<RavEngine::PhysicsMaterial>(0.3,0.3,0.1),vector3(0,0.4,0));
 		
 		dyn->SetMass(2);
