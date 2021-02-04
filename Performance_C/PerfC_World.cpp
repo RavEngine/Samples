@@ -26,6 +26,7 @@ static std::uniform_int_distribution<> texturerng(0,PerfC_World::num_textures - 
 static std::uniform_real_distribution<> spinrng(glm::radians(-1.0), glm::radians(1.0));
 static std::uniform_real_distribution<> colorrng(0.5,1);
 
+
 struct DemoMaterialInstance : public RavEngine::PBRMaterialInstance{
 
 	DemoMaterialInstance(Ref<PBRMaterial> m) : PBRMaterialInstance(m){}
@@ -46,6 +47,9 @@ struct DemoMaterialInstance : public RavEngine::PBRMaterialInstance{
 	}
 };
 
+static std::array<Ref<DemoMaterialInstance>,PerfC_World::num_textures> materialInstances;
+
+
 struct DemoObject : public RavEngine::Entity{
 	DemoObject(bool isLight = false){
 		Ref<Entity> child = make_shared<Entity>();
@@ -54,11 +58,10 @@ struct DemoObject : public RavEngine::Entity{
         EmplaceComponent<SpinComponent>(vector3(spinrng(gen)/3,spinrng(gen)/3,spinrng(gen)/3));
 		
 		auto mesh = child->EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)]);
-		Ref<DemoMaterialInstance> inst = make_shared< DemoMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		Ref<DemoMaterialInstance> inst = materialInstances[texturerng(gen)];
 		
 		if (!isLight){
 			inst->SetAlbedoColor({(float)colorrng(gen),(float)colorrng(gen),(float)colorrng(gen),1});
-			inst->SetAlbedoTexture(PerfC_World::textures[texturerng(gen)]);
 		}
 		else{
 			auto light = child->EmplaceComponent<PointLight>();
@@ -99,7 +102,9 @@ void PerfC_World::OnActivate(){
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
 		textures[i] = make_shared<Texture>(fmt::format("tx{}.png",i+1));
-	}
+		materialInstances[i] = make_shared<DemoMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		materialInstances[i]->SetAlbedoTexture(textures[i]);
+			}
 	
 	Debug::Log("Loading {} objects", num_objects);
 	//spawn the polygons
