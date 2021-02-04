@@ -209,7 +209,7 @@ void PerfC_World::OnActivate(){
 
 void PerfC_World::posttick(float scale){
 	hud->ExclusiveAccess([&] {
-		fpslabel->SetInnerRML(fmt::format("TPS: {}, FPS: {} ({} ms)", (int)App::CurrentTPS(),(int)RenderEngine::GetCurrentFPS(), (int)RenderEngine::GetLastFrameTime()));
+		fpslabel->SetInnerRML(fmt::format("TPS: {}, FPS: {} ({} ms)", (int)App::CurrentTPS(),(int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()));
 	});
 }
 
