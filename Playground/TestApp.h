@@ -3,8 +3,6 @@
 #include "WorldTest.hpp"
 #include <RavEngine/App.hpp>
 #include <RavEngine/WeakRef.hpp>
-#include <RavEngine/SharedObject.hpp>
-#include <cassert>
 
 class TestApp : public RavEngine::App{
 public:

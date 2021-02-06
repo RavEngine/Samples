@@ -84,5 +84,4 @@ add_test(
 )
 endmacro()
 
-test("SharedObject" "${PROJECT_NAME}_TestBasics")
 test("CTTI" "${PROJECT_NAME}_TestBasics")
