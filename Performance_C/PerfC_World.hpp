@@ -22,7 +22,7 @@ public:
 #ifdef _DEBUG
 	static constexpr size_t num_objects = 5000;	//reduced for demo because debug builds are slower
 #else
-	static constexpr size_t num_objects = 15000;
+	static constexpr size_t num_objects = 21000;
 #endif
 	
 	static bool TexturesEnabled;
