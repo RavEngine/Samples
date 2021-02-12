@@ -1,0 +1,33 @@
+<rml>
+	<head>
+        <link type="text/rcss" href="style.rcss"></link>
+		<style>
+			#header{
+				display: block;
+				background-color: #FF00FFFF;
+				width:100%;
+				text-align:center;
+			}
+			#scoreboard{
+				font-size:40dp;
+			}
+		</style>
+	</head>
+	<body>
+		<p id="header">
+			<span id="scoreboard">A full width header</span>
+		</p>
+        <p>
+            <button>
+                A button
+            </button>
+            <button>
+                Another button
+            </button>
+            <br></br>
+            <input>
+                type in me!
+            </input>
+        </p>
+	</body>
+</rml>

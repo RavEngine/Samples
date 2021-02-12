@@ -70,6 +70,7 @@ endmacro()
 add_sample("AirHockey")
 add_sample("Playground")
 add_sample("Performance_C")
+add_sample("GUIKitchenSink")
 
 # tests
 include(CTest)

@@ -9,6 +9,8 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - A testing zone, subject to change
 3. Performance_C
    - A stress test for high object count with animated lights
+4. GUIKitchenSink
+   - A demonstration of all the different supported GUI widgets
 
 ## How to build
 1. Ensure RavEngine supports your platform.
