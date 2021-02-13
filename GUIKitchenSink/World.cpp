@@ -14,7 +14,7 @@ using namespace std;
 struct SingleEntityMarker : public Component, public Queryable<SingleEntityMarker>{};
 
 struct FPSSystem : public System{
-	static list_type queries;
+	const list_type queries{ CTTI<SingleEntityMarker> };
 	void Tick(float scale, Ref<Entity> e) override{
 		App::DispatchMainThread([](){
 			App::SetWindowTitle(fmt::format("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::Renderer->currentBackend(), (int)App::CurrentTPS(), (int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()).c_str());
@@ -27,7 +27,7 @@ struct FPSSystem : public System{
 		return CTTI<FPSSystem>;
 	}
 };
-System::list_type FPSSystem::queries{CTTI<SingleEntityMarker>};
+//System::list_type FPSSystem::queries;
 
 void ::World::OnActivate(){
 	//camera and cube
