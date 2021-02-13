@@ -19,6 +19,8 @@ private:
 		auto world = std::make_shared<TestWorld>();
 		world->SetupInputs();
 		SetWorld(world);
+		
+		SetWindowTitle(fmt::format("RavEngine Playground | {}", Renderer->currentBackend()).c_str());
 	}
 
 	int OnShutdown() override {

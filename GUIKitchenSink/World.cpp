@@ -6,15 +6,35 @@
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/App.hpp>
+#include <RavEngine/Debug.hpp>
 
 using namespace RavEngine;
 using namespace std;
+
+struct SingleEntityMarker : public Component, public Queryable<SingleEntityMarker>{};
+
+struct FPSSystem : public System{
+	static list_type queries;
+	void Tick(float scale, Ref<Entity> e) override{
+		App::DispatchMainThread([](){
+			App::SetWindowTitle(fmt::format("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::Renderer->currentBackend(), (int)App::CurrentTPS(), (int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()).c_str());
+		});
+	}
+	const list_type& QueryTypes() const override{
+		return queries;
+	}
+	ctti_t ID() const override{
+		return CTTI<FPSSystem>;
+	}
+};
+System::list_type FPSSystem::queries{CTTI<SingleEntityMarker>};
 
 void ::World::OnActivate(){
 	//camera and cube
 	
 	Ref<Entity> camlights = make_shared<Entity>();
 	camlights->EmplaceComponent<CameraComponent>()->setActive(true);
+	camlights->EmplaceComponent<SingleEntityMarker>();
 	camlights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
 	camlights->transform()->LocalTranslateDelta(vector3(0,0,5));
 	
@@ -35,6 +55,8 @@ void ::World::OnActivate(){
 	Spawn(dirlight);
 	Spawn(gui);
 	
+	doc->Debug();
+	
 	//input manager
 	Ref<InputManager> im = make_shared<InputManager>();
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
@@ -45,6 +67,9 @@ void ::World::OnActivate(){
 	im->BindAnyAction(doc);
 	
 	App::inputManager = im;
+	
+	//FPS updating system
+	systemManager.RegisterTimedSystem(make_shared<FPSSystem>(), std::chrono::seconds(1));
 }
 
 void ::World::posttick(float scale){

@@ -23,7 +23,7 @@ gamename{
 br{
     display:block
 }
-button, input{
+button, input, select{
     background-color: #AAAAAAFF;
     border: 2dp #DDDDDDFF;
     border-radius: 5dp;

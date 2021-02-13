@@ -1,0 +1,65 @@
+/*
+* Default styles for all the basic elements.
+*/
+
+div
+{
+	display: block;
+}
+
+p
+{
+	display: block;
+}
+
+h1
+{
+	display: block;
+}
+
+em
+{
+	font-style: italic;
+}
+
+strong
+{
+	font-weight: bold;
+}
+
+datagrid
+{
+	display: block;
+}
+
+select, dataselect, datacombo
+{
+	text-align: left;
+}
+
+tabset tabs
+{
+	display: block;
+}
+
+
+body
+{
+	font-family: Delicious;
+	font-weight: normal;
+	font-style: normal;
+	font-size: 15 dp;
+	color: white;
+}
+
+body.window
+{
+	padding-top: 43px;
+	padding-bottom: 20px;
+	
+	min-width: 250px;
+	max-width: 800px;
+	
+	min-height: 135px;
+	max-height: 700px;
+}

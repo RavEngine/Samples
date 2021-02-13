@@ -1,12 +1,14 @@
 <rml>
 	<head>
         <link type="text/rcss" href="style.rcss"></link>
+		<link type="text/rcss" href="default.rcss"></link>
 		<style>
 			#header{
 				display: block;
 				background-color: #FF00FFFF;
 				width:100%;
 				text-align:center;
+				margin-top: 70px;
 			}
 			#scoreboard{
 				font-size:40dp;
@@ -24,10 +26,19 @@
             <button>
                 Another button
             </button>
-            <br></br>
-            <input>
-                type in me!
-            </input>
         </p>
+		<p>
+            <input value="type in me!"></input>
+		</p>
+		<p>
+			<select>
+				<option>Option 1</option>
+				<option selected>Option 2</option>
+				<option>Option 3</option>
+			</select>
+		</p>
+		<p>
+			<label><input type="checkbox" value="pizza"/> A checkbox</label>
+		</p>
 	</body>
 </rml>
