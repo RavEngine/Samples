@@ -21,6 +21,12 @@ private:
 		SetWorld(world);
 		
 		SetWindowTitle(fmt::format("RavEngine Playground | {}", Renderer->currentBackend()).c_str());
+		
+		App::networkManager.server = std::make_unique<RavEngine::NetworkServer>();
+		App::networkManager.server->Start(6969);
+		
+		App::networkManager.client = std::make_unique<RavEngine::NetworkClient>();
+		App::networkManager.client->Connect("127.0.0.1",6969);
 	}
 
 	int OnShutdown() override {
