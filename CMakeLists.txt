@@ -20,6 +20,10 @@ if(MSVC)
   add_definitions(/Qpar)
 endif()
 
+# set(CMAKE_MACOSX_BUNDLE YES)
+# set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED NO)
+# set(CMAKE_OSX_SYSROOT iphoneos)
+
 
 add_subdirectory("RavEngine")
 
