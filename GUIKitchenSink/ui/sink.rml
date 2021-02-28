@@ -26,19 +26,10 @@
             <button>
                 Another button
             </button>
+			<input value="Type in me!"></input>
         </p>
 		<p>
-            <input value="type in me!"></input>
-		</p>
-		<p>
-			<select>
-				<option>Option 1</option>
-				<option selected>Option 2</option>
-				<option>Option 3</option>
-			</select>
-		</p>
-		<p>
-			<label><input type="checkbox" value="pizza"/> A checkbox</label>
+			<input type="checkbox">A checkbox!</input>
 		</p>
 	</body>
 </rml>

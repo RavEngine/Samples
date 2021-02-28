@@ -20,11 +20,6 @@ if(MSVC)
   add_definitions(/Qpar)
 endif()
 
-# set(CMAKE_MACOSX_BUNDLE YES)
-# set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED NO)
-# set(CMAKE_OSX_SYSROOT iphoneos)
-
-
 add_subdirectory("RavEngine")
 
 project("RavEngine_Samples")
@@ -48,7 +43,7 @@ macro (add_sample sample_dir)
 	file(GLOB meshes "${sample_dir}/meshes/*.obj")
 	file(GLOB textures "${sample_dir}/textures/*")
 	file(GLOB shaders "${sample_dir}/shaders/*.cmake")
-	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss")
+	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png")
 	file(GLOB sounds "${sample_dir}/sounds/*")
 
 	pack_resources(TARGET "${APPNAME}" 
@@ -58,9 +53,6 @@ macro (add_sample sample_dir)
 		UIS ${uis}
 		SOUNDS ${sounds}
 	)
-
-	# strip symbols in release
-	set_target_properties("${APPNAME}"  PROPERTIES LINK_FLAGS_RELEASE -s)
 
 	# fixup mac bundle
 	INSTALL(CODE 

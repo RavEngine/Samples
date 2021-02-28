@@ -1,29 +1,30 @@
 *{
     font-family: Roboto;
-}
-
-tagline, gamename{
-    display:block;
-    text-align:center;
-    width:100%;
-}
-header, menu{
-    width:100%;
-    margin: 50dp;
-}
-tagline, button{
     font-size:30dp;
 }
-tagline{
-    margin-top: 40dp;
+
+@spritesheet theme 
+{
+	src: invader.png;
+	
+	/* For high dpi screens, designates the scaling it is intended to be shown at. */
+	resolution: 1x;  
+	
+	/**
+	   The following specifies a list of sprite names and associated rectangles into the image given above.
+	   Any sprite given here can be specified in a decorator. Their names must be globally unique.
+	   Rectangles are specified as: x y width height. With the origin assumed to be at the top left corner.
+	*/
+	checkbox-off: 407px 60px 30px 30px;
+    checkbox-on: 467px 60px 30px 30px;
+    checkbox-hover: 437px 60px 30px 30px;
+	checkbox-active: 467px 60px 30px 30px;
+	checkbox-checked-hover: 437px 90px 30px 30px;
+	checkbox-checked-active: 467px 90px 30px 30px;
 }
-gamename{
-    font-size:100dp;
-}
-br{
-    display:block
-}
-button, input, select{
+
+
+button{
     background-color: #AAAAAAFF;
     border: 2dp #DDDDDDFF;
     border-radius: 5dp;
@@ -43,4 +44,31 @@ button:hover{
 button:active{
     background-color: #888888FF;
     transition: background-color 0.7s elastic-out;
+}
+
+input{
+    background-color:#FFFFFFFF;
+    border: 2dp #CCCCCCFF;
+    color: black;
+    max-width:400dp;
+    display:inline-block;
+}
+
+input.checkbox{
+    color:white;
+    max-width: 400dp;
+    decorator: image(checkbox-off);
+    padding:30dp
+}
+
+input.checkbox:checked{
+    decorator: image(checkbox-on);
+}
+
+input.checkbox:active{
+    decorator: image(checkbox-active);
+}
+
+input.checkbox:hover{
+    decorator: image(checkbox-hover);
 }
