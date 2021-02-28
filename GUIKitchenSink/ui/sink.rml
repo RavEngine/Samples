@@ -28,8 +28,28 @@
             </button>
 			<input value="Type in me!"></input>
         </p>
+		<br></br>
 		<p>
-			<input type="checkbox">A checkbox!</input>
+			<label><input type="checkbox"></input>A checkbox!</label>
+		</p>
+		<br></br>
+		<p>
+			Select an option:
+			<select>
+				<option>Option 1</option>
+				<option selected>Option 2</option>
+				<option>Option 3</option>
+			</select>
+		</p>
+		<br></br>
+		<p>
+			Range slider
+			<input type="range" min=1 max=10></input>
+		</p>
+		<br></br>
+		<p>
+			Progress
+			<progress min=1 max=100 value=70></progress>
 		</p>
 	</body>
 </rml>
