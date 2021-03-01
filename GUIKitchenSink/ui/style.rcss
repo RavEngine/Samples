@@ -238,3 +238,45 @@ input.range sliderarrowdec:hover  { decorator: image( range-dec-hover  ); }
 input.range sliderarrowinc:hover  { decorator: image( range-inc-hover  ); }
 input.range sliderarrowdec:active { decorator: image( range-dec-active ); }
 input.range sliderarrowinc:active { decorator: image( range-inc-active ); }
+
+progressbar {
+	margin: 10dp 20dp;
+	display: inline-block;
+	vertical-align: middle;
+}
+.gauge { 
+	decorator: image( gauge );
+	width: 100dp;
+	height: 86dp;
+	fill-image: gauge-fill;
+}
+.progress_horizontal { 
+	decorator: tiled-horizontal( progress-l, progress-c, progress-r );
+	width: 150dp;
+	height: 34dp;
+}
+.progress_horizontal fill {
+	decorator: tiled-horizontal( progress-fill-l, progress-fill-c, progress-fill-r );
+	margin: 0 7dp;
+	padding-left: 14dp;
+}
+.progress_label {
+	font-size: 18dp;
+	color: #ceb;
+	margin-left: 1em;
+	margin-bottom: 0;
+}
+#gauge_value, #progress_value {
+	font-size: 16dp;
+	color: #4ADB2D;
+	text-align: right;
+	width: 53dp;
+	font-effect: outline( 2dp #555 );
+}
+#gauge_value {
+	margin: 34dp 0 0 18dp;
+}
+#progress_value { 
+	margin-left: -20dp;
+	display: inline-block;
+}
