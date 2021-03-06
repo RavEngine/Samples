@@ -20,11 +20,11 @@ if(MSVC)
   add_definitions(/Qpar)
 endif()
 
+project("RavEngine_Samples")
+#set(CMAKE_OSX_SYSROOT iphoneos CACHE INTERNAL "")
 add_subdirectory("RavEngine")
 
-project("RavEngine_Samples")
-
-macro (add_sample sample_dir)
+function (add_sample sample_dir)
 	# create the test executable
 	SET(APPNAME "RavEngine_Sample_${sample_dir}")
 
@@ -35,10 +35,6 @@ macro (add_sample sample_dir)
 	set_target_properties("${APPNAME}" 
 		PROPERTIES 
 		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist"
-		OSX_ARCHITECTURES "arm64;x86_64"
-		#XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2"
-		#XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET "14.0"
-		VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>"
 	)
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" )
 
@@ -65,7 +61,7 @@ macro (add_sample sample_dir)
 		" 
 		COMPONENT Runtime
 	)
-endmacro()
+endfunction()
 
 add_sample("AirHockey")
 add_sample("Playground")

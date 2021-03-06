@@ -23,9 +23,6 @@ struct FPSSystem : public System{
 	const list_type& QueryTypes() const override{
 		return queries;
 	}
-	ctti_t ID() const override{
-		return CTTI<FPSSystem>;
-	}
 };
 //System::list_type FPSSystem::queries;
 

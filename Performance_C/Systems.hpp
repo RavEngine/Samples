@@ -21,10 +21,6 @@ struct SpinSystem : public RavEngine::System{
 			e->transform()->LocalRotateDelta((double)fpsScale * e->GetComponent<SpinComponent>()->spinamt);
 		}
 	}
-	
-	RavEngine::ctti_t ID() const override{
-		return RavEngine::CTTI<SpinSystem>;
-	}
 protected:
 	static const list_type queries;
 };

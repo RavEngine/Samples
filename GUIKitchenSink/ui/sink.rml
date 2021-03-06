@@ -17,7 +17,7 @@
 	</head>
 	<body>
 		<p id="header">
-			<span id="scoreboard">A full width header</span>
+			<span id="scoreboard">A full-width header</span>
 		</p>
         <p>
             <button>
@@ -49,6 +49,7 @@
 		<br></br>
 		<p>
 			Progress
+			<progressbar min=0 max=100 value=30></progressbar>
 		</p>
 	</body>
 </rml>

@@ -45,6 +45,15 @@
 	range-inc:           3px 250px 17px 17px;
 	range-inc-hover:    21px 250px 17px 17px;
 	range-inc-active:   39px 250px 17px 17px;
+
+	progress-l:      103px 267px 13px 34px;
+	progress-c:      116px 267px 54px 34px;
+	progress-r:      170px 267px 13px 34px;
+	progress-fill-l: 110px 302px  6px 34px;
+	progress-fill-c: 140px 302px  6px 34px;
+	progress-fill-r: 170px 302px  6px 34px;
+	gauge:      0px 271px 100px 86px;
+	gauge-fill: 0px 356px 100px 86px;
 }
 
 
@@ -86,7 +95,9 @@ input.checkbox{
     color:white;
     max-width: 400dp;
     decorator: image(checkbox-off);
-    padding:30dp
+    padding:30dp;
+	background-color: transparent;
+	border:transparent;
 }
 
 input.checkbox:checked{
@@ -197,6 +208,8 @@ input.range {
 	width: 200dp;
 	height: 32dp;
 	vertical-align: -12dp;
+	background-color: transparent;
+	border: transparent;
 }
 input.range slidertrack {
 	margin-top: 3dp;
@@ -229,3 +242,18 @@ input.range sliderarrowdec:hover  { decorator: image( range-dec-hover  ); }
 input.range sliderarrowinc:hover  { decorator: image( range-inc-hover  ); }
 input.range sliderarrowdec:active { decorator: image( range-dec-active ); }
 input.range sliderarrowinc:active { decorator: image( range-inc-active ); }
+
+progressbar {
+	margin: 10dp 20dp;
+	display: inline-block;
+	vertical-align: middle;
+	background-color:white;
+	border: 2dp #555555FF;
+	width: 150dp;
+	height: 34dp;
+}
+progressbar fill{
+	background-color: #00AAAAFF;
+	margin: 0 7dp;
+	padding-left: 14dp;
+}
