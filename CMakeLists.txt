@@ -21,7 +21,7 @@ if(MSVC)
 endif()
 
 project("RavEngine_Samples")
-#set(CMAKE_OSX_SYSROOT iphoneos CACHE INTERNAL "")
+set(CMAKE_OSX_SYSROOT iphoneos CACHE INTERNAL "")
 add_subdirectory("RavEngine")
 
 function (add_sample sample_dir)
