@@ -39,6 +39,24 @@ jobs:
         with:
           name: RavEngine_Samples_macOS
           path: build/release/RavEngine_Samples_macOS.zip
+
+  build-ios:
+    name: Build Samples for iOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Build
+        run: ./build-ios.sh
+      - name: Compress Samples
+        run: cd build/release && zip -r -9 RavEngine_Samples_iOS.zip *.app
+      - name: Archive and upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_iOS
+          path: build/release/RavEngine_Samples_iOS.zip
                 
   build-windows:
     name: Build samples for Windows
