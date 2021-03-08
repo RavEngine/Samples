@@ -13,14 +13,14 @@ using namespace std;
 
 struct SingleEntityMarker : public Component, public Queryable<SingleEntityMarker>{};
 
-struct FPSSystem : public System{
-	const list_type queries{ CTTI<SingleEntityMarker> };
-	void Tick(float scale, Ref<Entity> e) override{
+struct FPSSystem {
+	const RavEngine::System::list_type queries{ CTTI<SingleEntityMarker> };
+	void Tick(float scale, Ref<Entity> e){
 		App::DispatchMainThread([](){
 			App::SetWindowTitle(fmt::format("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::Renderer->currentBackend(), (int)App::CurrentTPS(), (int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()).c_str());
 		});
 	}
-	const list_type& QueryTypes() const override{
+	const RavEngine::System::list_type& QueryTypes() const{
 		return queries;
 	}
 };
