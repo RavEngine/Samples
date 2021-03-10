@@ -13,6 +13,7 @@
 #include <iostream>
 #include "RavEngine/StaticMesh.hpp"
 #include <RavEngine/mathtypes.hpp>
+#include <RavEngine/NetworkIdentity.hpp>
 
 using namespace std;
 using namespace physx;
@@ -50,6 +51,8 @@ TestEntity::TestEntity() : Entity(){
     mesh->SetMaterial(sharedMatInst);
 	
 	EmplaceComponent<TestEntityDebugRenderer>();
+	
+	EmplaceComponent<NetworkIdentity>();
 }
 
 void TestEntityController::Tick(float scale) {

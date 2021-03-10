@@ -3,6 +3,7 @@
 #include "WorldTest.hpp"
 #include <RavEngine/App.hpp>
 #include <RavEngine/WeakRef.hpp>
+#include "TestEntity.hpp"
 
 class TestApp : public RavEngine::App{
 public:
@@ -11,9 +12,18 @@ private:
 	void OnStartup(int argc, char** argv) override{
 
 		//setup video settings
-		RavEngine::RenderEngine::VideoSettings.vsync = true;
+		RavEngine::RenderEngine::VideoSettings.vsync = false;
 		RavEngine::RenderEngine::VideoSettings.width = 800;
 		RavEngine::RenderEngine::VideoSettings.height = 480;
+		
+		App::networkManager.server = std::make_unique<RavEngine::NetworkServer>();
+		App::networkManager.server->Start(6969);
+		
+		App::networkManager.client = std::make_unique<RavEngine::NetworkClient>();
+		App::networkManager.client->Connect("127.0.0.1",6969);
+		
+		//what entities are allowed to spawn networked?
+		App::networkManager.RegisterNetworkedEntity<TestEntity>();
 
 		//create a world
 		auto world = std::make_shared<TestWorld>();
@@ -21,12 +31,6 @@ private:
 		SetWorld(world);
 		
 		SetWindowTitle(fmt::format("RavEngine Playground | {}", Renderer->currentBackend()).c_str());
-		
-		App::networkManager.server = std::make_unique<RavEngine::NetworkServer>();
-		App::networkManager.server->Start(6969);
-		
-		App::networkManager.client = std::make_unique<RavEngine::NetworkClient>();
-		App::networkManager.client->Connect("127.0.0.1",6969);
 	}
 
 	int OnShutdown() override {
