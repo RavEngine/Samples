@@ -44,7 +44,7 @@
 		<br></br>
 		<p>
 			Range slider
-			<input type="range" min=1 max=10></input>
+			<input type="range" min=1 max=100></input>
 		</p>
 		<br></br>
 		<p>

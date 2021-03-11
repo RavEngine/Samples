@@ -15,21 +15,6 @@
 	   Rectangles are specified as: x y width height. With the origin assumed to be at the top left corner.
 	*/
 
-    selectbox-tl: 281px 275px 11px 9px;
-	selectbox-t:  292px 275px 1px 9px;
-	selectbox-tr: 294px 275px 11px 9px;
-	selectbox-l:  281px 283px 11px 1px;
-	selectbox-c:  292px 283px 1px 1px;
-	selectbox-bl: 281px 285px 11px 11px;
-	selectbox-b:  292px 285px 1px 11px;
-	selectbox-br: 294px 285px 11px 11px;
-	
-	selectvalue: 162px 192px 145px 37px;
-	selectvalue-hover: 162px 230px 145px 37px;
-	selectarrow: 307px 192px 30px 37px;
-	selectarrow-hover: 307px 230px 30px 37px;
-	selectarrow-active: 307px 268px 30px 37px;
-
     range-track:       219px 194px  3px 32px;
 	range-track-inner: 220px 204px  1px 14px;
 	range-bar:         127px 191px 34px 32px;
@@ -82,7 +67,7 @@ input.checkbox{
 	height: 20dp;
 	background-color: #FFFFFFFF;
 	border: 5dp #CCCCCCFF;
-	border-radius: 4px;
+	border-radius: 4dp;
 }
 
 input.checkbox:checked{
@@ -111,25 +96,21 @@ dataselect selectvalue
 	width: auto;
 	margin-right: 30dp;
 	
-	height: 26dp;
-	padding: 11dp 10dp 0dp 10dp;
-
-	decorator: image( selectvalue  );
+	background-color:gray;
 }
 
 select selectarrow,
 dataselect selectarrow
 {
 	width: 30dp;
-	height: 37dp;
-	
-	decorator: image( selectarrow );
+	height: 100%;
+	background-color: orange;
 }
 
 select:hover selectarrow,
 dataselect:hover selectarrow
 {
-	decorator: image( selectarrow-hover );
+	background-color: red;
 }
 
 select:active selectarrow,
@@ -137,17 +118,13 @@ select selectarrow:checked,
 dataselect:active selectarrow,
 dataselect selectarrow:checked
 {
-	decorator: image( selectarrow-active );
+	background-color: blue;
 }
 
 select selectbox,
 dataselect selectbox
 {
-	margin-left: 1dp;
-	margin-top: -7dp;
-	margin-bottom: -10dp;
-	width: 162dp;
-	padding: 1dp 4dp 4dp 4dp;
+	width: 100%;
 }
 
 select selectbox,
@@ -155,78 +132,83 @@ dataselect selectbox,
 datagrid datagridbody,
 tbody
 {
-	decorator: tiled-box(
-		selectbox-tl, selectbox-t, selectbox-tr, 
-		selectbox-l, selectbox-c, auto,  /* auto mirrors left */
-		selectbox-bl, selectbox-b, selectbox-br
-	);
+	padding: 5dp;
+	border: 2dp black;
 }
 
 select selectbox option,
 dataselect selectbox option
 {
 	width: auto;
-	padding: 3dp 0 3dp 6dp;
 	background: #DDDD;
+	color:black;
 }
 
-select selectbox option:nth-child(even),
-dataselect selectbox option:nth-child(even),
-datagrid datagridrow:nth-child(even),
-tr:nth-child(even)
-{
-	background: #FFFFFFA0;
-}
 select selectbox option:checked,
 dataselect selectbox option:checked
 {
+	background-color: #74d2fda0;
 	font-weight: bold;
 }
 select selectbox option:hover,
 dataselect selectbox option:hover
 {
-	background: #FF5D5D;
+	background: #35bfffa0;
+	color:white;
 }
 
 /* Slider */
 input.range {
 	width: 200dp;
 	height: 32dp;
-	vertical-align: -12dp;
 	background-color: transparent;
 	border: transparent;
 }
 input.range slidertrack {
-	margin-top: 3dp;
-	height: 22dp;
-	image-color: #ecc;
-	decorator: ninepatch( range-track, range-track-inner, 1.0 );
+	margin-top: 10dp;
+	height: 2dp;
+	background-color:gray;
+	vertical-align: baseline;
 }
 input.range sliderbar {
 	margin-left: -8dp;
-	margin-right: -7dp;
-	margin-top: -3dp;
-	width: 34dp;
-	height: 23dp;
-	decorator: image( range-bar );
+	margin-right: -8dp;
+	width: 30dp;
+	height: 30dp;
+	background-color: white;
 }
 input.range:hover sliderbar {
-	image-color: #cc0;
+	background-color: #cc0;
 }
 input.range sliderbar:active {
-	image-color: #c80;
+	background-color: #c80;
 }
 input.range sliderarrowdec, input.range sliderarrowinc {
 	width: 17dp;
 	height: 17dp;
-	margin-top: 6dp;
+	background-color:red;
 }
-input.range sliderarrowdec        { decorator: image( range-dec        ); }
-input.range sliderarrowinc        { decorator: image( range-inc        ); }
-input.range sliderarrowdec:hover  { decorator: image( range-dec-hover  ); }
-input.range sliderarrowinc:hover  { decorator: image( range-inc-hover  ); }
-input.range sliderarrowdec:active { decorator: image( range-dec-active ); }
-input.range sliderarrowinc:active { decorator: image( range-inc-active ); }
+input.range sliderarrowdec        
+{ 
+	background-color:green;
+}
+input.range sliderarrowinc{
+	background-color:blue;
+}
+input.range sliderarrowdec:hover  {
+	background-color:rgb(23, 202, 83);
+}
+input.range sliderarrowinc:hover  { 
+	background-color: orange;
+}
+input.range sliderarrowdec:active { 
+	background-color:yellow;
+}
+input.range sliderarrowinc:active { 
+	background-color:purple;
+}
+
+/* Progress bar */
 
 progressbar {
 	margin: 10dp 20dp;
