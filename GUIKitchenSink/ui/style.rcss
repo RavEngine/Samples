@@ -75,7 +75,7 @@ input.checkbox:checked{
 }
 
 input.checkbox:active{
-	background-color: #CCCCCCFF
+	background-color: #EEEEEEFF
 }
 
 input.checkbox:hover{
@@ -104,7 +104,7 @@ dataselect selectarrow
 {
 	width: 30dp;
 	height: 100%;
-	background-color: orange;
+	background-color: #AAAAAAFF;
 }
 
 select:hover selectarrow,
@@ -186,25 +186,12 @@ input.range sliderbar:active {
 input.range sliderarrowdec, input.range sliderarrowinc {
 	width: 17dp;
 	height: 17dp;
-	background-color:red;
+	background-color:gray;
 }
-input.range sliderarrowdec        
-{ 
-	background-color:green;
-}
-input.range sliderarrowinc{
-	background-color:blue;
-}
-input.range sliderarrowdec:hover  {
-	background-color:rgb(23, 202, 83);
-}
-input.range sliderarrowinc:hover  { 
+input.range sliderarrowdec:hover, input.range sliderarrowinc:hover   {
 	background-color: orange;
 }
-input.range sliderarrowdec:active { 
-	background-color:yellow;
-}
-input.range sliderarrowinc:active { 
+input.range sliderarrowdec:active, input.range sliderarrowinc:active { 
 	background-color:purple;
 }
 
