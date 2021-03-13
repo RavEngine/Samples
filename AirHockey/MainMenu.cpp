@@ -77,9 +77,7 @@ void MainMenu::LoadGame(int numplayers){
 		Ref<GameWorld> g = make_shared<GameWorld>(numplayers);
 
 		App::DispatchMainThread([=]{
-			App::AddWorld(g);
-			App::SetRenderedWorld(g);
-			App::RemoveWorld(shared_from_this());
+			App::AddReplaceWorld(shared_from_this(), g);
 		});
 	});
 	worker.detach();

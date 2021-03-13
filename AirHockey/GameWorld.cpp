@@ -167,9 +167,7 @@ void GameWorld::GameOver(){
 		void ProcessEvent(Rml::Event& event) override{
 			App::DispatchMainThread([=]{
 				auto world = make_shared<MainMenu>();
-				App::AddWorld(world);
-				App::SetRenderedWorld(world);
-				App::RemoveWorld(gm.lock());
+				App::AddReplaceWorld(gm.lock(),world);
 			});
 		}
 	};
@@ -182,9 +180,7 @@ void GameWorld::GameOver(){
 				isLoading = true;
 				App::DispatchMainThread([=]{
 					auto world = make_shared<GameWorld>(gm.lock()->numplayers);
-					App::AddWorld(world);
-					App::SetRenderedWorld(world);
-					App::RemoveWorld(gm.lock());
+					App::AddReplaceWorld(gm.lock(),world);
 				});
 			}
 		}
