@@ -8,7 +8,7 @@ void ::App::OnStartup(int argc, char **argv){
 	RavEngine::RenderEngine::VideoSettings.width = 800;
 	RavEngine::RenderEngine::VideoSettings.height = 480;
 		
-	SetWorld(std::make_shared<::World>());
+	AddWorld(std::make_shared<::World>());
 	
 	SetWindowTitle(fmt::format("RavEngine GUIKitchenSink | {}", Renderer->currentBackend()).c_str());
 }

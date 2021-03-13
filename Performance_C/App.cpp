@@ -14,7 +14,7 @@ void Performance_C::OnStartup(int argc, char **argv){
     //unlock the tickrate
     SetMinTickTime(std::chrono::duration<double, std::milli>(0));
 	
-	SetWorld(std::make_shared<PerfC_World>());
+	AddWorld(std::make_shared<PerfC_World>());
 	
 	SetWindowTitle(fmt::format("RavEngine Performance_C | {}", Renderer->currentBackend()).c_str());
 }

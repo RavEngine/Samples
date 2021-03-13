@@ -28,7 +28,7 @@ private:
 		//create a world
 		auto world = std::make_shared<TestWorld>();
 		world->SetupInputs();
-		SetWorld(world);
+		AddWorld(world);
 		
 		SetWindowTitle(fmt::format("RavEngine Playground | {}", Renderer->currentBackend()).c_str());
 	}

@@ -162,9 +162,14 @@ void GameWorld::GameOver(){
 	auto doc = ctx->AddDocument("gameover.rml");
 	
 	struct MenuEventListener: public Rml::EventListener{
+		WeakRef<GameWorld> gm;
+		MenuEventListener(WeakRef<GameWorld> w) : gm(w){}
 		void ProcessEvent(Rml::Event& event) override{
 			App::DispatchMainThread([=]{
-				App::SetWorld(make_shared<MainMenu>());
+				auto world = make_shared<MainMenu>();
+				App::AddWorld(world);
+				App::SetRenderedWorld(world);
+				App::RemoveWorld(gm.lock());
 			});
 		}
 	};
@@ -177,12 +182,14 @@ void GameWorld::GameOver(){
 				isLoading = true;
 				App::DispatchMainThread([=]{
 					auto world = make_shared<GameWorld>(gm.lock()->numplayers);
-					App::SetWorld(world);
+					App::AddWorld(world);
+					App::SetRenderedWorld(world);
+					App::RemoveWorld(gm.lock());
 				});
 			}
 		}
 	};
-	doc->GetElementById("mainmenu")->AddEventListener("click", new MenuEventListener());
+	doc->GetElementById("mainmenu")->AddEventListener("click", new MenuEventListener(static_pointer_cast<GameWorld>(shared_from_this())));
 	doc->GetElementById("replay")->AddEventListener("click", new ReplayEventListener(static_pointer_cast<GameWorld>(shared_from_this())));
 	
 	//create a new input manager to stop game inputs and enable UI inputs
