@@ -45,8 +45,8 @@ protected:
 public:
     TestEntity();
 
-	ctti_t NetTypeID() const override {
-		return CTTI<TestEntity>;
+	RavEngine::ctti_t NetTypeID() const override {
+		return RavEngine::CTTI<TestEntity>;
 	}
 };
 
