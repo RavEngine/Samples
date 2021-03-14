@@ -202,6 +202,6 @@ void TestWorld::SetupInputs(){
 }
 
 TestWorld::TestWorld() : World() {
-	
-	
+	auto name = "plgrnd";
+	memcpy((char*)worldID.data(), name, sizeof(name));
 };
