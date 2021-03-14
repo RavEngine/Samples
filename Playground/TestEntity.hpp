@@ -19,6 +19,8 @@
 #include <RavEngine/MeshAsset.hpp>
 #include <RavEngine/Common3D.hpp>
 #include <RavEngine/DebugDraw.hpp>
+#include <RavEngine/NetworkReplicable.hpp>
+#include <RavEngine/CTTI.hpp>
 #include <atomic>
 
 class TestEntityController : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor {
@@ -31,15 +33,21 @@ public:
 	void Start() override;
 	static std::atomic<int> objectcount;
 	std::atomic<int> contactCount;
+
+	
 };
 
-class TestEntity : public RavEngine::Entity, public RavEngine::IPhysicsActor{
+class TestEntity : public RavEngine::Entity, public RavEngine::IPhysicsActor, public RavEngine::NetworkReplicable {
 protected:
     static Ref<RavEngine::PhysicsMaterial> sharedMat;
     static Ref<RavEngine::PBRMaterialInstance> sharedMatInst;
 	static Ref<RavEngine::MeshAsset> sharedMesh;
 public:
     TestEntity();
+
+	ctti_t NetTypeID() const override {
+		return CTTI<TestEntity>;
+	}
 };
 
 struct TestEntityDebugRenderer : public RavEngine::IDebugRenderer{
