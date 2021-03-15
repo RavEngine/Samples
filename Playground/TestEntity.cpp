@@ -24,6 +24,19 @@ Ref<RavEngine::PBRMaterialInstance> TestEntity::sharedMatInst;
 Ref<MeshAsset> TestEntity::sharedMesh;
 atomic<int> TestEntityController::objectcount;
 
+void TestEntity::CommonInit(){
+	if (!sharedMesh){
+		sharedMesh = make_shared<MeshAsset>("bunny_decimated.obj");
+	}
+	
+	//default staticmesh
+	auto mesh = EmplaceComponent<StaticMesh>(sharedMesh);
+	if (!sharedMatInst) {
+		sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+	}
+	mesh->SetMaterial(sharedMatInst);
+}
+
 TestEntity::TestEntity() : Entity(){
 
     //attach the script
@@ -39,20 +52,17 @@ TestEntity::TestEntity() : Entity(){
     }
     EmplaceComponent<CapsuleCollider>(1,1,sharedMat);
 	
-	if (!sharedMesh){
-		sharedMesh = make_shared<MeshAsset>("bunny_decimated.obj");
-	}
-
-    //default staticmesh
-    auto mesh = EmplaceComponent<StaticMesh>(sharedMesh);
-    if (!sharedMatInst) {
-        sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
-    }
-    mesh->SetMaterial(sharedMatInst);
+	CommonInit();
 	
 	EmplaceComponent<TestEntityDebugRenderer>();
 	
 	EmplaceComponent<NetworkIdentity>();
+}
+
+TestEntity::TestEntity(const uuids::uuid& uuid) : Entity(){
+	CommonInit();
+	
+	EmplaceComponent<NetworkIdentity>(uuid);
 }
 
 void TestEntityController::Tick(float scale) {

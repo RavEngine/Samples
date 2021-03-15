@@ -21,6 +21,7 @@
 #include <RavEngine/DebugDraw.hpp>
 #include <RavEngine/NetworkReplicable.hpp>
 #include <RavEngine/CTTI.hpp>
+#include <uuids.h>
 #include <atomic>
 
 class TestEntityController : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor {
@@ -42,8 +43,10 @@ protected:
     static Ref<RavEngine::PhysicsMaterial> sharedMat;
     static Ref<RavEngine::PBRMaterialInstance> sharedMatInst;
 	static Ref<RavEngine::MeshAsset> sharedMesh;
+	void CommonInit();
 public:
     TestEntity();
+	TestEntity(const uuids::uuid&);	//for netspawn
 
 	RavEngine::ctti_t NetTypeID() const override {
 		return RavEngine::CTTI<TestEntity>;
