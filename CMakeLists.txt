@@ -68,18 +68,3 @@ add_sample("AirHockey")
 add_sample("Playground")
 add_sample("Performance_C")
 add_sample("GUIKitchenSink")
-
-# tests
-include(CTest)
-add_executable("${PROJECT_NAME}_TestBasics" "Test/basics.cpp")
-target_link_libraries("${PROJECT_NAME}_TestBasics" PUBLIC "RavEngine" )
-
-macro(test name executable)
-add_test(
-	NAME ${name} 
-	COMMAND ${executable} "${name}" -C $<CONFIGURATION> 
-	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>
-)
-endmacro()
-
-test("CTTI" "${PROJECT_NAME}_TestBasics")
