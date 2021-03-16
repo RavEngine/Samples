@@ -51,5 +51,13 @@
 			Progress
 			<progressbar min=0 max=100 value=30></progressbar>
 		</p>
+		<p>
+			<form>
+				Radio Group<br />
+				<label><input type="radio" name="optiondemo" value="one" ></input>Radio option 1</label> <br />
+				<label><input type="radio" name="optiondemo" value="two" ></input>Radio option 2</label> <br />
+				<label><input type="radio" name="optiondemo" value="three"  checked="true"></input>Radio option 3</label>
+			</form>
+		</p>
 	</body>
 </rml>

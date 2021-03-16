@@ -3,30 +3,6 @@
     font-size:20dp;
 }
 
-@spritesheet theme 
-{
-	src: invader.png;
-	
-	/* For high dpi screens, designates the scaling it is intended to be shown at. */
-	
-	/**
-	   The following specifies a list of sprite names and associated rectangles into the image given above.
-	   Any sprite given here can be specified in a decorator. Their names must be globally unique.
-	   Rectangles are specified as: x y width height. With the origin assumed to be at the top left corner.
-	*/
-
-    range-track:       219px 194px  3px 32px;
-	range-track-inner: 220px 204px  1px 14px;
-	range-bar:         127px 191px 34px 32px;
-	range-dec:           3px 232px 17px 17px;
-	range-dec-hover:    21px 232px 17px 17px;
-	range-dec-active:   39px 232px 17px 17px;
-	range-inc:           3px 250px 17px 17px;
-	range-inc-hover:    21px 250px 17px 17px;
-	range-inc-active:   39px 250px 17px 17px;
-}
-
-
 br{
     display:block
 }
@@ -82,12 +58,64 @@ input.checkbox:hover{
     background-color: #BBBBBBFF
 }
 
+input.checkbox:checked:hover{
+	background-color: #CCCCCCFF
+}
+
+input.checkbox:checked:active
+{
+	background-color: #BBBBBBFF
+}
+
+
+/* Radio group */
+
+input.radio,
+input.checkbox
+{
+	width: 30dp;
+	height: 30dp;
+
+	vertical-align: -11dp;
+}
+
+input.radio
+{
+	border-radius: 100dp;
+}
+
+input.radio:hover
+{
+	background-color: #BBBBBBFF
+}
+
+input.radio:active
+{
+	background-color: #EEEEEEFF
+}
+
+input.radio:checked
+{
+	background-color: #AAAAAAFF
+}
+
+input.radio:checked:hover
+{
+	background-color: #CCCCCCFF
+}
+
+input.radio:checked:active
+{
+	background-color: #BBBBBBFF
+}
+
+
 /* Select box */
 select,
 dataselect
 {
 	width: 175dp;
-	height: 37dp;
+	vertical-align: 11dp;
 }
 
 select selectvalue,
@@ -103,7 +131,7 @@ select selectarrow,
 dataselect selectarrow
 {
 	width: 30dp;
-	height: 100%;
+	height: 100dp;
 	background-color: #AAAAAAFF;
 }
 
@@ -161,6 +189,7 @@ dataselect selectbox option:hover
 input.range {
 	width: 200dp;
 	height: 32dp;
+	vertical-align: -13dp;
 	background-color: transparent;
 	border: transparent;
 }
