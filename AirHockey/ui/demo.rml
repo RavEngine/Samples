@@ -1,6 +1,7 @@
 <rml>
 	<head>
-        <link type="text/rcss" href="style.rcss"></link>
+        <link type="text/rcss" href="default.rcss"></link>
+		<link type="text/rcss" href="style.rcss"></link>
 		<style>
 			p{
 				display: block;

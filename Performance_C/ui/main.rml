@@ -1,6 +1,6 @@
 <rml>
     <head>
-        <link type="text/rcss" href="style.rcss"></link>
+        <link type="text/rcss" href="default.rcss"></link>
     </head>
     <body>
         <main>
