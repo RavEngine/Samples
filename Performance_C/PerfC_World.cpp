@@ -216,8 +216,8 @@ void PerfC_World::posttick(float scale){
 void PerfC_World::ToggleFullbright(){
 	fullbright = !fullbright;
 	
-	auto dls = GetAllComponentsOfTypeFastPath<AmbientLight>();
-	auto als = GetAllComponentsOfTypeFastPath<DirectionalLight>();
+	auto dls = GetAllComponentsOfType<AmbientLight>();
+	auto als = GetAllComponentsOfType<DirectionalLight>();
 	
 	for(auto dl : dls){
 		static_pointer_cast<DirectionalLight>(dl)->Intensity = fullbright ? 1 : 0.5;
