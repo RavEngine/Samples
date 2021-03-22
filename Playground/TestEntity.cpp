@@ -83,7 +83,7 @@ void TestEntityController::Tick(float scale) {
 void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other)
 {
 	auto pos = other.lock()->getOwner().lock()->transform()->GetWorldPosition();
-	getOwner().lock()->GetComponent<RPCComponent>()->InvokeClientRPC("ClientRPC",,);
+	getOwner().lock()->GetComponent<RPCComponent>()->InvokeClientRPC("ClientRPC",(int)pos.x,pos.z);
 	contactCount++;
 }
 
