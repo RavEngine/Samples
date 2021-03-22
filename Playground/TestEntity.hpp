@@ -21,6 +21,8 @@
 #include <RavEngine/DebugDraw.hpp>
 #include <RavEngine/NetworkReplicable.hpp>
 #include <RavEngine/CTTI.hpp>
+#include <RavEngine/RPCComponent.hpp>
+#include <RavEngine/Debug.hpp>
 #include <uuids.h>
 #include <atomic>
 
@@ -36,6 +38,21 @@ public:
 	std::atomic<int> contactCount;
 
 	
+};
+
+struct TestEntityRPCs : public RavEngine::Component, public RavEngine::Queryable<TestEntityRPCs> {
+	void ServerRPCTest(RavEngine::RPCMsgUnpacker& upk) {
+		RavEngine::Debug::Log("Server message! Values are {} and {}", upk.get<int>().value(), upk.get<float>().value());
+	}
+
+	void ClientRPCTest(RavEngine::RPCMsgUnpacker& upk) {
+		auto A = upk.get<int>().value();
+		auto B = upk.get<float>().value();
+		RavEngine::Debug::Log("Client message! Values are {} and {}", A, B);
+
+		//get the value in collision, and send an RPC back to the server with the same number again
+		getOwner().lock()->GetComponent<RavEngine::RPCComponent>()->InvokeServerRPC("ServerRPC",A,B);
+	}
 };
 
 class TestEntity : public RavEngine::Entity, public RavEngine::IPhysicsActor, public RavEngine::NetworkReplicable {
