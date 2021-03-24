@@ -66,7 +66,7 @@ public:
 	TestEntity(const uuids::uuid&);	//for netspawn
 
 	RavEngine::ctti_t NetTypeID() const override {
-		return RavEngine::CTTI<TestEntity>;
+		return RavEngine::CTTI<TestEntity>();
 	}
 };
 
