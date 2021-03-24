@@ -62,6 +62,8 @@ void TestWorld::posttick(float fpsScale){
 }
 
 void TestWorld::SetupInputs(){
+	Debug::Log("name = {}",__PRETTY_FUNCTION__);
+
 	//setup inputs
 	Ref<RavEngine::InputManager> is = make_shared<RavEngine::InputManager>();
 	//setup control mappings

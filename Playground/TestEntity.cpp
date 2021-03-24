@@ -40,8 +40,8 @@ void TestEntity::CommonInit(){
 	//RPC component
 	auto rpc = EmplaceComponent<RPCComponent>();
 	auto rpcFuncs = EmplaceComponent<TestEntityRPCs>();
-	rpc->RegisterServerRPC("ServerRPC",rpcFuncs,&TestEntityRPCs::ServerRPCTest);
-	rpc->RegisterClientRPC("ClientRPC", rpcFuncs, &TestEntityRPCs::ClientRPCTest);
+	rpc->RegisterServerRPC(TestEntityCodes::ServerRPC,rpcFuncs,&TestEntityRPCs::ServerRPCTest);
+	rpc->RegisterClientRPC(TestEntityCodes::ClientRPC, rpcFuncs, &TestEntityRPCs::ClientRPCTest);
 }
 
 TestEntity::TestEntity() : Entity(){
@@ -83,7 +83,7 @@ void TestEntityController::Tick(float scale) {
 void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other)
 {
 	auto pos = other.lock()->getOwner().lock()->transform()->GetWorldPosition();
-	getOwner().lock()->GetComponent<RPCComponent>()->InvokeClientRPC("ClientRPC",(int)pos.x,pos.z);
+	getOwner().lock()->GetComponent<RPCComponent>()->InvokeClientRPC(TestEntityCodes::ClientRPC,(int)pos.x,pos.z);
 	contactCount++;
 }
 
