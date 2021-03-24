@@ -14,8 +14,8 @@ using namespace std;
 struct SingleEntityMarker : public Component, public Queryable<SingleEntityMarker>{};
 
 struct FPSSystem {
-	const RavEngine::System::list_type queries{ CTTI<SingleEntityMarker> };
-	void Tick(float scale, Ref<Entity> e){
+	const RavEngine::System::list_type queries{ CTTI<SingleEntityMarker>() };
+	void Tick(float scale, Ref<Component> c, ctti_t id){
 		App::DispatchMainThread([](){
 			App::SetWindowTitle(fmt::format("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::Renderer->currentBackend(), (int)App::CurrentTPS(), (int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()).c_str());
 		});

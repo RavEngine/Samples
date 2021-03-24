@@ -15,11 +15,12 @@ struct SpinSystem {
 		return queries;
 	}
 	
-	void Tick(float fpsScale, Ref<RavEngine::Entity> e) {
+    void Tick(float fpsScale, Ref<RavEngine::Component> c, RavEngine::ctti_t id) {
 		//get the entity and spin it based on the component data
-		if (!paused){
-			e->transform()->LocalRotateDelta((double)fpsScale * e->GetComponent<SpinComponent>()->spinamt);
-		}
+        auto e = c->getOwner().lock();
+        if (!paused && e){
+            e->transform()->LocalRotateDelta((double)fpsScale * std::static_pointer_cast<SpinComponent>(c)->spinamt);
+        }
 	}
 protected:
 	static const RavEngine::System::list_type queries;
