@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>UILaunchStoryboardName</key>
+	<string>iosLaunchScreen.storyboard</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Press OK, this unused permission will be resolved later</string>
 	<key>CFBundleExecutable</key>

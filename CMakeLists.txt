@@ -30,7 +30,11 @@ function (add_sample sample_dir)
 	# create the test executable
 	SET(APPNAME "RavEngine_Sample_${sample_dir}")
 
-	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h")
+	if (CMAKE_SYSTEM_NAME MATCHES "iOS")
+		set(PlatformFiles "iosLaunchScreen.storyboard")
+	endif()
+
+	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" ${PlatformFiles})
 
 	# creates a mac app if applicable
 	add_executable("${APPNAME}" ${TEST_SOURCES})
