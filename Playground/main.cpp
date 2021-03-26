@@ -6,5 +6,6 @@
 //
 
 #include "TestApp.h"
+#include <SDL_main.h>
 
 START_APP(TestApp)

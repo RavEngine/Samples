@@ -1,6 +1,7 @@
 #include "App.hpp"
 #include "World.hpp"
 #include <RavEngine/RenderEngine.hpp>
+#include <SDL_main.h>
 
 void ::App::OnStartup(int argc, char **argv){
 	

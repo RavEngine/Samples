@@ -1,5 +1,6 @@
 #include "App.hpp"
 #include "PerfC_World.hpp"
+#include <SDL_main.h>
 
 using namespace RavEngine;
 
