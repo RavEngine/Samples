@@ -40,7 +40,7 @@ void TestEntity::CommonInit(){
 	//RPC component
 	auto rpc = EmplaceComponent<RPCComponent>();
 	auto rpcFuncs = EmplaceComponent<TestEntityRPCs>();
-	rpc->RegisterServerRPC(TestEntityCodes::ServerRPC,rpcFuncs,&TestEntityRPCs::ServerRPCTest);
+	rpc->RegisterServerRPC(TestEntityCodes::ServerRPC,rpcFuncs,&TestEntityRPCs::ServerRPCTest, RPCComponent::Directionality::Bidirectional);	//clients can run this even if they are not owners of the object
 	rpc->RegisterClientRPC(TestEntityCodes::ClientRPC, rpcFuncs, &TestEntityRPCs::ClientRPCTest);
 }
 
@@ -78,6 +78,7 @@ void TestEntityController::Tick(float scale) {
         Destroy();
         objectcount--;
     }
+	my_x = transform()->GetWorldPosition().x;
 }
 
 void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other)

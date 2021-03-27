@@ -25,6 +25,7 @@
 #include <RavEngine/Debug.hpp>
 #include <uuids.h>
 #include <atomic>
+#include <RavEngine/SyncVar.hpp>
 
 //RPC IDs
 struct TestEntityCodes {
@@ -46,7 +47,7 @@ public:
 	static std::atomic<int> objectcount;
 	std::atomic<int> contactCount;
 
-	
+	RavEngine::SyncVar<float> my_x;
 };
 
 struct TestEntityRPCs : public RavEngine::Component, public RavEngine::Queryable<TestEntityRPCs> {
