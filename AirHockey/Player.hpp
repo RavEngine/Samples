@@ -11,13 +11,13 @@ protected:
 public:	
 	void MoveUpDown(float amt){
 		if (std::abs(amt) > 0.1){
-			getOwner().lock()->GetComponent<RavEngine::RigidBodyDynamicComponent>()->AddForce(vector3(amt,0,0) * sensitivity);
+			getOwner().lock()->GetComponent<RavEngine::RigidBodyDynamicComponent>().value()->AddForce(vector3(amt,0,0) * sensitivity);
 		}
 	}
 	
 	void MoveLeftRight(float amt){
 		if (std::abs(amt) > 0.1){
-			getOwner().lock()->GetComponent<RavEngine::RigidBodyDynamicComponent>()->AddForce(vector3(0,0,amt) * sensitivity);
+			getOwner().lock()->GetComponent<RavEngine::RigidBodyDynamicComponent>().value()->AddForce(vector3(0,0,amt) * sensitivity);
 		}
 	}
 };

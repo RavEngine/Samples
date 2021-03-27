@@ -93,7 +93,7 @@ void TestWorld::SetupInputs(){
 	auto con = CID::ANY;
 	
 	//bind controls
-	auto playerscript = player->GetComponent<PlayerScript>();
+	auto playerscript = player->GetComponent<PlayerScript>().value();
 	is->BindAxis("MoveForward", playerscript, &PlayerScript::MoveForward,con);
 	is->BindAxis("MoveRight", playerscript, &PlayerScript::MoveRight,con);
 	is->BindAxis("MoveUp", playerscript,&PlayerScript::MoveUp,con);
@@ -179,7 +179,7 @@ void TestWorld::SetupInputs(){
 			if (owner){
 				auto room = owner->GetComponent<AudioRoom>();
 				if (room){
-					room->DrawDebug(dbg);
+					room.value()->DrawDebug(dbg);
 				}
 			}
 		}

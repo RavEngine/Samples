@@ -136,7 +136,7 @@ void PerfC_World::OnActivate(){
 	im->AddAxisMap("ROTATE_X", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
 	im->AddAxisMap("ZOOM", ControllerAxis::SDL_CONTROLLER_AXIS_RIGHTY,-1);
 
-	auto player = cam->GetComponent<Player>();
+	auto player = cam->GetComponent<Player>().value();
 	
 	im->BindAxis("ZOOM", player, &Player::Zoom, CID::ANY);
 	im->BindAxis("ROTATE_Y", player, &Player::RotateLR, CID::ANY);

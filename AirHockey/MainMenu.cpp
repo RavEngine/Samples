@@ -69,7 +69,7 @@ void MainMenu::OnActivate(){
 }
 
 void MainMenu::LoadGame(int numplayers){
-	auto gui = mainMenu->GetComponent<GUIComponent>();
+	auto gui = mainMenu->GetComponent<GUIComponent>().value();
 	gui->GetDocument("mainmenu.rml")->Hide();
 	gui->GetDocument("loading.rml")->Show();
 	

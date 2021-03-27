@@ -137,7 +137,7 @@ void GameWorld::Reset(){
 
 	//clear velocities
 	auto zerovel = [](Ref<Entity> e){
-		e->GetComponent<RigidBodyDynamicComponent>()->SetLinearVelocity(vector3(0,0,0), false);
+		e->GetComponent<RigidBodyDynamicComponent>().value()->SetLinearVelocity(vector3(0,0,0), false);
 	};
 	
 	zerovel(p1);
