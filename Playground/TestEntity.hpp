@@ -51,13 +51,13 @@ public:
 };
 
 struct TestEntityRPCs : public RavEngine::Component, public RavEngine::Queryable<TestEntityRPCs> {
-	void ServerRPCTest(RavEngine::RPCMsgUnpacker& upk) {
+	void ServerRPCTest(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin) {
 		auto A = upk.get<int>().value();
 		auto B = upk.get<float>().value();
 		RavEngine::Debug::Log("Server message! Values are {} and {}", A, B);
 	}
 
-	void ClientRPCTest(RavEngine::RPCMsgUnpacker& upk) {
+	void ClientRPCTest(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin) {
 		auto A = upk.get<int>().value();
 		auto B = upk.get<float>().value();
 		RavEngine::Debug::Log("Client message! Values are {} and {}", A, B);
