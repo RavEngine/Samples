@@ -63,7 +63,7 @@ struct TestEntityRPCs : public RavEngine::Component, public RavEngine::Queryable
 		RavEngine::Debug::Log("Client message! Values are {} and {}", A, B);
 
 		//get the value in collision, and send an RPC back to the server with the same number again
-		getOwner().lock()->GetComponent<RavEngine::RPCComponent>().value()->InvokeServerRPC(TestEntityCodes::ServerRPC,A,B);
+		getOwner().lock()->GetComponent<RavEngine::RPCComponent>().value()->InvokeServerRPC(TestEntityCodes::ServerRPC,RavEngine::NetworkBase::Reliability::Reliable,A,B);
 	}
 };
 

@@ -3,6 +3,7 @@
 #include "GameWorld.hpp"
 #include <RavEngine/InputManager.hpp>
 #include "MainMenu.hpp"
+#include <SDL_main.h>
 
 using namespace RavEngine;
 
