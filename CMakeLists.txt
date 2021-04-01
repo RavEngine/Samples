@@ -61,15 +61,18 @@ function (add_sample sample_dir)
 	)
 
 	# fixup mac bundle
-	INSTALL(CODE 
-		"include(BundleUtilities)
-		fixup_bundle(\"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.app\" \"\" \"\")
-		" 
-		COMPONENT Runtime
-	)
+	if(APPLE)
+		INSTALL(CODE 
+			"include(BundleUtilities)
+			fixup_bundle(\"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.app\" \"\" \"\")
+			" 
+			COMPONENT Runtime
+		)
+	endif()
 endfunction()
 
 add_sample("AirHockey")
 add_sample("Playground")
+add_sample("Platforms")
 add_sample("Performance_C")
 add_sample("GUIKitchenSink")
