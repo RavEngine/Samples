@@ -46,14 +46,14 @@ function (add_sample sample_dir)
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 
-	file(GLOB meshes "${sample_dir}/meshes/*.obj")
+	file(GLOB objects "${sample_dir}/objects/*.obj")
 	file(GLOB textures "${sample_dir}/textures/*")
 	file(GLOB shaders "${sample_dir}/shaders/*.cmake")
 	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png")
 	file(GLOB sounds "${sample_dir}/sounds/*")
 
 	pack_resources(TARGET "${APPNAME}" 
-		MESHES ${meshes}
+		OBJECTS ${objects}
 		SHADERS ${shaders}
 		TEXTURES ${textures}
 		UIS ${uis}
