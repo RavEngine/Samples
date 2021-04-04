@@ -25,11 +25,15 @@ void Level::SetupInputs(){
 	auto skeleton = make_shared<SkeletonAsset>("robot_skeleton.ozz");
 	auto animatorComponent = cube->EmplaceComponent<AnimatorComponent>(skeleton);
 	auto blendTree = make_shared<AnimBlendTree>();
-	animatorComponent->SetBlendTree(blendTree);
+	AnimatorComponent::State state{0,blendTree};
+	animatorComponent->InsertState(state);
+	animatorComponent->Goto(0);
 	auto clip = make_shared<AnimationAsset>("robot_animation.ozz");
 	AnimBlendTree::Node node(clip, normalized_vec2(0,1));
 	blendTree->InsertNode(0,node);
 	blendTree->SetBlendPos(normalized_vec2(0,1));
+	animatorComponent->SetLoop(true);
+	animatorComponent->Play();
 	
 	Spawn(camlights);
 	Spawn(dirlight);
