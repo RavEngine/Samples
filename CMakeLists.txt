@@ -21,6 +21,8 @@ if(MSVC)
   add_definitions(/Qpar)
 endif()
 
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=haswell")
+
 project("RavEngine_Samples")
 
 #set(CMAKE_OSX_SYSROOT iphoneos CACHE INTERNAL "")
