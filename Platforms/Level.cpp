@@ -32,7 +32,6 @@ void Level::SetupInputs(){
 	AnimBlendTree::Node node(clip, normalized_vec2(0,1));
 	blendTree->InsertNode(0,node);
 	blendTree->SetBlendPos(normalized_vec2(0,1));
-	animatorComponent->SetLoop(true);
 	animatorComponent->Play();
 	
 	Spawn(camlights);
