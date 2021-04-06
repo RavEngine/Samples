@@ -33,10 +33,9 @@ void Level::SetupInputs(){
 	
 	auto animatedObject = make_shared<Entity>();
 	auto cube = make_shared<Entity>();
-	auto cubemesh = cube->EmplaceComponent<StaticMesh>(make_shared<MeshAsset>("cube.obj"));
+	auto cubemesh = cube->EmplaceComponent<StaticMesh>(make_shared<MeshAsset>("astro_maya.dae"));
 	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
 	cube->transform()->LocalTranslateDelta(vector3(0,0,-10));
-	cube->transform()->LocalRotateDelta(quaternion(1,1,1,1));
 	animatedObject->EmplaceComponent<BoneDebugRenderer>();
 	animatedObject->transform()->LocalRotateDelta(quaternion(1,1,1,-1));
 	
