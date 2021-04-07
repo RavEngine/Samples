@@ -41,7 +41,9 @@ void Level::SetupInputs(){
 	
 	//setup animation
 	auto skeleton = make_shared<SkeletonAsset>("robot_skeleton.ozz");
+    auto skeleton2 = make_shared<SkeletonAsset>("astro_maya.dae");
 	auto animatorComponent = animatedObject->EmplaceComponent<AnimatorComponent>(skeleton);
+    auto animatorComponent2 = cube->EmplaceComponent<AnimatorComponent>(skeleton2);
 	auto clip = make_shared<AnimationAsset>("robot_animation.ozz");
 	
 	//create the blend tree
