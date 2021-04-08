@@ -36,6 +36,7 @@ void Level::SetupInputs(){
 	auto cubemesh = cube->EmplaceComponent<StaticMesh>(make_shared<MeshAsset>("astro_maya.dae"));
 	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
 	cube->transform()->LocalTranslateDelta(vector3(0,0,-10));
+    cube->EmplaceComponent<BoneDebugRenderer>();
 	animatedObject->EmplaceComponent<BoneDebugRenderer>();
 	animatedObject->transform()->LocalRotateDelta(quaternion(1,1,1,-1));
 	
@@ -44,7 +45,9 @@ void Level::SetupInputs(){
     auto skeleton2 = make_shared<SkeletonAsset>("astro_maya.dae");
 	auto animatorComponent = animatedObject->EmplaceComponent<AnimatorComponent>(skeleton);
     auto animatorComponent2 = cube->EmplaceComponent<AnimatorComponent>(skeleton2);
-	auto clip = make_shared<AnimationAsset>("robot_animation.ozz");
+	auto clip = make_shared<AnimationAsset>("robot_animation.ozz",skeleton);
+    
+    auto clip2 = make_shared<AnimationAsset>("astro_maya.dae",skeleton2);
 	
 	//create the blend tree
 	auto blendTree = make_shared<AnimBlendTree>();
@@ -58,6 +61,11 @@ void Level::SetupInputs(){
 	animatorComponent->Goto(0,true);
 
 	animatorComponent->Play();
+    
+    AnimatorComponent::State state2{0,clip2};
+    animatorComponent2->InsertState(state2);
+    animatorComponent2->Goto(0,true);
+    animatorComponent2->Play();
 	
 	Spawn(camlights);
 	Spawn(dirlight);
