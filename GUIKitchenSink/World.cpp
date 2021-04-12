@@ -68,7 +68,7 @@ void ::World::OnActivate(){
 	//FPS updating system
 	systemManager.RegisterTimedSystem(make_shared<FPSSystem>(), std::chrono::seconds(1));
 
-	Debug::Log("{}",type_name<GUIComponent>());
+	Debug::Log("{} with ID: {}",type_name<GUIComponent>(),CTTI<GUIComponent>());
 }
 
 void ::World::posttick(float scale){
