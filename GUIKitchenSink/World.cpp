@@ -13,7 +13,7 @@ using namespace std;
 
 struct SingleEntityMarker : public Component, public Queryable<SingleEntityMarker>{};
 
-struct FPSSystem {
+struct FPSSystem : public AutoCTTI {
 	const RavEngine::System::list_type queries{ CTTI<SingleEntityMarker>() };
 	void Tick(float scale, Ref<Component> c, ctti_t id){
 		App::DispatchMainThread([](){
