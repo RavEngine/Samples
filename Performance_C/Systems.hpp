@@ -8,7 +8,7 @@ struct SpinComponent : public RavEngine::Component, public RavEngine::Queryable<
 	vector3 spinamt;
 };
 
-struct SpinSystem {
+struct SpinSystem : public RavEngine::AutoCTTI {
 	bool paused = false;
 	
 	const RavEngine::System::list_type& QueryTypes() const {
