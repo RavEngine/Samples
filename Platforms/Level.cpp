@@ -2,6 +2,8 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/AnimatorComponent.hpp>
 #include <RavEngine/DebugDraw.hpp>
+#include <RavEngine/MeshAssetSkinned.hpp>
+#include <RavEngine/SkinnedMeshComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -31,14 +33,15 @@ void Level::SetupInputs(){
 	dirlight->EmplaceComponent<DirectionalLight>();
 	dirlight->transform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
 	
+	//setup animation
+	auto skeleton2 = make_shared<SkeletonAsset>("astro_maya_2.dae");
+	
 	auto cube = make_shared<Entity>();
-	auto cubemesh = cube->EmplaceComponent<StaticMesh>(make_shared<MeshAsset>("astro_maya_2.dae"));
+	auto cubemesh = cube->EmplaceComponent<SkinnedMeshComponent>(skeleton2,make_shared<MeshAssetSkinned>("astro_maya_2.dae",skeleton2));
 	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
 	cube->transform()->LocalTranslateDelta(vector3(0,0,-10));
     cube->EmplaceComponent<BoneDebugRenderer>();
 	
-	//setup animation
-    auto skeleton2 = make_shared<SkeletonAsset>("astro_maya_2.dae");
     auto animatorComponent2 = cube->EmplaceComponent<AnimatorComponent>(skeleton2);
     
     auto clip2 = make_shared<AnimationAsset>("astro_2_anim.dae",skeleton2);
@@ -56,7 +59,7 @@ void Level::SetupInputs(){
 		state2{0,blendTree},
 		state3{1,clip};
 	
-	state3.SetTransition(0, RavEngine::TweenCurves::LinearCurve, 3);
+	state3.SetTransition(0, RavEngine::TweenCurves::LinearCurve, 3,AnimatorComponent::State::Transition::TimeMode::BeginNew);
 	
     animatorComponent2->InsertState(state2);
 	animatorComponent2->InsertState(state3);
