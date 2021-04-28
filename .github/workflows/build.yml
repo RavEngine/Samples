@@ -49,7 +49,7 @@ jobs:
         with:
           submodules: true
       - name: Build
-        run: .\build-win.bat ; .\build-win.bat
+        run: .\build-win.bat ; .\build-win.bat ; .\build-win.bat
       - name: Compress Samples
         run: cd build\release ; Compress-Archive -Path .\RavEngine_Sample_* -DestinationPath RavEngine_Samples_win64.zip
       - name: Archive and upload artifacts
