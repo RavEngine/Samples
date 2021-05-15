@@ -8,10 +8,10 @@
       <comments>
       </comments>
     </contributor>
-    <created>2021-05-15T06:30:26Z</created>
+    <created>2021-05-15T18:42:34Z</created>
     <keywords>
     </keywords>
-    <modified>2021-05-15T06:30:26Z</modified>
+    <modified>2021-05-15T18:42:34Z</modified>
     <revision>
     </revision>
     <subject>
@@ -299,19 +299,21 @@
     <animation id="joint1-anim" name="joint1">
       <animation>
         <source id="joint1-Matrix-animation-input">
-          <float_array id="joint1-Matrix-animation-input-array" count="30">
+          <float_array id="joint1-Matrix-animation-input-array" count="60">
 
 0.033333 0.066667 0.100000 0.133333 0.166667 0.200000 0.233333 0.266667 0.300000 0.333333 0.366667 0.400000 0.433333 0.466667 0.500000 0.533333
-0.566667 0.600000 0.633333 0.666667 0.700000 0.733333 0.766667 0.800000 0.833333 0.866667 0.900000 0.933333 0.966667 1.000000</float_array>
+0.566667 0.600000 0.633333 0.666667 0.700000 0.733333 0.766667 0.800000 0.833333 0.866667 0.900000 0.933333 0.966667 1.000000 1.033333 1.066667
+1.100000 1.133333 1.166667 1.200000 1.233333 1.266667 1.300000 1.333333 1.366667 1.400000 1.433333 1.466667 1.500000 1.533333 1.566667 1.600000
+1.633333 1.666667 1.700000 1.733333 1.766667 1.800000 1.833333 1.866667 1.900000 1.933333 1.966667 2.000000</float_array>
           <technique_common>
-            <accessor source="#joint1-Matrix-animation-input-array" count="30">
+            <accessor source="#joint1-Matrix-animation-input-array" count="60">
               <param name="TIME" type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint1-Matrix-animation-output-transform">
-          <float_array id="joint1-Matrix-animation-output-transform-array" count="480">
+          <float_array id="joint1-Matrix-animation-output-transform-array" count="960">
 
 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
 -0.999993 0.003712 0.000000 0.000000 0.003712 0.999993 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
@@ -342,21 +344,54 @@
 -0.511974 0.859001 0.000000 0.000000 0.859001 0.511974 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
 -0.497004 0.867748 0.000000 0.000000 0.867748 0.497004 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
 -0.487615 0.873059 0.000000 0.000000 0.873059 0.487615 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
--0.484370 0.874863 0.000000 0.000000 0.874863 0.484370 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</float_array>
+-0.484370 0.874863 0.000000 0.000000 0.874863 0.484370 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.487405 0.873176 0.000000 0.000000 0.873176 0.487405 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.496198 0.868209 0.000000 0.000000 0.868209 0.496198 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.510243 0.860030 0.000000 0.000000 0.860030 0.510243 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.528983 0.848632 0.000000 0.000000 0.848632 0.528983 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.551819 0.833964 0.000000 0.000000 0.833964 0.551819 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.578117 0.815954 0.000000 0.000000 0.815954 0.578117 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.607219 0.794535 0.000000 0.000000 0.794535 0.607219 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.638447 0.769666 0.000000 0.000000 0.769666 0.638447 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.671118 0.741350 0.000000 0.000000 0.741350 0.671118 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.704554 0.709651 0.000000 0.000000 0.709651 0.704554 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.738093 0.674699 0.000000 0.000000 0.674699 0.738093 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.771106 0.636706 0.000000 0.000000 0.636706 0.771106 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.803014 0.595960 0.000000 0.000000 0.595960 0.803014 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.833295 0.552829 0.000000 0.000000 0.552829 0.833295 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.861502 0.507755 0.000000 0.000000 0.507755 0.861502 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.887273 0.461245 0.000000 0.000000 0.461245 0.887273 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.910340 0.413862 0.000000 0.000000 0.413862 0.910340 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.930532 0.366211 0.000000 0.000000 0.366211 0.930532 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.947780 0.318926 0.000000 0.000000 0.318926 0.947780 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.962112 0.272654 0.000000 0.000000 0.272654 0.962112 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.973650 0.228049 0.000000 0.000000 0.228049 0.973650 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.982597 0.185751 0.000000 0.000000 0.185751 0.982597 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.989228 0.146384 0.000000 0.000000 0.146384 0.989228 -0.000000 0.000000 -0.000000 -0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.993871 0.110550 0.000000 0.000000 0.110550 0.993871 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.996889 0.078818 0.000000 0.000000 0.078818 0.996889 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.998661 0.051735 0.000000 0.000000 0.051735 0.998661 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.999555 0.029820 0.000000 0.000000 0.029820 0.999555 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.999908 0.013571 0.000000 0.000000 0.013571 0.999908 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.999994 0.003472 0.000000 0.000000 0.003472 0.999994 -0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</float_array>
           <technique_common>
-            <accessor source="#joint1-Matrix-animation-output-transform-array" count="30" stride="16">
+            <accessor source="#joint1-Matrix-animation-output-transform-array" count="60" stride="16">
               <param type="float4x4">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint1-Interpolations">
-          <Name_array id="joint1-Interpolations-array" count="30">
+          <Name_array id="joint1-Interpolations-array" count="60">
  LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
 LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
-LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR</Name_array>
           <technique_common>
-            <accessor source="#joint1-Interpolations-array" count="30">
+            <accessor source="#joint1-Interpolations-array" count="60">
               <param type="name">
               </param>
             </accessor>
@@ -375,54 +410,54 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
       </animation>
       <animation>
         <source id="joint1-visibility-animation-input">
-          <float_array id="joint1-visibility-animation-input-array" count="2">
+          <float_array id="joint1-visibility-animation-input-array" count="3">
 
-0.033333 1.000000</float_array>
+0.033333 1.000000 2.000000</float_array>
           <technique_common>
-            <accessor source="#joint1-visibility-animation-input-array" count="2">
+            <accessor source="#joint1-visibility-animation-input-array" count="3">
               <param name="TIME" type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint1-visibility-animation-output">
-          <float_array id="joint1-visibility-animation-output-array" count="2">
+          <float_array id="joint1-visibility-animation-output-array" count="3">
 
-1.000000 1.000000</float_array>
+1.000000 1.000000 1.000000</float_array>
           <technique_common>
-            <accessor source="#joint1-visibility-animation-output-array" count="2">
+            <accessor source="#joint1-visibility-animation-output-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint1-visibility-animation-intan">
-          <float_array id="joint1-visibility-animation-intan-array" count="2">
+          <float_array id="joint1-visibility-animation-intan-array" count="3">
 
-0.000000 0.000000</float_array>
+0.000000 0.000000 0.000000</float_array>
           <technique_common>
-            <accessor source="#joint1-visibility-animation-intan-array" count="2">
+            <accessor source="#joint1-visibility-animation-intan-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint1-visibility-animation-outtan">
-          <float_array id="joint1-visibility-animation-outtan-array" count="2">
+          <float_array id="joint1-visibility-animation-outtan-array" count="3">
 
-0.000000 0.000000</float_array>
+0.000000 0.000000 0.000000</float_array>
           <technique_common>
-            <accessor source="#joint1-visibility-animation-outtan-array" count="2">
+            <accessor source="#joint1-visibility-animation-outtan-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint1-visibility-animation-interpolation">
-          <Name_array id="joint1-visibility-animation-interpolation-array" count="2">
- STEP STEP</Name_array>
+          <Name_array id="joint1-visibility-animation-interpolation-array" count="3">
+ STEP STEP STEP</Name_array>
           <technique_common>
-            <accessor source="#joint1-visibility-animation-interpolation-array" count="2">
+            <accessor source="#joint1-visibility-animation-interpolation-array" count="3">
               <param type="name">
               </param>
             </accessor>
@@ -447,19 +482,21 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
     <animation id="joint2-anim" name="joint2">
       <animation>
         <source id="joint2-Matrix-animation-input">
-          <float_array id="joint2-Matrix-animation-input-array" count="30">
+          <float_array id="joint2-Matrix-animation-input-array" count="60">
 
 0.033333 0.066667 0.100000 0.133333 0.166667 0.200000 0.233333 0.266667 0.300000 0.333333 0.366667 0.400000 0.433333 0.466667 0.500000 0.533333
-0.566667 0.600000 0.633333 0.666667 0.700000 0.733333 0.766667 0.800000 0.833333 0.866667 0.900000 0.933333 0.966667 1.000000</float_array>
+0.566667 0.600000 0.633333 0.666667 0.700000 0.733333 0.766667 0.800000 0.833333 0.866667 0.900000 0.933333 0.966667 1.000000 1.033333 1.066667
+1.100000 1.133333 1.166667 1.200000 1.233333 1.266667 1.300000 1.333333 1.366667 1.400000 1.433333 1.466667 1.500000 1.533333 1.566667 1.600000
+1.633333 1.666667 1.700000 1.733333 1.766667 1.800000 1.833333 1.866667 1.900000 1.933333 1.966667 2.000000</float_array>
           <technique_common>
-            <accessor source="#joint2-Matrix-animation-input-array" count="30">
+            <accessor source="#joint2-Matrix-animation-input-array" count="60">
               <param name="TIME" type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint2-Matrix-animation-output-transform">
-          <float_array id="joint2-Matrix-animation-output-transform-array" count="480">
+          <float_array id="joint2-Matrix-animation-output-transform-array" count="960">
 
 1.000000 0.000000 0.000000 1.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
 0.999992 -0.003925 0.000000 1.000000 0.003925 0.999992 -0.000000 0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
@@ -490,21 +527,54 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
 0.460225 -0.887802 0.000000 1.000000 0.887802 0.460225 0.000000 -0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
 0.443873 -0.896090 0.000000 1.000000 0.896090 0.443873 0.000000 -0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
 0.433624 -0.901094 0.000000 1.000000 0.901094 0.433624 -0.000000 0.000000 -0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
-0.430084 -0.902789 0.000000 1.000000 0.902789 0.430084 0.000000 -0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</float_array>
+0.430084 -0.902789 0.000000 1.000000 0.902789 0.430084 0.000000 -0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.433395 -0.901204 -0.000000 1.000000 0.901204 0.433395 -0.000000 -0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.442993 -0.896525 -0.000000 1.000000 0.896525 0.442993 0.000000 -0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.458334 -0.888780 -0.000000 1.000000 0.888780 0.458334 0.000000 -0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.478821 -0.877913 0.000000 1.000000 0.877913 0.478821 -0.000000 0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.503814 -0.863812 -0.000000 1.000000 0.863812 0.503814 -0.000000 0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.532636 -0.846345 -0.000000 1.000000 0.846345 0.532636 -0.000000 -0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.564576 -0.825381 0.000000 1.000000 0.825381 0.564576 0.000000 0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.598904 -0.800821 -0.000000 1.000000 0.800821 0.598904 -0.000000 0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.634875 -0.772614 -0.000000 1.000000 0.772614 0.634875 -0.000000 0.000000 0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.671748 -0.740779 -0.000000 1.000000 0.740779 0.671748 0.000000 -0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.708795 -0.705415 0.000000 1.000000 0.705415 0.708795 0.000000 0.000000 0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.745318 -0.666709 0.000000 1.000000 0.666709 0.745318 -0.000000 0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.780670 -0.624943 -0.000000 1.000000 0.624943 0.780670 -0.000000 0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.814266 -0.580492 0.000000 1.000000 0.580492 0.814266 -0.000000 0.000000 -0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.845602 -0.533815 0.000000 1.000000 0.533815 0.845602 0.000000 0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.874264 -0.485450 0.000000 1.000000 0.485450 0.874264 -0.000000 0.000000 0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.899946 -0.436002 0.000000 1.000000 0.436002 0.899946 -0.000000 0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.922447 -0.386124 -0.000000 1.000000 0.386124 0.922447 -0.000000 -0.000000 0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.941682 -0.336504 -0.000000 1.000000 0.336504 0.941682 0.000000 -0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.957676 -0.287849 0.000000 1.000000 0.287849 0.957676 -0.000000 0.000000 -0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.970558 -0.240869 0.000000 1.000000 0.240869 0.970558 0.000000 0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.980551 -0.196263 -0.000000 1.000000 0.196263 0.980551 -0.000000 0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.987960 -0.154710 0.000000 1.000000 0.154710 0.987960 0.000000 -0.000000 0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.993149 -0.116858 0.000000 1.000000 0.116858 0.993149 -0.000000 0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.996522 -0.083326 0.000000 1.000000 0.083326 0.996522 -0.000000 0.000000 0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.998503 -0.054698 0.000000 1.000000 0.054698 0.998503 -0.000000 0.000000 0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.999503 -0.031529 0.000000 1.000000 0.031529 0.999503 -0.000000 0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.999897 -0.014348 -0.000000 1.000000 0.014348 0.999897 -0.000000 0.000000 0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+0.999993 -0.003671 0.000000 1.000000 0.003671 0.999993 0.000000 -0.000000 -0.000000 0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000 1.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 -0.000000 1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000</float_array>
           <technique_common>
-            <accessor source="#joint2-Matrix-animation-output-transform-array" count="30" stride="16">
+            <accessor source="#joint2-Matrix-animation-output-transform-array" count="60" stride="16">
               <param type="float4x4">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint2-Interpolations">
-          <Name_array id="joint2-Interpolations-array" count="30">
+          <Name_array id="joint2-Interpolations-array" count="60">
  LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
 LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
-LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR</Name_array>
           <technique_common>
-            <accessor source="#joint2-Interpolations-array" count="30">
+            <accessor source="#joint2-Interpolations-array" count="60">
               <param type="name">
               </param>
             </accessor>
@@ -523,54 +593,54 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
       </animation>
       <animation>
         <source id="joint2-visibility-animation-input">
-          <float_array id="joint2-visibility-animation-input-array" count="2">
+          <float_array id="joint2-visibility-animation-input-array" count="3">
 
-0.033333 1.000000</float_array>
+0.033333 1.000000 2.000000</float_array>
           <technique_common>
-            <accessor source="#joint2-visibility-animation-input-array" count="2">
+            <accessor source="#joint2-visibility-animation-input-array" count="3">
               <param name="TIME" type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint2-visibility-animation-output">
-          <float_array id="joint2-visibility-animation-output-array" count="2">
+          <float_array id="joint2-visibility-animation-output-array" count="3">
 
-1.000000 1.000000</float_array>
+1.000000 1.000000 1.000000</float_array>
           <technique_common>
-            <accessor source="#joint2-visibility-animation-output-array" count="2">
+            <accessor source="#joint2-visibility-animation-output-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint2-visibility-animation-intan">
-          <float_array id="joint2-visibility-animation-intan-array" count="2">
+          <float_array id="joint2-visibility-animation-intan-array" count="3">
 
-0.000000 0.000000</float_array>
+0.000000 0.000000 0.000000</float_array>
           <technique_common>
-            <accessor source="#joint2-visibility-animation-intan-array" count="2">
+            <accessor source="#joint2-visibility-animation-intan-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint2-visibility-animation-outtan">
-          <float_array id="joint2-visibility-animation-outtan-array" count="2">
+          <float_array id="joint2-visibility-animation-outtan-array" count="3">
 
-0.000000 0.000000</float_array>
+0.000000 0.000000 0.000000</float_array>
           <technique_common>
-            <accessor source="#joint2-visibility-animation-outtan-array" count="2">
+            <accessor source="#joint2-visibility-animation-outtan-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint2-visibility-animation-interpolation">
-          <Name_array id="joint2-visibility-animation-interpolation-array" count="2">
- STEP STEP</Name_array>
+          <Name_array id="joint2-visibility-animation-interpolation-array" count="3">
+ STEP STEP STEP</Name_array>
           <technique_common>
-            <accessor source="#joint2-visibility-animation-interpolation-array" count="2">
+            <accessor source="#joint2-visibility-animation-interpolation-array" count="3">
               <param type="name">
               </param>
             </accessor>
@@ -595,19 +665,21 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
     <animation id="joint3-anim" name="joint3">
       <animation>
         <source id="joint3-Matrix-animation-input">
-          <float_array id="joint3-Matrix-animation-input-array" count="30">
+          <float_array id="joint3-Matrix-animation-input-array" count="60">
 
 0.033333 0.066667 0.100000 0.133333 0.166667 0.200000 0.233333 0.266667 0.300000 0.333333 0.366667 0.400000 0.433333 0.466667 0.500000 0.533333
-0.566667 0.600000 0.633333 0.666667 0.700000 0.733333 0.766667 0.800000 0.833333 0.866667 0.900000 0.933333 0.966667 1.000000</float_array>
+0.566667 0.600000 0.633333 0.666667 0.700000 0.733333 0.766667 0.800000 0.833333 0.866667 0.900000 0.933333 0.966667 1.000000 1.033333 1.066667
+1.100000 1.133333 1.166667 1.200000 1.233333 1.266667 1.300000 1.333333 1.366667 1.400000 1.433333 1.466667 1.500000 1.533333 1.566667 1.600000
+1.633333 1.666667 1.700000 1.733333 1.766667 1.800000 1.833333 1.866667 1.900000 1.933333 1.966667 2.000000</float_array>
           <technique_common>
-            <accessor source="#joint3-Matrix-animation-input-array" count="30">
+            <accessor source="#joint3-Matrix-animation-input-array" count="60">
               <param name="TIME" type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint3-Matrix-animation-output-transform">
-          <float_array id="joint3-Matrix-animation-output-transform-array" count="480">
+          <float_array id="joint3-Matrix-animation-output-transform-array" count="960">
 
 -1.000000 0.000000 0.000000 1.000000 -0.000000 1.000000 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
 -0.999997 -0.002464 0.000000 1.000000 -0.002464 0.999997 0.000000 0.000000 -0.000000 -0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
@@ -638,21 +710,54 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
 -0.773846 -0.633374 0.000000 1.000000 -0.633374 0.773846 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
 -0.766505 -0.642238 0.000000 1.000000 -0.642238 0.766505 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
 -0.761887 -0.647710 0.000000 1.000000 -0.647710 0.761887 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
--0.760288 -0.649586 0.000000 1.000000 -0.649586 0.760288 0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</float_array>
+-0.760288 -0.649586 0.000000 1.000000 -0.649586 0.760288 0.000000 0.000000 -0.000000 0.000000 -1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+-0.761783 -0.647832 0.000000 1.000000 -0.647832 0.761783 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.766109 -0.642711 0.000000 1.000000 -0.642711 0.766109 0.000000 -0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.772998 -0.634408 0.000000 1.000000 -0.634408 0.772998 0.000000 -0.000000 -0.000000 -0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.782153 -0.623087 0.000000 1.000000 -0.623087 0.782153 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.793251 -0.608895 0.000000 1.000000 -0.608895 0.793251 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.805956 -0.591975 0.000000 1.000000 -0.591975 0.805956 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.819923 -0.572474 0.000000 1.000000 -0.572474 0.819923 0.000000 0.000000 -0.000000 -0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.834804 -0.550547 0.000000 1.000000 -0.550547 0.834804 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.850259 -0.526365 0.000000 1.000000 -0.526365 0.850259 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.865958 -0.500116 0.000000 1.000000 -0.500116 0.865958 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.881590 -0.472016 0.000000 1.000000 -0.472016 0.881590 0.000000 -0.000000 -0.000000 -0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.896867 -0.442300 0.000000 1.000000 -0.442300 0.896867 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.911531 -0.411232 0.000000 1.000000 -0.411232 0.911531 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.925357 -0.379096 0.000000 1.000000 -0.379096 0.925357 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.938160 -0.346202 0.000000 1.000000 -0.346202 0.938160 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.949794 -0.312877 0.000000 1.000000 -0.312877 0.949794 0.000000 0.000000 -0.000000 -0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.960156 -0.279463 0.000000 1.000000 -0.279463 0.960156 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.969189 -0.246317 0.000000 1.000000 -0.246317 0.969189 0.000000 -0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.976877 -0.213801 0.000000 1.000000 -0.213801 0.976877 0.000000 -0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.983246 -0.182282 0.000000 1.000000 -0.182282 0.983246 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.988361 -0.152128 0.000000 1.000000 -0.152128 0.988361 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.992319 -0.123702 0.000000 1.000000 -0.123702 0.992319 0.000000 -0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.995249 -0.097365 0.000000 1.000000 -0.097365 0.995249 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.997298 -0.073466 0.000000 1.000000 -0.073466 0.997298 0.000000 0.000000 -0.000000 -0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.998629 -0.052349 0.000000 1.000000 -0.052349 0.998629 0.000000 -0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.999410 -0.034350 0.000000 1.000000 -0.034350 0.999410 0.000000 -0.000000 -0.000000 -0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.999804 -0.019796 0.000000 1.000000 -0.019796 0.999804 0.000000 0.000000 -0.000000 -0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.999959 -0.009008 0.000000 1.000000 -0.009008 0.999959 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-0.999997 -0.002304 0.000000 1.000000 -0.002304 0.999997 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000
+-1.000000 0.000000 0.000000 1.000000 -0.000000 1.000000 0.000000 0.000000 -0.000000 0.000000 -1.000000 -0.000000 0.000000 0.000000 0.000000 1.000000</float_array>
           <technique_common>
-            <accessor source="#joint3-Matrix-animation-output-transform-array" count="30" stride="16">
+            <accessor source="#joint3-Matrix-animation-output-transform-array" count="60" stride="16">
               <param type="float4x4">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint3-Interpolations">
-          <Name_array id="joint3-Interpolations-array" count="30">
+          <Name_array id="joint3-Interpolations-array" count="60">
  LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
 LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
-LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR</Name_array>
           <technique_common>
-            <accessor source="#joint3-Interpolations-array" count="30">
+            <accessor source="#joint3-Interpolations-array" count="60">
               <param type="name">
               </param>
             </accessor>
@@ -671,54 +776,54 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
       </animation>
       <animation>
         <source id="joint3-visibility-animation-input">
-          <float_array id="joint3-visibility-animation-input-array" count="2">
+          <float_array id="joint3-visibility-animation-input-array" count="3">
 
-0.033333 1.000000</float_array>
+0.033333 1.000000 2.000000</float_array>
           <technique_common>
-            <accessor source="#joint3-visibility-animation-input-array" count="2">
+            <accessor source="#joint3-visibility-animation-input-array" count="3">
               <param name="TIME" type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint3-visibility-animation-output">
-          <float_array id="joint3-visibility-animation-output-array" count="2">
+          <float_array id="joint3-visibility-animation-output-array" count="3">
 
-1.000000 1.000000</float_array>
+1.000000 1.000000 1.000000</float_array>
           <technique_common>
-            <accessor source="#joint3-visibility-animation-output-array" count="2">
+            <accessor source="#joint3-visibility-animation-output-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint3-visibility-animation-intan">
-          <float_array id="joint3-visibility-animation-intan-array" count="2">
+          <float_array id="joint3-visibility-animation-intan-array" count="3">
 
-0.000000 0.000000</float_array>
+0.000000 0.000000 0.000000</float_array>
           <technique_common>
-            <accessor source="#joint3-visibility-animation-intan-array" count="2">
+            <accessor source="#joint3-visibility-animation-intan-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint3-visibility-animation-outtan">
-          <float_array id="joint3-visibility-animation-outtan-array" count="2">
+          <float_array id="joint3-visibility-animation-outtan-array" count="3">
 
-0.000000 0.000000</float_array>
+0.000000 0.000000 0.000000</float_array>
           <technique_common>
-            <accessor source="#joint3-visibility-animation-outtan-array" count="2">
+            <accessor source="#joint3-visibility-animation-outtan-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint3-visibility-animation-interpolation">
-          <Name_array id="joint3-visibility-animation-interpolation-array" count="2">
- STEP STEP</Name_array>
+          <Name_array id="joint3-visibility-animation-interpolation-array" count="3">
+ STEP STEP STEP</Name_array>
           <technique_common>
-            <accessor source="#joint3-visibility-animation-interpolation-array" count="2">
+            <accessor source="#joint3-visibility-animation-interpolation-array" count="3">
               <param type="name">
               </param>
             </accessor>
@@ -743,19 +848,21 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
     <animation id="joint4-anim" name="joint4">
       <animation>
         <source id="joint4-Matrix-animation-input">
-          <float_array id="joint4-Matrix-animation-input-array" count="30">
+          <float_array id="joint4-Matrix-animation-input-array" count="60">
 
 0.033333 0.066667 0.100000 0.133333 0.166667 0.200000 0.233333 0.266667 0.300000 0.333333 0.366667 0.400000 0.433333 0.466667 0.500000 0.533333
-0.566667 0.600000 0.633333 0.666667 0.700000 0.733333 0.766667 0.800000 0.833333 0.866667 0.900000 0.933333 0.966667 1.000000</float_array>
+0.566667 0.600000 0.633333 0.666667 0.700000 0.733333 0.766667 0.800000 0.833333 0.866667 0.900000 0.933333 0.966667 1.000000 1.033333 1.066667
+1.100000 1.133333 1.166667 1.200000 1.233333 1.266667 1.300000 1.333333 1.366667 1.400000 1.433333 1.466667 1.500000 1.533333 1.566667 1.600000
+1.633333 1.666667 1.700000 1.733333 1.766667 1.800000 1.833333 1.866667 1.900000 1.933333 1.966667 2.000000</float_array>
           <technique_common>
-            <accessor source="#joint4-Matrix-animation-input-array" count="30">
+            <accessor source="#joint4-Matrix-animation-input-array" count="60">
               <param name="TIME" type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint4-Matrix-animation-output-transform">
-          <float_array id="joint4-Matrix-animation-output-transform-array" count="480">
+          <float_array id="joint4-Matrix-animation-output-transform-array" count="960">
 
 1.000000 -0.000000 0.000000 -1.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
 0.999993 0.003683 0.000000 -1.000000 -0.003683 0.999993 0.000000 0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
@@ -786,21 +893,54 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
 0.518897 0.854837 0.000000 -1.000000 -0.854837 0.518897 0.000000 -0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
 0.504115 0.863637 -0.000000 -1.000000 -0.863637 0.504115 -0.000000 -0.000000 0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
 0.494843 0.868983 0.000000 -1.000000 -0.868983 0.494843 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
-0.491639 0.870799 0.000000 -1.000000 -0.870799 0.491639 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</float_array>
+0.491639 0.870799 0.000000 -1.000000 -0.870799 0.491639 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.494635 0.869101 0.000000 -1.000000 -0.869101 0.494635 0.000000 -0.000000 0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.503319 0.864101 -0.000000 -1.000000 -0.864101 0.503319 0.000000 0.000000 0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.517188 0.855872 0.000000 -1.000000 -0.855872 0.517188 0.000000 0.000000 0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.535690 0.844415 0.000000 -1.000000 -0.844415 0.535690 0.000000 0.000000 0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.558233 0.829684 0.000000 -1.000000 -0.829684 0.558233 -0.000000 -0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.584189 0.811618 0.000000 -1.000000 -0.811618 0.584189 -0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.612907 0.790155 0.000000 -1.000000 -0.790155 0.612907 0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.643717 0.765264 0.000000 -1.000000 -0.765264 0.643717 -0.000000 -0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.675944 0.736953 -0.000000 -1.000000 -0.736953 0.675944 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.708918 0.705291 0.000000 -1.000000 -0.705291 0.708918 -0.000000 0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.741986 0.670415 0.000000 -1.000000 -0.670415 0.741986 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.774531 0.632536 0.000000 -1.000000 -0.632536 0.774531 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.805979 0.591944 0.000000 -1.000000 -0.591944 0.805979 -0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.835818 0.549007 0.000000 -1.000000 -0.549007 0.835818 0.000000 0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.863608 0.504163 0.000000 -1.000000 -0.504163 0.863608 -0.000000 0.000000 0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.888995 0.457916 -0.000000 -1.000000 -0.457916 0.888995 0.000000 -0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.911715 0.410823 0.000000 -1.000000 -0.410823 0.911715 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.931601 0.363482 -0.000000 -1.000000 -0.363482 0.931601 -0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.948586 0.316519 0.000000 -1.000000 -0.316519 0.948586 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.962698 0.270577 -0.000000 -1.000000 -0.270577 0.962698 0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.974058 0.226297 0.000000 -1.000000 -0.226297 0.974058 -0.000000 -0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.982867 0.184315 0.000000 -1.000000 -0.184315 0.982867 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.989395 0.145248 0.000000 -1.000000 -0.145248 0.989395 0.000000 -0.000000 0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.993966 0.109689 0.000000 -1.000000 -0.109689 0.993966 0.000000 0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.996937 0.078203 0.000000 -1.000000 -0.078203 0.996937 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.998682 0.051331 0.000000 -1.000000 -0.051331 0.998682 -0.000000 0.000000 -0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.999562 0.029587 0.000000 -1.000000 -0.029587 0.999562 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.999909 0.013464 0.000000 -1.000000 -0.013464 0.999909 -0.000000 -0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+0.999994 0.003444 0.000000 -1.000000 -0.003444 0.999994 -0.000000 -0.000000 -0.000000 -0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
+1.000000 -0.000000 0.000000 -1.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</float_array>
           <technique_common>
-            <accessor source="#joint4-Matrix-animation-output-transform-array" count="30" stride="16">
+            <accessor source="#joint4-Matrix-animation-output-transform-array" count="60" stride="16">
               <param type="float4x4">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint4-Interpolations">
-          <Name_array id="joint4-Interpolations-array" count="30">
+          <Name_array id="joint4-Interpolations-array" count="60">
  LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
 LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
-LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR
+LINEAR</Name_array>
           <technique_common>
-            <accessor source="#joint4-Interpolations-array" count="30">
+            <accessor source="#joint4-Interpolations-array" count="60">
               <param type="name">
               </param>
             </accessor>
@@ -819,54 +959,54 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
       </animation>
       <animation>
         <source id="joint4-visibility-animation-input">
-          <float_array id="joint4-visibility-animation-input-array" count="2">
+          <float_array id="joint4-visibility-animation-input-array" count="3">
 
-0.033333 1.000000</float_array>
+0.033333 1.000000 2.000000</float_array>
           <technique_common>
-            <accessor source="#joint4-visibility-animation-input-array" count="2">
+            <accessor source="#joint4-visibility-animation-input-array" count="3">
               <param name="TIME" type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint4-visibility-animation-output">
-          <float_array id="joint4-visibility-animation-output-array" count="2">
+          <float_array id="joint4-visibility-animation-output-array" count="3">
 
-1.000000 1.000000</float_array>
+1.000000 1.000000 1.000000</float_array>
           <technique_common>
-            <accessor source="#joint4-visibility-animation-output-array" count="2">
+            <accessor source="#joint4-visibility-animation-output-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint4-visibility-animation-intan">
-          <float_array id="joint4-visibility-animation-intan-array" count="2">
+          <float_array id="joint4-visibility-animation-intan-array" count="3">
 
-0.000000 0.000000</float_array>
+0.000000 0.000000 0.000000</float_array>
           <technique_common>
-            <accessor source="#joint4-visibility-animation-intan-array" count="2">
+            <accessor source="#joint4-visibility-animation-intan-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint4-visibility-animation-outtan">
-          <float_array id="joint4-visibility-animation-outtan-array" count="2">
+          <float_array id="joint4-visibility-animation-outtan-array" count="3">
 
-0.000000 0.000000</float_array>
+0.000000 0.000000 0.000000</float_array>
           <technique_common>
-            <accessor source="#joint4-visibility-animation-outtan-array" count="2">
+            <accessor source="#joint4-visibility-animation-outtan-array" count="3">
               <param type="float">
               </param>
             </accessor>
           </technique_common>
         </source>
         <source id="joint4-visibility-animation-interpolation">
-          <Name_array id="joint4-visibility-animation-interpolation-array" count="2">
- STEP STEP</Name_array>
+          <Name_array id="joint4-visibility-animation-interpolation-array" count="3">
+ STEP STEP STEP</Name_array>
           <technique_common>
-            <accessor source="#joint4-visibility-animation-interpolation-array" count="2">
+            <accessor source="#joint4-visibility-animation-interpolation-array" count="3">
               <param type="name">
               </param>
             </accessor>
@@ -944,7 +1084,7 @@ LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR LINEAR</Name_array>
         </technique>
         <technique profile="FCOLLADA">
           <start_time>0.033333</start_time>
-          <end_time>1.000000</end_time>
+          <end_time>2.000000</end_time>
         </technique>
       </extra>
     </visual_scene>

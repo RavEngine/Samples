@@ -27,7 +27,7 @@ void Level::SetupInputs(){
 	Ref<Entity> camlights = make_shared<Entity>();
 	camlights->EmplaceComponent<CameraComponent>()->setActive(true);
 	camlights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
-	camlights->transform()->LocalTranslateDelta(vector3(0,7,14));
+	camlights->transform()->LocalTranslateDelta(vector3(3,0.5,6));
 	
 	Ref<Entity> dirlight = make_shared<Entity>();
 	dirlight->EmplaceComponent<DirectionalLight>();
@@ -36,10 +36,10 @@ void Level::SetupInputs(){
 	//setup animation
 	auto skeleton = make_shared<SkeletonAsset>("simplerig3.dae");
 	
-	auto cube = make_shared<Entity>();
+	cube = make_shared<Entity>();
 	auto cubemesh = cube->EmplaceComponent<SkinnedMeshComponent>(skeleton,make_shared<MeshAssetSkinned>("simplerig3.dae",skeleton));
 	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
-	//cube->transform()->LocalTranslateDelta(vector3(1,0,-4));
+	cube->transform()->LocalTranslateDelta(vector3(3,0,0));
 	cube->EmplaceComponent<BoneDebugRenderer>();
 	
 	auto animatorComponent2 = cube->EmplaceComponent<AnimatorComponent>(skeleton);
@@ -71,4 +71,9 @@ void Level::SetupInputs(){
 	Spawn(camlights);
 	Spawn(dirlight);
 	Spawn(cube);
+}
+
+void Level::posttick(float scale){
+	float rotamt = glm::radians(scale * 0.1);
+	cube->transform()->LocalRotateDelta(vector3(rotamt,rotamt,-rotamt));
 }
