@@ -27,25 +27,25 @@ void Level::SetupInputs(){
 	Ref<Entity> camlights = make_shared<Entity>();
 	camlights->EmplaceComponent<CameraComponent>()->setActive(true);
 	camlights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
-	camlights->transform()->LocalTranslateDelta(vector3(0,7,10));
+	camlights->transform()->LocalTranslateDelta(vector3(0,7,14));
 	
 	Ref<Entity> dirlight = make_shared<Entity>();
 	dirlight->EmplaceComponent<DirectionalLight>();
 	dirlight->transform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
 	
 	//setup animation
-	auto skeleton = make_shared<SkeletonAsset>("astro_maya_2.dae");
+	auto skeleton = make_shared<SkeletonAsset>("simplerig3.dae");
 	
 	auto cube = make_shared<Entity>();
-	auto cubemesh = cube->EmplaceComponent<SkinnedMeshComponent>(skeleton,make_shared<MeshAssetSkinned>("astro_maya_2.dae",skeleton));
+	auto cubemesh = cube->EmplaceComponent<SkinnedMeshComponent>(skeleton,make_shared<MeshAssetSkinned>("simplerig3.dae",skeleton));
 	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
-	cube->transform()->LocalTranslateDelta(vector3(0,0,-4));
+	//cube->transform()->LocalTranslateDelta(vector3(1,0,-4));
 	cube->EmplaceComponent<BoneDebugRenderer>();
 	
 	auto animatorComponent2 = cube->EmplaceComponent<AnimatorComponent>(skeleton);
 	
-	auto clip2 = make_shared<AnimationAsset>("astro_maya_2.dae",skeleton);
-	auto clip = make_shared<AnimationAsset>("astro_maya_2.dae",skeleton);
+	auto clip2 = make_shared<AnimationAsset>("simplerig3.dae",skeleton);
+	auto clip = make_shared<AnimationAsset>("simplerig3.dae",skeleton);
 	
 	//create the blend tree
 	auto blendTree = make_shared<AnimBlendTree>();
@@ -60,7 +60,7 @@ void Level::SetupInputs(){
 	state3{1,clip};
 	
 	state3.SetTransition(0, RavEngine::TweenCurves::LinearCurve, 3,AnimatorComponent::State::Transition::TimeMode::BeginNew);
-	state2.isLooping = false;
+	//state2.isLooping = false;
 	
 	animatorComponent2->InsertState(state2);
 	animatorComponent2->InsertState(state3);
