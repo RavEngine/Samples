@@ -4,6 +4,7 @@
 #include <RavEngine/DebugDraw.hpp>
 #include <RavEngine/MeshAssetSkinned.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
+#include <RavEngine/Utilities.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -27,7 +28,7 @@ void Level::SetupInputs(){
 	Ref<Entity> camlights = make_shared<Entity>();
 	camlights->EmplaceComponent<CameraComponent>()->setActive(true);
 	camlights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
-	camlights->transform()->LocalTranslateDelta(vector3(3,0.5,6));
+	camlights->transform()->LocalTranslateDelta(vector3(0,0.5,6));
 	
 	Ref<Entity> dirlight = make_shared<Entity>();
 	dirlight->EmplaceComponent<DirectionalLight>();
@@ -35,45 +36,56 @@ void Level::SetupInputs(){
 	
 	//setup animation
 	auto skeleton = make_shared<SkeletonAsset>("simplerig3.dae");
-	
-	cube = make_shared<Entity>();
-	auto cubemesh = cube->EmplaceComponent<SkinnedMeshComponent>(skeleton,make_shared<MeshAssetSkinned>("simplerig3.dae",skeleton));
-	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
-	cube->transform()->LocalTranslateDelta(vector3(3,0,0));
-	cube->EmplaceComponent<BoneDebugRenderer>();
-	
-	auto animatorComponent2 = cube->EmplaceComponent<AnimatorComponent>(skeleton);
-	
 	auto clip2 = make_shared<AnimationAsset>("simplerig3.dae",skeleton);
 	auto clip = make_shared<AnimationAsset>("simplerig3.dae",skeleton);
+	auto mesh = make_shared<MeshAssetSkinned>("simplerig3.dae",skeleton);
+	auto material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 	
-	//create the blend tree
-	auto blendTree = make_shared<AnimBlendTree>();
-	AnimBlendTree::Node node(clip2, normalized_vec2(0,1));
-	blendTree->InsertNode(0,node);
-	blendTree->SetBlendPos(normalized_vec2(0,0.5));
+	for(int i = 0; i < 10; i++){
+		auto cube = make_shared<Entity>();
+		auto cubemesh = cube->EmplaceComponent<SkinnedMeshComponent>(skeleton,mesh);
+		cubemesh->SetMaterial(material);
+		cube->transform()->LocalTranslateDelta(vector3(Random::get(-3,3),Random::get(-3,3),Random::get(-3,0)));
+		cube->EmplaceComponent<BoneDebugRenderer>();
+		
+		auto animatorComponent2 = cube->EmplaceComponent<AnimatorComponent>(skeleton);
+		
+		//create the blend tree
+		auto blendTree = make_shared<AnimBlendTree>();
+		AnimBlendTree::Node node(clip2, normalized_vec2(0,1));
+		blendTree->InsertNode(0,node);
+		blendTree->SetBlendPos(normalized_vec2(0,0.5));
+		
+		//create the state machine
+		
+		AnimatorComponent::State
+		state2{0,blendTree},
+		state3{1,clip};
+		
+		state3.speed = state2.speed = Random::get(0.001,0.003);
+		
+		state3.SetTransition(0, RavEngine::TweenCurves::LinearCurve, 3,AnimatorComponent::State::Transition::TimeMode::BeginNew);
+		//state2.isLooping = false;
+		
+		animatorComponent2->InsertState(state2);
+		animatorComponent2->InsertState(state3);
+		animatorComponent2->Goto(1,true);
+		animatorComponent2->Play();
+		animatorComponent2->Goto(0);
+		
+		cubes.push_back(cube);
+		Spawn(cube);
+	}
 	
-	//create the state machine
-	
-	AnimatorComponent::State
-	state2{0,blendTree},
-	state3{1,clip};
-	
-	state3.SetTransition(0, RavEngine::TweenCurves::LinearCurve, 3,AnimatorComponent::State::Transition::TimeMode::BeginNew);
-	//state2.isLooping = false;
-	
-	animatorComponent2->InsertState(state2);
-	animatorComponent2->InsertState(state3);
-	animatorComponent2->Goto(1,true);
-	animatorComponent2->Play();
-	animatorComponent2->Goto(0);
 	
 	Spawn(camlights);
 	Spawn(dirlight);
-	Spawn(cube);
 }
 
 void Level::posttick(float scale){
 	float rotamt = glm::radians(scale * 0.1);
-	cube->transform()->LocalRotateDelta(vector3(rotamt,rotamt,-rotamt));
+	for(const auto& cube : cubes){
+		cube->transform()->LocalRotateDelta(vector3(rotamt,rotamt,-rotamt));
+		rotamt += 0.001;
+	}
 }
