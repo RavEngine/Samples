@@ -21,7 +21,8 @@ if(MSVC)
   add_definitions(/Qpar)
 endif()
 
-#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=haswell")
+#Enable iPad as well as iPhone (Universal)
+set(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2" CACHE INTERNAL "")
 
 project("RavEngine_Samples")
 
@@ -42,7 +43,8 @@ function (add_sample sample_dir)
 	add_executable("${APPNAME}" ${TEST_SOURCES})
 	set_target_properties("${APPNAME}" 
 		PROPERTIES 
-		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist"
+		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
+		XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.ravbug.res-${sample_dir}"		# with templated plist we can set this
 	)
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" )
 
