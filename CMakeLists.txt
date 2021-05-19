@@ -22,7 +22,7 @@ if(MSVC)
 endif()
 
 #Enable iPad as well as iPhone (Universal)
-set(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2" CACHE INTERNAL "")
+set(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2,3" CACHE INTERNAL "")
 
 project("RavEngine_Samples")
 
