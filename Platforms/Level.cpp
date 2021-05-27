@@ -61,9 +61,9 @@ void Level::SetupInputs(){
 		AnimatorComponent::State
 		state2{0,blendTree},
 		state3{1,clip};
-		
-		state3.speed = state2.speed = Random::get(0.001,0.003);
-		
+		state2.speed = Random::get(0.1f,3.f);
+		state3.speed = Random::get(0.1f,3.f);
+				
 		state3.SetTransition(0, RavEngine::TweenCurves::LinearCurve, 3,AnimatorComponent::State::Transition::TimeMode::BeginNew);
 		//state2.isLooping = false;
 		
@@ -87,5 +87,11 @@ void Level::posttick(float scale){
 	for(const auto& cube : cubes){
 		cube->transform()->LocalRotateDelta(vector3(rotamt,rotamt,-rotamt));
 		rotamt += 0.001;
+		if(App::currentTime() > 5 && App::currentTime() < 10){
+			cube->GetComponent<AnimatorComponent>().value()->Pause();
+		}
+		if(App::currentTime() > 10){
+			cube->GetComponent<AnimatorComponent>().value()->Play();
+		}
 	}
 }
