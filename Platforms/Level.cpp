@@ -41,7 +41,9 @@ void Level::SetupInputs(){
 	auto mesh = make_shared<MeshAssetSkinned>("simplerig3.dae",skeleton);
 	auto material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 	
-	for(int i = 0; i < 10; i++){
+	auto trimmed_clip = make_shared<AnimationAssetSegment>(clip,12,48);
+	
+	for(float i = 0.5; i <= 1.5; i+=0.5){
 		auto cube = make_shared<Entity>();
 		auto cubemesh = cube->EmplaceComponent<SkinnedMeshComponent>(skeleton,mesh);
 		cubemesh->SetMaterial(material);
@@ -59,19 +61,20 @@ void Level::SetupInputs(){
 		//create the state machine
 		
 		AnimatorComponent::State
-		state2{0,blendTree},
-		state3{1,clip};
-		state2.speed = Random::get(0.1f,3.f);
-		state3.speed = Random::get(0.1f,3.f);
+		state2{0,trimmed_clip},
+		state3{1,trimmed_clip};
+		state2.speed = i;
+		state3.speed = i;
 				
 		state3.SetTransition(0, RavEngine::TweenCurves::LinearCurve, 3,AnimatorComponent::State::Transition::TimeMode::BeginNew);
 		//state2.isLooping = false;
 		
 		animatorComponent2->InsertState(state2);
 		animatorComponent2->InsertState(state3);
-		animatorComponent2->Goto(1,true);
+		animatorComponent2->Goto(0,true);
+		//animatorComponent2->Goto(1,true);
 		animatorComponent2->Play();
-		animatorComponent2->Goto(0);
+		//animatorComponent2->Goto(0);
 		
 		cubes.push_back(cube);
 		Spawn(cube);
