@@ -7,6 +7,7 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/App.hpp>
 #include <RavEngine/Debug.hpp>
+#include <RavEngine/QueryIterator.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -14,14 +15,13 @@ using namespace std;
 struct SingleEntityMarker : public Component, public Queryable<SingleEntityMarker>{};
 
 struct FPSSystem : public AutoCTTI {
-	const RavEngine::System::list_type queries{ CTTI<SingleEntityMarker>() };
-	void Tick(float scale, Ref<Component> c, ctti_t id){
+	void Tick(float scale, AccessRead<SingleEntityMarker> c){
 		App::DispatchMainThread([](){
 			App::SetWindowTitle(fmt::format("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::Renderer->currentBackend(), (int)App::CurrentTPS(), (int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()).c_str());
 		});
 	}
-	const RavEngine::System::list_type& QueryTypes() const{
-		return queries;
+	constexpr QueryIteratorAND<SingleEntityMarker> QueryTypes() const{
+		return QueryIteratorAND<SingleEntityMarker>();
 	}
 };
 //System::list_type FPSSystem::queries;
