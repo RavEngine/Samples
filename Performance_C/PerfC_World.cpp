@@ -9,11 +9,13 @@
 #include <RavEngine/BuiltinMaterials.hpp>
 #include <fmt/format.h>
 #include <RavEngine/Debug.hpp>
+#include <RavEngine/Utilities.hpp>
 
 using namespace RavEngine;
 using namespace std;
 
-std::array<Ref<MeshAsset>,PerfC_World::num_meshes> PerfC_World::meshes;
+STATIC(PerfC_World::meshes);
+std::array<Ref<MeshAsset>,PerfC_World::num_meshes>;
 std::array<Ref<Texture>,PerfC_World::num_textures> PerfC_World::textures;
 bool PerfC_World::TexturesEnabled = true;
 
