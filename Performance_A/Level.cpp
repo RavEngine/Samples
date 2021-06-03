@@ -43,7 +43,7 @@ void PerfA_World::OnActivate() {
 	systemManager.RegisterTimedSystem(make_shared<MetricsSystem>(),std::chrono::seconds(1));
 
 	// spawn demo entities
-	for (int i = 0; i < 5000; i++) {
+	for (int i = 0; i < 60000; i++) {
 		Spawn(make_shared<PA_Entity>());
 	}
 
