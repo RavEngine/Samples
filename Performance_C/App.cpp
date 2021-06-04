@@ -17,7 +17,7 @@ void Performance_C::OnStartup(int argc, char **argv){
 	
 	AddWorld(std::make_shared<PerfC_World>());
 	
-	SetWindowTitle(fmt::format("RavEngine Performance_C | {}", Renderer->currentBackend()).c_str());
+	SetWindowTitle(StrFormat("RavEngine Performance_C | {}", Renderer->currentBackend()).c_str());
 }
 
 START_APP(Performance_C);

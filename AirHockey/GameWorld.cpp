@@ -143,7 +143,7 @@ void GameWorld::Reset(){
 	zerovel(p1);
 	zerovel(p2);
 	zerovel(puck);
-	Scoreboard->SetInnerRML(fmt::format("Score: {} - {}", p1score, p2score).c_str());
+	Scoreboard->SetInnerRML(StrFormat("Score: {} - {}", p1score, p2score).c_str());
 	
 	if (p1score >= numToWin){
 		Scoreboard->SetInnerRML("Player 1 Wins!");

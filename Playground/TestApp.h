@@ -30,7 +30,7 @@ private:
 		world->SetupInputs();
 		AddWorld(world);
 		
-		SetWindowTitle(fmt::format("RavEngine Playground | {}", Renderer->currentBackend()).c_str());
+		SetWindowTitle(RavEngine::StrFormat("RavEngine Playground | {}", Renderer->currentBackend()).c_str());
 	}
 
 	int OnShutdown() override {

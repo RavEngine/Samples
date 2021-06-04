@@ -7,7 +7,7 @@ void Game::OnStartup(int argc, char** argv){
 	world->SetupInputs();
 	AddWorld(world);
 	
-	SetWindowTitle(fmt::format("RavEngine Platforms | {}", Renderer->currentBackend()).c_str());
+	SetWindowTitle(RavEngine::StrFormat("RavEngine Platforms | {}", Renderer->currentBackend()).c_str());
 }
 
 START_APP(Game)

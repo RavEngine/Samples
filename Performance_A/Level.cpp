@@ -16,7 +16,7 @@ struct MetricsSystem : public AutoCTTI {
 		auto doc = gui->GetDocument("ui.rml");
 		auto elem = doc->GetElementById("diag");
 		gui->ExclusiveAccess([&] {
-			elem->SetInnerRML(fmt::format(R"(<p>
+			elem->SetInnerRML(StrFormat(R"(<p>
 FPS: {}({} ms) <br />
 TPS : {} ({} ops/s) <br />
 Entities : {} <br />

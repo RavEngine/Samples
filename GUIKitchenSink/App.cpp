@@ -11,7 +11,7 @@ void ::App::OnStartup(int argc, char **argv){
 		
 	AddWorld(std::make_shared<::World>());
 	
-	SetWindowTitle(fmt::format("RavEngine GUIKitchenSink | {}", Renderer->currentBackend()).c_str());
+	SetWindowTitle(RavEngine::StrFormat("RavEngine GUIKitchenSink | {}", Renderer->currentBackend()).c_str());
 }
 
 START_APP(::App)

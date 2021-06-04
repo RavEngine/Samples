@@ -102,7 +102,7 @@ void PerfC_World::OnActivate(){
 	//load textures
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
-		textures[i] = make_shared<Texture>(fmt::format("tx{}.png",i+1));
+		textures[i] = make_shared<Texture>(StrFormat("tx{}.png",i+1));
 		materialInstances[i] = make_shared<DemoMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 		materialInstances[i]->SetAlbedoTexture(textures[i]);
 			}
@@ -210,7 +210,7 @@ void PerfC_World::OnActivate(){
 
 void PerfC_World::posttick(float scale){
 	hud->ExclusiveAccess([&] {
-		fpslabel->SetInnerRML(fmt::format("TPS: {}, FPS: {} ({} ms)", (int)App::CurrentTPS(),(int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()));
+		fpslabel->SetInnerRML(StrFormat("TPS: {}, FPS: {} ({} ms)", (int)App::CurrentTPS(),(int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()));
 	});
 }
 

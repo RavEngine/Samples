@@ -11,7 +11,7 @@ void Performance_A::OnStartup(int argc, char** argv) {
 	// load world
 	AddWorld(make_shared<PerfA_World>());
 
-	SetWindowTitle(fmt::format("RavEngine Performance_A | {}", Renderer->currentBackend()).c_str());
+	SetWindowTitle(RavEngine::StrFormat("RavEngine Performance_A | {}", Renderer->currentBackend()).c_str());
 }
 
 START_APP(Performance_A)
