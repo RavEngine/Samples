@@ -9,9 +9,11 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - A testing zone, subject to change
 3. Performance_A
    - ECS raw number crunching benchmark
-4. Performance_C
+4. Performance_B
+   - autobatched instancing benchmark
+5. Performance_C
    - A stress test for high object count with animated lights
-5. GUIKitchenSink
+6. GUIKitchenSink
    - A demonstration of all the different supported GUI widgets
 
 ## How to build

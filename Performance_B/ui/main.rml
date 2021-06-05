@@ -1,0 +1,19 @@
+<rml>
+    <head>
+        <link type="text/rcss" href="default.rcss"></link>
+        <style>
+            *{
+                font-size: 30dp
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <p id="diag"></p>
+            <br></br>
+            <p>Controls: </p>
+            <p>WASD - Turn camera</p>
+            <p>Up / Down - Dolly in / out</p>
+        </main>
+    </body>
+</rml>

@@ -39,8 +39,8 @@ Entities : {} <br />
 void PerfA_World::OnActivate() {
 
 	// register system
-	systemManager.RegisterSystem<CalcSystem>(make_shared<CalcSystem>());
-	systemManager.RegisterTimedSystem(make_shared<MetricsSystem>(),std::chrono::seconds(1));
+	systemManager.EmplaceSystem<CalcSystem>();
+	systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
 
 	// spawn demo entities
 	for (int i = 0; i < 60000; i++) {
