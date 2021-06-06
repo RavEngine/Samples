@@ -14,7 +14,7 @@ static constexpr uint16_t num_entities =
 #ifdef _DEBUG
 5000;
 #else
-10000;
+50000;
 #endif
 
 struct MetricsSystem : public AutoCTTI {
