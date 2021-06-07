@@ -1,5 +1,6 @@
 #include "App.hpp"
 #include "Level.hpp"
+#include <SDL_main.h>
 
 using namespace std;
 
