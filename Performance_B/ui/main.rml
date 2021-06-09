@@ -11,9 +11,15 @@
         <main>
             <p id="diag"></p>
             <br></br>
-            <p>Controls: </p>
-            <p>WASD - Turn camera</p>
-            <p>Up / Down - Dolly in / out</p>
+           <p>
+               Select Mesh<br />
+               <select id="sel" onchange="changeevt">
+                    <option selected>Cube</option>
+                    <option>Cone</option>
+                    <option>Cylinder</option>
+                    <option>Sphere</option>
+               </select>
+           </p>
         </main>
     </body>
 </rml>

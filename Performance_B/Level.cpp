@@ -41,15 +41,20 @@ void PerfB_World::OnActivate() {
 
 	Debug::Log("Loading Assets");
 	auto matinst = make_shared<PBRMaterialInstance>(make_shared<PBRMaterial>());
-	auto mesh = make_shared<MeshAsset>("cone.obj");
-
+	currentMesh = make_shared<MeshAsset>();
+	cube = make_shared<MeshAsset>("cube.obj");
+	cone = make_shared<MeshAsset>("cone.obj");
+	sphere = make_shared<MeshAsset>("sphere.obj");
+	cylinder = make_shared<MeshAsset>("cylinder.obj");
+	currentMesh->Exchange(cube);
+	
 	systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
 
 	// spawn demo entities
 
 	Debug::Log("Spawning {} entities",num_entities);
 	for (int i = 0; i < num_entities; i++) {
-		Spawn(make_shared<BasicEntity>(mesh,matinst));
+		Spawn(make_shared<BasicEntity>(currentMesh,matinst));
 	}
 
 	auto player = make_shared<Camera>();
@@ -61,7 +66,20 @@ void PerfB_World::OnActivate() {
 	auto dirlight = control->EmplaceComponent<DirectionalLight>();
 	auto ambientLight = control->EmplaceComponent<AmbientLight>();
 	ambientLight->Intensity = 0.3;
-	gui->AddDocument("main.rml");
+	auto doc = gui->AddDocument("main.rml");
+	
+	struct SelectionEventListener : public Rml::EventListener{
+		
+		WeakRef<PerfB_World> world;
+		SelectionEventListener(WeakRef<PerfB_World> s) : world(s){}
+		
+		void ProcessEvent(Rml::Event& evt) override{
+			auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
+			world.lock()->SwitchMesh(static_cast<meshes>(selbox->GetSelection()));
+		}
+	};
+	
+	doc->GetElementById("sel")->AddEventListener("change", new SelectionEventListener(static_pointer_cast<PerfB_World>(shared_from_this())));
 
 	Spawn(control);
 
