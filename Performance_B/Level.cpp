@@ -6,6 +6,7 @@
 #include "BasicEntity.hpp"
 #include "Camera.hpp"
 #include <RavEngine/QueryIterator.hpp>
+#include "CustomMaterials.hpp"
 
 using namespace std;
 using namespace RavEngine;
@@ -40,7 +41,7 @@ struct MetricsSystem : public AutoCTTI {
 void PerfB_World::OnActivate() {
 
 	Debug::Log("Loading Assets");
-	auto matinst = make_shared<PBRMaterialInstance>(make_shared<PBRMaterial>());
+	auto matinst = make_shared<InstanceColorMatInstance>(make_shared<InstanceColorMat>());
 	currentMesh = make_shared<MeshAsset>();
 	cube = make_shared<MeshAsset>("cube.obj");
 	cone = make_shared<MeshAsset>("cone.obj");

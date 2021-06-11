@@ -2,9 +2,10 @@
 #include <RavEngine/Entity.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/Utilities.hpp>
+#include "CustomMaterials.hpp"
 
 struct BasicEntity : public RavEngine::Entity {
-	BasicEntity(Ref<RavEngine::MeshAsset> mesh, Ref<RavEngine::PBRMaterialInstance> matinst) {
+	BasicEntity(Ref<RavEngine::MeshAsset> mesh, Ref<InstanceColorMatInstance> matinst) {
 		EmplaceComponent<RavEngine::StaticMesh>(mesh,matinst);
 	
 		vector3 pos;
