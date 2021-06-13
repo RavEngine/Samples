@@ -7,10 +7,10 @@ uniform vec4 albedoColor;
 
 void main()
 {
-	int index_id = v_texcoord0.x;
+	int index_id = abs(v_worldpos.x * 100);
 	
 	PBR material = make_mat();
-	material.color = vec3((index_id % 255)/255.0,(index_id % 128)/128.0,(index_id % 64)/64.0) * albedoColor;
+	material.color = v_worldpos / 30;
 	material.normal = v_normal;
 	material.position = v_worldpos;
 	

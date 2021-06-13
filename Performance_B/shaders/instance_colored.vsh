@@ -6,8 +6,6 @@ $output v_normal, v_texcoord0, v_worldpos
 void main()
 {
 	vs_genmats();
-	
-	v_texcoord0.x = gl_InstanceID;
-	
+		
 	vs_store();
 }
