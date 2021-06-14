@@ -1,7 +1,12 @@
-#include "App.hpp"
 #include "World.hpp"
 #include <RavEngine/RenderEngine.hpp>
 #include <SDL_main.h>
+#include <RavEngine/App.hpp>
+
+struct App : public RavEngine::App{
+	App() : RavEngine::App("RavEngine_Sample_GUIKitchenSink"){}
+	void OnStartup(int argc, char** argv) override;
+};
 
 void ::App::OnStartup(int argc, char **argv){
 	
