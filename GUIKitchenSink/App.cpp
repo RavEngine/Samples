@@ -1,6 +1,5 @@
 #include "World.hpp"
 #include <RavEngine/RenderEngine.hpp>
-#include <SDL_main.h>
 #include <RavEngine/App.hpp>
 
 struct App : public RavEngine::App{

@@ -1,8 +1,15 @@
-#include "App.hpp"
+#include <RavEngine/App.hpp>
 #include "Level.hpp"
-#include <SDL_main.h>
 
 using namespace std;
+
+struct Performance_A : public RavEngine::App {
+public:
+	Performance_A() : App("RavEngine_Sample_Performance_A") {}
+private:
+	void OnStartup(int argc, char** argv) override;
+};
+
 
 void Performance_A::OnStartup(int argc, char** argv) {
 	

@@ -1,6 +1,12 @@
-#include "App.hpp"
 #include "PerfC_World.hpp"
-#include <SDL_main.h>
+#include "RavEngine/App.hpp"
+
+class Performance_C : public RavEngine::App{
+public:
+	Performance_C() : App("RavEngine_Sample_Performance_C"){}
+private:
+	void OnStartup(int argc, char** argv) override;
+};
 
 using namespace RavEngine;
 
