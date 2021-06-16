@@ -6,7 +6,7 @@
 
 struct RotationComponent : public RavEngine::Component, public RavEngine::Queryable<RotationComponent>{
 	float xspeed = 0.5, yspeed = 0.2, zspeed = 0.4,
-		  maxDeg = 30;
+		  maxDeg = 10;
 };
 
 struct Ground : public RavEngine::Entity{
@@ -20,5 +20,26 @@ struct Ground : public RavEngine::Entity{
 		
 		// system memory copy is no longer needed
 		//mesh->DeallocSystemCopy();
+	}
+};
+
+struct RigidBody : public RavEngine::Entity{
+	enum class BodyType{
+		Sphere,
+		Cube
+	};
+	
+	RigidBody(Ref<RavEngine::PBRMaterialInstance> mat, Ref<RavEngine::MeshAsset> mesh, Ref<RavEngine::PhysicsMaterial> physmat, BodyType type){
+		EmplaceComponent<RavEngine::StaticMesh>(mesh,mat);
+		EmplaceComponent<RavEngine::RigidBodyDynamicComponent>();
+		
+		switch(type){
+			case BodyType::Sphere:
+				EmplaceComponent<RavEngine::SphereCollider>(1,physmat);
+				break;
+			case BodyType::Cube:
+				EmplaceComponent<RavEngine::BoxCollider>(vector3(1,1,1),physmat);
+				break;
+		}
 	}
 };
