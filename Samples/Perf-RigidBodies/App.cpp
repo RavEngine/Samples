@@ -1,12 +1,13 @@
 #include <RavEngine/App.hpp>
 #include "Level.hpp"
+#include "AppInfo.hpp"
 
 struct App : public RavEngine::App{
-	App() : RavEngine::App("RavEngine_Sample_Performance_G"){}
+	App() : RavEngine::App(APPNAME){}
 	void OnStartup(int argc, char** argv) override{
 		AddWorld(std::make_shared<Level>());
 		
-		SetWindowTitle(RavEngine::StrFormat("RavEngine Performance_G | {}", Renderer->currentBackend()).c_str());
+		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, Renderer->currentBackend()).c_str());
 	}
 };
 

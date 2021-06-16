@@ -1,9 +1,10 @@
 #include "PerfC_World.hpp"
 #include "RavEngine/App.hpp"
+#include "AppInfo.hpp"
 
 class Performance_C : public RavEngine::App{
 public:
-	Performance_C() : App("RavEngine_Sample_Performance_C"){}
+	Performance_C() : App(APPNAME){}
 private:
 	void OnStartup(int argc, char** argv) override;
 };
@@ -23,7 +24,7 @@ void Performance_C::OnStartup(int argc, char **argv){
 	
 	AddWorld(std::make_shared<PerfC_World>());
 	
-	SetWindowTitle(StrFormat("RavEngine Performance_C | {}", Renderer->currentBackend()).c_str());
+	SetWindowTitle(StrFormat("{} | {}", APPNAME, Renderer->currentBackend()).c_str());
 }
 
 START_APP(Performance_C);

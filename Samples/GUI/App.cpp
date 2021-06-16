@@ -1,9 +1,10 @@
 #include "World.hpp"
 #include <RavEngine/RenderEngine.hpp>
 #include <RavEngine/App.hpp>
+#include "AppInfo.hpp"
 
 struct App : public RavEngine::App{
-	App() : RavEngine::App("RavEngine_Sample_GUIKitchenSink"){}
+	App() : RavEngine::App(APPNAME){}
 	void OnStartup(int argc, char** argv) override;
 };
 
@@ -15,7 +16,7 @@ void ::App::OnStartup(int argc, char **argv){
 		
 	AddWorld(std::make_shared<::World>());
 	
-	SetWindowTitle(RavEngine::StrFormat("RavEngine GUIKitchenSink | {}", Renderer->currentBackend()).c_str());
+	SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, Renderer->currentBackend()).c_str());
 }
 
 START_APP(::App)

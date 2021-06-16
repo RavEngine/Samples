@@ -31,22 +31,28 @@ add_subdirectory("RavEngine")
 
 function (add_sample sample_dir)
 	# create the test executable
-	SET(APPNAME "RavEngine_Sample_${sample_dir}")
+	SET(APPNAME "RavEngine_${sample_dir}")
+	SET(sample_dir "Samples/${sample_dir}")
 
 	if (CMAKE_SYSTEM_NAME MATCHES "iOS")
 		set(PlatformFiles "iosLaunchScreen.storyboard")
 	endif()
 
-	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" ${PlatformFiles})
+	# create the helper header file
+	make_directory("${APPNAME}")
+	configure_file("Samples/AppInfo.hpp" "${CMAKE_BINARY_DIR}/${APPNAME}/" @ONLY)
+
+	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" ${PlatformFiles})
 
 	# creates a mac app if applicable
 	add_executable("${APPNAME}" ${TEST_SOURCES})
 	set_target_properties("${APPNAME}" 
 		PROPERTIES 
 		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
-		XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.ravbug.res-${sample_dir}"		# with templated plist we can set this
+		XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"		# with templated plist we can set this
 	)
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" )
+	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}")
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 
@@ -56,7 +62,7 @@ function (add_sample sample_dir)
 	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png")
 	file(GLOB sounds "${sample_dir}/sounds/*")
 
-	pack_resources(TARGET "${APPNAME}" 
+	pack_resources(TARGET "${APPNAME}"
 		OBJECTS ${objects}
 		SHADERS ${shaders}
 		TEXTURES ${textures}
@@ -77,9 +83,9 @@ endfunction()
 
 add_sample("AirHockey")
 add_sample("Playground")
-add_sample("Platforms")
-add_sample("Performance_A")
-add_sample("Performance_B")
-add_sample("Performance_C")
-add_sample("Performance_G")
-add_sample("GUIKitchenSink")
+add_sample("Animation")
+add_sample("Perf-ECS")
+add_sample("Perf-Draw")
+add_sample("Perf-DrawAnimated")
+add_sample("Perf-RigidBodies")
+add_sample("GUI")

@@ -3,12 +3,13 @@
 #include <RavEngine/InputManager.hpp>
 #include "MainMenu.hpp"
 #include "RavEngine/App.hpp"
+#include "AppInfo.hpp"
 
 using namespace RavEngine;
 
 class AirHockey : public RavEngine::App {
 public:
-	AirHockey() : App("RavEngine_Sample_AirHockey"){}
+	AirHockey() : App(APPNAME){}
 private:
 	void OnStartup(int argc, char** argv) override;
 	int OnShutdown() override;

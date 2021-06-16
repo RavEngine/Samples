@@ -9,10 +9,11 @@
 #include <RavEngine/App.hpp>
 #include <RavEngine/WeakRef.hpp>
 #include "TestEntity.hpp"
+#include "AppInfo.hpp"
 
 class TestApp : public RavEngine::App{
 public:
-	TestApp() : App("RavEngine_Sample_Playground"){}
+	TestApp() : App(APPNAME){}
 private:
 	void OnStartup(int argc, char** argv) override{
 		
@@ -35,7 +36,7 @@ private:
 		world->SetupInputs();
 		AddWorld(world);
 		
-		SetWindowTitle(RavEngine::StrFormat("RavEngine Playground | {}", Renderer->currentBackend()).c_str());
+		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, Renderer->currentBackend()).c_str());
 	}
 	
 	int OnShutdown() override {

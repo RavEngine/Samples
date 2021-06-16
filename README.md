@@ -7,14 +7,16 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - A simple air hockey game demonstrating RavEngine fundamentals (WIP)
 2. Playground
    - A testing zone, subject to change
-3. Performance_A
+3. Perf-ECS
    - ECS raw number crunching benchmark
-4. Performance_B
+4. Perf-Draw
    - autobatched instancing benchmark
-5. Performance_C
+5. Perf-DrawAnimated
    - A stress test for high object count with animated lights
-6. GUIKitchenSink
+6. GUI
    - A demonstration of all the different supported GUI widgets
+7. Animation
+   - Demonstrates the skinned mesh blending capabilities of RavEngine
 
 ## How to build
 1. Ensure RavEngine supports your platform.
@@ -25,4 +27,6 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - macOS: `./build-mac.sh`
    - Windows: `build-win.bat`
    - Linux: `./build-linux.sh`
+   - iOS (device): `./init-ios.sh`   (project gen only, open Xcode for code signing)
+   - tvOS (device): `./init-tvos.sh` (project gen only, open Xcode for code signing)
 5. Navigate your terminal to the `build/release` directory, and run the samples.
