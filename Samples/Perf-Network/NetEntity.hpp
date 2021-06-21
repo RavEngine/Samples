@@ -63,7 +63,7 @@ struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable
 	}
 
 	// invoked when spawned over the network
-	NetEntity(const uuids::uuid& id) : NetEntity() {
+	NetEntity(const uuids::uuid& id) {
 		EmplaceComponent<RavEngine::NetworkIdentity>(id);
 	}
 

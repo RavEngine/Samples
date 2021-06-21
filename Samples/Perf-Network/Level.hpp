@@ -15,11 +15,15 @@ struct RelayComp : public RavEngine::Component, public RavEngine::Queryable<Rela
 	void RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin);
 };
 
+enum ManagerRPCs {
+	SpawnReq
+};
+
 struct ManagementRelay : public RavEngine::Entity, public RavEngine::NetworkReplicable {
 	inline void CommonInit() {
 		auto rpc = EmplaceComponent<RavEngine::RPCComponent>();
 		auto relay = EmplaceComponent<RelayComp>();
-		rpc->RegisterServerRPC(0, relay, &RelayComp::RequestSpawnObject, RavEngine::RPCComponent::Directionality::Bidirectional);
+		rpc->RegisterServerRPC(SpawnReq, relay, &RelayComp::RequestSpawnObject, RavEngine::RPCComponent::Directionality::Bidirectional);
 	}
 
 	ManagementRelay() {

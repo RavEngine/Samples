@@ -27,11 +27,16 @@ void Level::OnActivate() {
 	// if on client, this will be spawned automatically
 	if (App::networkManager.IsServer()) {
 		Spawn(make_shared<ManagementRelay>());
+		Spawn(make_shared<NetEntity>());
+	}
+	else {
+		App::networkManager.client->SetNetSpawnHook<ManagementRelay>([](Ref<Entity> e, Ref<World> w) -> void {
+			// the management relay is here, so now we want to spawn objects with their ownership transfered here
+			auto rpc = e->GetComponent<RPCComponent>().value();
+			rpc->InvokeServerRPC(SpawnReq, NetworkBase::Reliability::Reliable, (int)0);
+		});
 	}
 
-	// if client, spawn objects
-
-	//Spawn(make_shared<NetEntity>());
 
 	// load sync
 	//systemManager.EmplaceTimedSystem<SyncNetTransforms>(std::chrono::seconds(1));
@@ -39,4 +44,5 @@ void Level::OnActivate() {
 
 void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin)
 {
+	Debug::Log("Client requested spawn");
 }
