@@ -35,12 +35,13 @@ void Level::OnActivate() {
 			auto rpc = e->GetComponent<RPCComponent>().value();
 			rpc->InvokeServerRPC(SpawnReq, NetworkBase::Reliability::Reliable, (int)0);
 		});
-		
+		// only the clients move objects and need to push changes up
+		// the server will automatically replicate changes from the other clients
+		systemManager.EmplaceTimedSystem<SyncNetTransforms>(std::chrono::milliseconds(100));
+		systemManager.EmplaceSystem<MoveEntities>();
 	}
 	//Debug::Log("{}",type_name<std::array<char, 16>>());
 
-	// load sync
-	//systemManager.EmplaceTimedSystem<SyncNetTransforms>(std::chrono::seconds(1));
 }
 
 void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin)
@@ -61,13 +62,4 @@ void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 	for (const auto& entity : entities) {
 		App::networkManager.server->ChangeOwnership(origin, entity->GetComponent<NetworkIdentity>().value());
 	}
-}
-
-void RelayComp::UpdateLocalEntities(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin)
-{
-	// update server's copy of this transform
-	Debug::Log("Update server copy");
-
-	// now RPC all the clients except the sender of this message to update their copy of this object
-	// as well
 }

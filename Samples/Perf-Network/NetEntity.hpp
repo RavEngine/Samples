@@ -5,6 +5,7 @@
 #include <RavEngine/AccessType.hpp>
 #include <RavEngine/QueryIterator.hpp>
 #include <RavEngine/StaticMesh.hpp>
+#include <RavEngine/Debug.hpp>
 
 enum class RPCs {
 	UpdateTransform
@@ -20,21 +21,57 @@ struct NetTransform : public RavEngine::Component, public RavEngine::Queryable<N
 		if (auto qd = upk.get<RawQuat>()) {
 			owner->transform()->SetWorldRotation(RawToQuat(qd.value()));
 		}
+
+		// update server's copy of this transform
+
+		// now RPC all the clients except the sender of this message to update their copy of this object
+		// as well
 	}
 };
 
+struct PathData : public RavEngine::Component, public RavEngine::Queryable<PathData> {
+	float xtiming = 0.2, ytiming = 0.5, ztiming = 0.01;
+	float offset = RavEngine::Random::get(-5,5);
+	float scale = 4;
+};
+
 struct SyncNetTransforms : public RavEngine::AutoCTTI {
-	inline void Tick(float scale,RavEngine::AccessRead<RavEngine::Transform> tr, RavEngine::AccessReadWrite<RavEngine::RPCComponent> r, RavEngine::AccessRead<NetTransform>) {
+	inline void Tick(float scale, RavEngine::AccessRead<NetTransform>, RavEngine::AccessRead<RavEngine::Transform> tr, RavEngine::AccessReadWrite<RavEngine::RPCComponent> r) {
 		auto transform = tr.get();
 		auto rpc = r.get();
 
 		rpc->InvokeServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), RavEngine::NetworkBase::Reliability::Reliable, vec3toRaw(transform->GetWorldPosition()), quatToRaw(transform->GetWorldRotation()));
 	}
 
-	inline constexpr RavEngine::QueryIteratorAND<RavEngine::Transform, RavEngine::RPCComponent, NetTransform> QueryTypes() const {
-		return RavEngine::QueryIteratorAND<RavEngine::Transform, RavEngine::RPCComponent, NetTransform>();
+	inline constexpr auto QueryTypes() const {
+		return RavEngine::QueryIteratorAND<NetTransform, RavEngine::Transform, RavEngine::RPCComponent>();
 	}
 };
+
+struct MoveEntities : public RavEngine::AutoCTTI {
+	inline void Tick(float fpsScale, RavEngine::AccessRead<PathData> pd, RavEngine::AccessReadWrite<RavEngine::Transform> tr) {
+
+		// use the sine of global time
+		auto transform = tr.get();
+		auto pathdata = pd.get();
+
+		auto t = RavEngine::App::currentTime();
+
+		auto pos = vector3(
+			std::sin(t * pathdata->xtiming + pathdata->offset) * pathdata->scale,
+			std::sin(t * pathdata->ytiming + pathdata->offset) * pathdata->scale,
+			std::sin(t * pathdata->ztiming + pathdata->offset) * pathdata->scale
+		);
+		transform->SetWorldPosition(pos);
+		auto rot = quaternion(pos);
+		transform->SetLocalRotation(rot);
+	}
+
+	inline constexpr auto QueryTypes() const {
+		return RavEngine::QueryIteratorAND <PathData, RavEngine::Transform>();
+	}
+};
+
 
 struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable {
 
@@ -66,6 +103,7 @@ struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable
 	NetEntity(const uuids::uuid& id) {
 		CommonInit();
 		EmplaceComponent<RavEngine::NetworkIdentity>(id);
+		EmplaceComponent<PathData>();		// since clients control their objects, the server does not need to allocate this
 	}
 
 	RavEngine::ctti_t NetTypeID() const override {

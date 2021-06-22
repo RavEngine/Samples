@@ -13,11 +13,11 @@ struct Level : public RavEngine::World {
 
 struct RelayComp : public RavEngine::Component, public RavEngine::Queryable<RelayComp> {
 	void RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin);
-	void UpdateLocalEntities(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin);
 };
 
 enum ManagerRPCs {
-	SpawnReq
+	SpawnReq,
+	UpdateReq
 };
 
 struct ManagementRelay : public RavEngine::Entity, public RavEngine::NetworkReplicable {
