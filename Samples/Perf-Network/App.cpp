@@ -43,7 +43,7 @@ struct NetApp : public RavEngine::App {
 			Debug::Log("Started client on {}", PORT);
 		}
 
-		SetWindowTitle(StrFormat("{} | {}", APPNAME, Renderer->currentBackend()).c_str());
+		SetWindowTitle(StrFormat("{} {} | {}", APPNAME, networkManager.IsServer()? "Server" : "Client", Renderer->currentBackend()).c_str());
 	}
 };
 START_APP(NetApp)

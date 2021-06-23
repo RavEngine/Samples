@@ -8,24 +8,26 @@
 #include <RavEngine/Debug.hpp>
 
 enum class RPCs {
-	UpdateTransform
+	UpdateTransform,
 };
 
 struct NetTransform : public RavEngine::Component, public RavEngine::Queryable<NetTransform> {
 	void UpdateTransform(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin) {
 		auto owner = getOwner().lock();
-		if (auto td = upk.get<RawVec3>()) {
+		// update server's copy of this transform
+		std::optional<RawVec3> td;
+		if (td = upk.get<RawVec3>()) {
 			owner->transform()->SetWorldPosition(RawToVec3(td.value()));
 		}
-
-		if (auto qd = upk.get<RawQuat>()) {
+		std::optional<RawQuat> qd;
+		if (qd = upk.get<RawQuat>()) {
 			owner->transform()->SetWorldRotation(RawToQuat(qd.value()));
 		}
 
-		// update server's copy of this transform
-
 		// now RPC all the clients except the sender of this message to update their copy of this object
 		// as well
+		auto rpc = owner->GetComponent<RavEngine::RPCComponent>().value();
+		rpc->InvokeClientRPCToAllExcept(RavEngine::to_underlying(RPCs::UpdateTransform), origin, RavEngine::NetworkBase::Reliability::Unreliable, td.value(), qd.value());
 	}
 };
 
@@ -40,7 +42,7 @@ struct SyncNetTransforms : public RavEngine::AutoCTTI {
 		auto transform = tr.get();
 		auto rpc = r.get();
 
-		rpc->InvokeServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), RavEngine::NetworkBase::Reliability::Reliable, vec3toRaw(transform->GetWorldPosition()), quatToRaw(transform->GetWorldRotation()));
+		rpc->InvokeServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), RavEngine::NetworkBase::Reliability::Unreliable, vec3toRaw(transform->GetWorldPosition()), quatToRaw(transform->GetWorldRotation()));
 	}
 
 	inline constexpr auto QueryTypes() const {
@@ -49,26 +51,29 @@ struct SyncNetTransforms : public RavEngine::AutoCTTI {
 };
 
 struct MoveEntities : public RavEngine::AutoCTTI {
-	inline void Tick(float fpsScale, RavEngine::AccessRead<PathData> pd, RavEngine::AccessReadWrite<RavEngine::Transform> tr) {
+	inline void Tick(float fpsScale, RavEngine::AccessRead<PathData> pd, RavEngine::AccessReadWrite<RavEngine::Transform> tr, RavEngine::AccessRead<RavEngine::NetworkIdentity> ni) {
 
 		// use the sine of global time
-		auto transform = tr.get();
-		auto pathdata = pd.get();
+		auto netid = ni.get();
+		if (netid->IsOwner()) {
+			auto transform = tr.get();
+			auto pathdata = pd.get();
 
-		auto t = RavEngine::App::currentTime();
+			auto t = RavEngine::App::currentTime();
 
-		auto pos = vector3(
-			std::sin(t * pathdata->xtiming + pathdata->offset) * pathdata->scale,
-			std::sin(t * pathdata->ytiming + pathdata->offset) * pathdata->scale,
-			std::sin(t * pathdata->ztiming + pathdata->offset) * pathdata->scale
-		);
-		transform->SetWorldPosition(pos);
-		auto rot = quaternion(pos);
-		transform->SetLocalRotation(rot);
+			auto pos = vector3(
+				std::sin(t * pathdata->xtiming + pathdata->offset) * pathdata->scale,
+				std::sin(t * pathdata->ytiming + pathdata->offset) * pathdata->scale,
+				std::sin(t * pathdata->ztiming + pathdata->offset) * pathdata->scale
+			);
+			transform->SetWorldPosition(pos);
+			auto rot = quaternion(pos);
+			transform->SetLocalRotation(rot);
+		}
 	}
 
 	inline constexpr auto QueryTypes() const {
-		return RavEngine::QueryIteratorAND <PathData, RavEngine::Transform>();
+		return RavEngine::QueryIteratorAND <PathData, RavEngine::Transform, RavEngine::NetworkIdentity>();
 	}
 };
 
@@ -82,6 +87,7 @@ struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable
 		auto rpc = EmplaceComponent<RavEngine::RPCComponent>();
 		auto rpccomp = EmplaceComponent<NetTransform>();
 		rpc->RegisterServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), rpccomp, &NetTransform::UpdateTransform);
+		rpc->RegisterClientRPC(RavEngine::to_underlying(RPCs::UpdateTransform), rpccomp, &NetTransform::UpdateTransform);
 
 		if (!matinst) {
 			matinst = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
