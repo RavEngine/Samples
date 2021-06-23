@@ -27,6 +27,7 @@ void Level::OnActivate() {
 	// if on client, this will be spawned automatically
 	if (App::networkManager.IsServer()) {
 		Spawn(make_shared<ManagementRelay>());
+		systemManager.EmplaceSystem<TweenEntities>();
 	}
 	else {
 		App::networkManager.client->SetNetSpawnHook<ManagementRelay>([](Ref<Entity> e, Ref<World> w) -> void {
