@@ -9,6 +9,11 @@ struct Level : public RavEngine::World {
 		std::memcpy((char*)worldID.data(), name, sizeof(name));
 	}
 	void OnActivate() final;
+
+private:
+	void ServerUpdateGUI();
+	void SetupServer();
+	void SetupClient();
 };
 
 struct RelayComp : public RavEngine::Component, public RavEngine::Queryable<RelayComp> {
