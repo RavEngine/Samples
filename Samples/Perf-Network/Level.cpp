@@ -15,7 +15,7 @@ void Level::OnActivate() {
 	auto camEntity = make_shared<Entity>();
 	auto camera = camEntity->EmplaceComponent<CameraComponent>();
 	camera->setActive(true);
-	camEntity->transform()->LocalTranslateDelta(vector3(0, 0, 5));
+	camEntity->transform()->LocalTranslateDelta(vector3(0, 0, 10));
 	Spawn(camEntity);
 
 	auto lightEntity = make_shared<Entity>();
@@ -107,7 +107,15 @@ void Level::SetupClient()
 void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin)
 {
 	// create entities
-	std::array<Ref<NetEntity>, 10> entities;
+	constexpr auto num_entities =
+#ifdef _DEBUG
+		20
+#else
+		500
+#endif
+		;
+
+	std::array<Ref<NetEntity>, num_entities> entities;
 	for (int i = 0; i < entities.size(); i++) {
 		entities[i] = make_shared<NetEntity>();
 	}

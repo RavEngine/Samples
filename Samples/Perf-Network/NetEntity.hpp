@@ -51,7 +51,7 @@ struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable
 			matinst = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
 		}
 		if (!mesh) {
-			mesh = std::make_shared<RavEngine::MeshAsset>("cube.obj");
+			mesh = std::make_shared<RavEngine::MeshAsset>("cube.obj",0.1);
 		}
 
 		EmplaceComponent<RavEngine::StaticMesh>(mesh, matinst);

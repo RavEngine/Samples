@@ -13,9 +13,11 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - autobatched instancing benchmark
 5. Perf-DrawAnimated
    - A stress test for high object count with animated lights
-6. GUI
+6. Perf-Network
+   - A networking stress test. Contains both the server and client code in the same target. Launch with no arguments for client, and any argument for server
+7. GUI
    - A demonstration of all the different supported GUI widgets
-7. Animation
+8. Animation
    - Demonstrates the skinned mesh blending capabilities of RavEngine
 
 ## How to build

@@ -23,8 +23,8 @@ struct NetTransform : public RavEngine::Component, public RavEngine::Queryable<N
 
 // stores the information for animating objects on the client
 struct PathData : public RavEngine::Component, public RavEngine::Queryable<PathData> {
-	float xtiming = 0.2, ytiming = 0.5, ztiming = 0.01;
-	float offset = RavEngine::Random::get(-5, 5);
+	float xtiming = RavEngine::Random::get(0.1,0.5), ytiming = RavEngine::Random::get(0.1, 0.5), ztiming = RavEngine::Random::get(0.1, 0.5);
+	float offset = RavEngine::Random::get(-10.0, 10.0);
 	float scale = 4;
 };
 
