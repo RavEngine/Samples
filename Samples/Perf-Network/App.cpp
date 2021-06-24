@@ -3,11 +3,11 @@
 #include "Level.hpp"
 #include <RavEngine/Debug.hpp>
 #include "NetEntity.hpp"
+#include "ClientMenuLevel.hpp"
 
 using namespace std;
 using namespace RavEngine;
 
-static constexpr auto PORT = 6970;
 
 struct NetApp : public RavEngine::App {
 	NetApp() : App(APPNAME) {}
@@ -28,17 +28,8 @@ struct NetApp : public RavEngine::App {
 		}
 		// otherwise we will launch as a client
 		else {
-			auto& cl = this->networkManager.client;
-			cl = std::make_unique<NetworkClient>();
-			cl->Connect("127.0.0.1",PORT);
-			cl->OnConnected = [&](HSteamNetConnection) {
-				Debug::Log("Client successfully connected");
-				AddWorld(make_shared<Level>());
-			};
-			cl->OnLostConnection = [&](HSteamNetConnection) {
-				Debug::Log("Client disconnected");
-				Quit();
-			};
+			this->networkManager.client = std::make_unique<NetworkClient>();
+			AddWorld(make_shared<ClientMenu>());
 
 			Debug::Log("Started client on {}", PORT);
 		}

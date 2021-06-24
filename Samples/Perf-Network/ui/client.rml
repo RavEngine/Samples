@@ -1,0 +1,13 @@
+<rml>
+	<head>
+        <link type="text/rcss" href="default.rcss"></link>
+        <style>
+            *{
+                font-size: 40dp
+            }
+        </style>
+	</head>
+	<body>
+		<p>Connect to server:<input value="127.0.0.1" id="addressfield"></input><button id="gobtn">Connect</button></p>
+	</body>
+</rml>
