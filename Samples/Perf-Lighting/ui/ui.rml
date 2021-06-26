@@ -1,0 +1,17 @@
+<rml>
+	<head>
+        <link type="text/rcss" href="default.rcss"></link>
+        <style>
+            *{
+                font-size: 40dp
+            }
+        </style>
+	</head>
+	<body>
+        <p id="metrics"></p>
+        <p>
+            <p id="readout">Number of objects: 1</p>
+            <input id="numobjs" type="range" min=1 max=50></input>
+        </p>
+	</body>
+</rml>
