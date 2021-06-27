@@ -11,8 +11,7 @@ using namespace RavEngine;
 STATIC(PA_Entity::num_objects);
 
 struct MetricsSystem : public AutoCTTI {
-	inline void Tick(float fpsScale, AccessReadWrite<GUIComponent> gc) {
-		auto gui = gc.get();
+	inline void Tick(float fpsScale, Ref<GUIComponent> gui) {
 		auto doc = gui->GetDocument("ui.rml");
 		auto elem = doc->GetElementById("diag");
 		gui->ExclusiveAccess([&] {
@@ -28,10 +27,6 @@ Entities : {} <br />
 			));
 		});
 
-	}
-
-	constexpr QueryIteratorAND<GUIComponent> QueryTypes() const{
-		return QueryIteratorAND<GUIComponent>();
 	}
 };
 

@@ -1,7 +1,6 @@
 #pragma once
 #include <RavEngine/Component.hpp>
 #include <RavEngine/Queryable.hpp>
-#include <RavEngine/QueryIterator.hpp>
 #include <RavEngine/App.hpp>
 
 struct CirculateComponent : public RavEngine::Component, public  RavEngine::Queryable<CirculateComponent> {
@@ -11,14 +10,8 @@ struct CirculateComponent : public RavEngine::Component, public  RavEngine::Quer
 };
 
 struct CirculateSystem : public RavEngine::AutoCTTI {
-	inline constexpr auto QueryTypes() const {
-		return RavEngine::QueryIteratorAND<CirculateComponent, RavEngine::Transform>();
-	}
-
-	inline void Tick(float fpsScale, RavEngine::AccessRead<CirculateComponent> c, RavEngine::AccessReadWrite<RavEngine::Transform> t) {
+	inline void Tick(float fpsScale, Ref<CirculateComponent> cc, Ref<RavEngine::Transform> transform) {
 		auto time = RavEngine::App::currentTime();
-		auto cc = c.get();
-		auto transform = t.get();
 		transform->SetLocalPosition(vector3(std::cos(time * cc->speed) * cc->radius, std::sin(time * cc->speed) * 0.5 + 1, std::sin(time * cc->speed) * cc->radius));
 	}
 };

@@ -2,20 +2,15 @@
 #include <RavEngine/Entity.hpp>
 #include <RavEngine/RPCComponent.hpp>
 #include <RavEngine/Utilities.hpp>
-#include <RavEngine/AccessType.hpp>
-#include <RavEngine/QueryIterator.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/Debug.hpp>
 #include "NetTransform.hpp"
 
 struct MoveEntities : public RavEngine::AutoCTTI {
-	inline void Tick(float fpsScale, RavEngine::AccessRead<PathData> pd, RavEngine::AccessReadWrite<RavEngine::Transform> tr, RavEngine::AccessRead<RavEngine::NetworkIdentity> ni) {
+	inline void Tick(float fpsScale, Ref<PathData> pathdata, Ref<RavEngine::Transform> transform, Ref<RavEngine::NetworkIdentity> netid) {
 
 		// use the sine of global time
-		auto netid = ni.get();
 		if (netid->IsOwner()) {
-			auto transform = tr.get();
-			auto pathdata = pd.get();
 
 			auto t = RavEngine::App::currentTime();
 
@@ -28,10 +23,6 @@ struct MoveEntities : public RavEngine::AutoCTTI {
 			auto rot = quaternion(pos);
 			transform->SetLocalRotation(rot);
 		}
-	}
-
-	inline constexpr auto QueryTypes() const {
-		return RavEngine::QueryIteratorAND <PathData, RavEngine::Transform, RavEngine::NetworkIdentity>();
 	}
 };
 

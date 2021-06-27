@@ -1,8 +1,6 @@
 #include "Level.hpp"
 #include "Objects.hpp"
-#include <RavEngine/AccessType.hpp>
 #include <RavEngine/App.hpp>
-#include <RavEngine/QueryIterator.hpp>
 #include <RavEngine/PhysicsLinkSystem.hpp>
 
 using namespace std;
@@ -17,7 +15,7 @@ static inline vector3 GenSpawnpoint(){
 
 struct RotationSystem : public RavEngine::AutoCTTI{
 	
-	inline void Tick(float fpsScale, AccessRead<RotationComponent> rot, AccessReadWrite<Transform> tr){
+	inline void Tick(float fpsScale, Ref<RotationComponent> rot, Ref<Transform> tr){
 		auto time = App::currentTime();
 		auto rotation = rot.get();
 		auto transform = tr.get();
@@ -28,27 +26,17 @@ struct RotationSystem : public RavEngine::AutoCTTI{
 		transform->SetLocalRotation(vector3(glm::radians(xrot),glm::radians(yrot),glm::radians(zrot)));
 	}
 	
-	inline constexpr QueryIteratorAND<RotationComponent,Transform> QueryTypes() const{
-		return QueryIteratorAND<RotationComponent,Transform>();
-	}
-	
 	inline const System::list_type& MustRunBefore() const{
 		return runBefore;
 	}
 };
 
 struct RespawnSystem : public RavEngine::AutoCTTI{
-	inline void Tick(float fpsScale, AccessRead<Transform> tr, AccessRead<RigidBodyDynamicComponent> rb){
-		auto transform = tr.get();
-		auto rigid = rb.get();
+	inline void Tick(float fpsScale, Ref<RigidBodyDynamicComponent> rigid, Ref<Transform> transform){
 		if (transform->GetWorldPosition().y < -20){
 			transform->SetWorldPosition(GenSpawnpoint());
 				rigid->SetLinearVelocity(vector3(0,0,0), false);
 		}
-	}
-	
-	inline constexpr QueryIteratorAND<Transform,RigidBodyDynamicComponent> QueryTypes() const{
-		return QueryIteratorAND<Transform,RigidBodyDynamicComponent>();
 	}
 	
 	inline const System::list_type& MustRunBefore() const{
@@ -75,7 +63,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 	
 	int count = 500;
 	
-	inline void Tick(float fpsScale, AccessRead<SpawnerMarker> tr){
+	inline void Tick(float fpsScale, Ref<SpawnerMarker>){
 		if (count > 0){
 			// spawn rigid bodies
 			auto rigid = std::make_shared<RigidBody>(mat,mesh, physmat, RigidBody::BodyType::Sphere);
@@ -86,10 +74,6 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 			
 			count--;
 		}
-	}
-	
-	inline constexpr QueryIteratorAND<SpawnerMarker> QueryTypes() const{
-		return QueryIteratorAND<SpawnerMarker>();
 	}
 };
 

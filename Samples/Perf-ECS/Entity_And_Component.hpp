@@ -2,8 +2,6 @@
 
 #include <RavEngine/Entity.hpp>
 #include <RavEngine/Component.hpp>
-#include <RavEngine/AccessType.hpp>
-#include <RavEngine/QueryIterator.hpp>
 #include <RavEngine/Utilities.hpp>
 #include <atomic>
 
@@ -16,16 +14,9 @@ struct CosComponent : public RavEngine::Component, public RavEngine::Queryable<C
 };
 
 struct CalcSystem : public RavEngine::AutoCTTI {
-	inline void Tick(float fpsScale, RavEngine::AccessReadWrite<SineComponent> sc, RavEngine::AccessReadWrite<CosComponent> cc) {
-		auto sinecomp = sc.get();
-		auto coscomp = sc.get();
-
+	inline void Tick(float fpsScale, Ref<SineComponent> sinecomp, Ref<CosComponent> coscomp) {
 		sinecomp->value = std::sin(sinecomp->value + fpsScale);
 		coscomp->value = std::cos(coscomp->value + fpsScale);
-	}
-
-	constexpr inline RavEngine::QueryIteratorAND<SineComponent, CosComponent> QueryTypes() const {
-		return RavEngine::QueryIteratorAND<SineComponent, CosComponent>();
 	}
 };
 

@@ -5,7 +5,6 @@
 #include <chrono>
 #include "BasicEntity.hpp"
 #include "Camera.hpp"
-#include <RavEngine/QueryIterator.hpp>
 #include "CustomMaterials.hpp"
 
 using namespace std;
@@ -19,8 +18,7 @@ static constexpr uint16_t num_entities =
 #endif
 
 struct MetricsSystem : public AutoCTTI {
-	inline void Tick(float fpsScale, AccessReadWrite<GUIComponent> gc) {
-		auto gui = gc.get();
+	inline void Tick(float fpsScale, Ref<GUIComponent> gui) {
 		auto doc = gui->GetDocument("main.rml");
 		auto elem = doc->GetElementById("diag");
 		gui->ExclusiveAccess([&] {
@@ -31,10 +29,6 @@ struct MetricsSystem : public AutoCTTI {
 				num_entities
 			));
 		});
-	}
-
-	constexpr QueryIteratorAND<GUIComponent> QueryTypes() const {
-		return QueryIteratorAND<GUIComponent>();
 	}
 };
 

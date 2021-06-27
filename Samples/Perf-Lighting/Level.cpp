@@ -1,10 +1,10 @@
 #include "Level.hpp"
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/StaticMesh.hpp>
-#include <RavEngine/QueryIterator.hpp>
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/InputManager.hpp>
 #include "LightEntity.hpp"
+#include <RavEngine/SystemInfo.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -16,12 +16,10 @@ struct SpinComponent : public RavEngine::Component, public Queryable<SpinCompone
 };
 
 struct SpinSystem : public RavEngine::AutoCTTI {
-	inline constexpr auto QueryTypes() const {
-		return QueryIteratorAND<SpinComponent,Transform>();
-	}
 
-	inline void Tick(float fpsScale, AccessRead<SpinComponent> s, AccessReadWrite<Transform> t) const {
-		t.get()->LocalRotateDelta(vector3(0,glm::radians(fpsScale * s.get()->speed),0));
+	inline void Tick(float fpsScale, Ref<SpinComponent> s, Ref<Transform> t) const {
+		//s->Enabled = true;
+		t->LocalRotateDelta(vector3(0,glm::radians(fpsScale * s->speed),0));
 	}
 };
 
@@ -38,18 +36,15 @@ struct StaticMeshEntity : public Entity {
 };
 
 struct FPSSystem : public RavEngine::AutoCTTI {
-	inline constexpr auto QueryTypes() const {
-		return QueryIteratorAND<GUIComponent>();
-	}
-
-	inline void Tick(float, RavEngine::AccessReadWrite<GUIComponent> g) {
-		auto gui = g.get();
+	inline void Tick(float, Ref<GUIComponent> gui) {
 		auto doc = gui->GetDocument("ui.rml");
 		doc->GetElementById("metrics")->SetInnerRML(StrFormat("FPS: {} ({} ms)", std::round(App::Renderer->GetCurrentFPS()),std::round(App::Renderer->GetLastFrameTime())));
 	};
 };
 
 void Level::OnActivate() {
+
+	Debug::Log("{}", SystemInfo::GPUBrandString());
 
 	// load camera and lights
 	auto camera = make_shared<Entity>();
@@ -82,8 +77,10 @@ void Level::OnActivate() {
 				}
 				i++;
 			}
-			App::DispatchMainThread([&,value] {
-				document->GetElementById("readout")->SetInnerRML(StrFormat("Number of objects: {}", value));
+			App::DispatchMainThread([&,world,value] {
+				world->GetComponent<GUIComponent>().value()->ExclusiveAccess([&] {
+						document->GetElementById("readout")->SetInnerRML(StrFormat("Number of objects: {}", value));
+					});
 			});
 		}
 	};
@@ -116,7 +113,7 @@ void Level::OnActivate() {
 	auto hmesh = make_shared<MeshAsset>("dragon_vrip.ply", 2);
 	auto hmat = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 	
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 150; i++) {
 		auto e = make_shared<StaticMeshEntity>(hmesh, hmat);
 		if (i == 0) {
 			e->GetComponent<StaticMesh>().value()->Enabled = true;

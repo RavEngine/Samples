@@ -1,7 +1,5 @@
 #pragma once
 #include <RavEngine/Component.hpp>
-#include <RavEngine/AccessType.hpp>
-#include <RavEngine/QueryIterator.hpp>
 #include <RavEngine/Queryable.hpp>
 #include <RavEngine/Tween.hpp>
 #include <RavEngine/RPCComponent.hpp>
@@ -30,12 +28,7 @@ struct PathData : public RavEngine::Component, public RavEngine::Queryable<PathD
 
 struct TweenEntities : public RavEngine::AutoCTTI {
 
-	inline constexpr auto QueryTypes() const {
-		return RavEngine::QueryIteratorAND<InterpolationTransform>();
-	}
-
-	inline void Tick(float fpsScale, RavEngine::AccessReadWrite<InterpolationTransform> it) {
-		auto itr = it.get();
+	inline void Tick(float fpsScale, Ref<InterpolationTransform> itr) {
 		if (itr->ok) {
 			itr->mtx.lock();
 			itr->translate.step(fpsScale);
@@ -46,14 +39,7 @@ struct TweenEntities : public RavEngine::AutoCTTI {
 };
 
 struct SyncNetTransforms : public RavEngine::AutoCTTI {
-	inline void Tick(float scale, RavEngine::AccessRead<NetTransform>, RavEngine::AccessRead<RavEngine::Transform> tr, RavEngine::AccessReadWrite<RavEngine::RPCComponent> r) {
-		auto transform = tr.get();
-		auto rpc = r.get();
-
+	inline void Tick(float scale, Ref<NetTransform>, Ref<RavEngine::Transform> transform, Ref<RavEngine::RPCComponent> rpc) {
 		rpc->InvokeServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), RavEngine::NetworkBase::Reliability::Unreliable, vec3toRaw(transform->GetWorldPosition()), quatToRaw(transform->GetWorldRotation()));
-	}
-
-	inline constexpr auto QueryTypes() const {
-		return RavEngine::QueryIteratorAND<NetTransform, RavEngine::Transform, RavEngine::RPCComponent>();
 	}
 };
