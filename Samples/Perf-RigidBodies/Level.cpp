@@ -51,13 +51,15 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 	Ref<MeshAsset> mesh;
 	Ref<PBRMaterialInstance> mat;
 	Ref<PhysicsMaterial> physmat;
+	Ref<Texture> texture;
 	
 	SpawnerSystem(decltype(ownWorld) world) :
-		mat( std::make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>())),
-		physmat(std::make_shared<PhysicsMaterial>(0.3,0.3,0.1)),
+		mat(std::make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>())),
+		physmat(std::make_shared<PhysicsMaterial>(0.3, 0.3, 0.1)),
+		texture(std::make_shared<Texture>("checkerboard.png")),
 		ownWorld(world)
 	{
-			
+		mat->SetAlbedoTexture(texture);
 		mesh = std::make_shared<MeshAsset>("sphere.obj",1.0,true);
 	}
 	
