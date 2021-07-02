@@ -5,96 +5,50 @@
 #include <RavEngine/MeshAssetSkinned.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
 #include <RavEngine/Utilities.hpp>
+#include <RavEngine/InputManager.hpp>
+#include "Character.hpp"
+#include "CameraEntity.hpp"
 
 using namespace RavEngine;
 using namespace std;
 
-struct BoneDebugRenderer : public RavEngine::IDebugRenderer{
-	void DrawDebug(RavEngine::DebugDraw& dbg) const override{
-		auto owner =getOwner().lock();
-		if (owner){
-			if(auto animator = owner->GetComponent<AnimatorComponent>()){
-				auto& pose = animator.value()->GetPose();
-				for(const auto& p : pose){
-					dbg.DrawSphere(p, 0xFFFF00FF, 0.1);
-				}
-			}
-		}
-	}
-};
-
 void Level::SetupInputs(){
 	
-	Ref<Entity> camlights = make_shared<Entity>();
-	camlights->EmplaceComponent<CameraComponent>()->setActive(true);
-	camlights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
-	camlights->transform()->LocalTranslateDelta(vector3(0,0.5,6));
-	
-	Ref<Entity> dirlight = make_shared<Entity>();
-	dirlight->EmplaceComponent<DirectionalLight>();
-	dirlight->transform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
-	
-	//setup animation
-	auto skeleton = make_shared<SkeletonAsset>("simplerig3.dae");
-	auto clip2 = make_shared<AnimationAsset>("simplerig3.dae",skeleton);
-	auto clip = make_shared<AnimationAsset>("simplerig3.dae",skeleton);
-	auto mesh = make_shared<MeshAssetSkinned>("simplerig3.dae",skeleton);
-	auto material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
-	
-	auto trimmed_clip = make_shared<AnimationAssetSegment>(clip,12,48);
-	
-	for(float i = 0.5; i <= 1.5; i+=0.5){
-		auto cube = make_shared<Entity>();
-		auto cubemesh = cube->EmplaceComponent<SkinnedMeshComponent>(skeleton,mesh);
-		cubemesh->SetMaterial(material);
-		cube->transform()->LocalTranslateDelta(vector3(Random::get(-3,3),Random::get(-3,3),Random::get(-3,0)));
-		cube->EmplaceComponent<BoneDebugRenderer>();
-		
-		auto animatorComponent2 = cube->EmplaceComponent<AnimatorComponent>(skeleton);
-		
-		//create the blend tree
-		auto blendTree = make_shared<AnimBlendTree>();
-		AnimBlendTree::Node node(clip2, normalized_vec2(0,1));
-		blendTree->InsertNode(0,node);
-		blendTree->SetBlendPos(normalized_vec2(0,0.5));
-		
-		//create the state machine
-		
-		AnimatorComponent::State
-		state2{0,trimmed_clip},
-		state3{1,trimmed_clip};
-		state2.speed = i;
-		state3.speed = i;
-				
-		state3.SetTransition(0, RavEngine::TweenCurves::LinearCurve, 3,AnimatorComponent::State::Transition::TimeMode::BeginNew);
-		//state2.isLooping = false;
-		
-		animatorComponent2->InsertState(state2);
-		animatorComponent2->InsertState(state3);
-		animatorComponent2->Goto(0,true);
-		//animatorComponent2->Goto(1,true);
-		animatorComponent2->Play();
-		//animatorComponent2->Goto(0);
-		
-		cubes.push_back(cube);
-		Spawn(cube);
-	}
-	
-	
-	Spawn(camlights);
-	Spawn(dirlight);
-}
+	Ref<Entity> lights = make_shared<Entity>();
+	lights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
+	lights->transform()->LocalTranslateDelta(vector3(0,0.5,6));
+	lights->EmplaceComponent<DirectionalLight>();
+	lights->transform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
+	Spawn(lights);
 
-void Level::posttick(float scale){
-	float rotamt = glm::radians(scale * 0.1);
-	for(const auto& cube : cubes){
-		cube->transform()->LocalRotateDelta(vector3(rotamt,rotamt,-rotamt));
-		rotamt += 0.001;
-		if(App::currentTime() > 5 && App::currentTime() < 10){
-			cube->GetComponent<AnimatorComponent>().value()->Pause();
-		}
-		if(App::currentTime() > 10){
-			cube->GetComponent<AnimatorComponent>().value()->Play();
-		}
-	}
+	auto character = make_shared<Character>();
+	character->transform()->LocalTranslateDelta(vector3(0,5,0));
+	Spawn(character);
+
+	auto im = App::inputManager = make_shared<InputManager>();
+	im->AddAxisMap("MoveForward",SDL_SCANCODE_W);
+	im->AddAxisMap("MoveForward", SDL_SCANCODE_S,-1);
+	im->AddAxisMap("MoveRight", SDL_SCANCODE_A,-1);
+	im->AddAxisMap("MoveRight", SDL_SCANCODE_D);
+
+	im->AddActionMap("Test", SDL_SCANCODE_T);
+	im->AddActionMap("Idle", SDL_SCANCODE_Y);
+	im->BindAction("Test", character, &Character::SwitchAnimation, ActionState::Pressed, CID::ANY);
+	im->BindAction("Idle", character, &Character::GoToIdle, ActionState::Pressed, CID::ANY);
+
+	// load the game level
+	auto floorplane = make_shared<RavEngine::Entity>();
+	Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("cube.obj");
+	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+	floorplane->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
+	floorplane->transform()->LocalScaleDelta(vector3(10, 0.5, 10));
+	floorplane->EmplaceComponent<RigidBodyStaticComponent>();
+	floorplane->EmplaceComponent<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5, 0.5, 0));
+	Spawn(floorplane);
+
+	auto camera = make_shared<CameraEntity>(character);
+	camera->transform()->LocalTranslateDelta(vector3(0,2,5));
+	Spawn(camera);
+
+	InitPhysics();
 }
