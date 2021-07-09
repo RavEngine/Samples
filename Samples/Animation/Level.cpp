@@ -12,6 +12,12 @@
 using namespace RavEngine;
 using namespace std;
 
+struct InputNames{
+	static constexpr char const
+		*MoveForward = "MoveForward",
+		*MoveRight = "MoveRight";
+};
+
 void Level::SetupInputs(){
 	
 	Ref<Entity> lights = make_shared<Entity>();
@@ -22,14 +28,23 @@ void Level::SetupInputs(){
 	Spawn(lights);
 
 	auto character = make_shared<Character>();
-	character->transform()->LocalTranslateDelta(vector3(0,5,0));
+	character->transform()->LocalTranslateDelta(vector3(1,5,0));
 	Spawn(character);
-
+		
+	
+	auto camera = make_shared<CameraEntity>(character);
+	camera->transform()->LocalTranslateDelta(vector3(0,2,5));
+	Spawn(camera);
+	
 	auto im = App::inputManager = make_shared<InputManager>();
-	im->AddAxisMap("MoveForward",SDL_SCANCODE_W);
-	im->AddAxisMap("MoveForward", SDL_SCANCODE_S,-1);
-	im->AddAxisMap("MoveRight", SDL_SCANCODE_A,-1);
-	im->AddAxisMap("MoveRight", SDL_SCANCODE_D);
+	im->AddAxisMap(InputNames::MoveForward,SDL_SCANCODE_W);
+	im->AddAxisMap(InputNames::MoveForward, SDL_SCANCODE_S,-1);
+	im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_A,-1);
+	im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_D);
+	
+	// controls are sent to the Camera, which then forwards them to the character after determining which way to move
+	im->BindAxis(InputNames::MoveForward, camera, &CameraEntity::MoveForward, CID::ANY);
+	im->BindAxis(InputNames::MoveRight, camera, &CameraEntity::MoveRight, CID::ANY);
 
 	im->AddActionMap("Test", SDL_SCANCODE_T);
 	im->AddActionMap("Idle", SDL_SCANCODE_Y);
@@ -45,10 +60,6 @@ void Level::SetupInputs(){
 	floorplane->EmplaceComponent<RigidBodyStaticComponent>();
 	floorplane->EmplaceComponent<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5, 0.5, 0));
 	Spawn(floorplane);
-
-	auto camera = make_shared<CameraEntity>(character);
-	camera->transform()->LocalTranslateDelta(vector3(0,2,5));
-	Spawn(camera);
 
 	InitPhysics();
 }
