@@ -28,12 +28,11 @@ void Level::SetupInputs(){
 	Spawn(lights);
 
 	auto character = make_shared<Character>();
-	character->transform()->LocalTranslateDelta(vector3(1,5,0));
+	character->transform()->LocalTranslateDelta(vector3(0,5,0));
 	Spawn(character);
-		
 	
 	auto camera = make_shared<CameraEntity>(character);
-	camera->transform()->LocalTranslateDelta(vector3(0,2,5));
+	camera->transform()->LocalTranslateDelta(vector3(0,0,0));
 	Spawn(camera);
 	
 	auto im = App::inputManager = make_shared<InputManager>();

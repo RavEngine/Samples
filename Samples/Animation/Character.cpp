@@ -30,9 +30,9 @@ Character::Character() {
 	EmplaceComponent<BoneDebugRenderer>();
 
 	// load the collider and physics settings
-	auto rigid = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
+	rigidBody = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
 	EmplaceComponent<CapsuleCollider>(0.5, 0.7, make_shared<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,0,0),vector3(0,0,glm::radians(90.0)));
-	rigid->SetAxisLock(RigidBodyDynamicComponent::AxisLock::Angular_X | RigidBodyDynamicComponent::AxisLock::Angular_Z);
+	rigidBody->SetAxisLock(RigidBodyDynamicComponent::AxisLock::Angular_X | RigidBodyDynamicComponent::AxisLock::Angular_Z);
 
 	// load the animation
 	auto animcomp = EmplaceComponent<AnimatorComponent>(skeleton);
@@ -66,4 +66,13 @@ void Character::SwitchAnimation() {
 
 void Character::GoToIdle() {
 	GetComponent<AnimatorComponent>().value()->Goto(CharAnims::Idle);
+}
+
+void Character::Move(const vector3& dir){
+	// move in direction
+	rigidBody->SetLinearVelocity(dir, false);
+	// face direction
+	auto rot = glm::quatLookAt(dir, transform()->WorldUp());
+	transform()->SetWorldRotation(rot);
+	
 }

@@ -2,11 +2,14 @@
 #include <RavEngine/Entity.hpp>
 #include "Character.hpp"
 
+struct CameraScript;
+
 struct CameraEntity : public RavEngine::Entity {
 	CameraEntity(Ref<Character>);
 	
 	void MoveForward(float);
 	void MoveRight(float);
 private:
-	Ref<Character> target;
+	Ref<Entity> cameraEntity, cameraArmBase;
+	Ref<CameraScript> cameraScript;
 };

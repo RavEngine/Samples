@@ -21,4 +21,7 @@ struct Character : public RavEngine::Entity {
 	Character();
 	void SwitchAnimation();
 	void GoToIdle();
+	void Move(const vector3&);
+private:
+	Ref<RavEngine::RigidBodyDynamicComponent> rigidBody;
 };
