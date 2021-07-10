@@ -10,6 +10,7 @@ struct CameraScript : public RavEngine::ScriptComponent {
 	Ref<Character> target;
 	vector3 forwardVector = vector3(0,0,0);
 	vector3 rightVector = vector3(0,0,0);
+	decimalType speedIncrement = 1;
 	
 	CameraScript(const decltype(target)& t) : target(t){}
 	
@@ -33,7 +34,7 @@ struct CameraScript : public RavEngine::ScriptComponent {
 		auto combined = glm::normalize(forwardVector + rightVector);
 		forwardVector = rightVector = vector3(0,0,0);
 		if ((!std::isnan(combined.x) && !std::isnan(combined.y) && !std::isnan(combined.z)) && (glm::length(combined) > 0.3)){
-			target->Move(combined);
+			target->Move(combined,speedIncrement);
 		}
 	}
 };
@@ -48,13 +49,13 @@ CameraEntity::CameraEntity(Ref<Character> cm){
 	cameraArmBase = make_shared<Entity>();
 	cameraArmBase->transform()->AddChild(cameraEntity->transform());
 	cameraArmBase->EmplaceComponent<ChildEntityComponent>(cameraEntity);
-	cameraEntity->transform()->LocalTranslateDelta(vector3(0,5,0));
-	cameraEntity->transform()->LocalRotateDelta(vector3(glm::radians(-15.0),0,0));
+	cameraEntity->transform()->LocalTranslateDelta(vector3(0,3,0));
+	cameraEntity->transform()->LocalRotateDelta(vector3(glm::radians(-10.0),0,0));
 	
 	// attached to the root transform
 	EmplaceComponent<ChildEntityComponent>(cameraArmBase);
 	transform()->AddChild(cameraArmBase->transform());
-	cameraArmBase->transform()->LocalTranslateDelta(vector3(0,0,5));
+	cameraArmBase->transform()->LocalTranslateDelta(vector3(0,0,7));
 	
 	cameraScript = EmplaceComponent<CameraScript>(cm);
 }
@@ -70,4 +71,9 @@ void CameraEntity::MoveForward(float amt){
 void CameraEntity::MoveRight(float amt){
 	auto right = cameraArmBase->transform()->WorldRight() * static_cast<decimalType>(amt);
 	cameraScript->rightVector += right;
+}
+
+void CameraEntity::SpeedIncrement(float s)
+{
+	cameraScript->speedIncrement = 1 + s;
 }

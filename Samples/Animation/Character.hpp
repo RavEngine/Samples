@@ -19,9 +19,8 @@ struct BoneDebugRenderer : public RavEngine::IDebugRenderer {
 
 struct Character : public RavEngine::Entity {
 	Character();
-	void SwitchAnimation();
-	void GoToIdle();
-	void Move(const vector3&);
+	void Move(const vector3&, decimalType speedMultiplier = 1);
 private:
 	Ref<RavEngine::RigidBodyDynamicComponent> rigidBody;
+	constexpr static decimalType sprintSpeed = 5;
 };

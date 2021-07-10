@@ -14,8 +14,9 @@ using namespace std;
 
 struct InputNames{
 	static constexpr char const
-		*MoveForward = "MoveForward",
-		*MoveRight = "MoveRight";
+		* MoveForward = "MoveForward",
+		* MoveRight = "MoveRight",
+		* Sprint = "Sprint";
 };
 
 void Level::SetupInputs(){
@@ -36,19 +37,21 @@ void Level::SetupInputs(){
 	Spawn(camera);
 	
 	auto im = App::inputManager = make_shared<InputManager>();
+	// keyboard
 	im->AddAxisMap(InputNames::MoveForward,SDL_SCANCODE_W);
 	im->AddAxisMap(InputNames::MoveForward, SDL_SCANCODE_S,-1);
 	im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_A,-1);
 	im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_D);
+	im->AddAxisMap(InputNames::Sprint, SDL_SCANCODE_LSHIFT);
+
+	// controller
+	im->AddAxisMap(InputNames::MoveForward, ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
+	im->AddAxisMap(InputNames::MoveRight, ControllerAxis::SDL_CONTROLLER_AXIS_LEFTX);
 	
 	// controls are sent to the Camera, which then forwards them to the character after determining which way to move
 	im->BindAxis(InputNames::MoveForward, camera, &CameraEntity::MoveForward, CID::ANY);
 	im->BindAxis(InputNames::MoveRight, camera, &CameraEntity::MoveRight, CID::ANY);
-
-	im->AddActionMap("Test", SDL_SCANCODE_T);
-	im->AddActionMap("Idle", SDL_SCANCODE_Y);
-	im->BindAction("Test", character, &Character::SwitchAnimation, ActionState::Pressed, CID::ANY);
-	im->BindAction("Idle", character, &Character::GoToIdle, ActionState::Pressed, CID::ANY);
+	im->BindAxis(InputNames::Sprint, camera, &CameraEntity::SpeedIncrement, CID::ANY);
 
 	// load the game level
 	auto floorplane = make_shared<RavEngine::Entity>();

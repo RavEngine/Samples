@@ -9,6 +9,7 @@ struct CameraEntity : public RavEngine::Entity {
 	
 	void MoveForward(float);
 	void MoveRight(float);
+	void SpeedIncrement(float);
 private:
 	Ref<Entity> cameraEntity, cameraArmBase;
 	Ref<CameraScript> cameraScript;
