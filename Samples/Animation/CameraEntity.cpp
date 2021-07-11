@@ -27,6 +27,8 @@ struct CameraScript : public RavEngine::ScriptComponent {
 		thisTransform->WorldTranslateDelta(dirvec);
 		
 		// which way is the player facing? we want to rotate to be behind them
+		auto facingRot = glm::quatLookAt(targetTransform->WorldForward(), transform()->WorldUp());
+		transform()->SetWorldRotation(glm::slerp(transform()->GetWorldRotation(), facingRot, 0.01 * fpsScale));
 		
 		// which way is the player moving? we want to swivel to a point ahead of them so they can see more easily
 		

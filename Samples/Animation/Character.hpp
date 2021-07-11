@@ -17,10 +17,11 @@ struct BoneDebugRenderer : public RavEngine::IDebugRenderer {
 	}
 };
 
+struct CharacterScript;
 struct Character : public RavEngine::Entity {
 	Character();
 	void Move(const vector3&, decimalType speedMultiplier = 0);
 private:
 	Ref<RavEngine::RigidBodyDynamicComponent> rigidBody;
-	constexpr static decimalType sprintSpeed = 5;
+	Ref<CharacterScript> script;
 };

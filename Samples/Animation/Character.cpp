@@ -18,13 +18,14 @@ enum CharAnims {
 struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor {
 	Ref<AnimatorComponent> animator;
 	Ref<RigidBodyDynamicComponent> rigidBody;
+	constexpr static decimalType sprintSpeed = 5;
 
 	int16_t groundCounter = 0;
 
 	CharacterScript(const decltype(animator)& a, const decltype(rigidBody)& r) : animator(a), rigidBody(r) {}
 
 	inline bool OnGround() const {
-		return groundCounter <= 0;	// shouldn't be negative but check that case to be safe
+		return groundCounter > 0;	
 	}
 
 	void Tick(float fpsScale) final {
@@ -38,6 +39,18 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 		else {
 			animator->Goto(CharAnims::Idle);
 		}
+	}
+
+	void Move(const vector3& dir, decimalType speedMultiplier) {
+		// apply movement only if touching the ground
+		if (OnGround()) {
+			// move in direction
+			rigidBody->SetLinearVelocity(dir + dir * (speedMultiplier * sprintSpeed), false);
+			rigidBody->SetAngularVelocity(vector3(0, 0, 0), false);
+		}
+		// face direction
+		auto rot = glm::quatLookAt(dir, transform()->WorldUp());
+		transform()->SetWorldRotation(glm::slerp(transform()->GetWorldRotation(), rot, 0.2));
 	}
 
 
@@ -115,15 +128,10 @@ Character::Character() {
 	animcomp->Play();
 
 	// this script controls the animation
-	auto script = EmplaceComponent<CharacterScript>(animcomp,rigidBody);
+	script = EmplaceComponent<CharacterScript>(animcomp,rigidBody);
 	rigidBody->AddReceiver(script);
 }
 
 void Character::Move(const vector3& dir, decimalType speedMultiplier){
-	// move in direction
-	rigidBody->SetLinearVelocity(dir + dir * (speedMultiplier * sprintSpeed), false);
-	rigidBody->SetAngularVelocity(vector3(0,0,0),false);
-	// face direction
-	auto rot = glm::quatLookAt(dir, transform()->WorldUp());
-	transform()->SetWorldRotation(rot);
+	script->Move(dir, speedMultiplier);
 }
