@@ -19,7 +19,7 @@ struct BoneDebugRenderer : public RavEngine::IDebugRenderer {
 
 struct Character : public RavEngine::Entity {
 	Character();
-	void Move(const vector3&, decimalType speedMultiplier = 1);
+	void Move(const vector3&, decimalType speedMultiplier = 0);
 private:
 	Ref<RavEngine::RigidBodyDynamicComponent> rigidBody;
 	constexpr static decimalType sprintSpeed = 5;

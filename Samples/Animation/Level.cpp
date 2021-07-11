@@ -59,7 +59,7 @@ void Level::SetupInputs(){
 	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 	floorplane->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
 	floorplane->transform()->LocalScaleDelta(vector3(10, 0.5, 10));
-	floorplane->EmplaceComponent<RigidBodyStaticComponent>();
+	floorplane->EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
 	floorplane->EmplaceComponent<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5, 0.5, 0));
 	Spawn(floorplane);
 

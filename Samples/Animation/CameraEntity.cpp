@@ -10,7 +10,7 @@ struct CameraScript : public RavEngine::ScriptComponent {
 	Ref<Character> target;
 	vector3 forwardVector = vector3(0,0,0);
 	vector3 rightVector = vector3(0,0,0);
-	decimalType speedIncrement = 1;
+	decimalType speedIncrement = 0;
 	
 	CameraScript(const decltype(target)& t) : target(t){}
 	
@@ -75,5 +75,5 @@ void CameraEntity::MoveRight(float amt){
 
 void CameraEntity::SpeedIncrement(float s)
 {
-	cameraScript->speedIncrement = 1 + s;
+	cameraScript->speedIncrement = s;
 }
