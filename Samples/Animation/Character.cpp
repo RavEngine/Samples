@@ -12,7 +12,9 @@ using namespace std;
 enum CharAnims {
 	Idle,
 	Walk,
-	Run
+	Run,
+	Fall,
+	Jump
 };
 
 struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor {
@@ -29,28 +31,60 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 	}
 
 	void Tick(float fpsScale) final {
-		auto velocity = glm::length(rigidBody->GetLinearVelocity());
-		if (velocity > 0.4 && velocity < 1.5) {
-			animator->Goto(CharAnims::Walk);
+		auto velocity = rigidBody->GetLinearVelocity();
+		auto movementVel = velocity;
+		movementVel.y = 0;
+
+		auto xzspeed = glm::length(movementVel);
+
+		if (OnGround()) {
+			if (xzspeed > 0.4 && xzspeed < 1.5) {
+				animator->Goto(CharAnims::Walk);
+			}
+			else if (xzspeed >= 1.5) {
+				animator->Goto(CharAnims::Run);
+			}
+			// not jumping?
+			else if (velocity.y < 0.3) {
+				animator->Goto(CharAnims::Idle);
+			}
 		}
-		else if (velocity >= 1.5) {
-			animator->Goto(CharAnims::Run);
+		else{
+			// falling?
+			if (velocity.y < -0.05) {
+				animator->Goto(CharAnims::Fall);
+			}
 		}
-		else {
-			animator->Goto(CharAnims::Idle);
+		// jumping?
+		if (velocity.y > 2) {
+			animator->Goto(CharAnims::Jump);
 		}
 	}
 
-	void Move(const vector3& dir, decimalType speedMultiplier) {
+	inline void Move(const vector3& dir, decimalType speedMultiplier) {
 		// apply movement only if touching the ground
 		if (OnGround()) {
 			// move in direction
-			rigidBody->SetLinearVelocity(dir + dir * (speedMultiplier * sprintSpeed), false);
+			auto vec = dir + dir * (speedMultiplier * sprintSpeed);
+			vec.y = rigidBody->GetLinearVelocity().y;
+			rigidBody->SetLinearVelocity(vec, false);
 			rigidBody->SetAngularVelocity(vector3(0, 0, 0), false);
+		}
+		else {
+			// in the air, you can slightly nudge your character in a direction
+			rigidBody->AddForce(dir * 0.5);
 		}
 		// face direction
 		auto rot = glm::quatLookAt(dir, transform()->WorldUp());
 		transform()->SetWorldRotation(glm::slerp(transform()->GetWorldRotation(), rot, 0.2));
+	}
+
+	inline void Jump() {
+		if (OnGround()) {
+			auto vel = rigidBody->GetLinearVelocity();
+			vel.y = 10;
+			rigidBody->SetLinearVelocity(vel,false);
+		}
 	}
 
 
@@ -80,6 +114,8 @@ Character::Character() {
 	auto walk_anim = make_shared<AnimationAssetSegment>(all_clips, 0, 47);
 	auto idle_anim = make_shared<AnimationAssetSegment>(all_clips, 60,120);
 	auto run_anim = make_shared<AnimationAssetSegment>(all_clips, 131, 149);
+	auto jump_anim = make_shared<AnimationAssetSegment>(all_clips, 160, 163);
+	auto fall_anim = make_shared<AnimationAssetSegment>(all_clips, 171, 177);
 	auto mesh = make_shared<MeshAssetSkinned>("character_anims.dae", skeleton);
 	auto material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
 
@@ -105,18 +141,34 @@ Character::Character() {
 	AnimatorComponent::State
 		idle_state{ CharAnims::Idle, idle_anim },
 		walk_state{ CharAnims::Walk, walk_anim },
-		run_state{ CharAnims::Run, run_anim };
+		run_state{ CharAnims::Run, run_anim },
+		fall_state{ CharAnims::Fall, fall_anim },
+		jump_state{ CharAnims::Jump, jump_anim };
+
+	// some states should not loop
+	jump_state.isLooping = false;
+	fall_state.isLooping = false;
 
 	// create transitions
 	// if a transition between A -> B does not exist, the animation will switch instantly.
 	idle_state.SetTransition(CharAnims::Walk, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	idle_state.SetTransition(CharAnims::Fall, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+
 	walk_state.SetTransition(CharAnims::Idle, RavEngine::TweenCurves::LinearCurve, 0.5, AnimatorComponent::State::Transition::TimeMode::BeginNew);
 	walk_state.SetTransition(CharAnims::Run, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::Blended);
+	walk_state.SetTransition(CharAnims::Fall, RavEngine::TweenCurves::LinearCurve, 0.5, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	
 	run_state.SetTransition(CharAnims::Walk, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::Blended);
+	run_state.SetTransition(CharAnims::Fall, RavEngine::TweenCurves::LinearCurve, 0.5, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	run_state.SetTransition(CharAnims::Jump, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+
+	jump_state.SetTransition(CharAnims::Fall, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
 
 	animcomp->InsertState(walk_state);
 	animcomp->InsertState(idle_state);
 	animcomp->InsertState(run_state);
+	animcomp->InsertState(jump_state);
+	animcomp->InsertState(fall_state);
 
 	// initialize the state machine
 	// if an entry state is not set before play, your game will crash.
@@ -134,4 +186,9 @@ Character::Character() {
 
 void Character::Move(const vector3& dir, decimalType speedMultiplier){
 	script->Move(dir, speedMultiplier);
+}
+
+void Character::Jump()
+{
+	script->Jump();
 }

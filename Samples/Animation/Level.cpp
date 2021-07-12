@@ -16,7 +16,8 @@ struct InputNames{
 	static constexpr char const
 		* MoveForward = "MoveForward",
 		* MoveRight = "MoveRight",
-		* Sprint = "Sprint";
+		* Sprint = "Sprint",
+		* Jump = "Jump";
 };
 
 void Level::SetupInputs(){
@@ -43,6 +44,7 @@ void Level::SetupInputs(){
 	im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_A,-1);
 	im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_D);
 	im->AddAxisMap(InputNames::Sprint, SDL_SCANCODE_LSHIFT);
+	im->AddActionMap(InputNames::Jump, SDL_SCANCODE_SPACE);
 
 	// controller
 	im->AddAxisMap(InputNames::MoveForward, ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
@@ -52,6 +54,7 @@ void Level::SetupInputs(){
 	im->BindAxis(InputNames::MoveForward, camera, &CameraEntity::MoveForward, CID::ANY);
 	im->BindAxis(InputNames::MoveRight, camera, &CameraEntity::MoveRight, CID::ANY);
 	im->BindAxis(InputNames::Sprint, camera, &CameraEntity::SpeedIncrement, CID::ANY);
+	im->BindAction(InputNames::Jump, character, &Character::Jump, ActionState::Pressed, CID::ANY);
 
 	// load the game level
 	auto floorplane = make_shared<RavEngine::Entity>();
