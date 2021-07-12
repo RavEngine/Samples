@@ -60,6 +60,7 @@ void Level::SetupInputs(){
 	auto floorplane = make_shared<RavEngine::Entity>();
 	Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("cube.obj");
 	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+	material->SetAlbedoColor({174.0/255,210.0/255,234.0/255,1});
 	floorplane->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
 	floorplane->transform()->LocalScaleDelta(vector3(10, 0.5, 10));
 	floorplane->EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);

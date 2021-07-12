@@ -118,6 +118,7 @@ Character::Character() {
 	auto fall_anim = make_shared<AnimationAssetSegment>(all_clips, 171, 177);
 	auto mesh = make_shared<MeshAssetSkinned>("character_anims.dae", skeleton);
 	auto material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+	material->SetAlbedoColor({1,0.4,0.2,1});
 
 	auto childEntity = make_shared<Entity>();										// I made the animation facing the wrong way
 	transform()->AddChild(childEntity->transform());								// so I need a child entity to rotate it back
