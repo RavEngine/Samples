@@ -26,12 +26,12 @@ set(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2,3" CACHE INTERNAL "")
 
 project("RavEngine_Samples")
 
-#set(CMAKE_OSX_SYSROOT iphoneos CACHE INTERNAL "")
+set(RAVENGINE_BUILD_TESTS ON CACHE INTERNAL "")
 add_subdirectory("RavEngine")
 
 function (add_sample sample_dir)
 	# create the test executable
-	SET(APPNAME "RavEngine_${sample_dir}")
+	SET(APPNAME "RavEngine${sample_dir}")
 	SET(sample_dir "Samples/${sample_dir}")
 
 	if (CMAKE_SYSTEM_NAME MATCHES "iOS")
