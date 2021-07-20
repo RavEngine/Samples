@@ -50,11 +50,13 @@ function (add_sample sample_dir)
 		PROPERTIES 
 		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
 		XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"		# with templated plist we can set this
+		VS_GLOBAL_OutputType AppContainerExe
 	)
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" )
 	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}")
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
+	#set_property(TARGET "${APPNAME}" PROPERTY WIN32_EXECUTABLE FALSE) 
 
 	file(GLOB objects "${sample_dir}/objects/*.fbx" "${sample_dir}/objects/*.dae" "${sample_dir}/objects/*.ozz" "${sample_dir}/objects/*.obj", "${sample_dir}/objects/*.ply")
 	file(GLOB textures "${sample_dir}/textures/*")

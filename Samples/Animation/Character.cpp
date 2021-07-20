@@ -59,6 +59,10 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 		if (velocity.y > 2) {
 			animator->Goto(CharAnims::Jump);
 		}
+
+		if (transform()->GetWorldPosition().y < -10) {
+			transform()->SetWorldPosition(vector3(0,5,0));
+		}
 	}
 
 	inline void Move(const vector3& dir, decimalType speedMultiplier) {
@@ -72,7 +76,7 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 		}
 		else {
 			// in the air, you can slightly nudge your character in a direction
-			rigidBody->AddForce(dir * 0.5);
+			rigidBody->AddForce(dir);
 		}
 		// face direction
 		auto rot = glm::quatLookAt(dir, transform()->WorldUp());
@@ -154,17 +158,30 @@ Character::Character() {
 	// if a transition between A -> B does not exist, the animation will switch instantly.
 	idle_state.SetTransition(CharAnims::Walk, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
 	idle_state.SetTransition(CharAnims::Fall, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	idle_state.SetTransition(CharAnims::Jump, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	idle_state.SetTransition(CharAnims::Run, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
 
 	walk_state.SetTransition(CharAnims::Idle, RavEngine::TweenCurves::LinearCurve, 0.5, AnimatorComponent::State::Transition::TimeMode::BeginNew);
 	walk_state.SetTransition(CharAnims::Run, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::Blended);
 	walk_state.SetTransition(CharAnims::Fall, RavEngine::TweenCurves::LinearCurve, 0.5, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	walk_state.SetTransition(CharAnims::Jump, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
 	
 	run_state.SetTransition(CharAnims::Walk, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::Blended);
 	run_state.SetTransition(CharAnims::Fall, RavEngine::TweenCurves::LinearCurve, 0.5, AnimatorComponent::State::Transition::TimeMode::BeginNew);
 	run_state.SetTransition(CharAnims::Jump, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	run_state.SetTransition(CharAnims::Idle, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
 
 	jump_state.SetTransition(CharAnims::Fall, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	jump_state.SetTransition(CharAnims::Walk, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	jump_state.SetTransition(CharAnims::Run, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	jump_state.SetTransition(CharAnims::Idle, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
 
+	fall_state.SetTransition(CharAnims::Idle, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	fall_state.SetTransition(CharAnims::Walk, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	fall_state.SetTransition(CharAnims::Run, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+	fall_state.SetTransition(CharAnims::Jump, RavEngine::TweenCurves::LinearCurve, 0.2, AnimatorComponent::State::Transition::TimeMode::BeginNew);
+
+	// add transitions to the animator component
 	animcomp->InsertState(walk_state);
 	animcomp->InsertState(idle_state);
 	animcomp->InsertState(run_state);
