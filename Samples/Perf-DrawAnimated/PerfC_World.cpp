@@ -10,14 +10,14 @@
 #include <fmt/format.h>
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/Utilities.hpp>
+#include <array>
 
 using namespace RavEngine;
 using namespace std;
 
 STATIC(PerfC_World::meshes);
-std::array<Ref<MeshAsset>,PerfC_World::num_meshes>;
-std::array<Ref<Texture>,PerfC_World::num_textures> PerfC_World::textures;
-bool PerfC_World::TexturesEnabled = true;
+STATIC(PerfC_World::textures);
+STATIC(PerfC_World::TexturesEnabled) = true;
 
 static std::random_device rd; // obtain a random number from hardware
 static std::mt19937 gen(rd()); // seed the generator
@@ -48,19 +48,14 @@ struct DemoMaterialInstance : public RavEngine::PBRMaterialInstance{
 	}
 };
 
-static std::array<Ref<DemoMaterialInstance>,PerfC_World::num_textures> materialInstances;
-
-
 struct DemoObject : public RavEngine::Entity{
-	DemoObject(bool isLight = false){
+	DemoObject(Ref<DemoMaterialInstance> inst,bool isLight = false){
 		Ref<Entity> child = make_shared<Entity>();
 		
 		EmplaceComponent<ChildEntityComponent>(child);
         EmplaceComponent<SpinComponent>(vector3(spinrng(gen)/3,spinrng(gen)/3,spinrng(gen)/3));
 		
-		auto mesh = child->EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)]);
-		Ref<DemoMaterialInstance> inst = materialInstances[texturerng(gen)];
-		
+		auto mesh = child->EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)]);		
 		if (!isLight){
 			inst->SetAlbedoColor({(float)colorrng(gen),(float)colorrng(gen),(float)colorrng(gen),1});
 		}
@@ -100,6 +95,9 @@ void PerfC_World::OnActivate(){
 	dl->Intensity = 0.5;
 	
 	//load textures
+	
+	std::array<Ref<DemoMaterialInstance>,PerfC_World::num_textures> materialInstances;
+	
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
 		textures[i] = make_shared<Texture>(StrFormat("tx{}.png",i+1));
@@ -110,12 +108,14 @@ void PerfC_World::OnActivate(){
 	Debug::Log("Loading {} objects", num_objects);
 	//spawn the polygons
 	for(int i = 0; i < num_objects; i++){
-		Spawn(make_shared<DemoObject>());
+		Ref<DemoMaterialInstance> inst = materialInstances[texturerng(gen)];
+		Spawn(make_shared<DemoObject>(inst));
 	}
 	
 	//spawn the lights
 	for(int i = 0; i < 3; i++){
-		Spawn(make_shared<DemoObject>(true));
+		Ref<DemoMaterialInstance> inst = materialInstances[texturerng(gen)];
+		Spawn(make_shared<DemoObject>(inst,true));
 	}
 	
 	Spawn(lightEntity);
