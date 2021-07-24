@@ -15,7 +15,7 @@ jobs:
       - name: Build
         run: mkdir -p build; cd build; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release .. && cmake --build . --config release --target install 
       - name: Compress Samples
-        run: cd build/Release && zip -r -9 RavEngine_Samples_Linux64.zip RavEngine*
+        run: cd build/Release && zip -r -9 RavEngine_Samples_Linux64.zip *.AppImage
       - name: Archive and upload artifacts
         uses: actions/upload-artifact@v2
         with:

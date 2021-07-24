@@ -72,11 +72,25 @@ function (add_sample sample_dir)
 		SOUNDS ${sounds}
 	)
 
-	# fixup mac bundle
+	# fixup mac bundle, or generate Linux AppImage
 	if(APPLE)
 		INSTALL(CODE 
 			"include(BundleUtilities)
 			fixup_bundle(\"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.app\" \"\" \"\")
+			" 
+			COMPONENT Runtime
+		)
+    elseif(LINUX)
+        INSTALL(CODE 
+			"include(../appimage.cmake)
+			make_appimage(
+                EXE \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}\"
+                NAME \"${APPNAME}\"
+                ICON \"../logo.png\"
+                DIR_ICON \"../logo.png\"
+                OUTPUT_NAME \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.AppImage\"
+                ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.zip\"
+            )
 			" 
 			COMPONENT Runtime
 		)
