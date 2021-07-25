@@ -76,7 +76,7 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 		}
 		else {
 			// in the air, you can slightly nudge your character in a direction
-			rigidBody->AddForce(dir);
+			rigidBody->AddForce(dir * 5.0);
 		}
 		// face direction
 		auto rot = glm::quatLookAt(dir, transform()->WorldUp());
@@ -92,14 +92,23 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 	}
 
 
-	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>& other) final
+	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
 	{
 		if (other.lock()->filterGroup & FilterLayers::L0) {	// we use filter layer 0 to mark ground
-			groundCounter++;
+			auto worldpos = transform()->GetWorldPosition();
+			// is this contact point underneath the character?
+			for (int i = 0; i < numContactPoints; i++) {
+				auto diff = worldpos.y - contactPoints[i].position.y;
+				if (diff > 0) {
+					groundCounter++;
+					break;
+				}
+			}
+
 		}
 	}
 
-	void OnColliderExit(const WeakRef<RavEngine::PhysicsBodyComponent>& other) final
+	void OnColliderExit(const WeakRef<RavEngine::PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
 	{
 		if (other.lock()->filterGroup & FilterLayers::L0) {
 			groundCounter--;
@@ -134,10 +143,23 @@ Character::Character() {
 	cubemesh->SetMaterial(material);
 	childEntity->EmplaceComponent<BoneDebugRenderer>();
 
+	struct DebugRenderer : public RavEngine::IDebugRenderer {
+		void DrawDebug(RavEngine::DebugDraw& dbg) const override {
+			auto owner = getOwner().lock();
+			if (owner) {
+				owner->GetComponent<RavEngine::PhysicsCollider>().value()->DebugDraw(dbg, 0x0000FFFF);
+			}
+		}
+	};
+#if _DEBUG
+	EmplaceComponent<DebugRenderer>();
+#endif
+
 	// load the collider and physics settings
 	rigidBody = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
-	EmplaceComponent<CapsuleCollider>(0.5, 0.7, make_shared<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,0,0),vector3(0,0,glm::radians(90.0)));
+	EmplaceComponent<CapsuleCollider>(0.6, 1.3, make_shared<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,1.7,0),vector3(0,0,glm::radians(90.0)));
 	rigidBody->SetAxisLock(RigidBodyDynamicComponent::AxisLock::Angular_X | RigidBodyDynamicComponent::AxisLock::Angular_Z);
+	rigidBody->setWantsContactData(true);
 
 	// load the animation
 	auto animcomp = childEntity->EmplaceComponent<AnimatorComponent>(skeleton);

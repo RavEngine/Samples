@@ -23,7 +23,7 @@ struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::IPhysic
 		std::make_shared<RavEngine::AudioAsset>("hockeyhit4.wav")
 	};
 	void Tick(float scale) override{}
-	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&) override{
+	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) override{
 		GetWorld()->PlaySound(RavEngine::InstantaneousAudioSource(sounds[std::rand() % 4],transform()->GetWorldPosition(),3));
 	}
 };

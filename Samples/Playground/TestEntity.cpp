@@ -81,14 +81,14 @@ void TestEntityController::Tick(float scale) {
 	my_x = transform()->GetWorldPosition().x;
 }
 
-void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other)
+void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
 {
 	auto pos = other.lock()->getOwner().lock()->transform()->GetWorldPosition();
 	getOwner().lock()->GetComponent<RPCComponent>().value()->InvokeClientRPC(TestEntityCodes::ClientRPC,RavEngine::NetworkBase::Reliability::Reliable,(int)pos.x,(float)pos.z);
 	contactCount++;
 }
 
-void TestEntityController::OnColliderExit(const WeakRef<PhysicsBodyComponent>& other){
+void TestEntityController::OnColliderExit(const WeakRef<PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints){
 	contactCount--;
 }
 

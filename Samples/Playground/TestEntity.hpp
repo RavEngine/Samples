@@ -40,8 +40,8 @@ class TestEntityController : public RavEngine::ScriptComponent, public RavEngine
 public:
     void Tick(float scale) override;
 
-    void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&) override;
-	void OnColliderExit(const WeakRef<RavEngine::PhysicsBodyComponent>&) override;
+    void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) override;
+	void OnColliderExit(const WeakRef<RavEngine::PhysicsBodyComponent>&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) override;
 	
 	void Start() override;
 	static std::atomic<int> objectcount;
