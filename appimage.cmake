@@ -29,8 +29,15 @@ function(make_appimage)
 
     # copy executable to appdir
     file(COPY "${ARGS_EXE}" DESTINATION "${APPDIR}" FOLLOW_SYMLINK_CHAIN)
-    get_filename_component(EXE_NAME "${ARGS_EXE}" NAME_WE)
-    file(RENAME "${APPDIR}/${EXE_NAME}" "${APPDIR}/AppRun")
+    get_filename_component(EXE_NAME "${ARGS_EXE}" NAME)
+
+    # create the script that will launch the AppImage
+file(WRITE "${APPDIR}/AppRun" 
+"#!/bin/sh
+cd \"$(dirname \"$0\")\";
+./${EXE_NAME} $@"
+    )
+    execute_process(COMMAND chmod +x "${APPDIR}/AppRun")
     
     # copy assets to appdir
     file(COPY ${ARGS_ASSETS} DESTINATION "${APPDIR}")
