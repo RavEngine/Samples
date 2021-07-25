@@ -151,7 +151,7 @@ Character::Character() {
 			}
 		}
 	};
-#if _DEBUG
+#ifdef _DEBUG
 	EmplaceComponent<DebugRenderer>();
 #endif
 
