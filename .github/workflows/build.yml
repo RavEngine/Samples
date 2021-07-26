@@ -31,7 +31,7 @@ jobs:
         with:
           submodules: true
       - name: Build
-        run: ./build-mac.sh
+        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release .. && cmake --build . --config release --target install
       - name: Compress Samples
         run: cd build/release && zip -r -9 RavEngine_Samples_macOS.zip *.app
       - name: Archive and upload artifacts
@@ -49,9 +49,9 @@ jobs:
         with:
           submodules: true
       - name: Build
-        run: .\build-win.bat -ErrorAction Ignore; .\build-win.bat -ErrorAction Ignore; .\build-win.bat
+        run: mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=Release .. ; cmake .. ; cmake --build . --config release --target install
       - name: Compress Samples
-        run: cd build\Release ; Compress-Archive -Path .\RavEngine* -DestinationPath RavEngine_Samples_win64.zip
+        run: cd build\Release ; Compress-Archive -Path .\RavEngine*.exe,.\RavEngine*.zip -DestinationPath RavEngine_Samples_win64.zip
       - name: Archive and upload artifacts
         uses: actions/upload-artifact@v2
         with:
