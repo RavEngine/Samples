@@ -97,7 +97,7 @@ function (add_sample sample_dir)
 	endif()
 
     # Strip binary for release builds
-    if (${CMAKE_BUILD_TYPE} STREQUAL Release)
+    if (CMAKE_BUILD_TYPE STREQUAL Release)
         add_custom_command(TARGET ${APPNAME} POST_BUILD COMMAND ${CMAKE_STRIP} ${CMAKE_BUILD_TYPE}/${APPNAME})
     endif ()
 
