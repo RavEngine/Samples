@@ -20,7 +20,7 @@ enum CharAnims {
 struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor {
 	Ref<AnimatorComponent> animator;
 	Ref<RigidBodyDynamicComponent> rigidBody;
-	constexpr static decimalType sprintSpeed = 5;
+	constexpr static decimalType sprintSpeed = 2.5, walkSpeed = 2;
 
 	int16_t groundCounter = 0;
 
@@ -38,10 +38,10 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 		auto xzspeed = glm::length(movementVel);
 
 		if (OnGround()) {
-			if (xzspeed > 0.4 && xzspeed < 1.5) {
+			if (xzspeed > 0.4 && xzspeed < 2.2) {
 				animator->Goto(CharAnims::Walk);
 			}
-			else if (xzspeed >= 1.5) {
+			else if (xzspeed >= 2.2) {
 				animator->Goto(CharAnims::Run);
 			}
 			// not jumping?
@@ -69,7 +69,7 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 		// apply movement only if touching the ground
 		if (OnGround()) {
 			// move in direction
-			auto vec = dir + dir * (speedMultiplier * sprintSpeed);
+			auto vec = dir * walkSpeed + dir * (speedMultiplier * sprintSpeed);
 			vec.y = rigidBody->GetLinearVelocity().y;
 			rigidBody->SetLinearVelocity(vec, false);
 			rigidBody->SetAngularVelocity(vector3(0, 0, 0), false);
@@ -99,7 +99,7 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 			// is this contact point underneath the character?
 			for (int i = 0; i < numContactPoints; i++) {
 				auto diff = worldpos.y - contactPoints[i].position.y;
-				if (diff > 0) {
+				if (diff > -0.3) {
 					groundCounter++;
 					break;
 				}
@@ -175,6 +175,9 @@ Character::Character() {
 	// some states should not loop
 	jump_state.isLooping = false;
 	fall_state.isLooping = false;
+	
+	// adjust the speed of clips
+	walk_state.speed = 2.0;
 
 	// create transitions
 	// if a transition between A -> B does not exist, the animation will switch instantly.
