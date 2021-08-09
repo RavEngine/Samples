@@ -48,6 +48,7 @@ function (add_sample sample_dir)
 		PROPERTIES 
 		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
 		XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"		# with templated plist we can set this
+		XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"
 		VS_GLOBAL_OutputType AppContainerExe
 	)
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" )
