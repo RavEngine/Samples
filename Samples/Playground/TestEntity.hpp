@@ -58,12 +58,12 @@ struct TestEntityRPCs : public RavEngine::Component, public RavEngine::Queryable
 	}
 
 	void ClientRPCTest(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin) {
-		auto A = upk.get<int>().value();
-		auto B = upk.get<float>().value();
-		RavEngine::Debug::Log("Client message! Values are {} and {}", A, B);
+		//auto A = upk.get<int>().value();
+		//auto B = upk.get<float>().value();
+		//RavEngine::Debug::Log("Client message! Values are {} and {}", A, B);
 
-		//get the value in collision, and send an RPC back to the server with the same number again
-		getOwner().lock()->GetComponent<RavEngine::RPCComponent>().value()->InvokeServerRPC(TestEntityCodes::ServerRPC,RavEngine::NetworkBase::Reliability::Reliable,A,B);
+		////get the value in collision, and send an RPC back to the server with the same number again
+		//getOwner().lock()->GetComponent<RavEngine::RPCComponent>().value()->InvokeServerRPC(TestEntityCodes::ServerRPC,RavEngine::NetworkBase::Reliability::Reliable,A,B);
 	}
 };
 
