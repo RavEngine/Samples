@@ -97,7 +97,7 @@ void Level::SetupClient()
 		// the management relay is here, so now we want to spawn objects with their ownership transfered here
 		auto rpc = e->GetComponent<RPCComponent>().value();
 		rpc->InvokeServerRPC(SpawnReq, NetworkBase::Reliability::Reliable, (int)0);
-		});
+	});
 	// only the clients move objects and need to push changes up
 	// the server will automatically replicate changes from the other clients
 	systemManager.EmplaceTimedSystem<SyncNetTransforms>(std::chrono::milliseconds(100));

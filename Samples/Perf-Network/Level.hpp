@@ -4,10 +4,7 @@
 #include <RavEngine/NetworkReplicable.hpp>
 
 struct Level : public RavEngine::World {
-	Level() {
-		auto name = "level";
-		std::memcpy((char*)worldID.data(), name, sizeof(name));
-	}
+	Level() : World("level") {}
 	void OnActivate() final;
 
 private:

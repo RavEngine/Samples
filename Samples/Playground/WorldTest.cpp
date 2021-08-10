@@ -203,7 +203,4 @@ void TestWorld::SetupInputs(){
 	Spawn(ambientLight1);
 }
 
-TestWorld::TestWorld() : World() {
-	auto name = "plgrnd";
-	memcpy((char*)worldID.data(), &name, sizeof(name));
-};
+TestWorld::TestWorld() : World("plgrnd") {}
