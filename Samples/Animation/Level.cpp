@@ -82,26 +82,26 @@ void Level::SetupInputs(){
 
 	InitPhysics();
 
-	SceneLoader loader("sceneloader.fbx");
-
-	phmap::flat_hash_map<std::string_view, Ref<MeshAsset>> name2Asset;
-	loader.LoadMeshes([&](const PreloadedAsset& pr) -> bool {
-		// we want to load all meshes in this case
-		return true;
-
-	}, [&](Ref<MeshAsset> rm, const PreloadedAsset& pr) {
-		name2Asset[pr.name] = rm;
-	});
-
-	loader.LoadLocators([&](const Locator& locator) {
-		// is this the node for a mesh?
-		if (name2Asset.contains(locator.name)) {
-			auto entity = make_shared<Entity>();
-			entity->EmplaceComponent<StaticMesh>(name2Asset.at(locator.name), material);
-			entity->transform()->SetWorldPosition(locator.translate);
-			entity->transform()->SetWorldRotation(locator.rotation);
-			entity->transform()->SetLocalScale(locator.scale);
-			Spawn(entity);
-		}
-	});
+//	SceneLoader loader("sceneloader.fbx");
+//
+//	phmap::flat_hash_map<std::string_view, Ref<MeshAsset>> name2Asset;
+//	loader.LoadMeshes([&](const PreloadedAsset& pr) -> bool {
+//		// we want to load all meshes in this case
+//		return true;
+//
+//	}, [&](Ref<MeshAsset> rm, const PreloadedAsset& pr) {
+//		name2Asset[pr.name] = rm;
+//	});
+//
+//	loader.LoadLocators([&](const Locator& locator) {
+//		// is this the node for a mesh?
+//		if (name2Asset.contains(locator.name)) {
+//			auto entity = make_shared<Entity>();
+//			entity->EmplaceComponent<StaticMesh>(name2Asset.at(locator.name), material);
+//			entity->transform()->SetWorldPosition(locator.translate);
+//			entity->transform()->SetWorldRotation(locator.rotation);
+//			entity->transform()->SetLocalScale(locator.scale);
+//			Spawn(entity);
+//		}
+//	});
 }
