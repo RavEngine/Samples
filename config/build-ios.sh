@@ -1,4 +1,4 @@
 ./init-ios.sh
-cd build;
+cd build/ios;
 cmake --build . --config release --target install
 

@@ -43,7 +43,7 @@ function (add_sample sample_dir)
 	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" ${PlatformFiles})
 
 	# creates a mac app if applicable
-	add_executable("${APPNAME}" ${TEST_SOURCES})
+	add_executable("${APPNAME}" ${TEST_SOURCES} "logo.png")
 	set_target_properties("${APPNAME}" 
 		PROPERTIES 
 		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
@@ -54,7 +54,7 @@ function (add_sample sample_dir)
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" )
 	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}")
 	target_compile_features(${APPNAME} PRIVATE cxx_std_17)
-
+	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 	#set_property(TARGET "${APPNAME}" PROPERTY WIN32_EXECUTABLE FALSE) 
