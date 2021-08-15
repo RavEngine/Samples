@@ -11,7 +11,7 @@ struct CirculateComponent : public RavEngine::Component, public  RavEngine::Quer
 
 struct CirculateSystem : public RavEngine::AutoCTTI {
 	inline void Tick(float fpsScale, Ref<CirculateComponent> cc, Ref<RavEngine::Transform> transform) {
-		auto time = RavEngine::App::currentTime();
+		auto time = RavEngine::App::GetCurrentTime();
 		transform->SetLocalPosition(vector3(std::cos(time * cc->speed) * cc->radius, std::sin(time * cc->speed) * 0.5 + 1, std::sin(time * cc->speed) * cc->radius));
 	}
 };

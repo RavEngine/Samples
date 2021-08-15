@@ -16,7 +16,7 @@ static inline vector3 GenSpawnpoint(){
 struct RotationSystem : public RavEngine::AutoCTTI{
 	
 	inline void Tick(float fpsScale, Ref<RotationComponent> rot, Ref<Transform> tr){
-		auto time = App::currentTime();
+		auto time = App::GetCurrentTime();
 		auto rotation = rot.get();
 		auto transform = tr.get();
 		decimalType xrot = std::sin(time * rotation->xspeed) * rotation->maxDeg;

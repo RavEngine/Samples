@@ -18,7 +18,8 @@ struct InputNames{
 		* MoveForward = "MoveForward",
 		* MoveRight = "MoveRight",
 		* Sprint = "Sprint",
-		* Jump = "Jump";
+		* Jump = "Jump",
+		* Pound = "Pound";
 };
 
 void Level::SetupInputs(){
@@ -46,6 +47,7 @@ void Level::SetupInputs(){
 	im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_D);
 	im->AddAxisMap(InputNames::Sprint, SDL_SCANCODE_LSHIFT);
 	im->AddActionMap(InputNames::Jump, SDL_SCANCODE_SPACE);
+	im->AddActionMap(InputNames::Pound, SDL_SCANCODE_LCTRL);
 
 	// controller
 	im->AddAxisMap(InputNames::MoveForward, ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY, -1);
@@ -58,6 +60,7 @@ void Level::SetupInputs(){
 	im->BindAxis(InputNames::MoveRight, camera, &CameraEntity::MoveRight, CID::ANY);
 	im->BindAxis(InputNames::Sprint, camera, &CameraEntity::SpeedIncrement, CID::ANY);
 	im->BindAction(InputNames::Jump, character, &Character::Jump, ActionState::Pressed, CID::ANY);
+	im->BindAction(InputNames::Pound, character, &Character::Pound, ActionState::Pressed, CID::ANY);
 
 	// load the game level
 	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
