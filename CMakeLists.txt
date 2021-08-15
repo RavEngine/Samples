@@ -16,7 +16,6 @@ endif()
 
 if(MSVC)
   add_definitions(/MP)
-  add_definitions(/Qpar)
 endif()
 
 #Enable iPad as well as iPhone (Universal)
@@ -43,7 +42,7 @@ function (add_sample sample_dir)
 	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" ${PlatformFiles})
 
 	# creates a mac app if applicable
-	add_executable("${APPNAME}" ${TEST_SOURCES} "logo.png")
+	add_executable("${APPNAME}" ${TEST_SOURCES} "Samples/logo.png" "Samples/windows.rc")
 	set_target_properties("${APPNAME}" 
 		PROPERTIES 
 		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
