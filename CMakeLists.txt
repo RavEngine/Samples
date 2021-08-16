@@ -31,21 +31,17 @@ function (add_sample sample_dir)
 	SET(APPNAME "RavEngine${sample_dir}")
 	SET(sample_dir "Samples/${sample_dir}")
 
-	if (CMAKE_SYSTEM_NAME MATCHES "iOS")
-		set(PlatformFiles "iosLaunchScreen.storyboard")
-	endif()
-
 	# create the helper header file
 	make_directory("${APPNAME}")
 	configure_file("Samples/AppInfo.hpp" "${CMAKE_BINARY_DIR}/${APPNAME}/" @ONLY)
 
-	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" ${PlatformFiles})
+	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" )
 
 	# creates a mac app if applicable
-	add_executable("${APPNAME}" ${TEST_SOURCES} "Samples/logo.png" "Samples/windows.rc")
+	add_executable("${APPNAME}" ${TEST_SOURCES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard")
 	set_target_properties("${APPNAME}" 
 		PROPERTIES 
-		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
+		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Samples/Info.plist.in"
 		XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"		# with templated plist we can set this
 		XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"
 		VS_GLOBAL_OutputType AppContainerExe
@@ -53,7 +49,7 @@ function (add_sample sample_dir)
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" )
 	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}")
 	target_compile_features(${APPNAME} PRIVATE cxx_std_17)
-	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 	#set_property(TARGET "${APPNAME}" PROPERTY WIN32_EXECUTABLE FALSE) 
