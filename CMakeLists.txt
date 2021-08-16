@@ -11,7 +11,7 @@ if(UNIX AND NOT APPLE)
 endif()
 
 if(LINUX)
-	set(CMAKE_CXX_STANDARD_LIBRARIES -latomic) # need libatomic on linux
+	set(atomic_lib atomic CACHE INTERNAL "") # need libatomic on linux
 endif()
 
 if(MSVC)
@@ -46,7 +46,7 @@ function (add_sample sample_dir)
 		XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"
 		VS_GLOBAL_OutputType AppContainerExe
 	)
-	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" )
+	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" ${atomic_lib})
 	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}")
 	target_compile_features(${APPNAME} PRIVATE cxx_std_17)
 	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
