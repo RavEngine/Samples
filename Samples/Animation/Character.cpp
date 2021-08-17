@@ -78,7 +78,7 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 					}
 				}
 				// jumping?
-				if (velocity.y > 2) {
+				if (velocity.y > 5) {
 					animator->Goto(CharAnims::Jump);
 				}
 			}
@@ -288,15 +288,15 @@ Character::Character() {
 
 	// need to avoid a cyclical reference here
 	WeakRef<CharacterScript> scriptref(script);
-	pound_begin_state.SetBeginCallback([scriptref] {
+	pound_begin_state.SetBeginCallback([scriptref](uint16_t nextState) {
 		auto ref = scriptref.lock();
 		ref->rigidBody->SetGravityEnabled(false);
 		ref->controlsEnabled = false;
 	});
-	pound_do_state.SetBeginCallback([=] {
+	pound_do_state.SetBeginCallback([=] (uint16_t nextState) {
 		scriptref.lock()->StartPounding();
 	});
-	pound_end_state.SetEndCallback([=] {
+	pound_end_state.SetEndCallback([=] (uint16_t nextState) {
 		scriptref.lock()->controlsEnabled = true;
 	});
 
