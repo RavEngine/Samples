@@ -74,17 +74,17 @@ TestEntity::TestEntity(const uuids::uuid& uuid) : Entity(){
 
 void TestEntityController::Tick(float scale) {
 
-    if (transform()->GetWorldPosition().y < -40) {
+    if (Transform()->GetWorldPosition().y < -40) {
         Destroy();
         objectcount--;
     }
-	my_x = transform()->GetWorldPosition().x;
+	my_x = Transform()->GetWorldPosition().x;
 }
 
 void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
 {
-	auto pos = other.lock()->getOwner().lock()->transform()->GetWorldPosition();
-	getOwner().lock()->GetComponent<RPCComponent>().value()->InvokeClientRPC(TestEntityCodes::ClientRPC,RavEngine::NetworkBase::Reliability::Reliable,(int)pos.x,(float)pos.z);
+	auto pos = other.lock()->GetOwner().lock()->transform()->GetWorldPosition();
+	GetOwner().lock()->GetComponent<RPCComponent>().value()->InvokeClientRPC(TestEntityCodes::ClientRPC,RavEngine::NetworkBase::Reliability::Reliable,(int)pos.x,(float)pos.z);
 	contactCount++;
 }
 
@@ -93,6 +93,6 @@ void TestEntityController::OnColliderExit(const WeakRef<PhysicsBodyComponent>& o
 }
 
 void TestEntityController::Start(){
-	transform()->SetWorldPosition(vector3(rand()%10-5,rand()%10-5,rand()%10-5));
+	Transform()->SetWorldPosition(vector3(rand()%10-5,rand()%10-5,rand()%10-5));
     objectcount++;
 }

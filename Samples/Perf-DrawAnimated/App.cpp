@@ -24,7 +24,7 @@ void Performance_C::OnStartup(int argc, char **argv){
 	
 	AddWorld(std::make_shared<PerfC_World>());
 	
-	SetWindowTitle(StrFormat("{} | {}", APPNAME, Renderer->currentBackend()).c_str());
+	SetWindowTitle(StrFormat("{} | {}", APPNAME, Renderer->GetCurrentBackendName()).c_str());
 }
 
 START_APP(Performance_C);

@@ -19,7 +19,7 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers){}
 
 void GameWorld::OnActivate(){
 	Ref<Entity> cameraActor = make_shared<Entity>();
-	cameraActor->EmplaceComponent<CameraComponent>()->setActive(true);
+	cameraActor->EmplaceComponent<CameraComponent>()->SetActive(true);
 	cameraActor->EmplaceComponent<AudioListener>();
 	cameraBoom->transform()->SetWorldPosition(vector3(0,0,0));
 	
@@ -116,7 +116,7 @@ void GameWorld::OnActivate(){
 
 void GameWorld::posttick(float f)
 {
-	t.step(f);
+	t.Step(f);
 	
 	//if the puck's z position > 6 then the right side must have scored
 	auto pos = puck->transform()->GetWorldPosition();

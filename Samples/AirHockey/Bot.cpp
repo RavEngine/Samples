@@ -16,12 +16,12 @@ void BotPlayer::Tick(float scale){
 
 	//find the closest puck to the goal
 	
-	Ref<Entity> closestPuck(static_pointer_cast<PuckComponent>(*pucks.begin())->getOwner());
-	auto worldpos = Ref<Entity>(getOwner())->transform()->GetWorldPosition();
+	Ref<Entity> closestPuck(static_pointer_cast<PuckComponent>(*pucks.begin())->GetOwner());
+	auto worldpos = Ref<Entity>(GetOwner())->transform()->GetWorldPosition();
 	float closestDist = 1000;
 	for(auto puck : pucks){
         auto p = static_pointer_cast<PuckComponent>(puck);
-		Ref<Entity> e(p->getOwner());
+		Ref<Entity> e(p->GetOwner());
 		
 		auto dist = glm::distance(e->transform()->GetWorldPosition(), goalpos);
 		if (dist <= closestDist){

@@ -52,8 +52,8 @@ public:
 
 struct TestEntityRPCs : public RavEngine::Component, public RavEngine::Queryable<TestEntityRPCs> {
 	void ServerRPCTest(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin) {
-		auto A = upk.get<int>().value();
-		auto B = upk.get<float>().value();
+		auto A = upk.Get<int>().value();
+		auto B = upk.Get<float>().value();
 		RavEngine::Debug::Log("Server message! Values are {} and {}", A, B);
 	}
 
@@ -84,7 +84,7 @@ public:
 
 struct TestEntityDebugRenderer : public RavEngine::IDebugRenderer{
 	void DrawDebug(RavEngine::DebugDraw& dbg) const override{
-		auto owner = std::static_pointer_cast<TestEntity>(getOwner().lock());
+		auto owner = std::static_pointer_cast<TestEntity>(GetOwner().lock());
 		if (owner){
 			auto script = owner->GetComponent<TestEntityController>().value();
 			owner->GetComponent<RavEngine::PhysicsCollider>().value()->DebugDraw(dbg, script->contactCount == 0 ? 0x0000FFFF : 0xFFFFFFFF);

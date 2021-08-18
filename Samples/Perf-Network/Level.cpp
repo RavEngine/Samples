@@ -14,7 +14,7 @@ void Level::OnActivate() {
 	// create camera and lights
 	auto camEntity = make_shared<Entity>();
 	auto camera = camEntity->EmplaceComponent<CameraComponent>();
-	camera->setActive(true);
+	camera->SetActive(true);
 	camEntity->transform()->LocalTranslateDelta(vector3(0, 0, 10));
 	Spawn(camEntity);
 
@@ -121,7 +121,7 @@ void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 	}
 
 	// spawn them
-	auto w = getOwner().lock()->GetWorld().lock();
+	auto w = GetOwner().lock()->GetWorld().lock();
 	for (const auto& entity : entities) {
 		w->Spawn(entity);
 	}

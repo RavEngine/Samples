@@ -67,7 +67,7 @@ public:
 struct TableDebugRenderer : public RavEngine::IDebugRenderer{
 		
 	void DrawDebug(RavEngine::DebugDraw& dbg) const override{
-		auto boxes = getOwner().lock()->GetAllComponentsOfType<RavEngine::BoxCollider>();
+		auto boxes = GetOwner().lock()->GetAllComponentsOfType<RavEngine::BoxCollider>();
 		for(const auto& box : boxes){
 			std::static_pointer_cast<RavEngine::BoxCollider>(box)->DebugDraw(dbg);
 		}

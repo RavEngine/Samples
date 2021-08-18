@@ -84,7 +84,7 @@ void Level::OnActivate(){
 	// create camera and lights
 	auto camEntity = make_shared<Entity>();
 	auto camera = camEntity->EmplaceComponent<CameraComponent>();
-	camera->setActive(true);
+	camera->SetActive(true);
 	camera->farClip = 1000;
 	camEntity->transform()->LocalTranslateDelta(vector3(0,10*5,20*5));
 	camEntity->transform()->LocalRotateDelta(vector3(glm::radians(-30.0f),0,0));

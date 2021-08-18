@@ -145,9 +145,10 @@ void TestWorld::SetupInputs(){
 	anonymousChild->EmplaceComponent<PointLight>()->Intensity = 4;
 	anonymousChild->EmplaceComponent<RigidBodyStaticComponent>();
 	anonymousChild->EmplaceComponent<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5));
-	//auto audioAsset = std::make_shared<RavEngine::AudioAsset>("vgaudio2.wav");
-	//auto audiosource = anonymousChild->EmplaceComponent<RavEngine::AudioSourceComponent>(audioAsset);
-	//  PlaySound(InstantaneousAudioSource(audioAsset,vector3(0,0,0),2));
+	auto audioAsset = std::make_shared<RavEngine::AudioAsset>("creative2-3.ogg",2);
+	//auto audiosource = anonymousChild->EmplaceComponent<RavEngine::AmbientAudioSourceComponent>(audioAsset);
+	// PlaySound(InstantaneousAudioSource(audioAsset,vector3(0,0,0),2));
+	PlayAmbientSound(InstantaneousAmbientAudioSource(audioAsset));
 	Spawn(anonymousChild);
 	
 	floorplane = make_shared<RavEngine::Entity>();
@@ -169,13 +170,13 @@ void TestWorld::SetupInputs(){
 
 	//room->SetRoomMaterial(testMat);
 	
-//	audiosource->Play();
-//	audiosource->SetLoop(true);
+	//audiosource->Play();
+	//audiosource->SetLoop(true);
 //	audiosource->SetVolume(5);
 	
 	struct RoomDebugRenderer : public IDebugRenderer{
 		void DrawDebug(RavEngine::DebugDraw& dbg) const override{
-			auto owner = std::static_pointer_cast<TestEntity>(getOwner().lock());
+			auto owner = std::static_pointer_cast<TestEntity>(GetOwner().lock());
 			if (owner){
 				auto room = owner->GetComponent<AudioRoom>();
 				if (room){

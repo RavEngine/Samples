@@ -10,18 +10,18 @@ struct Player : public RavEngine::ScriptComponent {
 	float fpsScale = 0;
 
 	void Zoom(float amt) {
-		auto owner = Ref<RavEngine::Entity>(getOwner());
+		auto owner = Ref<RavEngine::Entity>(GetOwner());
 		auto zoomAmt = amt * zoomspeed;
-		auto child = owner->GetComponent<RavEngine::ChildEntityComponent>().value()->get()->transform();
+		auto child = owner->GetComponent<RavEngine::ChildEntityComponent>().value()->GetEntity()->transform();
 		child->LocalTranslateDelta(vector3(0, 0, zoomAmt * fpsScale) * child->Forward());
 	}
 	void RotateLR(float amt) {
-		auto owner = Ref<RavEngine::Entity>(getOwner());
+		auto owner = Ref<RavEngine::Entity>(GetOwner());
 		owner->transform()->LocalRotateDelta((double)fpsScale * vector3(0, glm::radians(amt), 0));
 	}
 
 	void RotateUD(float amt) {
-		auto owner = Ref<RavEngine::Entity>(getOwner());
+		auto owner = Ref<RavEngine::Entity>(GetOwner());
 		owner->transform()->LocalRotateDelta((double)fpsScale * vector3(glm::radians(amt), 0, 0));
 	}
 
@@ -42,7 +42,7 @@ struct Camera : public RavEngine::Entity {
 		transform()->AddChild(cameraBoom->transform());
 
 		auto camera = cameraBoom->EmplaceComponent<RavEngine::CameraComponent>();
-		camera->setActive(true);
+		camera->SetActive(true);
 		camera->farClip = 500;
 	}
 };

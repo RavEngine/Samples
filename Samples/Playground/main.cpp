@@ -36,7 +36,7 @@ private:
 		world->SetupInputs();
 		AddWorld(world);
 		
-		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, Renderer->currentBackend()).c_str());
+		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, Renderer->GetCurrentBackendName()).c_str());
 	}
 	
 	int OnShutdown() override {

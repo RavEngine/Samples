@@ -31,8 +31,8 @@ struct TweenEntities : public RavEngine::AutoCTTI {
 	inline void Tick(float fpsScale, Ref<InterpolationTransform> itr) {
 		if (itr->ok) {
 			itr->mtx.lock();
-			itr->translate.step(fpsScale);
-			itr->rotate.step(fpsScale);
+			itr->translate.Step(fpsScale);
+			itr->rotate.Step(fpsScale);
 			itr->mtx.unlock();
 		}
 	}

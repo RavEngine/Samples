@@ -5,12 +5,12 @@ using namespace RavEngine;
 
 void NetTransform::UpdateTransform(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin)
 {
-	auto owner = getOwner().lock();
+	auto owner = GetOwner().lock();
 	// update server's copy of this transform
 	auto itr = owner->GetComponent<InterpolationTransform>().value();
 	itr->mtx.lock();
 	std::optional<RawVec3> td;
-	if ((td = upk.get<RawVec3>())) {
+	if ((td = upk.Get<RawVec3>())) {
 		auto currentpos = owner->transform()->GetLocalPosition();
 		RavEngine::Debug::Assert(!std::isnan(currentpos.x), "CurrentPos was NaN!");
 		RavEngine::Debug::Assert(!std::isnan(td.value()[0]), "NetworkPos was NaN!");
@@ -26,7 +26,7 @@ void NetTransform::UpdateTransform(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 		itr->translate.AddKeyframe(0.1, RavEngine::TweenCurves::LinearCurve, t[0], t[1], t[2]);
 	}
 	std::optional<RawQuat> qd;
-	if ((qd = upk.get<RawQuat>())) {
+	if ((qd = upk.Get<RawQuat>())) {
 		auto currentRot = owner->transform()->GetLocalRotation();
 
 		itr->rotate = decltype(itr->rotate)([=](decimalType w, decimalType x, decimalType y, decimalType z) {

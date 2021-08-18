@@ -16,7 +16,7 @@ struct SingleEntityMarker : public Component, public Queryable<SingleEntityMarke
 struct FPSSystem : public AutoCTTI {
 	void Tick(float scale, Ref<SingleEntityMarker>){
 		App::DispatchMainThread([](){
-			App::SetWindowTitle(StrFormat("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::Renderer->currentBackend(), (int)App::CurrentTPS(), (int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()).c_str());
+			App::SetWindowTitle(StrFormat("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::Renderer->GetCurrentBackendName(), (int)App::CurrentTPS(), (int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()).c_str());
 		});
 	}
 };
@@ -26,7 +26,7 @@ void ::World::OnActivate(){
 	//camera and cube
 	
 	Ref<Entity> camlights = make_shared<Entity>();
-	camlights->EmplaceComponent<CameraComponent>()->setActive(true);
+	camlights->EmplaceComponent<CameraComponent>()->SetActive(true);
 	camlights->EmplaceComponent<SingleEntityMarker>();
 	camlights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
 	camlights->transform()->LocalTranslateDelta(vector3(0,0,5));

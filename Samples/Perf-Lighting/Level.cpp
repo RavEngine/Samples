@@ -48,7 +48,7 @@ void Level::OnActivate() {
 
 	// load camera and lights
 	auto camera = make_shared<Entity>();
-	camera->EmplaceComponent<CameraComponent>()->setActive(true);
+	camera->EmplaceComponent<CameraComponent>()->SetActive(true);
 	camera->transform()->LocalTranslateDelta(vector3(0, 0.5, 2));
 
 	// GUI
@@ -67,11 +67,11 @@ void Level::OnActivate() {
 			auto world = level.lock();
 			const auto objects = world->GetAllComponentsOfType<ObjectMarker>();
 			for (const auto& obj : objects) {
-				obj->getOwner().lock()->GetComponent<StaticMesh>().value()->Enabled = false;
+				obj->GetOwner().lock()->GetComponent<StaticMesh>().value()->Enabled = false;
 			}
 			int i = 1;
 			for (const auto& obj : objects) {
-				obj->getOwner().lock()->GetComponent<StaticMesh>().value()->Enabled = true;
+				obj->GetOwner().lock()->GetComponent<StaticMesh>().value()->Enabled = true;
 				if (i >= value) {
 					break;
 				}

@@ -23,21 +23,21 @@ public:
 	}
 
 	void MoveForward(float amt) {
-		transform()->LocalTranslateDelta(scaleMovement(amt) * transform()->Forward());
+		Transform()->LocalTranslateDelta(scaleMovement(amt) * Transform()->Forward());
 	}
 	void MoveRight(float amt) {
-		transform()->LocalTranslateDelta(scaleMovement(amt) * transform()->Right());
+		Transform()->LocalTranslateDelta(scaleMovement(amt) * Transform()->Right());
 	}
 
 	void MoveUp(float amt) {
-		transform()->LocalTranslateDelta(scaleMovement(amt) * transform()->Up());
+		Transform()->LocalTranslateDelta(scaleMovement(amt) * Transform()->Up());
 	}
 
 	void LookUp(float amt) {
 		cameraEntity->transform()->LocalRotateDelta(vector3(scaleRotation(amt), 0, 0));
 	}
 	void LookRight(float amt) {
-		transform()->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
+		Transform()->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
 	}
 
 	virtual void Tick(float scale) override{
@@ -61,7 +61,7 @@ public:
 		script->cameraEntity = cameraEntity;
 		
 		//set the active camera
-		cam->setActive(true);
+		cam->SetActive(true);
 		
 		transform()->AddChild(cameraEntity->transform());
         EmplaceComponent<RavEngine::ChildEntityComponent>(cameraEntity);

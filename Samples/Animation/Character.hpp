@@ -5,7 +5,7 @@
 
 struct BoneDebugRenderer : public RavEngine::IDebugRenderer {
 	void DrawDebug(RavEngine::DebugDraw& dbg) const override {
-		auto owner = getOwner().lock();
+		auto owner = GetOwner().lock();
 		if (owner) {
 			if (auto animator = owner->GetComponent<RavEngine::AnimatorComponent>()) {
 				auto& pose = animator.value()->GetPose();
