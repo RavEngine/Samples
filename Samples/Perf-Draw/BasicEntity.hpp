@@ -15,7 +15,7 @@ struct BasicEntity : public RavEngine::Entity {
 
 		vector3 rot(glm::radians(pos.x), glm::radians(pos.y), glm::radians(pos.z));
 
-		Transform()->LocalTranslateDelta(pos);
-		Transform()->LocalRotateDelta(rot);
+		GetTransform()->LocalTranslateDelta(pos);
+		GetTransform()->LocalRotateDelta(rot);
 	}
 };

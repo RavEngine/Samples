@@ -43,13 +43,13 @@ void TestWorld::SpawnEntities(float f) {
 }
 
 void TestWorld::ResetCam() {
-	player->Transform()->SetWorldPosition(vector3(0, -10, 50));
-	player->Transform()->SetWorldRotation(quaternion());
+	player->GetTransform()->SetWorldPosition(vector3(0, -10, 50));
+	player->GetTransform()->SetWorldRotation(quaternion());
 }
 
 void TestWorld::posttick(float fpsScale){
     auto rotation = quaternion(vector3(0, 0, 0.01 * fpsScale));
-    anonymous->Transform()->LocalRotateDelta(rotation);
+    anonymous->GetTransform()->LocalRotateDelta(rotation);
     scale = fpsScale;
     
     RenderEngine::DebugPrint(1, 0x4f, "TPS: {}", round(App::CurrentTPS()));
@@ -58,7 +58,7 @@ void TestWorld::posttick(float fpsScale){
     RenderEngine::DebugPrint(4, 0x4f, "Frame Time: {} ms", App::Renderer->GetLastFrameTime());
     RenderEngine::DebugPrint(5, 0x4f, "Physics Bodies: {}", TestEntityController::objectcount.load());
 	
-	dl->Transform()->LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
+	dl->GetTransform()->LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
 }
 
 void TestWorld::SetupInputs(){
@@ -134,14 +134,14 @@ void TestWorld::SetupInputs(){
 	spotlight->Intensity = 4;
 	spotlight->radius = 10;
 	Spawn(anonymous);
-	anonymous->Transform()->LocalTranslateDelta(vector3(0, 1, 0));
+	anonymous->GetTransform()->LocalTranslateDelta(vector3(0, 1, 0));
 	
 	InitPhysics();
 	
 	anonymousChild = make_shared<RavEngine::Entity>();
 	anonymousChild->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);;
-	anonymous->Transform()->AddChild(anonymousChild->Transform());
-	anonymousChild->Transform()->LocalTranslateDelta(vector3(17,0,0));
+	anonymous->GetTransform()->AddChild(anonymousChild->GetTransform());
+	anonymousChild->GetTransform()->LocalTranslateDelta(vector3(17,0,0));
 	anonymousChild->EmplaceComponent<PointLight>()->Intensity = 4;
 	anonymousChild->EmplaceComponent<RigidBodyStaticComponent>();
 	anonymousChild->EmplaceComponent<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5));
@@ -153,8 +153,8 @@ void TestWorld::SetupInputs(){
 	
 	floorplane = make_shared<RavEngine::Entity>();
 	floorplane->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
-	floorplane->Transform()->LocalScaleDelta(vector3(10, 0.5, 10));
-	floorplane->Transform()->LocalTranslateDelta(vector3(0, -20, 0));
+	floorplane->GetTransform()->LocalScaleDelta(vector3(10, 0.5, 10));
+	floorplane->GetTransform()->LocalTranslateDelta(vector3(0, -20, 0));
 	floorplane->EmplaceComponent<RigidBodyStaticComponent>();
 	floorplane->EmplaceComponent<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5));
 	
@@ -192,8 +192,8 @@ void TestWorld::SetupInputs(){
 	dl = make_shared<Entity>();
 	auto dll = dl->EmplaceComponent<DirectionalLight>();
 	auto amt = glm::radians(45.0);
-	dl->Transform()->LocalRotateDelta(vector3(amt,0,0));
-	dl->Transform()->LocalTranslateDelta(vector3(0,1,1));
+	dl->GetTransform()->LocalRotateDelta(vector3(amt,0,0));
+	dl->GetTransform()->LocalTranslateDelta(vector3(0,1,1));
 	dll->color = {1,0.5,0};
 	Spawn(dl);
 	

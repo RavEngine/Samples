@@ -182,8 +182,8 @@ Character::Character() {
 	material->SetAlbedoColor({1,0.4,0.2,1});
 
 	auto childEntity = make_shared<Entity>();										// I made the animation facing the wrong way
-	Transform()->AddChild(childEntity->Transform());								// so I need a child entity to rotate it back
-	childEntity->Transform()->LocalRotateDelta(vector3(0, glm::radians(180.f), 0));	// if your animations are the correct orientation you don't need this
+	GetTransform()->AddChild(childEntity->GetTransform());								// so I need a child entity to rotate it back
+	childEntity->GetTransform()->LocalRotateDelta(vector3(0, glm::radians(180.f), 0));	// if your animations are the correct orientation you don't need this
 	EmplaceComponent<ChildEntityComponent>(childEntity);
 
 	// load the mesh and material onto the character
@@ -219,9 +219,9 @@ Character::Character() {
 	auto handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
 	auto handsocket = animcomp->AddSocket("characterFBXASC058hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
 
-	handsocket->AddChild(handEntity->Transform());
+	handsocket->AddChild(handEntity->GetTransform());
 	// since this is just a normal transform, we can add an additional transformation
-	handEntity->Transform()->LocalTranslateDelta(vector3(0,-0.5,0));
+	handEntity->GetTransform()->LocalTranslateDelta(vector3(0,-0.5,0));
 
 	// create the animation state machine
 	AnimatorComponent::State

@@ -21,26 +21,26 @@ void GameWorld::OnActivate(){
 	Ref<Entity> cameraActor = make_shared<Entity>();
 	cameraActor->EmplaceComponent<CameraComponent>()->SetActive(true);
 	cameraActor->EmplaceComponent<AudioListener>();
-	cameraBoom->Transform()->SetWorldPosition(vector3(0,0,0));
+	cameraBoom->GetTransform()->SetWorldPosition(vector3(0,0,0));
 	
-	cameraBoom->Transform()->AddChild(cameraActor->Transform());
-	cameraActor->Transform()->LocalTranslateDelta(vector3(0,3,3));
-	cameraActor->Transform()->LocalRotateDelta(vector3(glm::radians(-90.0),0,0));
+	cameraBoom->GetTransform()->AddChild(cameraActor->GetTransform());
+	cameraActor->GetTransform()->LocalTranslateDelta(vector3(0,3,3));
+	cameraActor->GetTransform()->LocalRotateDelta(vector3(glm::radians(-90.0),0,0));
 	
 	Spawn(cameraActor);
 	Spawn(cameraBoom);
 	Spawn(hockeytable);
 	
 	//create the puck
-	puck->Transform()->LocalTranslateDelta(vector3(0,3,0));
+	puck->GetTransform()->LocalTranslateDelta(vector3(0,3,0));
 	Spawn(puck);
 	
 	InitPhysics();
 	
 	//intro animation
 	t = Tween<decimalType,decimalType>([=](decimalType d, decimalType p){
-		cameraBoom->Transform()->SetLocalRotation(vector3(glm::radians(d),glm::radians(90.0),0));
-		cameraActor->Transform()->SetLocalPosition(vector3(0,p,0));
+		cameraBoom->GetTransform()->SetLocalRotation(vector3(glm::radians(d),glm::radians(90.0),0));
+		cameraActor->GetTransform()->SetLocalPosition(vector3(0,p,0));
 	},90,15);
 	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,7);
 	
@@ -51,7 +51,7 @@ void GameWorld::OnActivate(){
 	auto fill = lightmain->EmplaceComponent<AmbientLight>();
 	fill->Intensity=0.4;
 	fill->color = {0,0,1,1};
-	lightmain->Transform()->LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
+	lightmain->GetTransform()->LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
 	auto room = lightmain->EmplaceComponent<AudioRoom>();
 	room->SetRoomDimensions(vector3(30,30,30));
 	room->WallMaterials()[0] = RoomMat::kMarble;
@@ -119,7 +119,7 @@ void GameWorld::posttick(float f)
 	t.Step(f);
 	
 	//if the puck's z position > 6 then the right side must have scored
-	auto pos = puck->Transform()->GetWorldPosition();
+	auto pos = puck->GetTransform()->GetWorldPosition();
 	if (pos.z > 6){
 		p2score++;
 		Reset();
@@ -131,9 +131,9 @@ void GameWorld::posttick(float f)
 }
 
 void GameWorld::Reset(){
-	puck->Transform()->SetWorldPosition(vector3(0,2,0));
-	p1->Transform()->SetWorldPosition(vector3(2,2,3));
-	p2->Transform()->SetWorldPosition(vector3(-2,2,-3));
+	puck->GetTransform()->SetWorldPosition(vector3(0,2,0));
+	p1->GetTransform()->SetWorldPosition(vector3(2,2,3));
+	p2->GetTransform()->SetWorldPosition(vector3(-2,2,-3));
 
 	//clear velocities
 	auto zerovel = [](Ref<Entity> e){

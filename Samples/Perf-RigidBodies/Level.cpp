@@ -70,8 +70,8 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 			// spawn rigid bodies
 			auto rigid = std::make_shared<RigidBody>(mat,mesh, physmat, RigidBody::BodyType::Sphere);
 			
-			rigid->Transform()->LocalTranslateDelta(GenSpawnpoint());
-			rigid->Transform()->SetLocalScale(vector3(0.5,0.5,0.5));
+			rigid->GetTransform()->LocalTranslateDelta(GenSpawnpoint());
+			rigid->GetTransform()->SetLocalScale(vector3(0.5,0.5,0.5));
 			ownWorld.lock()->Spawn(rigid);
 			
 			count--;
@@ -86,8 +86,8 @@ void Level::OnActivate(){
 	auto camera = camEntity->EmplaceComponent<CameraComponent>();
 	camera->SetActive(true);
 	camera->farClip = 1000;
-	camEntity->Transform()->LocalTranslateDelta(vector3(0,10*5,20*5));
-	camEntity->Transform()->LocalRotateDelta(vector3(glm::radians(-30.0f),0,0));
+	camEntity->GetTransform()->LocalTranslateDelta(vector3(0,10*5,20*5));
+	camEntity->GetTransform()->LocalRotateDelta(vector3(glm::radians(-30.0f),0,0));
 	Spawn(camEntity);
 	
 	auto lightEntity = make_shared<Entity>();
@@ -96,7 +96,7 @@ void Level::OnActivate(){
 	lightEntity->EmplaceComponent<SpawnerMarker>();
 	dirLight->Intensity = 1.0;
 	ambientLight->Intensity = 0.2;
-	lightEntity->Transform()->SetLocalRotation(vector3(0,glm::radians(45.0),glm::radians(45.0)));
+	lightEntity->GetTransform()->SetLocalRotation(vector3(0,glm::radians(45.0),glm::radians(45.0)));
 	Spawn(lightEntity);
 	
 	// create ground

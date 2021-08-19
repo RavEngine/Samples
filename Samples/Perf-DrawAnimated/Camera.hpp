@@ -12,17 +12,17 @@ struct Player : public RavEngine::ScriptComponent{
 	void Zoom(float amt){
 		auto owner = Ref<RavEngine::Entity>(GetOwner());
 		auto zoomAmt = amt * zoomspeed;
-		auto child = owner->GetComponent<RavEngine::ChildEntityComponent>().value()->GetEntity()->Transform();
+		auto child = owner->GetComponent<RavEngine::ChildEntityComponent>().value()->GetEntity()->GetTransform();
 		child->LocalTranslateDelta(vector3(0, 0, zoomAmt * fpsScale) * child->Forward());
 	}
 	void RotateLR(float amt){
 		auto owner = Ref<RavEngine::Entity>(GetOwner());
-		owner->Transform()->LocalRotateDelta((double)fpsScale * vector3(0, glm::radians(amt), 0));
+		owner->GetTransform()->LocalRotateDelta((double)fpsScale * vector3(0, glm::radians(amt), 0));
 	}
 	
 	void RotateUD(float amt){
 		auto owner = Ref<RavEngine::Entity>(GetOwner());
-		owner->Transform()->LocalRotateDelta((double)fpsScale * vector3(glm::radians(amt), 0, 0));
+		owner->GetTransform()->LocalRotateDelta((double)fpsScale * vector3(glm::radians(amt), 0, 0));
 	}
 	
 	void Tick(float scale) override{		
@@ -38,8 +38,8 @@ struct Camera : public RavEngine::Entity{
         EmplaceComponent<RavEngine::ChildEntityComponent>(cameraBoom);
         EmplaceComponent<Player>();
 		
-		cameraBoom->Transform()->LocalTranslateDelta(vector3(0,0,50));
-		Transform()->AddChild(cameraBoom->Transform());
+		cameraBoom->GetTransform()->LocalTranslateDelta(vector3(0,0,50));
+		GetTransform()->AddChild(cameraBoom->GetTransform());
 		
 		auto camera = cameraBoom->EmplaceComponent<RavEngine::CameraComponent>();
 		camera->SetActive(true);

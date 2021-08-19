@@ -16,7 +16,7 @@ struct CameraScript : public RavEngine::ScriptComponent {
 	
 	void Tick(float fpsScale) final{
 		// where is the player? we should accelerate towards this position
-		auto targetTransform = target->Transform();
+		auto targetTransform = target->GetTransform();
 		auto thisTransform = Transform();
 		auto dirvec = (thisTransform->GetWorldPosition() - targetTransform->GetWorldPosition()) * static_cast<double>(fpsScale) * -1.0;
 		
@@ -49,15 +49,15 @@ CameraEntity::CameraEntity(Ref<Character> cm){
 	
 	// midway arm node used for distance-adjust and y-axis swivel
 	cameraArmBase = make_shared<Entity>();
-	cameraArmBase->Transform()->AddChild(cameraEntity->Transform());
+	cameraArmBase->GetTransform()->AddChild(cameraEntity->GetTransform());
 	cameraArmBase->EmplaceComponent<ChildEntityComponent>(cameraEntity);
-	cameraEntity->Transform()->LocalTranslateDelta(vector3(0,3,0));
-	cameraEntity->Transform()->LocalRotateDelta(vector3(glm::radians(-10.0),0,0));
+	cameraEntity->GetTransform()->LocalTranslateDelta(vector3(0,3,0));
+	cameraEntity->GetTransform()->LocalRotateDelta(vector3(glm::radians(-10.0),0,0));
 	
 	// attached to the root transform
 	EmplaceComponent<ChildEntityComponent>(cameraArmBase);
-	Transform()->AddChild(cameraArmBase->Transform());
-	cameraArmBase->Transform()->LocalTranslateDelta(vector3(0,0,7));
+	GetTransform()->AddChild(cameraArmBase->GetTransform());
+	cameraArmBase->GetTransform()->LocalTranslateDelta(vector3(0,0,7));
 	
 	cameraScript = EmplaceComponent<CameraScript>(cm);
 }
@@ -66,12 +66,12 @@ void CameraEntity::MoveForward(float amt){
 	// what is the camera's direction vector? movement is relative to the camera,
 	// so up on the control stick is torwards the top of the screen rather than
 	// the direction the character is facing.
-	auto forward = cameraArmBase->Transform()->WorldForward() * static_cast<decimalType>(amt);
+	auto forward = cameraArmBase->GetTransform()->WorldForward() * static_cast<decimalType>(amt);
 	cameraScript->forwardVector += forward;
 }
 
 void CameraEntity::MoveRight(float amt){
-	auto right = cameraArmBase->Transform()->WorldRight() * static_cast<decimalType>(amt);
+	auto right = cameraArmBase->GetTransform()->WorldRight() * static_cast<decimalType>(amt);
 	cameraScript->rightVector += right;
 }
 

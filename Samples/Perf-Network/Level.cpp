@@ -15,14 +15,14 @@ void Level::OnActivate() {
 	auto camEntity = make_shared<Entity>();
 	auto camera = camEntity->EmplaceComponent<CameraComponent>();
 	camera->SetActive(true);
-	camEntity->Transform()->LocalTranslateDelta(vector3(0, 0, 10));
+	camEntity->GetTransform()->LocalTranslateDelta(vector3(0, 0, 10));
 	Spawn(camEntity);
 
 	auto lightEntity = make_shared<Entity>();
 	auto ambientLight = lightEntity->EmplaceComponent<AmbientLight>();
 	auto dirLight = lightEntity->EmplaceComponent<DirectionalLight>();
 	ambientLight->Intensity = 0.2;
-	lightEntity->Transform()->SetLocalRotation(vector3(0, glm::radians(45.0), glm::radians(45.0)));
+	lightEntity->GetTransform()->SetLocalRotation(vector3(0, glm::radians(45.0), glm::radians(45.0)));
 	Spawn(lightEntity);
 
 	// spawn the management relay if on server

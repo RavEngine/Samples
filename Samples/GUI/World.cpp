@@ -29,11 +29,11 @@ void ::World::OnActivate(){
 	camlights->EmplaceComponent<CameraComponent>()->SetActive(true);
 	camlights->EmplaceComponent<SingleEntityMarker>();
 	camlights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
-	camlights->Transform()->LocalTranslateDelta(vector3(0,0,5));
+	camlights->GetTransform()->LocalTranslateDelta(vector3(0,0,5));
 	
 	Ref<Entity> dirlight = make_shared<Entity>();
 	dirlight->EmplaceComponent<DirectionalLight>();
-	dirlight->Transform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
+	dirlight->GetTransform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
 	
 	cube = make_shared<Entity>();
 	auto cubemesh = cube->EmplaceComponent<StaticMesh>(make_shared<MeshAsset>("cube.obj"));
@@ -68,5 +68,5 @@ void ::World::OnActivate(){
 }
 
 void ::World::posttick(float scale){
-	cube->Transform()->LocalRotateDelta(vector3(glm::radians(1.0) * scale,glm::radians(-1.0 * scale),glm::radians(0.5) * scale));
+	cube->GetTransform()->LocalRotateDelta(vector3(glm::radians(1.0) * scale,glm::radians(-1.0 * scale),glm::radians(0.5) * scale));
 }
