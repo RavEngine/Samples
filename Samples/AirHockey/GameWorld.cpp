@@ -114,7 +114,7 @@ void GameWorld::OnActivate(){
 	Reset();
 }
 
-void GameWorld::posttick(float f)
+void GameWorld::PostTick(float f)
 {
 	t.Step(f);
 	

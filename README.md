@@ -3,25 +3,27 @@
 This repository contains sample programs to demonstrate how to use the [RavEngine C++ game library](https://github.com/Ravbug/RavEngine).
 
 ## Samples
-1. AirHockey
+1. Hello Cube
+   - A getting started guide for using RavEngine
+2. AirHockey
    - A simple air hockey game demonstrating RavEngine fundamentals (WIP)
-2. Playground
+3. Playground
    - A testing zone, subject to change
-3. Perf-ECS
+4. Perf-ECS
    - ECS raw number crunching benchmark
-4. Perf-Draw
+5. Perf-Draw
    - autobatched instancing benchmark
-5. Perf-DrawAnimated
+6. Perf-DrawAnimated
    - A stress test for high object count with animated lights
-6. Perf-Network
+7. Perf-Network
    - A networking stress test. Contains both the server and client code in the same target. Launch with no arguments for client, and any argument for server
-7. Perf-Lighting
+8. Perf-Lighting
    - GPU-centric lighting and materials performance test with high-polygon models
-8. GUI
+9. GUI
    - A demonstration of all the different supported GUI widgets
-9. Animation
+10. Animation
    - Demonstrates the skinned mesh blending capabilities of RavEngine
-10. SoundDynamics
+11. SoundDynamics
    - A virtual theatre demonstrating the audio reverbation modeling feature 
 
 ## How to build

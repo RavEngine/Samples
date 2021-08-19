@@ -55,5 +55,5 @@ protected:
 	
 	Ref<SpinSystem> spinsys;
 	
-	void posttick(float) override;
+	void PostTick(float) override;
 };

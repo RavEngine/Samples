@@ -208,7 +208,7 @@ void PerfC_World::OnActivate(){
 	im->BindAction("ToggleLight", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::ToggleFullbright, ActionState::Pressed, CID::ANY);
 }
 
-void PerfC_World::posttick(float scale){
+void PerfC_World::PostTick(float scale){
 	hud->ExclusiveAccess([&] {
 		fpslabel->SetInnerRML(StrFormat("TPS: {}, FPS: {} ({} ms)", (int)App::CurrentTPS(),(int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()));
 	});

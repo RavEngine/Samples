@@ -67,6 +67,6 @@ void ::World::OnActivate(){
 	Debug::Log("{} with ID: {}",type_name<GUIComponent>(),CTTI<GUIComponent>());
 }
 
-void ::World::posttick(float scale){
+void ::World::PostTick(float scale){
 	cube->GetTransform()->LocalRotateDelta(vector3(glm::radians(1.0) * scale,glm::radians(-1.0 * scale),glm::radians(0.5) * scale));
 }

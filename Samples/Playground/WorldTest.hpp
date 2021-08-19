@@ -15,7 +15,7 @@
 
 class TestWorld : public RavEngine::World{
 public:
-    void posttick(float fpsScale) override;
+    void PostTick(float fpsScale) override;
     TestWorld();
     Ref<PlayerActor> player = std::make_shared<PlayerActor>();
 

@@ -15,7 +15,7 @@ public:
 	
 	void OnActivate() override;
 
-	void posttick(float) override;
+	void PostTick(float) override;
 	
     
 protected:

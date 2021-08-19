@@ -111,7 +111,7 @@ void Level::SetupInputs(){
 //	});
 }
 
-void Level::posttick(float)
+void Level::PostTick(float)
 {
 	App::Renderer->DebugPrint(0,0x4F,"{}",App::Renderer->GetCurrentBackendName());
 }

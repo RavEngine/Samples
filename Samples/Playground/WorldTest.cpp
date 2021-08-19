@@ -47,7 +47,7 @@ void TestWorld::ResetCam() {
 	player->GetTransform()->SetWorldRotation(quaternion());
 }
 
-void TestWorld::posttick(float fpsScale){
+void TestWorld::PostTick(float fpsScale){
     auto rotation = quaternion(vector3(0, 0, 0.01 * fpsScale));
     anonymous->GetTransform()->LocalRotateDelta(rotation);
     scale = fpsScale;

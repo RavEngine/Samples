@@ -4,7 +4,7 @@
 
 class World : public RavEngine::World{
 	void OnActivate() override;
-	void posttick(float) override;
+	void PostTick(float) override;
 protected:
 	Ref<RavEngine::Entity> cube;
 };

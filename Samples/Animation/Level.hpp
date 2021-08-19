@@ -6,5 +6,5 @@
 class Level : public RavEngine::World{
 public:
 	void SetupInputs();
-	void posttick(float) final;
+	void PostTick(float) final;
 };
