@@ -66,9 +66,9 @@ struct DemoObject : public RavEngine::Entity{
 		}
 		mesh->SetMaterial(inst);
 		
-		transform()->AddChild(child->transform());
+		Transform()->AddChild(child->Transform());
 		
-		child->transform()->LocalTranslateDelta(vector3(rng(gen),rng(gen),rng(gen)));
+		child->Transform()->LocalTranslateDelta(vector3(rng(gen),rng(gen),rng(gen)));
 		
 		child->EmplaceComponent<SpinComponent>(vector3(spinrng(gen),spinrng(gen),spinrng(gen)));
 	}

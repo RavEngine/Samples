@@ -21,6 +21,8 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - A demonstration of all the different supported GUI widgets
 9. Animation
    - Demonstrates the skinned mesh blending capabilities of RavEngine
+10. SoundDynamics
+   - A virtual theatre demonstrating the audio reverbation modeling feature 
 
 ## How to build
 1. Ensure RavEngine supports your platform.

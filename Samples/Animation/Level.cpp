@@ -26,17 +26,17 @@ void Level::SetupInputs(){
 	
 	Ref<Entity> lights = make_shared<Entity>();
 	lights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
-	lights->transform()->LocalTranslateDelta(vector3(0,0.5,6));
+	lights->Transform()->LocalTranslateDelta(vector3(0,0.5,6));
 	lights->EmplaceComponent<DirectionalLight>();
-	lights->transform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
+	lights->Transform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
 	Spawn(lights);
 
 	auto character = make_shared<Character>();
-	character->transform()->LocalTranslateDelta(vector3(0,5,0));
+	character->Transform()->LocalTranslateDelta(vector3(0,5,0));
 	Spawn(character);
 	
 	auto camera = make_shared<CameraEntity>(character);
-	camera->transform()->LocalTranslateDelta(vector3(0,0,0));
+	camera->Transform()->LocalTranslateDelta(vector3(0,0,0));
 	Spawn(camera);
 	
 	auto im = App::inputManager = make_shared<InputManager>();

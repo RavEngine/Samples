@@ -31,7 +31,7 @@ struct StaticMeshEntity : public Entity {
 		EmplaceComponent<SpinComponent>();
 		EmplaceComponent<ObjectMarker>();
 		constexpr float dist = 1.0;
-		transform()->LocalTranslateDelta(vector3(Random::get(-dist,dist), Random::get(-dist, dist), Random::get(-dist, dist)));
+		Transform()->LocalTranslateDelta(vector3(Random::get(-dist,dist), Random::get(-dist, dist), Random::get(-dist, dist)));
 	}
 };
 
@@ -49,7 +49,7 @@ void Level::OnActivate() {
 	// load camera and lights
 	auto camera = make_shared<Entity>();
 	camera->EmplaceComponent<CameraComponent>()->SetActive(true);
-	camera->transform()->LocalTranslateDelta(vector3(0, 0.5, 2));
+	camera->Transform()->LocalTranslateDelta(vector3(0, 0.5, 2));
 
 	// GUI
 	auto g = camera->EmplaceComponent<GUIComponent>();
@@ -96,7 +96,7 @@ void Level::OnActivate() {
 
 	auto lights = make_shared<Entity>();
 	lights->EmplaceComponent<AmbientLight>()->Intensity = 0.1;
-	lights->transform()->LocalRotateDelta(vector3(0,glm::radians(-30.f),glm::radians(45.f)));
+	lights->Transform()->LocalRotateDelta(vector3(0,glm::radians(-30.f),glm::radians(45.f)));
 	
 	Spawn(camera);
 	Spawn(lights);

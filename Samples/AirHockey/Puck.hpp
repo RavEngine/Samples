@@ -54,9 +54,9 @@ public:
 		light->color = {0,0,1,1};
 		light->Intensity = 2;
 		
-		transform()->AddChild(lightEntity->transform());
+		Transform()->AddChild(lightEntity->Transform());
 		
-		lightEntity->transform()->LocalTranslateDelta(vector3(0,1,0));
+		lightEntity->Transform()->LocalTranslateDelta(vector3(0,1,0));
 		
         EmplaceComponent<PuckComponent>();
 		

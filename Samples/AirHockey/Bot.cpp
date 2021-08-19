@@ -17,13 +17,13 @@ void BotPlayer::Tick(float scale){
 	//find the closest puck to the goal
 	
 	Ref<Entity> closestPuck(static_pointer_cast<PuckComponent>(*pucks.begin())->GetOwner());
-	auto worldpos = Ref<Entity>(GetOwner())->transform()->GetWorldPosition();
+	auto worldpos = Ref<Entity>(GetOwner())->Transform()->GetWorldPosition();
 	float closestDist = 1000;
 	for(auto puck : pucks){
         auto p = static_pointer_cast<PuckComponent>(puck);
 		Ref<Entity> e(p->GetOwner());
 		
-		auto dist = glm::distance(e->transform()->GetWorldPosition(), goalpos);
+		auto dist = glm::distance(e->Transform()->GetWorldPosition(), goalpos);
 		if (dist <= closestDist){
 			closestDist = dist;
 			closestPuck = e;
@@ -31,7 +31,7 @@ void BotPlayer::Tick(float scale){
 	}
 	
 	//if puck is on bot's side of the field, move towards that puck
-	auto pos = closestPuck->transform()->GetWorldPosition();
+	auto pos = closestPuck->Transform()->GetWorldPosition();
 	
 	bool shouldChase = (!leftSide && pos.z < 0) || (leftSide && pos.z >= 0);
 	

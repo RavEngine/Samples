@@ -11,7 +11,7 @@ void NetTransform::UpdateTransform(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 	itr->mtx.lock();
 	std::optional<RawVec3> td;
 	if ((td = upk.Get<RawVec3>())) {
-		auto currentpos = owner->transform()->GetLocalPosition();
+		auto currentpos = owner->Transform()->GetLocalPosition();
 		RavEngine::Debug::Assert(!std::isnan(currentpos.x), "CurrentPos was NaN!");
 		RavEngine::Debug::Assert(!std::isnan(td.value()[0]), "NetworkPos was NaN!");
 		// create the tween
@@ -20,20 +20,20 @@ void NetTransform::UpdateTransform(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 			if (isnan(x) || isnan(y) || isnan(z)) {		//sometimes the value is NaN???
 				return;
 			}
-			owner->transform()->SetLocalPosition(vector3(x, y, z));
+			owner->Transform()->SetLocalPosition(vector3(x, y, z));
 			}, currentpos.x, currentpos.y, currentpos.z);
 		auto t = td.value();
 		itr->translate.AddKeyframe(0.1, RavEngine::TweenCurves::LinearCurve, t[0], t[1], t[2]);
 	}
 	std::optional<RawQuat> qd;
 	if ((qd = upk.Get<RawQuat>())) {
-		auto currentRot = owner->transform()->GetLocalRotation();
+		auto currentRot = owner->Transform()->GetLocalRotation();
 
 		itr->rotate = decltype(itr->rotate)([=](decimalType w, decimalType x, decimalType y, decimalType z) {
 			if (isnan(w) || isnan(x) || isnan(y) || isnan(z)) {
 				return;
 			}
-			owner->transform()->SetLocalRotation(quaternion(w, x, y, z));
+			owner->Transform()->SetLocalRotation(quaternion(w, x, y, z));
 			}, currentRot.w, currentRot.x, currentRot.y, currentRot.z);
 		auto r = qd.value();
 		itr->rotate.AddKeyframe(0.1, RavEngine::TweenCurves::LinearCurve, r[0], r[1], r[2], r[3]);
