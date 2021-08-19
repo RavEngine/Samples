@@ -23,21 +23,21 @@ public:
 	}
 
 	void MoveForward(float amt) {
-		Transform()->LocalTranslateDelta(scaleMovement(amt) * Transform()->Forward());
+		GetTransform()->LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Forward());
 	}
 	void MoveRight(float amt) {
-		Transform()->LocalTranslateDelta(scaleMovement(amt) * Transform()->Right());
+		GetTransform()->LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Right());
 	}
 
 	void MoveUp(float amt) {
-		Transform()->LocalTranslateDelta(scaleMovement(amt) * Transform()->Up());
+		GetTransform()->LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Up());
 	}
 
 	void LookUp(float amt) {
 		cameraEntity->transform()->LocalRotateDelta(vector3(scaleRotation(amt), 0, 0));
 	}
 	void LookRight(float amt) {
-		Transform()->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
+		GetTransform()->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
 	}
 
 	virtual void Tick(float scale) override{

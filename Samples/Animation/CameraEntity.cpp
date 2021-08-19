@@ -17,7 +17,7 @@ struct CameraScript : public RavEngine::ScriptComponent {
 	void Tick(float fpsScale) final{
 		// where is the player? we should accelerate towards this position
 		auto targetTransform = target->GetTransform();
-		auto thisTransform = Transform();
+		auto thisTransform = GetTransform();
 		auto dirvec = (thisTransform->GetWorldPosition() - targetTransform->GetWorldPosition()) * static_cast<double>(fpsScale) * -1.0;
 		
 		// if we are close, we should decelerate / accelerate smoothly
@@ -27,8 +27,8 @@ struct CameraScript : public RavEngine::ScriptComponent {
 		thisTransform->WorldTranslateDelta(dirvec);
 		
 		// which way is the player facing? we want to rotate to be behind them
-		auto facingRot = glm::quatLookAt(targetTransform->WorldForward(), Transform()->WorldUp());
-		Transform()->SetWorldRotation(glm::slerp(Transform()->GetWorldRotation(), facingRot, 0.01 * fpsScale));
+		auto facingRot = glm::quatLookAt(targetTransform->WorldForward(), GetTransform()->WorldUp());
+		GetTransform()->SetWorldRotation(glm::slerp(GetTransform()->GetWorldRotation(), facingRot, 0.01 * fpsScale));
 		
 		// which way is the player moving? we want to swivel to a point ahead of them so they can see more easily
 		

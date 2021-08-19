@@ -83,8 +83,8 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 				}
 			}
 		}
-		if (Transform()->GetWorldPosition().y < -10) {
-			Transform()->SetWorldPosition(vector3(0, 5, 0));
+		if (GetTransform()->GetWorldPosition().y < -10) {
+			GetTransform()->SetWorldPosition(vector3(0, 5, 0));
 		}
 	}
 
@@ -103,8 +103,8 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 				rigidBody->AddForce(dir * 5.0);
 			}
 			// face direction
-			auto rot = glm::quatLookAt(dir, Transform()->WorldUp());
-			Transform()->SetWorldRotation(glm::slerp(Transform()->GetWorldRotation(), rot, 0.2));
+			auto rot = glm::quatLookAt(dir, GetTransform()->WorldUp());
+			GetTransform()->SetWorldRotation(glm::slerp(GetTransform()->GetWorldRotation(), rot, 0.2));
 		}
 	}
 
@@ -135,7 +135,7 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
 	{
 		if (other.lock()->filterGroup & FilterLayers::L0) {	// we use filter layer 0 to mark ground
-			auto worldpos = Transform()->GetWorldPosition();
+			auto worldpos = GetTransform()->GetWorldPosition();
 			// is this contact point underneath the character?
 			for (int i = 0; i < numContactPoints; i++) {
 				auto diff = worldpos.y - contactPoints[i].position.y;

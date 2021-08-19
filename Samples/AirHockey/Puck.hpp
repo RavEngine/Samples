@@ -24,7 +24,7 @@ struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::IPhysic
 	};
 	void Tick(float scale) override{}
 	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) override{
-		GetWorld()->PlaySound(RavEngine::InstantaneousAudioSource(sounds[std::rand() % 4],Transform()->GetWorldPosition(),3));
+		GetWorld()->PlaySound(RavEngine::InstantaneousAudioSource(sounds[std::rand() % 4],GetTransform()->GetWorldPosition(),3));
 	}
 };
 

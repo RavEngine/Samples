@@ -74,11 +74,11 @@ TestEntity::TestEntity(const uuids::uuid& uuid) : Entity(){
 
 void TestEntityController::Tick(float scale) {
 
-    if (Transform()->GetWorldPosition().y < -40) {
+    if (GetTransform()->GetWorldPosition().y < -40) {
         Destroy();
         objectcount--;
     }
-	my_x = Transform()->GetWorldPosition().x;
+	my_x = GetTransform()->GetWorldPosition().x;
 }
 
 void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
@@ -93,6 +93,6 @@ void TestEntityController::OnColliderExit(const WeakRef<PhysicsBodyComponent>& o
 }
 
 void TestEntityController::Start(){
-	Transform()->SetWorldPosition(vector3(rand()%10-5,rand()%10-5,rand()%10-5));
+	GetTransform()->SetWorldPosition(vector3(rand()%10-5,rand()%10-5,rand()%10-5));
     objectcount++;
 }
