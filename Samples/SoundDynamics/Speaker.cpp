@@ -1,5 +1,6 @@
 #include "Speaker.hpp"
 #include <RavEngine/StaticMesh.hpp>
+#include <RavEngine/ChildEntityComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -9,7 +10,12 @@ STATIC(Speaker::speakerInstance);
 
 Speaker::Speaker(Ref<AudioAsset> a) {
 	// audio source
-	auto audio = EmplaceComponent<RavEngine::AudioSourceComponent>(a);
+	auto sourceEntity = make_shared<Entity>();
+	EmplaceComponent<ChildEntityComponent>(sourceEntity);
+	auto audio = sourceEntity->EmplaceComponent<RavEngine::AudioSourceComponent>(a);
+
+	GetTransform()->AddChild(sourceEntity->GetTransform());
+	sourceEntity->GetTransform()->LocalTranslateDelta(vector3(0, 3, 0));
 
 	// mesh
 	if (!speakerMesh) {

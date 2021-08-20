@@ -3,3 +3,4 @@ build/
 *.vscode
 deps/physx/physx/include/PxConfig.h
 Testing/
+.mayaSwatches
