@@ -69,7 +69,7 @@ void Level::SetupInputs(){
 	auto physmat = make_shared<PhysicsMaterial>(0.5, 0.5, 0);
 	{
 		auto floorplane = make_shared<RavEngine::Entity>();
-		Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("level_walkable.obj", 1.0, true);
+		Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("level.fbx", "ground", 1.5, true);
 		material->SetAlbedoColor({ 174.0 / 255,210.0 / 255,234.0 / 255,1 });
 		floorplane->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
 		floorplane->EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
@@ -79,36 +79,13 @@ void Level::SetupInputs(){
 
 	// load the walls
 	auto walls = make_shared<Entity>();
-	Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("level_walls.obj", 1.0, true);
+	Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("level.fbx", "walls", 1.5, true);
 	walls->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
 	walls->EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls
 	walls->EmplaceComponent<MeshCollider>(sharedMesh, physmat);
 	Spawn(walls);
 
 	InitPhysics();
-
-//	SceneLoader loader("sceneloader.fbx");
-//
-//	phmap::flat_hash_map<std::string_view, Ref<MeshAsset>> name2Asset;
-//	loader.LoadMeshes([&](const PreloadedAsset& pr) -> bool {
-//		// we want to load all meshes in this case
-//		return true;
-//
-//	}, [&](Ref<MeshAsset> rm, const PreloadedAsset& pr) {
-//		name2Asset[pr.name] = rm;
-//	});
-//
-//	loader.LoadLocators([&](const Locator& locator) {
-//		// is this the node for a mesh?
-//		if (name2Asset.contains(locator.name)) {
-//			auto entity = make_shared<Entity>();
-//			entity->EmplaceComponent<StaticMesh>(name2Asset.at(locator.name), material);
-//			entity->transform()->SetWorldPosition(locator.translate);
-//			entity->transform()->SetWorldRotation(locator.rotation);
-//			entity->transform()->SetLocalScale(locator.scale);
-//			Spawn(entity);
-//		}
-//	});
 }
 
 void Level::PostTick(float)

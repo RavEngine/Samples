@@ -2,6 +2,7 @@
 #include <RavEngine/AudioRoom.hpp>
 #include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/StaticMesh.hpp>
+#include <RavEngine/SceneLoader.hpp>
 
 using namespace std;
 using namespace RavEngine;
@@ -11,14 +12,20 @@ Stage::Stage() {
 
 	auto audioRoom = roomEntity->EmplaceComponent<AudioRoom>();
 	audioRoom->SetRoomDimensions(vector3(20, 10, 20));
-	roomEntity->GetTransform()->LocalTranslateDelta(vector3(0,audioRoom->GetRoomDimensions().y/2,0));
 
 	EmplaceComponent<ChildEntityComponent>(roomEntity);
 	GetTransform()->AddChild(roomEntity->GetTransform());
 
 	// load room
-	auto roomMesh = make_shared<MeshAsset>("room.obj");
-	EmplaceComponent<StaticMesh>(roomMesh, make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
+	SceneLoader loader("room.fbx");
+	loader.LoadMeshes([&](const PreloadedAsset& pr) -> bool {
+		// we want to load all meshes in this case
+		return true;
+
+	}, [&](Ref<MeshAsset> rm, const PreloadedAsset& pr) {
+		EmplaceComponent<StaticMesh>(rm, make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
+	});
+	GetTransform()->LocalTranslateDelta(vector3(0,audioRoom->GetRoomDimensions().y / 2,0));
 
 	struct RoomDebugRenderer : public IDebugRenderer {
 		void DrawDebug(RavEngine::DebugDraw& dbg) const override {
