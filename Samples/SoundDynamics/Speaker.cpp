@@ -24,6 +24,8 @@ Speaker::Speaker(Ref<AudioAsset> a) {
 
 	if (!speakerInstance) {
 		speakerInstance = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		auto texture = make_shared<Texture>("speaker.png");
+		speakerInstance->SetAlbedoTexture(texture);
 	}
 	audio->Play();
 	EmplaceComponent<StaticMesh>(speakerMesh,speakerInstance);
