@@ -16,6 +16,15 @@ Stage::Stage() {
 	EmplaceComponent<ChildEntityComponent>(roomEntity);
 	GetTransform()->AddChild(roomEntity->GetTransform());
 
+	std::array<string_view, 6> faceOrder{
+		"wall_negx",
+		"wall_posx",
+		"floor",
+		"ceiling",
+		"wall_negz",
+		"wall_posz"
+	};
+
 	// load room
 	SceneLoader loader("room.fbx");
 	loader.LoadMeshes([&](const PreloadedAsset& pr) -> bool {
@@ -23,7 +32,10 @@ Stage::Stage() {
 		return true;
 
 	}, [&](Ref<MeshAsset> rm, const PreloadedAsset& pr) {
-		EmplaceComponent<StaticMesh>(rm, make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
+		auto pos = std::distance(faceOrder.begin(),std::find(faceOrder.begin(), faceOrder.end(), pr.name));
+		auto inst = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		EmplaceComponent<StaticMesh>(rm, inst);
+		wallMaterials[pos] = inst;
 	});
 	GetTransform()->LocalTranslateDelta(vector3(0,audioRoom->GetRoomDimensions().y / 2,0));
 

@@ -5,6 +5,7 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/AudioRoom.hpp>
+#include <filesystem>
 
 using namespace RavEngine;
 using namespace std;
@@ -68,6 +69,11 @@ void Level::OnActivate() {
 		"Uniform"
 	};
 
+	wallTextures.reserve(RoomMat::kNumMaterialNames);
+	App::Resources->IterateDirectory("textures", [&](const string& file) {
+		Debug::Log("{}", file);
+	});
+
 	for (int i = 0; i < 6; i++) {
 		auto sel = doc->CreateElement("select");
 		
@@ -89,6 +95,7 @@ void Level::OnActivate() {
 			void ProcessEvent(Rml::Event& evt) final {
 				auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
 				room->WallMaterials()[roomFace] = static_cast<RoomMat>(selbox->GetSelection());
+
 			}
 		};
 
@@ -118,12 +125,17 @@ void Level::OnActivate() {
 	musicsel->AddEventListener(Rml::EventId::Change, new MusicChangeEventListener(static_pointer_cast<Level>(shared_from_this())));
 	
 	// load audio & initialize music selector
-	for (const auto& track : { "The Entertainer.mp3" , "Aquarium.mp3", "String Impromptu Number 1.mp3", "Danse Macabre.mp3"}) {
-		tracks.push_back(make_shared<AudioAsset>(track));
-		auto opt = doc->CreateElement("option");
-		opt->SetInnerRML(track);
-		musicsel->AppendChild(std::move(opt));
-	}
+	App::Resources->IterateDirectory("sounds", [&](const string& track) {
+		auto path = std::filesystem::path(track);
+		if (path.extension() == ".mp3") {
+			auto leaf_name = path.filename();
+			tracks.push_back(make_shared<AudioAsset>(leaf_name.string()));
+			auto opt = doc->CreateElement("option");
+			opt->SetInnerRML(leaf_name.string());
+			musicsel->AppendChild(std::move(opt));
+		}
+	});
+
 	// auto select first
 	auto firstopt = musicsel->QuerySelector("option");
 	firstopt->SetAttribute("selected", true);
