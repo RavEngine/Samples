@@ -1,0 +1,17 @@
+<rml>
+    <head>
+        <link type="text/rcss" href="default.rcss"></link>
+        <style>
+         
+        </style>
+    </head>
+    <body>
+        <main>
+            <p id="diag"></p>
+            <br></br>
+            <p id="materials">
+            
+            </p>
+        </main>
+    </body>
+</rml>

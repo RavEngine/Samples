@@ -11,6 +11,11 @@ struct Speaker : public RavEngine::Entity {
 	static Ref<RavEngine::PBRMaterialInstance> speakerInstance;
 };
 
+namespace RavEngine {
+	struct AudioRoom;
+}
+
 struct Stage : public RavEngine::Entity {
 	Stage();
+	Ref<RavEngine::AudioRoom> GetRoom();
 };
