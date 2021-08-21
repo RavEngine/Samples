@@ -30,18 +30,6 @@ void Level::OnActivate() {
 	auto stage = make_shared<Stage>();
 	Spawn(stage);
 
-	// load audio
-	auto audio = make_shared<AudioAsset>("The Entertainer.mp3");
-
-	// create speakers
-	auto speaker1 = make_shared<Speaker>(audio);
-	speaker1->GetTransform()->LocalTranslateDelta(vector3(5,0,-2));
-	Spawn(speaker1);
-
-	/*auto speaker2 = make_shared<Speaker>(audio);
-	speaker2->GetTransform()->LocalTranslateDelta(vector3(0, 0, 2));
-	Spawn(speaker2);*/
-
 	// create player 
 	auto player = make_shared<Player>();
 	Spawn(player);
@@ -93,22 +81,61 @@ void Level::OnActivate() {
 		}
 
 		// change event listener
-		struct SelectionEventListener : public Rml::EventListener {
+		struct WallMaterialChangeEventListener : public Rml::EventListener {
 			uint8 roomFace;
 			Ref<AudioRoom> room;
-			SelectionEventListener(decltype(roomFace) rf, decltype(room) room) : roomFace(rf), room(room){}
+			WallMaterialChangeEventListener(decltype(roomFace) rf, decltype(room) room) : roomFace(rf), room(room){}
 
-			void ProcessEvent(Rml::Event& evt) override {
+			void ProcessEvent(Rml::Event& evt) final {
 				auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
 				room->WallMaterials()[roomFace] = static_cast<RoomMat>(selbox->GetSelection());
 			}
 		};
 
-		sel->AddEventListener(Rml::EventId::Change, new SelectionEventListener(i,stage->GetRoom()));
+		sel->AddEventListener(Rml::EventId::Change, new WallMaterialChangeEventListener(i,stage->GetRoom()));
 
 		doc->GetElementById("materials")->AppendChild(std::move(sel));
-
 	}
+
+	struct MusicChangeEventListener : public Rml::EventListener {
+		WeakRef<Level> world;
+
+		MusicChangeEventListener(decltype(world) world) : world(world) {}
+
+		void ProcessEvent(Rml::Event& evt) final {
+			if (auto owning = world.lock()) {
+				auto sources = owning->GetAllComponentsOfType<AudioSourceComponent>();
+				auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
+				for (const auto& source : sources) {
+					auto player = static_pointer_cast<AudioSourceComponent>(source);
+					player->SetAudio(owning->tracks[selbox->GetSelection()]);
+					player->Restart();
+				}
+			}
+		}
+	};
+	auto musicsel = doc->GetElementById("music");
+	musicsel->AddEventListener(Rml::EventId::Change, new MusicChangeEventListener(static_pointer_cast<Level>(shared_from_this())));
+	
+	// load audio & initialize music selector
+	for (const auto& track : { "The Entertainer.mp3" , "Aquarium.mp3", "String Impromptu Number 1.mp3", "Danse Macabre.mp3"}) {
+		tracks.push_back(make_shared<AudioAsset>(track));
+		auto opt = doc->CreateElement("option");
+		opt->SetInnerRML(track);
+		musicsel->AppendChild(std::move(opt));
+	}
+	// auto select first
+	auto firstopt = musicsel->QuerySelector("option");
+	firstopt->SetAttribute("selected", true);
+
+	// create speakers
+	auto speaker1 = make_shared<Speaker>(tracks[0]);
+	speaker1->GetTransform()->LocalTranslateDelta(vector3(5, 0, -2));
+	Spawn(speaker1);
+
+	/*auto speaker2 = make_shared<Speaker>(tracks[0]);
+	speaker2->GetTransform()->LocalTranslateDelta(vector3(0, 0, 2));
+	Spawn(speaker2);*/
 
 	// setup inputs
 	auto im = App::inputManager = make_shared<InputManager>();

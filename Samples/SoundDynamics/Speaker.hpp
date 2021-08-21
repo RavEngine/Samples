@@ -9,6 +9,7 @@ struct Speaker : public RavEngine::Entity {
 
 	static Ref<RavEngine::MeshAsset> speakerMesh;
 	static Ref<RavEngine::PBRMaterialInstance> speakerInstance;
+
 };
 
 namespace RavEngine {

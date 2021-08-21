@@ -7,11 +7,17 @@
     </head>
     <body>
         <main>
-            <p id="diag"></p>
-            <br></br>
-            <p id="materials">
-            
-            </p>
+          <p id="diag"></p>
+          <p id="materials">
+            Select Wall Materials
+            <br />
+          </p>
+          <p>
+            Select Music
+            <br />
+            <select id="music">
+            </select>
+          </p>
         </main>
     </body>
 </rml>
