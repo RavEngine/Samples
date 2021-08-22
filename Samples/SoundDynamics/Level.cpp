@@ -69,9 +69,20 @@ void Level::OnActivate() {
 		"Uniform"
 	};
 
-	wallTextures.reserve(RoomMat::kNumMaterialNames);
+	wallTextures[0] = TextureManager::defaultTexture;
+	wallTextures[23] = TextureManager::defaultTexture;
 	App::Resources->IterateDirectory("textures", [&](const string& file) {
-		Debug::Log("{}", file);
+		auto name = std::filesystem::path(file).filename();
+		auto tex = make_shared<Texture>(name.string());
+		auto pos = std::distance(names.begin(), std::find(names.begin(), names.end(), name.replace_extension("").string()));
+
+		if (pos != 24) {
+			wallTextures[pos] = tex;
+		}
+		else {
+			Debug::Warning("Skipped texture {}", file);
+		}
+
 	});
 
 	for (int i = 0; i < 6; i++) {
@@ -90,16 +101,21 @@ void Level::OnActivate() {
 		struct WallMaterialChangeEventListener : public Rml::EventListener {
 			uint8 roomFace;
 			Ref<AudioRoom> room;
-			WallMaterialChangeEventListener(decltype(roomFace) rf, decltype(room) room) : roomFace(rf), room(room){}
+			Ref<Stage> stage;
+			WallMaterialChangeEventListener(decltype(roomFace) rf, decltype(room) room, decltype(stage) stage) : stage(stage), roomFace(rf), room(room){}
 
 			void ProcessEvent(Rml::Event& evt) final {
 				auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
 				room->WallMaterials()[roomFace] = static_cast<RoomMat>(selbox->GetSelection());
-
+				auto owner = room->GetOwner().lock();
+				auto world = static_pointer_cast<Level>(owner->GetWorld().lock());
+				auto material = stage->wallMaterials[roomFace];
+				auto tex = world->wallTextures[selbox->GetSelection()];
+				material->SetAlbedoTexture(tex);
 			}
 		};
 
-		sel->AddEventListener(Rml::EventId::Change, new WallMaterialChangeEventListener(i,stage->GetRoom()));
+		sel->AddEventListener(Rml::EventId::Change, new WallMaterialChangeEventListener(i,stage->GetRoom(),stage));
 
 		doc->GetElementById("materials")->AppendChild(std::move(sel));
 	}

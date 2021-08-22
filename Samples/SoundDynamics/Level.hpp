@@ -8,5 +8,5 @@ struct Level : public RavEngine::World {
 	void OnActivate() final;
 	Level();
 	std::vector<Ref<RavEngine::AudioAsset>> tracks;
-	std::vector<Ref<RavEngine::Texture>> wallTextures;
+	std::array<Ref<RavEngine::Texture>,24> wallTextures;
 };
