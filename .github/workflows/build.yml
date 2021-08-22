@@ -13,14 +13,14 @@ jobs:
       - name: Install Dependencies
         run: sudo apt-get update && sudo apt-get install cmake clang ninja-build libgl1-mesa-dev libasound2-dev -y --no-install-recommends 
       - name: Build
-        run: mkdir -p build; cd build; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release .. && cmake --build . --config release --target install 
+        run: mkdir -p build; mkdir -p build/linux; cd build/linux; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build . --config release --target install 
       - name: Compress Samples
-        run: cd build/Release && zip -r -9 RavEngine_Samples_Linux64.zip *.AppImage
+        run: cd build/linux/Release && zip -r -9 RavEngine_Samples_Linux64.zip *.AppImage
       - name: Archive and upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name:  RavEngine_Samples_linux64
-          path:  build/Release/RavEngine_Samples_Linux64.zip
+          path:  build/linux/Release/RavEngine_Samples_Linux64.zip
 
   build-mac:
     name: Build Samples for macOS
