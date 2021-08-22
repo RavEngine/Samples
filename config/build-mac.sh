@@ -1,3 +1,3 @@
 ./init-mac.sh
-cd build/mac;
+cd ../build/mac
 cmake --build . --config release --target install
