@@ -34,7 +34,7 @@ public:
 	}
 
 	void LookUp(float amt) {
-		cameraEntity->transform()->LocalRotateDelta(vector3(scaleRotation(amt), 0, 0));
+		cameraEntity->GetTransform()->LocalRotateDelta(vector3(scaleRotation(amt), 0, 0));
 	}
 	void LookRight(float amt) {
 		GetTransform()->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
@@ -43,9 +43,9 @@ public:
 	virtual void Tick(float scale) override{
 		dt = scale;
 		//prevent camera from flipping over
-		vector3 rotation = glm::eulerAngles(cameraEntity->transform()->GetLocalRotation());
+		vector3 rotation = glm::eulerAngles(cameraEntity->GetTransform()->GetLocalRotation());
 		rotation.x = std::clamp(rotation.x, -RavEngine::PI/2.0, RavEngine::PI /2.0);
-		cameraEntity->transform()->SetLocalRotation(rotation);
+		cameraEntity->GetTransform()->SetLocalRotation(rotation);
 	}
 };
 
@@ -63,7 +63,7 @@ public:
 		//set the active camera
 		cam->SetActive(true);
 		
-		transform()->AddChild(cameraEntity->transform());
+		GetTransform()->AddChild(cameraEntity->GetTransform());
         EmplaceComponent<RavEngine::ChildEntityComponent>(cameraEntity);
 		
 		EmplaceComponent<RavEngine::AudioListener>();

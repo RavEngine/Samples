@@ -145,10 +145,10 @@ void TestWorld::SetupInputs(){
 	anonymousChild->EmplaceComponent<PointLight>()->Intensity = 4;
 	anonymousChild->EmplaceComponent<RigidBodyStaticComponent>();
 	anonymousChild->EmplaceComponent<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5));
-	auto audioAsset = std::make_shared<RavEngine::AudioAsset>("creative2-3.ogg",2);
+	//auto audioAsset = std::make_shared<RavEngine::AudioAsset>("creative2-3.ogg",2);
 	//auto audiosource = anonymousChild->EmplaceComponent<RavEngine::AmbientAudioSourceComponent>(audioAsset);
 	// PlaySound(InstantaneousAudioSource(audioAsset,vector3(0,0,0),2));
-	PlayAmbientSound(InstantaneousAmbientAudioSource(audioAsset));
+	//PlayAmbientSound(InstantaneousAmbientAudioSource(audioAsset));
 	Spawn(anonymousChild);
 	
 	floorplane = make_shared<RavEngine::Entity>();
