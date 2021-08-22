@@ -78,12 +78,12 @@ function (add_sample sample_dir)
 		)
     elseif(LINUX)
         INSTALL(CODE 
-			"include(../appimage.cmake)
+			"include(../../appimage.cmake)
 			make_appimage(
                 EXE \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}\"
                 NAME \"${APPNAME}\"
-                ICON \"../logo.png\"
-                DIR_ICON \"../logo.png\"
+                ICON \"../../Samples/logo.png\"
+                DIR_ICON \"../../Samples/logo.png\"
                 OUTPUT_NAME \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.AppImage\"
                 ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.zip\"
             )
