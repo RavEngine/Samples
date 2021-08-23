@@ -161,9 +161,9 @@ void Level::OnActivate() {
 	speaker1->GetTransform()->LocalTranslateDelta(vector3(5, 0, -2));
 	Spawn(speaker1);
 
-	/*auto speaker2 = make_shared<Speaker>(tracks[0]);
-	speaker2->GetTransform()->LocalTranslateDelta(vector3(0, 0, 2));
-	Spawn(speaker2);*/
+	auto speaker2 = make_shared<Speaker>(tracks[0]);
+	speaker2->GetTransform()->LocalTranslateDelta(vector3(5, 0, 2));
+	Spawn(speaker2);
 
 	// setup inputs
 	auto im = App::inputManager = make_shared<InputManager>();
