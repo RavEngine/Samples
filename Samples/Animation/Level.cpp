@@ -65,7 +65,7 @@ void Level::SetupInputs(){
 	im->BindAction(InputNames::Pound, character, &Character::Pound, ActionState::Pressed, CID::ANY);
 
 	// load the game level
-	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	auto physmat = make_shared<PhysicsMaterial>(0.5, 0.5, 0);
 	{
 		auto floorplane = make_shared<RavEngine::Entity>();

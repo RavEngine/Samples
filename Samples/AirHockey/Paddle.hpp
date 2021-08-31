@@ -10,9 +10,9 @@
 class Paddle : public RavEngine::Entity{
 public:
 	Paddle(const RavEngine::ColorRGBA& color){
-		auto mesh = EmplaceComponent<RavEngine::StaticMesh>(std::make_shared<RavEngine::MeshAsset>("HockeyPaddle.obj",0.5));
+        auto mesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetMesh("HockeyPaddle.obj",0.5));
 		
-		Ref<RavEngine::PBRMaterialInstance> material = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
+		Ref<RavEngine::PBRMaterialInstance> material = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
 		material->SetAlbedoColor(color);
 		mesh->SetMaterial(material);
 		

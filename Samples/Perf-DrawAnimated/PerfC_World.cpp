@@ -75,10 +75,10 @@ struct DemoObject : public RavEngine::Entity{
 };
 
 void PerfC_World::OnActivate(){
-	meshes[0] = make_shared<MeshAsset>("cube.obj");
-	meshes[1] = make_shared<MeshAsset>("sphere.obj");
-	meshes[2] = make_shared<MeshAsset>("cone.obj");
-	meshes[3] = make_shared<MeshAsset>("cylinder.obj");
+	meshes[0] = MeshAsset::Manager::GetMesh("cube.obj");
+	meshes[1] = MeshAsset::Manager::GetMesh("sphere.obj");
+	meshes[2] = MeshAsset::Manager::GetMesh("cone.obj");
+	meshes[3] = MeshAsset::Manager::GetMesh("cylinder.obj");
 	
 	Ref<Camera> cam = make_shared<Camera>();
 	
@@ -101,7 +101,7 @@ void PerfC_World::OnActivate(){
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
 		textures[i] = make_shared<Texture>(StrFormat("tx{}.png",i+1));
-		materialInstances[i] = make_shared<DemoMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		materialInstances[i] = make_shared<DemoMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 		materialInstances[i]->SetAlbedoTexture(textures[i]);
 			}
 	

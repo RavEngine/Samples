@@ -30,7 +30,6 @@ struct MoveEntities : public RavEngine::AutoCTTI {
 struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable {
 
 	static Ref<RavEngine::PBRMaterialInstance> matinst;
-	static Ref<RavEngine::MeshAsset> mesh;
 
 	inline void CommonInit() {
 		auto rpc = EmplaceComponent<RavEngine::RPCComponent>();
@@ -39,13 +38,10 @@ struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable
 		rpc->RegisterClientRPC(RavEngine::to_underlying(RPCs::UpdateTransform), rpccomp, &NetTransform::UpdateTransform);
 
 		if (!matinst) {
-			matinst = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
-		}
-		if (!mesh) {
-			mesh = std::make_shared<RavEngine::MeshAsset>("cube.obj",0.1);
+			matinst = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
 		}
 
-		EmplaceComponent<RavEngine::StaticMesh>(mesh, matinst);
+		EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetMesh("cube.obj",0.1), matinst);
 		EmplaceComponent<InterpolationTransform>();
 	}
 

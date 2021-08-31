@@ -5,7 +5,6 @@
 using namespace RavEngine;
 using namespace std;
 
-STATIC(Speaker::speakerMesh);
 STATIC(Speaker::speakerInstance);
 
 Speaker::Speaker(Ref<AudioAsset> a) {
@@ -17,16 +16,11 @@ Speaker::Speaker(Ref<AudioAsset> a) {
 	GetTransform()->AddChild(sourceEntity->GetTransform());
 	sourceEntity->GetTransform()->LocalTranslateDelta(vector3(0, 3, 0));
 
-	// mesh
-	if (!speakerMesh) {
-		speakerMesh = make_shared<MeshAsset>("speaker.obj",true);
-	}
-
 	if (!speakerInstance) {
-		speakerInstance = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		speakerInstance = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 		auto texture = make_shared<Texture>("speaker.png");
 		speakerInstance->SetAlbedoTexture(texture);
 	}
 	audio->Play();
-	EmplaceComponent<StaticMesh>(speakerMesh,speakerInstance);
+    EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetMesh("speaker.obj"),speakerInstance);
 }

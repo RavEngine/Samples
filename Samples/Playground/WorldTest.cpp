@@ -121,12 +121,12 @@ void TestWorld::SetupInputs(){
 	Spawn(player);
 	ResetCam();
 	
-	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	
 	//	Ref<Texture> t = new Texture("youcantrun.png");
 	//	material->SetAlbedoTexture(t);
 	
-	Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("cube.obj");
+	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetMesh("cube.obj");
 	
 	anonymous = make_shared<RavEngine::Entity>();
 	anonymous->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);

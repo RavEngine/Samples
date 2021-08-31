@@ -9,8 +9,6 @@
 using namespace RavEngine;
 using namespace std;
 
-STATIC(LightEntity::lightmesh);
-
 struct SpinComponent : public RavEngine::Component, public Queryable<SpinComponent> {
 	float speed = Random::get(0.3,1.5);
 };
@@ -103,15 +101,15 @@ void Level::OnActivate() {
 
 	// load the ground plane
 	auto ground = make_shared<Entity>();
-	auto mesh = make_shared<MeshAsset>("quad.obj",1.2);
-	auto mat = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+	auto mesh = MeshAsset::Manager::GetMesh("quad.obj",1.2);
+	auto mat = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	mat->SetAlbedoColor({0.2,0.2,0.2,1.0});
 	ground->EmplaceComponent<StaticMesh>(mesh,mat);
 	Spawn(ground);
 
 	// load the stanford dragon
-	auto hmesh = make_shared<MeshAsset>("dragon_vrip.ply", 2);
-	auto hmat = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+	auto hmesh = MeshAsset::Manager::GetMesh("dragon_vrip.ply", 2);
+	auto hmat = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	
 	for (int i = 0; i < 150; i++) {
 		auto e = make_shared<StaticMeshEntity>(hmesh, hmat);

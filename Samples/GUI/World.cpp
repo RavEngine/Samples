@@ -36,8 +36,8 @@ void ::World::OnActivate(){
 	dirlight->GetTransform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
 	
 	cube = make_shared<Entity>();
-	auto cubemesh = cube->EmplaceComponent<StaticMesh>(make_shared<MeshAsset>("cube.obj"));
-	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
+	auto cubemesh = cube->EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetMesh("cube.obj"));
+	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
 	
 	Ref<Entity> gui = make_shared<Entity>();
 	auto doc = gui->EmplaceComponent<GUIComponent>();

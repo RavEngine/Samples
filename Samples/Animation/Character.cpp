@@ -178,7 +178,7 @@ Character::Character() {
 	auto pound_do_anim = make_shared<AnimationAssetSegment>(all_clips, 196, 200);
 	auto pound_end_anim = make_shared<AnimationAssetSegment>(all_clips, 201, 207);
 	auto mesh = make_shared<MeshAssetSkinned>("character_anims.dae", skeleton);
-	auto material = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+	auto material = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	material->SetAlbedoColor({1,0.4,0.2,1});
 
 	auto childEntity = make_shared<Entity>();										// I made the animation facing the wrong way
@@ -215,7 +215,7 @@ Character::Character() {
 	// the Sockets feature allows you to expose transforms at bones on an animated skeleton as though they were their own entities.
 	// this is useful for attaching an object to a character's hand, as shown below.
 	auto handEntity = make_shared<Entity>();
-	handEntity->EmplaceComponent<StaticMesh>(make_shared<MeshAsset>("cone.obj", 0.4),make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>()));
+	handEntity->EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetMesh("cone.obj", 0.4),make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
 	auto handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
 	auto handsocket = animcomp->AddSocket("characterFBXASC058hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
 

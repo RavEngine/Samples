@@ -17,13 +17,9 @@ struct CirculateSystem : public RavEngine::AutoCTTI {
 };
 
 struct LightEntity : public RavEngine::Entity {
-	static Ref<RavEngine::MeshAsset> lightmesh;
 	LightEntity() {
-		if (!lightmesh) {
-			lightmesh = std::make_shared<RavEngine::MeshAsset>("sphere.obj",0.03);
-		}
-		auto mat = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
-		EmplaceComponent<RavEngine::StaticMesh>(lightmesh,mat);
+		auto mat = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
+        EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetMesh("sphere.obj",0.03),mat);
 		auto cc = EmplaceComponent<CirculateComponent>();
 		auto light = EmplaceComponent<RavEngine::PointLight>();
 		light->Intensity = cc->radius * 1.3;

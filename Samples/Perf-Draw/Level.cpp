@@ -37,10 +37,10 @@ void PerfB_World::OnActivate() {
 	Debug::Log("Loading Assets");
 	auto matinst = make_shared<InstanceColorMatInstance>(make_shared<InstanceColorMat>());
 	currentMesh = make_shared<MeshAsset>();
-	cube = make_shared<MeshAsset>("cube.obj");
-	cone = make_shared<MeshAsset>("cone.obj");
-	sphere = make_shared<MeshAsset>("sphere.obj");
-	cylinder = make_shared<MeshAsset>("cylinder.obj");
+	cube = RavEngine::MeshAsset::Manager::GetMesh("cube.obj");
+	cone = RavEngine::MeshAsset::Manager::GetMesh("cone.obj");
+	sphere = RavEngine::MeshAsset::Manager::GetMesh("sphere.obj");
+	cylinder = RavEngine::MeshAsset::Manager::GetMesh("cylinder.obj");
 	currentMesh->Exchange(cube);
 	
 	systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));

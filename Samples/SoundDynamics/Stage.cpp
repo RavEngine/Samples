@@ -33,7 +33,7 @@ Stage::Stage() {
 
 	}, [&](Ref<MeshAsset> rm, const PreloadedAsset& pr) {
 		auto pos = std::distance(faceOrder.begin(),std::find(faceOrder.begin(), faceOrder.end(), pr.name));
-		auto inst = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		auto inst = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 		EmplaceComponent<StaticMesh>(rm, inst);
 		this->wallMaterials[pos] = inst;
 	});

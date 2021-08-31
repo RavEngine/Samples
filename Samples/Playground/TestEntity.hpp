@@ -71,7 +71,6 @@ class TestEntity : public RavEngine::Entity, public RavEngine::IPhysicsActor, pu
 protected:
     static Ref<RavEngine::PhysicsMaterial> sharedMat;
     static Ref<RavEngine::PBRMaterialInstance> sharedMatInst;
-	static Ref<RavEngine::MeshAsset> sharedMesh;
 	void CommonInit();
 public:
     TestEntity();

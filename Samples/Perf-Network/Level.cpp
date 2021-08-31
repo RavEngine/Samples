@@ -7,7 +7,6 @@ using namespace RavEngine;
 using namespace std;
 
 STATIC(NetEntity::matinst);
-STATIC(NetEntity::mesh);
 
 void Level::OnActivate() {
 

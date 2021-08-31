@@ -22,18 +22,14 @@ using namespace RavEngine;
 
 Ref<RavEngine::PhysicsMaterial> TestEntity::sharedMat;
 Ref<RavEngine::PBRMaterialInstance> TestEntity::sharedMatInst;
-Ref<MeshAsset> TestEntity::sharedMesh;
 atomic<int> TestEntityController::objectcount;
 
 void TestEntity::CommonInit(){
-	if (!sharedMesh){
-		sharedMesh = make_shared<MeshAsset>("bunny_decimated.obj");
-	}
 	
 	//default staticmesh
-	auto mesh = EmplaceComponent<StaticMesh>(sharedMesh);
+	auto mesh = EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetMesh("bunny_decimated.obj"));
 	if (!sharedMatInst) {
-		sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	}
 	mesh->SetMaterial(sharedMatInst);
 

@@ -14,8 +14,8 @@ public:
     virtual ~Table(){}
     Table(){
         //create the table
-        auto tablemesh = EmplaceComponent<RavEngine::StaticMesh>(std::make_shared<RavEngine::MeshAsset>("HockeyTable.obj"));
-        Ref<RavEngine::PBRMaterialInstance> matinst = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::AccessMaterialOfType<RavEngine::PBRMaterial>());
+        auto tablemesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetMesh("HockeyTable.obj"));
+        Ref<RavEngine::PBRMaterialInstance> matinst = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
         tablemesh->SetMaterial(matinst);
 
         //low-friction

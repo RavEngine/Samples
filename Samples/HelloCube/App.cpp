@@ -40,12 +40,12 @@ struct HelloCubeWorld : public RavEngine::World {
 		// setup inside its constructor for Unreal-style inheritance. 
 
 		// We will start by loading the cube mesh. The cube is one of the default primitives that comes with RavEngine.
-		auto cubeMesh = make_shared<MeshAsset>("cube.obj");
+		auto cubeMesh = MeshAsset::Manager::GetMesh("cube.obj");
 
 		// Next we need to define a material for the cube. We can use the default material.
 		// RavEngine can optimize your rendering for you by batching if you minimize the number of Material Instances you create,
 		// and share them wherever possible. 
-		auto cubeMat = make_shared<PBRMaterialInstance>(Material::Manager::AccessMaterialOfType<PBRMaterial>());
+		auto cubeMat = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 
 		// A StaticMesh defines a fixed (non-deforming) rendered polygon, which is perfect for our cube.
 		// Note that all StaticMeshes must have a material bound to them. A StaticMesh without a material will cause
