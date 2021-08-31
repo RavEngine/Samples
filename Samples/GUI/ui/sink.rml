@@ -18,42 +18,75 @@
 		<p id="header">
 			<span id="scoreboard">A full-width header</span>
 		</p>
-        <p>
-            <button>
-                A button
-            </button>
-            <button>
-                Another button
-            </button>
-			<input value="Type in me!"></input>
-        </p>
-		<br></br>
 		<p>
-			<label><input type="checkbox"></input>A checkbox!</label>
-		</p>
-		<p>
-			Select an option:
-			<select>
-				<option>Option 1</option>
-				<option selected>Option 2</option>
-				<option>Option 3</option>
-			</select>
-		</p>
-		<p>
-			Range slider
-			<input type="range" min=1 max=100></input>
-		</p>
-		<p>
-			Progress
-			<progress value=0.7></progress>
-		</p>
-		<p>
-			<form>
-				Radio Group<br />
-				<label><input type="radio" name="optiondemo" value="one" ></input>Radio option 1</label> <br />
-				<label><input type="radio" name="optiondemo" value="two" ></input>Radio option 2</label> <br />
-				<label><input type="radio" name="optiondemo" value="three"  checked="true"></input>Radio option 3</label>
-			</form>
+			<table>
+				<col/>
+				<colgroup>
+					<col span="2"/>
+					<col/>
+				</colgroup>
+				<thead>
+					<tr>
+						<td><u><b>Common Controls</b></u></td>
+						<td><u><b>Special Items</b></u></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="width: 50%">
+							<p>
+								<button>
+									A button
+								</button>
+								<button>
+									Another button
+								</button>
+								<input style="width:100%" value="Type in me!"></input>
+							</p>
+							<br></br>
+							<p>
+								<label><input type="checkbox"></input>A checkbox!</label>
+							</p>
+							<p>
+								Select an option:
+								<select>
+									<option>Option 1</option>
+									<option selected>Option 2</option>
+									<option>Option 3</option>
+								</select>
+							</p>
+							<p>
+								Range slider
+								<input type="range" min=1 max=100></input>
+							</p>
+							<p>
+								Progress
+								<progress value=0.7></progress>
+							</p>
+							<p>
+								<form>
+									Radio Group<br />
+									<label><input type="radio" name="optiondemo" value="one" ></input>Radio option 1</label> <br />
+									<label><input type="radio" name="optiondemo" value="two" ></input>Radio option 2</label> <br />
+									<label><input type="radio" name="optiondemo" value="three"  checked="true"></input>Radio option 3</label>
+								</form>
+							</p>
+						</td>
+						<td>
+							<p>
+								Vector graphics
+								<br />
+								<svg src="../textures/gs_tiger.svg" style="width:70%;"></svg>
+							</p>
+							<p>
+								Lottie Animations
+								<br />
+								<lottie src="deliveryfast-backlab_agency.json" style="width:70%"></lottie>
+							</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</p>
 	</body>
 </rml>
