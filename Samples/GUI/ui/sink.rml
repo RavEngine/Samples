@@ -45,7 +45,7 @@
 		</p>
 		<p>
 			Progress
-			<progressbar value=0.7></progressbar>
+			<progress value=0.7></progress>
 		</p>
 		<p>
 			<form>
