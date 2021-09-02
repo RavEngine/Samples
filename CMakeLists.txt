@@ -54,6 +54,13 @@ function (add_sample sample_dir)
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 	#set_property(TARGET "${APPNAME}" PROPERTY WIN32_EXECUTABLE FALSE) 
 
+	# UWP / Winstore deployment things
+	set(WINSTORE_MANIFEST "${CMAKE_CURRENT_LIST_DIR}/Samples/Sample.appxmanifest.in")
+	set(WINSTORE_ICONS "${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png")
+	set_property(SOURCE WINSTORE_MANIFEST PROPERTY VS_DEPLOYMENT_CONTENT 1)
+	set_property(SOURCE "${WINSTORE_ICONS}" PROPERTY VS_DEPLOYMENT_CONTENT 1)
+	set_property(SOURCE "${WINSTORE_ICONS}" PROPERTY VS_DEPLOYMENT_LOCATION "")
+
 	file(GLOB objects "${sample_dir}/objects/*.fbx" "${sample_dir}/objects/*.dae" "${sample_dir}/objects/*.ozz" "${sample_dir}/objects/*.obj", "${sample_dir}/objects/*.ply")
 	file(GLOB textures "${sample_dir}/textures/*.jpg", "${sample_dir}/textures/*.png" "${sample_dir}/textures/*.svg")
 	file(GLOB shaders "${sample_dir}/shaders/*.cmake")

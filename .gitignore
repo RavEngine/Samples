@@ -1,6 +1,7 @@
 build/
 *.DS_Store
 *.vscode
+.vs/
 deps/physx/physx/include/PxConfig.h
 Testing/
 .mayaSwatches
