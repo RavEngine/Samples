@@ -77,5 +77,5 @@ jobs:
       - name: Archive and upload artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: RavEngine_Samples_win64
+          name: RavEngine_Samples_uwp64
           path: build\uwp\RavEngine_Samples_uwp64.zip
