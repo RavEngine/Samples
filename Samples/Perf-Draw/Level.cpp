@@ -74,7 +74,7 @@ void PerfB_World::OnActivate() {
 		}
 	};
 	
-	doc->GetElementById("sel")->AddEventListener("change", new SelectionEventListener(static_pointer_cast<PerfB_World>(shared_from_this())));
+	doc->GetElementById("sel")->AddEventListener(Rml::EventId::Change, new SelectionEventListener(static_pointer_cast<PerfB_World>(shared_from_this())));
 
 	Spawn(control);
 

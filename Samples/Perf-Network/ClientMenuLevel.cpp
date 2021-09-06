@@ -35,7 +35,7 @@ void ClientMenu::OnActivate()
 		}
 
 	};
-	doc->GetElementById("gobtn")->AddEventListener("click", new ConnectEventListener(shared_from_this(),doc));
+	doc->GetElementById("gobtn")->AddEventListener(Rml::EventId::Click, new ConnectEventListener(shared_from_this(),doc));
 
 	Spawn(guientity);
 }

@@ -186,9 +186,9 @@ void PerfC_World::OnActivate(){
 	
 	auto ptr = shared_from_this();
 	
-	doc->GetElementById("pause")->AddEventListener("click", new PauseEvtListener(static_pointer_cast<PerfC_World>(ptr)));
-	doc->GetElementById("toggletex")->AddEventListener("click", new ToggleTxEvtListener(static_pointer_cast<PerfC_World>(ptr)));
-	doc->GetElementById("toggleLighting")->AddEventListener("click", new ToggleLightListener(static_pointer_cast<PerfC_World>(ptr)));
+	doc->GetElementById("pause")->AddEventListener(Rml::EventId::Click, new PauseEvtListener(static_pointer_cast<PerfC_World>(ptr)));
+	doc->GetElementById("toggletex")->AddEventListener(Rml::EventId::Click, new ToggleTxEvtListener(static_pointer_cast<PerfC_World>(ptr)));
+	doc->GetElementById("toggleLighting")->AddEventListener(Rml::EventId::Click, new ToggleLightListener(static_pointer_cast<PerfC_World>(ptr)));
 	
 	Spawn(hudentity);
 	

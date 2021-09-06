@@ -58,7 +58,7 @@ void Level::ServerUpdateGUI()
 			}
 		};
 
-		button->AddEventListener("click", new KickEventListener(con));
+		button->AddEventListener(Rml::EventId::Click, new KickEventListener(con));
 
 		textNode->AppendChild(std::move(button));
 		root->AppendChild(std::move(textNode));

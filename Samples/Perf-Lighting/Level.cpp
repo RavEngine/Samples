@@ -75,14 +75,12 @@ void Level::OnActivate() {
 				}
 				i++;
 			}
-			App::DispatchMainThread([this,world,value] {
-				world->GetComponent<GUIComponent>().value()->EnqueueUIUpdate([&] {
-						document->GetElementById("readout")->SetInnerRML(StrFormat("Number of objects: {}", value));
-					});
-			});
+            world->GetComponent<GUIComponent>().value()->EnqueueUIUpdate([=] {
+                document->GetElementById("readout")->SetInnerRML(StrFormat("Number of objects: {}", value));
+            });
 		}
 	};
-	doc->GetElementById("numobjs")->AddEventListener("change", new SliderHandler(static_pointer_cast<Level>(shared_from_this()), doc));
+	doc->GetElementById("numobjs")->AddEventListener(Rml::EventId::Change, new SliderHandler(static_pointer_cast<Level>(shared_from_this()), doc));
 
 	// inputs
 	auto im = App::inputManager = std::make_shared<RavEngine::InputManager>();

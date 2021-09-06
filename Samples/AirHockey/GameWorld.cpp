@@ -185,8 +185,8 @@ void GameWorld::GameOver(){
 			}
 		}
 	};
-	doc->GetElementById("mainmenu")->AddEventListener("click", new MenuEventListener(static_pointer_cast<GameWorld>(shared_from_this())));
-	doc->GetElementById("replay")->AddEventListener("click", new ReplayEventListener(static_pointer_cast<GameWorld>(shared_from_this())));
+	doc->GetElementById("mainmenu")->AddEventListener(Rml::EventId::Click, new MenuEventListener(static_pointer_cast<GameWorld>(shared_from_this())));
+	doc->GetElementById("replay")->AddEventListener(Rml::EventId::Click, new ReplayEventListener(static_pointer_cast<GameWorld>(shared_from_this())));
 	
 	//create a new input manager to stop game inputs and enable UI inputs
 	Ref<InputManager> im = make_shared<InputManager>();

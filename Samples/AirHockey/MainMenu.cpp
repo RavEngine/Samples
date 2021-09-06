@@ -47,10 +47,10 @@ void MainMenu::OnActivate(){
 	
 	auto ptr = shared_from_this();
 	
-	doc->GetElementById("quitbtn")->AddEventListener("click", new QuitEventListener());
-	doc->GetElementById("playsingle")->AddEventListener("click", new StartEventListener(static_pointer_cast<MainMenu>(ptr)));
-	doc->GetElementById("playmulti")->AddEventListener("click", new StartMultiplayerEventListener(static_pointer_cast<MainMenu>(ptr)));
-	doc->GetElementById("playzero")->AddEventListener("click", new StartZeroplayerEventListener(static_pointer_cast<MainMenu>(ptr)));
+	doc->GetElementById("quitbtn")->AddEventListener(Rml::EventId::Click, new QuitEventListener());
+	doc->GetElementById("playsingle")->AddEventListener(Rml::EventId::Click, new StartEventListener(static_pointer_cast<MainMenu>(ptr)));
+	doc->GetElementById("playmulti")->AddEventListener(Rml::EventId::Click, new StartMultiplayerEventListener(static_pointer_cast<MainMenu>(ptr)));
+	doc->GetElementById("playzero")->AddEventListener(Rml::EventId::Click, new StartZeroplayerEventListener(static_pointer_cast<MainMenu>(ptr)));
 	
 	
 	Spawn(mainMenu);
