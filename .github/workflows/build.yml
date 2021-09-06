@@ -14,13 +14,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install cmake clang ninja-build libgl1-mesa-dev libasound2-dev -y --no-install-recommends 
       - name: Build
         run: mkdir -p build; mkdir -p build/linux; cd build/linux; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build . --config release --target install 
-      - name: Compress Samples
-        run: cd build/linux/Release && zip -r -9 RavEngine_Samples_Linux64.zip *.AppImage
-      - name: Archive and upload artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name:  RavEngine_Samples_linux64
-          path:  build/linux/Release/RavEngine_Samples_Linux64.zip
+          path:  build/linux/Release/*.AppImage
 
   build-mac:
     name: Build Samples for macOS
@@ -32,13 +30,11 @@ jobs:
           submodules: true
       - name: Build
         run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release .. && cmake --build . --config release --target install
-      - name: Compress Samples
-        run: cd build/release && zip -r -9 RavEngine_Samples_macOS.zip *.app
-      - name: Archive and upload artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_macOS
-          path: build/release/RavEngine_Samples_macOS.zip
+          path: build/release/*.app
                 
   build-windows:
     name: Build samples for Windows
@@ -50,13 +46,13 @@ jobs:
           submodules: true
       - name: Build
         run: mkdir build; cd build; mkdir win; cd win; cmake -DCMAKE_BUILD_TYPE=Release ..\.. ; cmake ..\.. ; cmake --build . --config release --target install
-      - name: Compress Samples
-        run: cd build\win\Release ; Compress-Archive -Path .\RavEngine*.exe,.\RavEngine*.zip -DestinationPath RavEngine_Samples_win64.zip
-      - name: Archive and upload artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_win64
-          path: build\win\release\RavEngine_Samples_win64.zip
+          path: |
+                build\win\release\RavEngine*.exe 
+                build\win\release\RavEngine*.zip 
 
   build-uwp:
     name: Build samples for UWP
@@ -72,10 +68,8 @@ jobs:
         run: mkdir build; cd build; mkdir uwp; cd uwp; cmake -G "Visual Studio 16 2019" -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. ; cmake -G "Visual Studio 16 2019" -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\..;
       - name: Build & Publish
         run: cd build\uwp ; & "MSbuild.exe" "RavEngine_Samples.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x64"
-      - name: Compress Samples
-        run: cd build\uwp; Compress-Archive -Path .\AppPackages -DestinationPath RavEngine_Samples_uwp64.zip
-      - name: Archive and upload artifacts
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_uwp64
-          path: build\uwp\RavEngine_Samples_uwp64.zip
+          path: build\uwp\AppPackages
