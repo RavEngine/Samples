@@ -21,7 +21,7 @@ struct MetricsSystem : public AutoCTTI {
 	inline void Tick(float fpsScale, Ref<GUIComponent> gui) {
 		auto doc = gui->GetDocument("main.rml");
 		auto elem = doc->GetElementById("diag");
-		gui->ExclusiveAccess([&] {
+		gui->EnqueueUIUpdate([this,elem] {
 			elem->SetInnerRML(StrFormat(
 				"FPS: {} ({} ms) <br /> TPS: {} <br /> Num Entities: {}",
 				(int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime(),

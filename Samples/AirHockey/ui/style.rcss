@@ -1,6 +1,3 @@
-*{
-    font-family: Roboto;
-}
 
 tagline, gamename{
     display:block;

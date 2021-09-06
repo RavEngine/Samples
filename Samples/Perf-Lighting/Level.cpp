@@ -75,8 +75,8 @@ void Level::OnActivate() {
 				}
 				i++;
 			}
-			App::DispatchMainThread([&,world,value] {
-				world->GetComponent<GUIComponent>().value()->ExclusiveAccess([&] {
+			App::DispatchMainThread([this,world,value] {
+				world->GetComponent<GUIComponent>().value()->EnqueueUIUpdate([&] {
 						document->GetElementById("readout")->SetInnerRML(StrFormat("Number of objects: {}", value));
 					});
 			});
