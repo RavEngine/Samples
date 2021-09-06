@@ -42,6 +42,7 @@ void PerfB_World::OnActivate() {
 	sphere = RavEngine::MeshAsset::Manager::GetMesh("sphere.obj");
 	cylinder = RavEngine::MeshAsset::Manager::GetMesh("cylinder.obj");
 	currentMesh->Exchange(cube);
+    currentMesh->destroyOnDestruction = false;
 	
 	systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
 
@@ -75,7 +76,7 @@ void PerfB_World::OnActivate() {
 	};
 	
 	doc->GetElementById("sel")->AddEventListener(Rml::EventId::Change, new SelectionEventListener(static_pointer_cast<PerfB_World>(shared_from_this())));
-
+    
 	Spawn(control);
 
 	// input manager for the GUI

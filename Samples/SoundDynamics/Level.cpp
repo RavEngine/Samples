@@ -93,6 +93,7 @@ void Level::OnActivate() {
 			if (j == 0) {
 				opt->SetAttribute("selected", true);
 			}
+            opt->SetAttribute("value", StrFormat("{}",j));
 			opt->SetInnerRML(names[j]);
 			sel->AppendChild(std::move(opt));
 		}
@@ -141,16 +142,20 @@ void Level::OnActivate() {
 	musicsel->AddEventListener(Rml::EventId::Change, new MusicChangeEventListener(static_pointer_cast<Level>(shared_from_this())));
 	
 	// load audio & initialize music selector
-	App::Resources->IterateDirectory("sounds", [&](const string& track) {
-		auto path = std::filesystem::path(track);
-		if (path.extension() == ".mp3") {
-			auto leaf_name = path.filename();
-			tracks.push_back(make_shared<AudioAsset>(leaf_name.string()));
-			auto opt = doc->CreateElement("option");
-			opt->SetInnerRML(leaf_name.string());
-			musicsel->AppendChild(std::move(opt));
-		}
-	});
+    {
+        int music_id = 0;
+        App::Resources->IterateDirectory("sounds", [&](const string& track) {
+            auto path = std::filesystem::path(track);
+            if (path.extension() == ".mp3") {
+                auto leaf_name = path.filename();
+                tracks.push_back(make_shared<AudioAsset>(leaf_name.string()));
+                auto opt = doc->CreateElement("option");
+                opt->SetAttribute("value", StrFormat("{}",music_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
+                opt->SetInnerRML(leaf_name.string());
+                musicsel->AppendChild(std::move(opt));
+            }
+        });
+    }
 
 	// auto select first
 	auto firstopt = musicsel->QuerySelector("option");

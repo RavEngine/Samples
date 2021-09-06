@@ -13,11 +13,11 @@
             <br></br>
            <p>
                Select Mesh<br />
-               <select id="sel" onchange="changeevt">
-                    <option selected>Cube</option>
-                    <option>Cone</option>
-                    <option>Cylinder</option>
-                    <option>Sphere</option>
+               <select id="sel">
+                    <option value=1 selected>Cube</option>
+                    <option value=2>Cone</option>
+                    <option value=3>Cylinder</option>
+                    <option value=4>Sphere</option>
                </select>
            </p>
         </main>
