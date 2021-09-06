@@ -2,6 +2,7 @@
 #include "Objects.hpp"
 #include <RavEngine/App.hpp>
 #include <RavEngine/PhysicsLinkSystem.hpp>
+#include <FPSSystem.hpp>
 
 using namespace std;
 using namespace RavEngine;
@@ -63,7 +64,8 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 		mesh = RavEngine::MeshAsset::Manager::GetMesh("sphere.obj",1.0,true);
 	}
 	
-	int count = 500;
+    static constexpr auto total = 500;
+	int count = total;
 	
 	inline void Tick(float fpsScale, Ref<SpawnerMarker>){
 		if (count > 0){
@@ -72,9 +74,15 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 			
 			rigid->GetTransform()->LocalTranslateDelta(GenSpawnpoint());
 			rigid->GetTransform()->SetLocalScale(vector3(0.5,0.5,0.5));
-			ownWorld.lock()->Spawn(rigid);
+            auto own = ownWorld.lock();
+            own->Spawn(rigid);
 			
 			count--;
+            
+            auto guic = own->GetComponent<GUIComponent>().value();
+            guic->EnqueueUIUpdate([=]{
+                guic->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{} balls", total - count));
+            });
 		}
 	}
 };
@@ -88,6 +96,8 @@ void Level::OnActivate(){
 	camera->farClip = 1000;
 	camEntity->GetTransform()->LocalTranslateDelta(vector3(0,10*5,20*5));
 	camEntity->GetTransform()->LocalRotateDelta(vector3(glm::radians(-30.0f),0,0));
+    auto gui = camEntity->EmplaceComponent<GUIComponent>();
+    gui->AddDocument("ui.rml");
 	Spawn(camEntity);
 	
 	auto lightEntity = make_shared<Entity>();
@@ -110,4 +120,6 @@ void Level::OnActivate(){
 	systemManager.EmplaceSystem<RotationSystem>();
 	systemManager.EmplaceSystem<RespawnSystem>();
 	systemManager.EmplaceTimedSystem<SpawnerSystem>(std::chrono::milliseconds(100),static_pointer_cast<Level>(shared_from_this()) );
+    systemManager.EmplaceTimedSystem<FPSSystem>(std::chrono::seconds(1),"ui.rml","metrics");
+
 }

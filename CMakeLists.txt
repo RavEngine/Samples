@@ -26,6 +26,8 @@ project("RavEngine_Samples")
 set(RAVENGINE_BUILD_TESTS ON CACHE INTERNAL "")
 add_subdirectory("RavEngine")
 
+file(GLOB COMMON_FILES "Samples/Common/*.hpp" "Samples/Common/*.cpp")
+
 function (add_sample sample_dir)
 	# create the test executable
 	SET(APPNAME "RavEngine${sample_dir}")
@@ -38,7 +40,7 @@ function (add_sample sample_dir)
 	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" )
 
 	# creates a mac app if applicable
-	add_executable("${APPNAME}" ${TEST_SOURCES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard")
+	add_executable("${APPNAME}" ${TEST_SOURCES} ${COMMON_FILES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard")
 	set_target_properties("${APPNAME}" 
 		PROPERTIES 
 		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Samples/Info.plist.in"
@@ -47,7 +49,7 @@ function (add_sample sample_dir)
 		VS_GLOBAL_OutputType AppContainerExe
 	)
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" ${atomic_lib})
-	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}")
+	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}" "${CMAKE_CURRENT_LIST_DIR}/Samples/Common")
 	target_compile_features(${APPNAME} PRIVATE cxx_std_17)
 	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 

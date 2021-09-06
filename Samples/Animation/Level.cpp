@@ -9,6 +9,7 @@
 #include "Character.hpp"
 #include "CameraEntity.hpp"
 #include <RavEngine/SceneLoader.hpp>
+#include <FPSSystem.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -29,6 +30,8 @@ void Level::SetupInputs(){
 	lights->GetTransform()->LocalTranslateDelta(vector3(0,0.5,6));
 	lights->EmplaceComponent<DirectionalLight>();
 	lights->GetTransform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
+    auto gui = lights->EmplaceComponent<GUIComponent>();
+    gui->AddDocument("ui.rml");
 	Spawn(lights);
 
 	auto character = make_shared<Character>();
@@ -86,6 +89,8 @@ void Level::SetupInputs(){
 	Spawn(walls);
 
 	InitPhysics();
+    
+    systemManager.EmplaceTimedSystem<FPSSystem>(std::chrono::seconds(1), "ui.rml", "metrics");
 }
 
 void Level::PostTick(float)

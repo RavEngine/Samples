@@ -1,0 +1,13 @@
+<rml>
+	<head>
+        <link type="text/rcss" href="default.rcss"></link>
+        <style>
+            *{
+                font-size: 40dp
+            }
+        </style>
+	</head>
+	<body>
+        <p id="metrics" style="color:black"></p>
+	</body>
+</rml>

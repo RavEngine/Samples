@@ -5,6 +5,7 @@
 #include <RavEngine/InputManager.hpp>
 #include "LightEntity.hpp"
 #include <RavEngine/SystemInfo.hpp>
+#include <FPSSystem.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -33,12 +34,6 @@ struct StaticMeshEntity : public Entity {
 	}
 };
 
-struct FPSSystem : public RavEngine::AutoCTTI {
-	inline void Tick(float, Ref<GUIComponent> gui) {
-		auto doc = gui->GetDocument("ui.rml");
-		doc->GetElementById("metrics")->SetInnerRML(StrFormat("FPS: {} ({} ms)", std::round(App::Renderer->GetCurrentFPS()),std::round(App::Renderer->GetLastFrameTime())));
-	};
-};
 
 void Level::OnActivate() {
 
@@ -120,7 +115,7 @@ void Level::OnActivate() {
 	// load Systems
 	systemManager.EmplaceSystem<SpinSystem>();
 	systemManager.EmplaceSystem<CirculateSystem>();
-	systemManager.EmplaceTimedSystem<FPSSystem>(chrono::seconds(1));
+	systemManager.EmplaceTimedSystem<FPSSystem>(chrono::seconds(1),"ui.rml","metrics");
 
 	// load lights
 	for (int i = 0; i < 5; i++) {
