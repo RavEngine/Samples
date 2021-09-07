@@ -36,5 +36,12 @@
 	<true/>
 	<key>CFBundleIconFile</key>
 	<string>logo.png</string>
+
+
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
 </dict>
 </plist>

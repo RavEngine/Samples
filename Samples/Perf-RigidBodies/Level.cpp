@@ -64,7 +64,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 		mesh = RavEngine::MeshAsset::Manager::GetMesh("sphere.obj",1.0,true);
 	}
 	
-    static constexpr auto total = 500;
+    static constexpr auto total = 5000;
 	int count = total;
 	
 	inline void Tick(float fpsScale, Ref<SpawnerMarker>){
@@ -79,10 +79,21 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 			
 			count--;
             
+            auto lastTPS = App::CurrentTPS();
+            auto lastFPS = App::Renderer->GetCurrentFPS();
             auto guic = own->GetComponent<GUIComponent>().value();
-            guic->EnqueueUIUpdate([=]{
-                guic->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{} balls", total - count));
-            });
+            if (lastTPS > 30 && lastFPS > 30){
+                guic->EnqueueUIUpdate([=]{
+                    guic->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls", total - count,total));
+                });
+            }
+            else{
+                auto spawned = total - count;
+                guic->EnqueueUIUpdate([=]{
+                    guic->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls (Detected dip in performance, stopping)", spawned,total));
+                });
+                count = 0;
+            }
 		}
 	}
 };
