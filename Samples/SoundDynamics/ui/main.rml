@@ -18,6 +18,10 @@
             <select id="music">
             </select>
           </p>
+          <br />
+          <p>
+            Press ESC to toggle mouse
+          </p>
         </main>
     </body>
 </rml>

@@ -5,6 +5,8 @@
 #include <RavEngine/AudioSource.hpp>
 #include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/ScriptComponent.hpp>
+#include <RavEngine/App.hpp>
+#include <RavEngine/InputManager.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -15,7 +17,7 @@ struct PlayerController : public RavEngine::ScriptComponent {
 	decimalType rotationSpeed = 0.05;
 
 	inline decimalType scale(decimalType amt) {
-		return amt * scaleFactor * movementSpeed;
+		return amt * scaleFactor * movementSpeed * App::inputManager->GetRelativeMouseMode();
 	}
 
 	inline void MoveForward(decimalType amt) {
@@ -35,12 +37,12 @@ struct PlayerController : public RavEngine::ScriptComponent {
 
 	inline void LookUp(decimalType amt) {
 		auto tr = GetComponent<ChildEntityComponent>().value()->GetEntity()->GetTransform();
-		tr->LocalRotateDelta(vector3(glm::radians(amt * rotationSpeed), 0, 0));
+		tr->LocalRotateDelta(vector3(glm::radians(amt * rotationSpeed * App::inputManager->GetRelativeMouseMode()), 0, 0));
 	}
 
 	inline void LookRight(decimalType amt) {
 		auto tr = GetTransform();
-		tr->LocalRotateDelta(vector3(0, glm::radians(amt * rotationSpeed), 0));
+		tr->LocalRotateDelta(vector3(0, glm::radians(amt * rotationSpeed * App::inputManager->GetRelativeMouseMode()), 0));
 	}
 
 	void Tick(float scale) final {

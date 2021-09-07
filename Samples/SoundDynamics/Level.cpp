@@ -16,8 +16,14 @@ struct InputNames {
 		* MoveRight = "MoveRight",
 		* MoveUp = "MoveUp",
 		* LookRight = "LookRight",
-		* LookUp = "LookUp";
+		* LookUp = "LookUp",
+        * ToggleMouse = "ToggleMouse"
+        ;
 };
+
+void Level::ToggleMouse(){
+    App::inputManager->SetRelativeMouseMode(!App::inputManager->GetRelativeMouseMode());
+}
 
 void Level::OnActivate() {
 	// lights
@@ -93,7 +99,7 @@ void Level::OnActivate() {
 			if (j == 0) {
 				opt->SetAttribute("selected", true);
 			}
-            opt->SetAttribute("value", StrFormat("{}",j));
+            //opt->SetAttribute("value", StrFormat("{}",j));    //uncomment if selection box stops working in future RmlUi
 			opt->SetInnerRML(names[j]);
 			sel->AppendChild(std::move(opt));
 		}
@@ -182,6 +188,7 @@ void Level::OnActivate() {
 	im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_A, -1);
 	im->AddAxisMap(InputNames::MoveUp, SDL_SCANCODE_SPACE);
 	im->AddAxisMap(InputNames::MoveUp, SDL_SCANCODE_LSHIFT, -1);
+    im->AddActionMap(InputNames::ToggleMouse, SDL_SCANCODE_ESCAPE);
 
 	im->AddAxisMap(InputNames::LookRight,Special::MOUSEMOVE_XVEL,-1);
 	im->AddAxisMap(InputNames::LookUp,Special::MOUSEMOVE_YVEL,-1);
@@ -191,6 +198,10 @@ void Level::OnActivate() {
 	im->BindAxis(InputNames::MoveUp, player, &Player::MoveUp, CID::ANY);
 	im->BindAxis(InputNames::LookRight, player, &Player::LookRight, CID::ANY);
 	im->BindAxis(InputNames::LookUp, player, &Player::LookUp, CID::ANY);
+    im->BindAction(InputNames::ToggleMouse, static_pointer_cast<Level>(shared_from_this()), &Level::ToggleMouse, Pressed, CID::ANY);
+    
+    // default to camera control
+    im->SetRelativeMouseMode(true);
 
 	// for gui
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);

@@ -9,4 +9,6 @@ struct Level : public RavEngine::World {
 	Level();
 	std::vector<Ref<RavEngine::AudioAsset>> tracks;
 	std::array<Ref<RavEngine::Texture>,24> wallTextures;
+    
+    void ToggleMouse();
 };
