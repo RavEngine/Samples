@@ -66,6 +66,9 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 	
     static constexpr auto total = 5000;
 	int count = total;
+    
+    int totalLostTicks = 0;
+    static constexpr auto maxLostTicks = 100;
 	
 	inline void Tick(float fpsScale, Ref<SpawnerMarker>){
 		if (count > 0){
@@ -82,7 +85,10 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
             auto lastTPS = App::CurrentTPS();
             auto lastFPS = App::Renderer->GetCurrentFPS();
             auto guic = own->GetComponent<GUIComponent>().value();
-            if (lastTPS > 30 && lastFPS > 30){
+            if (total - count > 30 && ( lastTPS < 30 && lastFPS < 30)){
+                totalLostTicks++;
+            }
+            if(totalLostTicks < maxLostTicks){
                 guic->EnqueueUIUpdate([=]{
                     guic->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls", total - count,total));
                 });
@@ -130,7 +136,7 @@ void Level::OnActivate(){
 	// load systems
 	systemManager.EmplaceSystem<RotationSystem>();
 	systemManager.EmplaceSystem<RespawnSystem>();
-	systemManager.EmplaceTimedSystem<SpawnerSystem>(std::chrono::milliseconds(100),static_pointer_cast<Level>(shared_from_this()) );
+	systemManager.EmplaceTimedSystem<SpawnerSystem>(std::chrono::milliseconds(50),static_pointer_cast<Level>(shared_from_this()) );
     systemManager.EmplaceTimedSystem<FPSSystem>(std::chrono::seconds(1),"ui.rml","metrics");
 
 }
