@@ -94,14 +94,18 @@ void Level::OnActivate() {
 
 	// load the ground plane
 	auto ground = make_shared<Entity>();
-	auto mesh = MeshAsset::Manager::GetMesh("quad.obj",1.2);
+    MeshAssetOptions opt{
+        .scale = 1.2
+    };
+	auto mesh = MeshAsset::Manager::GetMesh("quad.obj",opt);
 	auto mat = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	mat->SetAlbedoColor({0.2,0.2,0.2,1.0});
 	ground->EmplaceComponent<StaticMesh>(mesh,mat);
 	Spawn(ground);
 
 	// load the stanford dragon
-	auto hmesh = MeshAsset::Manager::GetMesh("dragon_vrip.ply", 2);
+    opt.scale = 2;
+	auto hmesh = MeshAsset::Manager::GetMesh("dragon_vrip.ply", opt);
 	auto hmat = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	
 	for (int i = 0; i < 150; i++) {

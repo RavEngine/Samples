@@ -215,7 +215,9 @@ Character::Character() {
 	// the Sockets feature allows you to expose transforms at bones on an animated skeleton as though they were their own entities.
 	// this is useful for attaching an object to a character's hand, as shown below.
 	auto handEntity = make_shared<Entity>();
-	handEntity->EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetMesh("cone.obj", 0.4),make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+    MeshAssetOptions opt;
+    opt.scale = 0.4;
+	handEntity->EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetMesh("cone.obj", opt),make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
 	auto handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
 	auto handsocket = animcomp->AddSocket("characterFBXASC058hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
 

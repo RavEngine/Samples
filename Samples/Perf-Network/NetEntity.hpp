@@ -40,8 +40,7 @@ struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable
 		if (!matinst) {
 			matinst = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
 		}
-
-		EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetMesh("cube.obj",0.1), matinst);
+		EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetMesh("cube.obj",RavEngine::MeshAssetOptions{.scale = 0.1}), matinst);
 		EmplaceComponent<InterpolationTransform>();
 	}
 

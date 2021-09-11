@@ -61,7 +61,9 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 		ownWorld(world)
 	{
 		mat->SetAlbedoTexture(texture);
-		mesh = RavEngine::MeshAsset::Manager::GetMesh("sphere.obj",1.0,true);
+        MeshAssetOptions opt;
+        opt.keepInSystemRAM = true;
+		mesh = RavEngine::MeshAsset::Manager::GetMesh("sphere.obj",opt);
 	}
 	
     static constexpr auto total = 5000;
@@ -98,6 +100,9 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
                 guic->EnqueueUIUpdate([=]{
                     guic->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls (Detected dip in performance, stopping)", spawned,total));
                 });
+                ownWorld.lock()->DispatchAsync([](){
+                    Debug::Log("Ran dispatched fun");
+                }, 3);
                 count = 0;
             }
 		}
