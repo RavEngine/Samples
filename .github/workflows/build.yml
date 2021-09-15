@@ -11,7 +11,7 @@ jobs:
         with:
           submodules: true
       - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install cmake clang ninja-build libgl1-mesa-dev libasound2-dev -y --no-install-recommends 
+        run: sudo apt-get update && sudo apt-get install cmake g++ ninja-build libgl1-mesa-dev libasound2-dev -y --no-install-recommends 
       - name: Build
         run: mkdir -p build; mkdir -p build/linux; cd build/linux; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build . --config release --target install 
       - name: Upload Artifacts

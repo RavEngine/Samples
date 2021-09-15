@@ -94,9 +94,8 @@ void Level::OnActivate() {
 
 	// load the ground plane
 	auto ground = make_shared<Entity>();
-    MeshAssetOptions opt{
-        .scale = 1.2
-    };
+    MeshAssetOptions opt;
+    opt.scale 1.2;
 	auto mesh = MeshAsset::Manager::GetMesh("quad.obj",opt);
 	auto mat = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	mat->SetAlbedoColor({0.2,0.2,0.2,1.0});

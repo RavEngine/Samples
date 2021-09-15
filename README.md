@@ -28,7 +28,7 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
 
 ## How to try the samples without building
 1. Sign in to GitHub in your browser. This is required for accessing the downloads.
-2. Go to [Actions->Build Samples](https://github.com/Ravbug/RavEngine-Samples/actions/workflows/build.yml) on this repository
+2. Go to [Actions > Build Samples](https://github.com/Ravbug/RavEngine-Samples/actions/workflows/build.yml) on this repository
 3. Find the latest run that has a build for your platform (check the failed runs as well) 
 4. Download the Artifact for your platform
 
