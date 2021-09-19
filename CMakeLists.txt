@@ -54,7 +54,6 @@ function (add_sample sample_dir)
 	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
-	#set_property(TARGET "${APPNAME}" PROPERTY WIN32_EXECUTABLE FALSE) 
 
 	# UWP / Winstore deployment things
 	set(WINSTORE_MANIFEST "${CMAKE_CURRENT_LIST_DIR}/Samples/Sample.appxmanifest.in")
@@ -123,4 +122,5 @@ add_sample("Perf-Network")
 add_sample("Perf-Lighting")
 add_sample("GUI")
 add_sample("SoundDynamics")
+add_sample("Flags")
 add_sample("HelloCube")
