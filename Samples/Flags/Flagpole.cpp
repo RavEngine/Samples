@@ -37,6 +37,9 @@ Flagpole::Flagpole(){
     auto matinst = RavEngine::New<FlagMatInst>(Material::Manager::GetMaterial<FlagMat>());
     skinnedMesh->SetMaterial(matinst);
     
+    Ref<Texture> tx = RavEngine::New<Texture>("flag_us.svg",1024,1024);
+    matinst->SetAlbedoTexture(tx);
+    
     auto animcomp = flagEntity->EmplaceComponent<AnimatorComponent>(skeleton);
     
     AnimatorComponent::State all_anim{ 0, clips };
