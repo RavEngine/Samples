@@ -34,7 +34,8 @@ Flagpole::Flagpole(){
     flagEntity->GetTransform()->LocalScaleDelta(vector3(2));
     
     auto skinnedMesh = flagEntity->EmplaceComponent<SkinnedMeshComponent>(skeleton,meshAssetSkinned);
-    skinnedMesh->SetMaterial(RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+    auto matinst = RavEngine::New<FlagMatInst>(Material::Manager::GetMaterial<FlagMat>());
+    skinnedMesh->SetMaterial(matinst);
     
     auto animcomp = flagEntity->EmplaceComponent<AnimatorComponent>(skeleton);
     
