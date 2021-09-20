@@ -3,6 +3,8 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/ChildEntityComponent.hpp>
 #include <etl/vector.h>
+#include <RavEngine/AnimatorComponent.hpp>
+#include <RavEngine/SkinnedMeshComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -19,6 +21,28 @@ Flagpole::Flagpole(){
     
     EmplaceComponent<StaticMesh>(meshes[0],RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
     EmplaceComponent<StaticMesh>(meshes[1],RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+    
+    // load animation
+    auto skeleton = RavEngine::New<SkeletonAsset>("flag.fbx");
+    auto clips = RavEngine::New<AnimationAsset>("flag.fbx",skeleton);
+    auto meshAssetSkinned = MeshAssetSkinned::Manager::Get("flag.fbx",skeleton);
+    
+    auto flagEntity = Entity::New();
+    EmplaceComponent<ChildEntityComponent>(flagEntity);
+    flagEntity->GetTransform()->LocalTranslateDelta(vector3(3,8,0));
+    flagEntity->GetTransform()->LocalRotateDelta(vector3(PI/2,0,0));
+    flagEntity->GetTransform()->LocalScaleDelta(vector3(2));
+    
+    auto skinnedMesh = flagEntity->EmplaceComponent<SkinnedMeshComponent>(skeleton,meshAssetSkinned);
+    skinnedMesh->SetMaterial(RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+    
+    auto animcomp = flagEntity->EmplaceComponent<AnimatorComponent>(skeleton);
+    
+    AnimatorComponent::State all_anim{ 0, clips };
+    all_anim.isLooping = true;
+    animcomp->InsertState(all_anim);
+    animcomp->Goto(0,true);
+    animcomp->Play();
     
     // load shaders
 }

@@ -42,7 +42,7 @@ struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable
 		}
         RavEngine::MeshAssetOptions opt;
         opt.scale = 0.1;
-		EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetMesh("cube.obj",opt), matinst);
+		EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("cube.obj",opt), matinst);
 		EmplaceComponent<InterpolationTransform>();
 	}
 

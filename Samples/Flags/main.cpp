@@ -10,7 +10,7 @@ struct Level : public World{
         auto cameraEntity = Entity::New();
         auto camera = cameraEntity->EmplaceComponent<CameraComponent>();
         camera->SetActive(true);
-        cameraEntity->GetTransform()->LocalTranslateDelta(vector3(0,1,10));
+        cameraEntity->GetTransform()->LocalTranslateDelta(vector3(0,5,10));
         
         auto lightEntity = Entity::New();
         lightEntity->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
@@ -18,7 +18,7 @@ struct Level : public World{
         lightEntity->GetTransform()->LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
         auto ground = Entity::New();
-        ground->EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetMesh("quad.obj"),make_shared<PBRMaterialInstance>( Material::Manager::GetMaterial<PBRMaterial>()));
+        ground->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),make_shared<PBRMaterialInstance>( Material::Manager::GetMaterial<PBRMaterial>()));
         ground->GetTransform()->LocalScaleDelta(vector3(10));
         
         auto flagpole = New<Flagpole>();

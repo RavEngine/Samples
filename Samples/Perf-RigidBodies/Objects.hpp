@@ -14,7 +14,7 @@ struct Ground : public RavEngine::Entity{
 		auto mat = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
         RavEngine::MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
-		auto mesh = RavEngine::MeshAsset::Manager::GetMesh("ground.obj",opt);	//need to retain the mesh data in system memory 
+		auto mesh = RavEngine::MeshAsset::Manager::Get("ground.obj",opt);	//need to retain the mesh data in system memory 
 		EmplaceComponent<RavEngine::StaticMesh>(mesh,mat);
 		EmplaceComponent<RotationComponent>();
 		EmplaceComponent<RavEngine::RigidBodyStaticComponent>();

@@ -21,7 +21,7 @@ struct LightEntity : public RavEngine::Entity {
 		auto mat = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
         RavEngine::MeshAssetOptions opt;
         opt.scale = 0.03;
-        EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetMesh("sphere.obj",opt),mat);
+        EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("sphere.obj",opt),mat);
 		auto cc = EmplaceComponent<CirculateComponent>();
 		auto light = EmplaceComponent<RavEngine::PointLight>();
 		light->Intensity = cc->radius * 1.3;
