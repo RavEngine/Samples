@@ -2,6 +2,8 @@
 #include <RavEngine/StaticMesh.hpp>
 #include "AppInfo.hpp"
 #include "Flagpole.hpp"
+#include <RavEngine/GUI.hpp>
+#include <RavEngine/InputManager.hpp>
 using namespace RavEngine;
 using namespace std;
 
@@ -17,16 +19,49 @@ struct Level : public World{
         lightEntity->EmplaceComponent<DirectionalLight>();
         lightEntity->GetTransform()->LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
+        auto guiEntity = Entity::New();
+        auto gui = guiEntity->EmplaceComponent<GUIComponent>();
+        auto doc = gui->AddDocument("ui.rml");
+        
+        auto im = App::inputManager = RavEngine::New<InputManager>();
+        im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
+        im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
+        im->BindAxis("MouseX", gui, &GUIComponent::MouseX, CID::ANY);
+        im->BindAxis("MouseY", gui, &GUIComponent::MouseY, CID::ANY);
+        im->BindAnyAction(gui);
+        
         auto ground = Entity::New();
         ground->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),make_shared<PBRMaterialInstance>( Material::Manager::GetMaterial<PBRMaterial>()));
         ground->GetTransform()->LocalScaleDelta(vector3(10));
         
         auto flagpole = New<Flagpole>();
         
+        auto picker = doc->GetElementById("picker");
+        
+        uint8_t flag_id = 0;
+        for(const auto& f : flagpole->flags){
+            auto opt = doc->CreateElement("option");
+            opt->SetAttribute("value", StrFormat("{}",flag_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
+            opt->SetInnerRML(f.name);
+            picker->AppendChild(std::move(opt));
+        }
+        
+        struct changeListener : public Rml::EventListener{
+            WeakRef<Flagpole> pole;
+            void ProcessEvent(Rml::Event& evt) final{
+                auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
+                pole.lock()->SwitchToFlag(selbox->GetSelection());
+            }
+            changeListener(decltype(flagpole) fl ) : pole(fl){}
+        };
+        
+       picker->AddEventListener(Rml::EventId::Change, new changeListener(flagpole));
+        
         Spawn(cameraEntity);
         Spawn(lightEntity);
         Spawn(ground);
         Spawn(flagpole);
+        Spawn(guiEntity);
     }
 };
 

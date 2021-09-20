@@ -1,0 +1,15 @@
+<rml>
+    <head>
+        <link type="text/rcss" href="default.rcss"></link>
+        <style>
+            *{
+                font-size: 20dp
+            }
+        </style>
+    </head>
+    <body>
+        Select Flag <br />
+        <select id="picker">
+        </select>
+    </body>
+</rml>

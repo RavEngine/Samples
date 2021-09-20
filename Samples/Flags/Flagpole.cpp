@@ -34,11 +34,32 @@ Flagpole::Flagpole(){
     flagEntity->GetTransform()->LocalScaleDelta(vector3(2));
     
     auto skinnedMesh = flagEntity->EmplaceComponent<SkinnedMeshComponent>(skeleton,meshAssetSkinned);
-    auto matinst = RavEngine::New<FlagMatInst>(Material::Manager::GetMaterial<FlagMat>());
-    skinnedMesh->SetMaterial(matinst);
     
-    Ref<Texture> tx = RavEngine::New<Texture>("flag_us.svg",1024,1024);
-    matinst->SetAlbedoTexture(tx);
+    // load the flags
+    struct name_file{
+        std::string name;
+        std::string filename;
+    };
+    name_file names[] = {
+        {"United States","flag_us.svg"},
+        {"Canada","flag_ca.svg"},
+        {"Mexico","flag_mx.svg"}
+    };
+    for(const auto& n : names)
+    {
+        auto mat = RavEngine::New<FlagMatInst>(Material::Manager::GetMaterial<FlagMat>());
+        Ref<Texture> tx = RavEngine::New<Texture>(n.filename,1024,1024);
+        mat->SetAlbedoTexture(tx);
+        flags.push_back({n.name,mat});
+    }
+    
+    // load the special flag, which uses a different shader
+    {
+        auto mat = RavEngine::New<PBRMaterialInstance>(RavEngine::New<PBRMaterial>("flag_special"));    // we use New here due to a bug with Material::Manager
+        flags.push_back({"My Room",mat});
+    }
+    
+    SwitchToFlag(0);
     
     auto animcomp = flagEntity->EmplaceComponent<AnimatorComponent>(skeleton);
     
@@ -49,4 +70,8 @@ Flagpole::Flagpole(){
     animcomp->Play();
     
     // load shaders
+}
+
+void Flagpole::SwitchToFlag(uint16_t idx){
+    GetComponent<ChildEntityComponent>().value()->GetEntity()->GetComponent<SkinnedMeshComponent>().value()->SetMaterial(flags[idx].matInst);
 }
