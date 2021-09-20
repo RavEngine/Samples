@@ -8,11 +8,31 @@ using namespace RavEngine;
 using namespace std;
 
 struct Level : public World{
+    
+    float deltaTime = 0;
+    
+    float cameraSpeed = 0.02;
+    
+    Ref<Entity> cameraRoot = Entity::New();
+    Ref<Entity> cameraGimball = Entity::New();
+    
+    void CameraLR(float amt){
+        cameraRoot->GetTransform()->LocalRotateDelta(vector3(0,amt * deltaTime * cameraSpeed,0));
+    }
+    
+    void CameraUD(float amt){
+        cameraGimball->GetTransform()->LocalRotateDelta(vector3(-amt * deltaTime * cameraSpeed,0,0));
+    }
+    
     void Init(){
         auto cameraEntity = Entity::New();
         auto camera = cameraEntity->EmplaceComponent<CameraComponent>();
         camera->SetActive(true);
-        cameraEntity->GetTransform()->LocalTranslateDelta(vector3(0,5,10));
+        cameraEntity->GetTransform()->LocalTranslateDelta(vector3(0,0,10));
+        
+        cameraRoot->GetTransform()->AddChild(cameraGimball->GetTransform());
+        cameraGimball->GetTransform()->AddChild(cameraEntity->GetTransform());
+        cameraRoot->GetTransform()->LocalTranslateDelta(vector3(0,5,0));
         
         auto lightEntity = Entity::New();
         lightEntity->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
@@ -29,6 +49,14 @@ struct Level : public World{
         im->BindAxis("MouseX", gui, &GUIComponent::MouseX, CID::ANY);
         im->BindAxis("MouseY", gui, &GUIComponent::MouseY, CID::ANY);
         im->BindAnyAction(gui);
+        
+        im->AddAxisMap("CUD", SDL_SCANCODE_W);
+        im->AddAxisMap("CUD", SDL_SCANCODE_S,-1);
+        im->AddAxisMap("CLR", SDL_SCANCODE_A,-1);
+        im->AddAxisMap("CLR", SDL_SCANCODE_D);
+        
+        im->BindAxis("CUD", static_pointer_cast<Level>(shared_from_this()), &Level::CameraUD, CID::ANY);
+        im->BindAxis("CLR", static_pointer_cast<Level>(shared_from_this()), &Level::CameraLR, CID::ANY);
         
         auto ground = Entity::New();
         ground->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),make_shared<PBRMaterialInstance>( Material::Manager::GetMaterial<PBRMaterial>()));
@@ -57,11 +85,17 @@ struct Level : public World{
         
        picker->AddEventListener(Rml::EventId::Change, new changeListener(flagpole));
         
+        Spawn(cameraRoot);
+        Spawn(cameraGimball);
         Spawn(cameraEntity);
         Spawn(lightEntity);
         Spawn(ground);
         Spawn(flagpole);
         Spawn(guiEntity);
+    }
+    
+    void PostTick(float d) final{
+        deltaTime = d;
     }
 };
 
