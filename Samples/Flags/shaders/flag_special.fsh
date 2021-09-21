@@ -2,11 +2,6 @@ $input v_normal, v_texcoord0, v_worldpos
 
 #include "ravengine_shader.glsl"
 
-SAMPLER2D(s_albedoTex,0);
-
-// adjust the number of stripes
-const float stripes = 6.0;
-
 //  Function from Iñigo Quiles
 //  https://www.shadertoy.com/view/MsS3Wc
 vec3 hsb2rgb( in vec3 c ){
@@ -46,8 +41,10 @@ float clampInRange(float x){
 
 void main()
 {
-    
-    vec2 uv = v_texcoord0;
+    // adjust the number of stripes
+    const float stripes = 6.0;
+
+    vec2 uv = 1 - v_texcoord0;  // model UVs are upside-down
     
     // calculate where to sample 
     float coord = hsbinfcufve(stepf(1.0-uv.y,stripes));
