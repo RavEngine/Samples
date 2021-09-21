@@ -15,7 +15,7 @@ vec3 hsb2rgb( in vec3 c ){
                      0.0,
                      1.0 );
     rgb = rgb*rgb*(3.0-2.0*rgb);
-    return c.z * mix(vec3(1.0), rgb, c.y);
+    return c.z * mix(vec3(1.0,1.0,1.0), rgb, c.y);
 }
 
 
