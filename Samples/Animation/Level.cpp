@@ -26,7 +26,7 @@ struct InputNames{
 void Level::SetupInputs(){
 	
 	Ref<Entity> lights = make_shared<Entity>();
-	lights->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
+	lights->EmplaceComponent<AmbientLight>()->Intensity = 0.2f;
 	lights->GetTransform()->LocalTranslateDelta(vector3(0,0.5,6));
 	lights->EmplaceComponent<DirectionalLight>();
 	lights->GetTransform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
@@ -76,7 +76,7 @@ void Level::SetupInputs(){
 	{
 		auto floorplane = make_shared<RavEngine::Entity>();
 		Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("level.fbx", "ground", opt);
-		material->SetAlbedoColor({ 174.0 / 255,210.0 / 255,234.0 / 255,1 });
+		material->SetAlbedoColor({ 174.f / 255,210.f / 255,234.f / 255,1 });
 		floorplane->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
 		floorplane->EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
 		floorplane->EmplaceComponent<MeshCollider>(sharedMesh, physmat);
