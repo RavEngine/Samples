@@ -5,8 +5,9 @@ $output v_normal, v_texcoord0, v_worldpos
 
 void main()
 {
-    a_position.y += sin(u_time[0] * 10 + a_position.x * -5) / 40;
-
+    a_position.z += sin(u_time[0] * 10 + a_position.x * -5) / 40;
+    a_position.y += cos(u_time[0] * 10 + a_position.x * -5) / 50;
+    
     vs_genmats();
     v_texcoord0 = a_texcoord0;
     vs_store();

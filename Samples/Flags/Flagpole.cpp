@@ -29,8 +29,7 @@ Flagpole::Flagpole(){
     
     auto flagEntity = Entity::New();
     EmplaceComponent<ChildEntityComponent>(flagEntity);
-    flagEntity->GetTransform()->LocalTranslateDelta(vector3(3,8,0));
-    flagEntity->GetTransform()->LocalRotateDelta(vector3(PI/2,0,0));
+    flagEntity->GetTransform()->LocalTranslateDelta(vector3(0,8,0));
     flagEntity->GetTransform()->LocalScaleDelta(vector3(2));
     
     auto skinnedMesh = flagEntity->EmplaceComponent<SkinnedMeshComponent>(skeleton,meshAssetSkinned);

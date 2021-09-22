@@ -167,8 +167,8 @@ Character::Character() {
 	// note: if you are loading multiple instances
 	// of an animated character, you will want to load and store
 	// the assets separately to avoid unnecessary disk i/o and parsing.
-	auto skeleton = make_shared<SkeletonAsset>("character_anims.dae");
-	auto all_clips = make_shared<AnimationAsset>("character_anims.dae", skeleton);
+	auto skeleton = make_shared<SkeletonAsset>("character_anims.fbx");
+	auto all_clips = make_shared<AnimationAsset>("character_anims.fbx", skeleton);
 	auto walk_anim = make_shared<AnimationAssetSegment>(all_clips, 0, 47);
 	auto idle_anim = make_shared<AnimationAssetSegment>(all_clips, 60,120);
 	auto run_anim = make_shared<AnimationAssetSegment>(all_clips, 131, 149);
@@ -177,7 +177,7 @@ Character::Character() {
 	auto pound_begin_anim = make_shared<AnimationAssetSegment>(all_clips, 180, 195);
 	auto pound_do_anim = make_shared<AnimationAssetSegment>(all_clips, 196, 200);
 	auto pound_end_anim = make_shared<AnimationAssetSegment>(all_clips, 201, 207);
-	auto mesh = make_shared<MeshAssetSkinned>("character_anims.dae", skeleton);
+	auto mesh = make_shared<MeshAssetSkinned>("character_anims.fbx", skeleton);
 	auto material = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
 	material->SetAlbedoColor({1,0.4,0.2,1});
 
@@ -219,7 +219,7 @@ Character::Character() {
     opt.scale = 0.4f;
 	handEntity->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
 	auto handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
-	auto handsocket = animcomp->AddSocket("characterFBXASC058hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
+	auto handsocket = animcomp->AddSocket("character:hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
 
 	handsocket->AddChild(handEntity->GetTransform());
 	// since this is just a normal transform, we can add an additional transformation
