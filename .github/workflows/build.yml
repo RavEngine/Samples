@@ -11,9 +11,9 @@ jobs:
         with:
           submodules: true
       - name: Install Dependencies
-        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo apt-get install cmake g++-9 ninja-build libgl1-mesa-dev libasound2-dev -y --no-install-recommends 
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo apt-get install cmake g++-8 ninja-build libgl1-mesa-dev libasound2-dev -y --no-install-recommends 
       - name: Build
-        run: mkdir -p build; mkdir -p build/linux; cd build/linux; export CC=/usr/bin/gcc-9; export CXX=/usr/bin/g++-9; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build . --config release --target install 
+        run: mkdir -p build; mkdir -p build/linux; cd build/linux; export CC=/usr/bin/gcc-8; export CXX=/usr/bin/g++-8; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build . --config release --target install 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
