@@ -3,6 +3,7 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/StaticMesh.hpp>
+#include <RavEngine/NavMeshComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -58,13 +59,18 @@ struct Level : public World{
         
         // create the navigation object
         auto mazeEntity = Entity::New();
-        mazeEntity->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("maze.fbx"),RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+        MeshAssetOptions opt;
+        opt.keepInSystemRAM = true;
+        auto mesh = MeshAsset::Manager::Get("maze.fbx", opt);
+        mazeEntity->EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+        mazeEntity->EmplaceComponent<NavMeshComponent>(mesh,NavMeshComponent::Options());
         
         Spawn(cameraRoot);
         Spawn(cameraGimball);
         Spawn(cameraEntity);
         Spawn(mazeEntity);
         Spawn(lightEntity);
+        Spawn(guiEntity);
     }
     
     void PostTick(float d) final{
