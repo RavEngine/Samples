@@ -1,0 +1,13 @@
+<rml>
+    <head>
+        <link type="text/rcss" href="default.rcss"></link>
+        <style>
+            *{
+                font-size: 20dp
+            }
+        </style>
+    </head>
+    <body>
+        Click on the board to set <elem>Start</elem> point
+    </body>
+</rml>
