@@ -4,14 +4,14 @@ on: push
 jobs:
   build-linux:
     name: Build Samples for Linux x64
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           submodules: true
       - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install cmake g++ ninja-build libgl1-mesa-dev libasound2-dev -y --no-install-recommends 
+        run: add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo apt-get install cmake g++-9 ninja-build libgl1-mesa-dev libasound2-dev -y --no-install-recommends 
       - name: Build
         run: mkdir -p build; mkdir -p build/linux; cd build/linux; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build . --config release --target install 
       - name: Upload Artifacts
