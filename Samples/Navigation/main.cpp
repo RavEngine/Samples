@@ -16,6 +16,8 @@ struct Level : public World{
     Ref<Entity> cameraRoot = Entity::New();
     Ref<Entity> cameraGimball = Entity::New();
     
+    Ref<NavMeshComponent> navMesh;
+    
     void CameraLR(float amt){
         cameraRoot->GetTransform()->LocalRotateDelta(vector3(0,amt * deltaTime * cameraSpeed,0));
     }
@@ -63,7 +65,8 @@ struct Level : public World{
         opt.keepInSystemRAM = true;
         auto mesh = MeshAsset::Manager::Get("maze.fbx", opt);
         mazeEntity->EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
-        mazeEntity->EmplaceComponent<NavMeshComponent>(mesh,NavMeshComponent::Options());
+        navMesh = mazeEntity->EmplaceComponent<NavMeshComponent>(mesh,NavMeshComponent::Options());
+        navMesh->CalculatePath(vector3(1,0,1), vector3(-1,0,-1));
         
         Spawn(cameraRoot);
         Spawn(cameraGimball);
