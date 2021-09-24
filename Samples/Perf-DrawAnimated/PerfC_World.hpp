@@ -14,10 +14,10 @@ public:
 	Ref<RavEngine::Entity> lightEntity;
 	
 	static constexpr size_t num_meshes = 4;
-	static Array<Ref<RavEngine::MeshAsset>,num_meshes> meshes;
+	static RavEngine::Array<Ref<RavEngine::MeshAsset>,num_meshes> meshes;
 	
 	static constexpr size_t num_textures = 80;
-	static Array<Ref<RavEngine::Texture>, num_textures> textures;
+	static RavEngine::Array<Ref<RavEngine::Texture>, num_textures> textures;
 	
 #ifdef _DEBUG
 	static constexpr size_t num_objects = 5000;	//reduced for demo because debug builds are slower
