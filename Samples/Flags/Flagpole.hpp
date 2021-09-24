@@ -18,7 +18,7 @@ struct Flagpole : public RavEngine::Entity{
         std::string name;
         Ref<RavEngine::PBRMaterialInstance> matInst;
     };
-    std::vector<entry> flags;
+    RavEngine::Vector<entry> flags;
     
     void SwitchToFlag(uint16_t idx);
 };

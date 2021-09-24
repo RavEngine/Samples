@@ -16,7 +16,7 @@
 class PuckComponent : public RavEngine::Component, public RavEngine::Queryable<PuckComponent>{};
 
 struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor{
-	std::array<Ref<RavEngine::AudioAsset>,4> sounds{
+    Array<Ref<RavEngine::AudioAsset>,4> sounds{
 		std::make_shared<RavEngine::AudioAsset>("hockeyhit1.wav"),
 		std::make_shared<RavEngine::AudioAsset>("hockeyhit2.wav"),
 		std::make_shared<RavEngine::AudioAsset>("hockeyhit3.wav"),

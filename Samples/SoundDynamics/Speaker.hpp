@@ -18,5 +18,5 @@ namespace RavEngine {
 struct Stage : public RavEngine::Entity {
 	Stage();
 	Ref<RavEngine::AudioRoom> GetRoom();
-	std::array<Ref<RavEngine::PBRMaterialInstance>, 6> wallMaterials;
+    Array<Ref<RavEngine::PBRMaterialInstance>, 6> wallMaterials;
 };

@@ -49,7 +49,7 @@ void Level::OnActivate() {
 	auto doc = ui->AddDocument("main.rml");
 	Spawn(uiEntity);
 
-	std::array<std::string, RoomMat::kNumMaterialNames> names{
+    Array<std::string, RoomMat::kNumMaterialNames> names{
 		"Transparent",
 		"Acoustic Ceiling Tiles",
 		"Bare Brick",

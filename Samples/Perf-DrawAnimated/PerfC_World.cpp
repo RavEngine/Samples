@@ -96,7 +96,7 @@ void PerfC_World::OnActivate(){
 	
 	//load textures
 	
-	std::array<Ref<DemoMaterialInstance>,PerfC_World::num_textures> materialInstances;
+    Array<Ref<DemoMaterialInstance>,PerfC_World::num_textures> materialInstances;
 	
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){

@@ -32,8 +32,6 @@ void Level::OnActivate() {
 	else {
 		SetupClient();
 	}
-	//Debug::Log("{}",type_name<std::array<char, 16>>());
-
 }
 
 void Level::ServerUpdateGUI()
@@ -114,7 +112,7 @@ void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 #endif
 		;
 
-	std::array<Ref<NetEntity>, num_entities> entities;
+    Array<Ref<NetEntity>, num_entities> entities;
 	for (int i = 0; i < entities.size(); i++) {
 		entities[i] = make_shared<NetEntity>();
 	}

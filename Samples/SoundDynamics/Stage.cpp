@@ -16,7 +16,7 @@ Stage::Stage() {
 	EmplaceComponent<ChildEntityComponent>(roomEntity);
 	GetTransform()->AddChild(roomEntity->GetTransform());
 
-	std::array<string_view, 6> faceOrder{
+    Array<string_view, 6> faceOrder{
 		"wall_negx",
 		"wall_posx",
 		"floor",
