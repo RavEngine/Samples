@@ -17,7 +17,7 @@ Speaker::Speaker(Ref<AudioAsset> a) {
 	sourceEntity->GetTransform()->LocalTranslateDelta(vector3(0, 3, 0));
 
 	if (!speakerInstance) {
-		speakerInstance = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
+		speakerInstance = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		auto texture = make_shared<Texture>("speaker.png");
 		speakerInstance->SetAlbedoTexture(texture);
 	}

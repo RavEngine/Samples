@@ -11,7 +11,7 @@ struct RotationComponent : public RavEngine::Component, public RavEngine::Querya
 
 struct Ground : public RavEngine::Entity{
 	Ground(){
-		auto mat = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
+		auto mat = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
         RavEngine::MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
 		auto mesh = RavEngine::MeshAsset::Manager::Get("ground.obj",opt);	//need to retain the mesh data in system memory 

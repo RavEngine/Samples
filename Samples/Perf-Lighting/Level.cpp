@@ -97,7 +97,7 @@ void Level::OnActivate() {
     MeshAssetOptions opt;
     opt.scale = 1.2;
 	auto mesh = MeshAsset::Manager::Get("quad.obj",opt);
-	auto mat = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
+	auto mat = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	mat->SetAlbedoColor({0.2,0.2,0.2,1.0});
 	ground->EmplaceComponent<StaticMesh>(mesh,mat);
 	Spawn(ground);
@@ -105,7 +105,7 @@ void Level::OnActivate() {
 	// load the stanford dragon
     opt.scale = 2;
 	auto hmesh = MeshAsset::Manager::Get("dragon_vrip.ply", opt);
-	auto hmat = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
+	auto hmat = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	
 	for (int i = 0; i < 150; i++) {
 		auto e = make_shared<StaticMeshEntity>(hmesh, hmat);

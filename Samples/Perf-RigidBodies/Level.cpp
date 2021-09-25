@@ -55,7 +55,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 	Ref<Texture> texture;
 	
 	SpawnerSystem(decltype(ownWorld) world) :
-		mat(std::make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>())),
+		mat(std::make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())),
 		physmat(std::make_shared<PhysicsMaterial>(0.3, 0.3, 0.1)),
 		texture(std::make_shared<Texture>("checkerboard.png")),
 		ownWorld(world)

@@ -37,7 +37,7 @@ public:
         opt.scale = 0.03;
         auto puckmesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPuck.obj",opt));
         if(material == nullptr){
-			material = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
+			material = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
 			material->SetAlbedoColor({0.2,0.2,0.2,1});
         }
         puckmesh->SetMaterial(material);

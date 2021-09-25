@@ -121,7 +121,7 @@ void TestWorld::SetupInputs(){
 	Spawn(player);
 	ResetCam();
 	
-	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
+	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	
 	//	Ref<Texture> t = new Texture("youcantrun.png");
 	//	material->SetAlbedoTexture(t);

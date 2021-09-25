@@ -19,8 +19,8 @@ Flagpole::Flagpole(){
         meshes.push_back(mesh);
     });
     
-    EmplaceComponent<StaticMesh>(meshes[0],RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
-    EmplaceComponent<StaticMesh>(meshes[1],RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+    EmplaceComponent<StaticMesh>(meshes[0],RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+    EmplaceComponent<StaticMesh>(meshes[1],RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
     
     // load animation
     auto skeleton = RavEngine::New<SkeletonAsset>("flag.fbx");
@@ -46,7 +46,7 @@ Flagpole::Flagpole(){
     };
     for(const auto& n : names)
     {
-        auto mat = RavEngine::New<FlagMatInst>(Material::Manager::GetMaterial<FlagMat>());
+        auto mat = RavEngine::New<FlagMatInst>(Material::Manager::Get<FlagMat>());
         Ref<Texture> tx = RavEngine::New<Texture>(n.filename,1024,1024);
         mat->SetAlbedoTexture(tx);
         flags.push_back({n.name,mat});

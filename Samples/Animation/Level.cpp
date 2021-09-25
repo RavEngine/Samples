@@ -68,14 +68,14 @@ void Level::SetupInputs(){
 	im->BindAction(InputNames::Pound, character, &Character::Pound, ActionState::Pressed, CID::ANY);
 
 	// load the game level
-	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
+	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	auto physmat = make_shared<PhysicsMaterial>(0.5, 0.5, 0);
     MeshAssetOptions opt;
     opt.scale = 1.5;
     opt.keepInSystemRAM = true;
 	{
 		auto floorplane = make_shared<RavEngine::Entity>();
-		Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("level.fbx", "ground", opt);
+		Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("level.fbx", "ground", opt);
 		material->SetAlbedoColor({ 174.f / 255,210.f / 255,234.f / 255,1 });
 		floorplane->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
 		floorplane->EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
@@ -85,7 +85,7 @@ void Level::SetupInputs(){
 
 	// load the walls
 	auto walls = make_shared<Entity>();
-	Ref<MeshAsset> sharedMesh = make_shared<MeshAsset>("level.fbx", "walls", opt);
+	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("level.fbx", "walls", opt);
 	walls->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
 	walls->EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls
 	walls->EmplaceComponent<MeshCollider>(sharedMesh, physmat);

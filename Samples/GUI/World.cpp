@@ -37,7 +37,7 @@ void ::World::OnActivate(){
 	
 	cube = make_shared<Entity>();
 	auto cubemesh = cube->EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetMesh("cube.obj"));
-	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+	cubemesh->SetMaterial(make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
 	
 	Ref<Entity> gui = make_shared<Entity>();
 	auto doc = gui->EmplaceComponent<GUIComponent>();

@@ -64,7 +64,7 @@ struct Level : public World{
         MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
         auto mesh = MeshAsset::Manager::Get("maze.fbx", opt);
-        mazeEntity->EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+        mazeEntity->EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
         navMesh = mazeEntity->EmplaceComponent<NavMeshComponent>(mesh,NavMeshComponent::Options());
         navMesh->CalculatePath(vector3(1,0,1), vector3(-1,0,-1));
         

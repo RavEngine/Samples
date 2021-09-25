@@ -59,7 +59,7 @@ struct Level : public World{
         im->BindAxis("CLR", static_pointer_cast<Level>(shared_from_this()), &Level::CameraLR, CID::ANY);
         
         auto ground = Entity::New();
-        ground->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),make_shared<PBRMaterialInstance>( Material::Manager::GetMaterial<PBRMaterial>()));
+        ground->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),make_shared<PBRMaterialInstance>( Material::Manager::Get<PBRMaterial>()));
         ground->GetTransform()->LocalScaleDelta(vector3(10));
         
         auto flagpole = New<Flagpole>();

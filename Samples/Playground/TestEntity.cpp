@@ -29,7 +29,7 @@ void TestEntity::CommonInit(){
 	//default staticmesh
 	auto mesh = EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetMesh("bunny_decimated.obj"));
 	if (!sharedMatInst) {
-		sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
+		sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	}
 	mesh->SetMaterial(sharedMatInst);
 

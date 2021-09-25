@@ -178,7 +178,7 @@ Character::Character() {
 	auto pound_do_anim = make_shared<AnimationAssetSegment>(all_clips, 196, 200);
 	auto pound_end_anim = make_shared<AnimationAssetSegment>(all_clips, 201, 207);
 	auto mesh = make_shared<MeshAssetSkinned>("character_anims.fbx", skeleton);
-	auto material = make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>());
+	auto material = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	material->SetAlbedoColor({1,0.4,0.2,1});
 
 	auto childEntity = make_shared<Entity>();										// I made the animation facing the wrong way
@@ -217,7 +217,7 @@ Character::Character() {
 	auto handEntity = make_shared<Entity>();
     MeshAssetOptions opt;
     opt.scale = 0.4f;
-	handEntity->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),make_shared<PBRMaterialInstance>(Material::Manager::GetMaterial<PBRMaterial>()));
+	handEntity->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
 	auto handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
 	auto handsocket = animcomp->AddSocket("character:hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
 

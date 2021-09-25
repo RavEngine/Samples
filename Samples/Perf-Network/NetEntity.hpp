@@ -38,7 +38,7 @@ struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable
 		rpc->RegisterClientRPC(RavEngine::to_underlying(RPCs::UpdateTransform), rpccomp, &NetTransform::UpdateTransform);
 
 		if (!matinst) {
-			matinst = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::GetMaterial<RavEngine::PBRMaterial>());
+			matinst = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
 		}
         RavEngine::MeshAssetOptions opt;
         opt.scale = 0.1;
