@@ -100,7 +100,7 @@ void PerfC_World::OnActivate(){
 	
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
-		textures[i] = make_shared<Texture>(StrFormat("tx{}.png",i+1));
+		textures[i] = Texture::Manager::Get(StrFormat("tx{}.png",i+1));
 		materialInstances[i] = make_shared<DemoMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		materialInstances[i]->SetAlbedoTexture(textures[i]);
 			}

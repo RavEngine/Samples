@@ -79,7 +79,7 @@ void Level::OnActivate() {
 	wallTextures[23] = TextureManager::defaultTexture;
 	App::Resources->IterateDirectory("textures", [&](const string& file) {
 		auto name = std::filesystem::path(file).filename();
-		auto tex = make_shared<Texture>(name.string());
+		auto tex = Texture::Manager::Get(name.string());
 		auto pos = std::distance(names.begin(), std::find(names.begin(), names.end(), name.replace_extension("").string()));
 
 		if (pos != 24) {

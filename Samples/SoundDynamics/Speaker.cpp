@@ -18,7 +18,7 @@ Speaker::Speaker(Ref<AudioAsset> a) {
 
 	if (!speakerInstance) {
 		speakerInstance = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-		auto texture = make_shared<Texture>("speaker.png");
+		auto texture = Texture::Manager::Get("speaker.png");
 		speakerInstance->SetAlbedoTexture(texture);
 	}
 	audio->Play();
