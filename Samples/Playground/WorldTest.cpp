@@ -126,7 +126,7 @@ void TestWorld::SetupInputs(){
 	//	Ref<Texture> t = new Texture("youcantrun.png");
 	//	material->SetAlbedoTexture(t);
 	
-	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetMesh("cube.obj");
+	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetDefault("cube.obj");
 	
 	anonymous = make_shared<RavEngine::Entity>();
 	anonymous->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);

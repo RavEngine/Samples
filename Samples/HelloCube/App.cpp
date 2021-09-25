@@ -40,7 +40,7 @@ struct HelloCubeWorld : public RavEngine::World {
 		// setup inside its constructor for Unreal-style inheritance. 
 
 		// We will start by loading the cube mesh. The cube is one of the default primitives that comes with RavEngine.
-		auto cubeMesh = MeshAsset::Manager::GetMesh("cube.obj");
+		auto cubeMesh = MeshAsset::Manager::GetDefault("cube.obj");
 
 		// Next we need to define a material for the cube. We can use the default material.
 		// RavEngine can optimize your rendering for you by batching if you minimize the number of Material Instances you create,

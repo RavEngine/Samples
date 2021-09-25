@@ -75,10 +75,10 @@ struct DemoObject : public RavEngine::Entity{
 };
 
 void PerfC_World::OnActivate(){
-	meshes[0] = MeshAsset::Manager::GetMesh("cube.obj");
-	meshes[1] = MeshAsset::Manager::GetMesh("sphere.obj");
-	meshes[2] = MeshAsset::Manager::GetMesh("cone.obj");
-	meshes[3] = MeshAsset::Manager::GetMesh("cylinder.obj");
+	meshes[0] = MeshAsset::Manager::GetDefault("cube.obj");
+	meshes[1] = MeshAsset::Manager::GetDefault("sphere.obj");
+	meshes[2] = MeshAsset::Manager::GetDefault("cone.obj");
+	meshes[3] = MeshAsset::Manager::GetDefault("cylinder.obj");
 	
 	Ref<Camera> cam = make_shared<Camera>();
 	

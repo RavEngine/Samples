@@ -14,7 +14,7 @@ public:
     virtual ~Table(){}
     Table(){
         //create the table
-        auto tablemesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetMesh("HockeyTable.obj"));
+        auto tablemesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetDefault("HockeyTable.obj"));
         Ref<RavEngine::PBRMaterialInstance> matinst = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
         tablemesh->SetMaterial(matinst);
 

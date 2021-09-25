@@ -54,7 +54,7 @@ Flagpole::Flagpole(){
     
     // load the special flag, which uses a different shader
     {
-        auto mat = RavEngine::New<PBRMaterialInstance>(RavEngine::New<PBRMaterial>("flag_special"));    // we use New here due to a bug with Material::Manager
+        auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>("flag_special"));
         flags.push_back({"My Room",mat});
     }
     
