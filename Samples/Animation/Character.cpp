@@ -189,19 +189,6 @@ Character::Character() {
 	// load the mesh and material onto the character
 	auto cubemesh = childEntity->EmplaceComponent<SkinnedMeshComponent>(skeleton, mesh);
 	cubemesh->SetMaterial(material);
-	childEntity->EmplaceComponent<BoneDebugRenderer>();
-
-	struct DebugRenderer : public RavEngine::IDebugRenderer {
-		void DrawDebug(RavEngine::DebugDraw& dbg) const override {
-			auto owner = GetOwner().lock();
-			if (owner) {
-				owner->GetComponent<RavEngine::PhysicsCollider>().value()->DebugDraw(dbg, 0x0000FFFF);
-			}
-		}
-	};
-#ifdef _DEBUG
-	EmplaceComponent<DebugRenderer>();
-#endif
 
 	// load the collider and physics settings
 	rigidBody = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);

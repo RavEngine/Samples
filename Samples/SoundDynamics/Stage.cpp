@@ -39,18 +39,6 @@ Stage::Stage() {
 	});
 	GetTransform()->LocalTranslateDelta(vector3(0,audioRoom->GetRoomDimensions().y / 2,0));
 
-	struct RoomDebugRenderer : public IDebugRenderer {
-		void DrawDebug(RavEngine::DebugDraw& dbg) const override {
-			auto owner = std::static_pointer_cast<Entity>(GetOwner().lock());
-			if (owner) {
-				auto room = owner->GetComponent<AudioRoom>();
-				if (room) {
-					room.value()->DrawDebug(dbg);
-				}
-			}
-		}
-	};
-	roomEntity->EmplaceComponent<RoomDebugRenderer>();
 }
 
 Ref<AudioRoom> Stage::GetRoom()

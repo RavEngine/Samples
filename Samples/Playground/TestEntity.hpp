@@ -18,7 +18,7 @@
 #include "RavEngine/BuiltinMaterials.hpp"
 #include <RavEngine/MeshAsset.hpp>
 #include <RavEngine/Common3D.hpp>
-#include <RavEngine/DebugDraw.hpp>
+#include <RavEngine/DebugDrawer.hpp>
 #include <RavEngine/NetworkReplicable.hpp>
 #include <RavEngine/CTTI.hpp>
 #include <RavEngine/RPCComponent.hpp>
@@ -78,15 +78,5 @@ public:
 
 	RavEngine::ctti_t NetTypeID() const override {
 		return RavEngine::CTTI<TestEntity>();
-	}
-};
-
-struct TestEntityDebugRenderer : public RavEngine::IDebugRenderer{
-	void DrawDebug(RavEngine::DebugDraw& dbg) const override{
-		auto owner = std::static_pointer_cast<TestEntity>(GetOwner().lock());
-		if (owner){
-			auto script = owner->GetComponent<TestEntityController>().value();
-			owner->GetComponent<RavEngine::PhysicsCollider>().value()->DebugDraw(dbg, script->contactCount == 0 ? 0x0000FFFF : 0xFFFFFFFF);
-		}
 	}
 };

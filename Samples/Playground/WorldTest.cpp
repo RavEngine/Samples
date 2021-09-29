@@ -174,19 +174,6 @@ void TestWorld::SetupInputs(){
 	//audiosource->SetLoop(true);
 //	audiosource->SetVolume(5);
 	
-	struct RoomDebugRenderer : public IDebugRenderer{
-		void DrawDebug(RavEngine::DebugDraw& dbg) const override{
-			auto owner = std::static_pointer_cast<TestEntity>(GetOwner().lock());
-			if (owner){
-				auto room = owner->GetComponent<AudioRoom>();
-				if (room){
-					room.value()->DrawDebug(dbg);
-				}
-			}
-		}
-	};
-	floorplane->EmplaceComponent<RoomDebugRenderer>();
-	
 	Spawn(floorplane);
 	
 	dl = make_shared<Entity>();

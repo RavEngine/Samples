@@ -56,9 +56,7 @@ TestEntity::TestEntity() : Entity(){
     EmplaceComponent<CapsuleCollider>(1,1,sharedMat);
 	
 	CommonInit();
-	
-	EmplaceComponent<TestEntityDebugRenderer>();
-	
+		
 	EmplaceComponent<NetworkIdentity>();
 }
 

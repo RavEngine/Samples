@@ -5,7 +5,7 @@
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/Texture.hpp>
 #include <RavEngine/BuiltinMaterials.hpp>
-#include <RavEngine/DebugDraw.hpp>
+#include <RavEngine/DebugDrawer.hpp>
 
 struct TableDebugRenderer;
 
@@ -58,19 +58,5 @@ public:
 		//load texture
 		Ref<RavEngine::Texture> t = std::make_shared<RavEngine::Texture>("HockeyTable.png");
         matinst->SetAlbedoTexture(t);
-		
-		//add the debug renderer
-		EmplaceComponent<TableDebugRenderer>();
     }
 };
-
-struct TableDebugRenderer : public RavEngine::IDebugRenderer{
-		
-	void DrawDebug(RavEngine::DebugDraw& dbg) const override{
-		auto boxes = GetOwner().lock()->GetAllComponentsOfType<RavEngine::BoxCollider>();
-		for(const auto& box : boxes){
-			std::static_pointer_cast<RavEngine::BoxCollider>(box)->DebugDraw(dbg);
-		}
-	}
-};
-
