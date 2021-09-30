@@ -65,7 +65,11 @@ struct Level : public World{
         opt.keepInSystemRAM = true;
         auto mesh = MeshAsset::Manager::Get("maze.fbx", opt);
         mazeEntity->EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-        navMesh = mazeEntity->EmplaceComponent<NavMeshComponent>(mesh,NavMeshComponent::Options());
+        auto nvopt = NavMeshComponent::Options();
+        //nvopt.agent.radius = 0.0001;
+        //nvopt.agent.maxClimb = 0.001;   // no climbing
+        navMesh = mazeEntity->EmplaceComponent<NavMeshComponent>(mesh,nvopt);
+        navMesh->debugEnabled = true;
         //navMesh->CalculatePath(vector3(1,0,1), vector3(-1,0,-1));
         
         Spawn(cameraRoot);
