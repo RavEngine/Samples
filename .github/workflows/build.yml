@@ -12,8 +12,12 @@ jobs:
           submodules: true
       - name: Install Dependencies
         run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo apt-get install cmake g++-8 ninja-build libgl1-mesa-dev libasound2-dev -y --no-install-recommends 
+      - name: Configure
+        run: mkdir -p build; mkdir -p build/linux; cd build/linux; export CC=/usr/bin/gcc-8; export CXX=/usr/bin/g++-8; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
       - name: Build
-        run: mkdir -p build; mkdir -p build/linux; cd build/linux; export CC=/usr/bin/gcc-8; export CXX=/usr/bin/g++-8; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. && cmake --build . --config release --target install 
+        run: cd build/linux && cmake --build . --config release --target install 
+      - name: Fix Permissions
+        run: cd build/linux; chmod +x *.AppImage
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -28,8 +32,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+      - name: Configure
+        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release .. 
       - name: Build
-        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release .. && cmake --build . --config release --target install
+        run: cd build; cmake --build . --config release --target install
+      - name: Fix Permissions
+        run: cd build/release && chmod +x */Contents/MacOS/*
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -44,8 +52,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+      - name: Configure
+        run: mkdir build; cd build; mkdir win; cd win; cmake -DCMAKE_BUILD_TYPE=Release ..\.. ; cmake ..\.. 
       - name: Build
-        run: mkdir build; cd build; mkdir win; cd win; cmake -DCMAKE_BUILD_TYPE=Release ..\.. ; cmake ..\.. ; cmake --build . --config release --target install
+        run: cd build; cd win; cmake --build . --config release --target install
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -64,7 +74,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
-      - name: CMake Configure
+      - name: Configure
         run: mkdir build; cd build; mkdir uwp; cd uwp; cmake -G "Visual Studio 16 2019" -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. ; cmake -G "Visual Studio 16 2019" -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\..;
       - name: Build & Publish
         run: cd build\uwp ; & "MSbuild.exe" "RavEngine_Samples.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x64"
