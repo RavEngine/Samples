@@ -17,14 +17,14 @@ void Performance_C::OnStartup(int argc, char **argv){
 	RenderEngine::VideoSettings.width = 1280;
 	RenderEngine::VideoSettings.height = 720;
 	
-	Renderer->SyncVideoSettings();
+    GetRenderEngine().SyncVideoSettings();
     
     //unlock the tickrate
     SetMinTickTime(std::chrono::duration<double, std::milli>(0));
 	
 	AddWorld(std::make_shared<PerfC_World>());
 	
-	SetWindowTitle(StrFormat("{} | {}", APPNAME, Renderer->GetCurrentBackendName()).c_str());
+	SetWindowTitle(StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 }
 
 START_APP(Performance_C);

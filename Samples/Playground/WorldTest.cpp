@@ -54,8 +54,8 @@ void TestWorld::PostTick(float fpsScale){
     
     RenderEngine::DebugPrint(1, 0x4f, "TPS: {}", round(App::CurrentTPS()));
     RenderEngine::DebugPrint(2, 0x4f, "TPS Scale: {}", fpsScale);
-    RenderEngine::DebugPrint(3, 0x4f, "FPS: {}", round(App::Renderer->GetCurrentFPS()));
-    RenderEngine::DebugPrint(4, 0x4f, "Frame Time: {} ms", App::Renderer->GetLastFrameTime());
+    RenderEngine::DebugPrint(3, 0x4f, "FPS: {}", round(App::GetRenderEngine().GetCurrentFPS()));
+    RenderEngine::DebugPrint(4, 0x4f, "Frame Time: {} ms", App::GetRenderEngine().GetLastFrameTime());
     RenderEngine::DebugPrint(5, 0x4f, "Physics Bodies: {}", TestEntityController::objectcount.load());
 	
 	dl->GetTransform()->LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));

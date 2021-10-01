@@ -24,7 +24,7 @@ struct MetricsSystem : public AutoCTTI {
 		gui->EnqueueUIUpdate([this,elem] {
 			elem->SetInnerRML(StrFormat(
 				"FPS: {} ({} ms) <br /> TPS: {} <br /> Num Entities: {}",
-				(int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime(),
+				(int)App::GetRenderEngine().GetCurrentFPS(), (int)App::GetRenderEngine().GetLastFrameTime(),
 				(int)App::CurrentTPS(),
 				num_entities
 			));

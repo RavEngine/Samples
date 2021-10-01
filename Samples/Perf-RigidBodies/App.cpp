@@ -7,7 +7,7 @@ struct App : public RavEngine::App{
 	void OnStartup(int argc, char** argv) override{
 		AddWorld(std::make_shared<Level>());
 		
-		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, Renderer->GetCurrentBackendName()).c_str());
+		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
 };
 

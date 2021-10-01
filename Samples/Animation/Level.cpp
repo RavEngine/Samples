@@ -98,5 +98,5 @@ void Level::SetupInputs(){
 
 void Level::PostTick(float)
 {
-	App::Renderer->DebugPrint(0,0x4F,"{}",App::Renderer->GetCurrentBackendName());
+	App::GetRenderEngine().DebugPrint(0,0x4F,"{}",App::GetRenderEngine().GetCurrentBackendName());
 }

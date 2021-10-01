@@ -85,7 +85,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 			count--;
             
             auto lastTPS = App::CurrentTPS();
-            auto lastFPS = App::Renderer->GetCurrentFPS();
+            auto lastFPS = App::GetRenderEngine().GetCurrentFPS();
             auto guic = own->GetComponent<GUIComponent>().value();
             if (total - count > 30 && ( lastTPS < 30 && lastFPS < 30)){
                 totalLostTicks++;

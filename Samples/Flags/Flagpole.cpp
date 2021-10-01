@@ -67,6 +67,7 @@ Flagpole::Flagpole(){
     animcomp->InsertState(all_anim);
     animcomp->Goto(0,true);
     animcomp->Play();
+    animcomp->debugEnabled = true;
     
     // load shaders
 }

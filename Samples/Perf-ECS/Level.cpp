@@ -21,7 +21,7 @@ TPS : {} ({} ops/s) <br />
 Entities : {} <br />
 </p> 
 )",
-			(int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime(),
+			(int)App::GetRenderEngine().GetCurrentFPS(), (int)App::GetRenderEngine().GetLastFrameTime(),
 			FormatWithSep<int>(App::CurrentTPS()), FormatWithSep((int)App::CurrentTPS() * PA_Entity::num_objects * 2),
 			FormatWithSep(PA_Entity::num_objects.load())
 			));

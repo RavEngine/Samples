@@ -77,7 +77,7 @@ void Level::OnActivate() {
 
 	wallTextures[0] = TextureManager::defaultTexture;
 	wallTextures[23] = TextureManager::defaultTexture;
-	App::Resources->IterateDirectory("textures", [&](const string& file) {
+	App::GetResources().IterateDirectory("textures", [&](const string& file) {
 		auto name = std::filesystem::path(file).filename();
 		auto tex = Texture::Manager::Get(name.string());
 		auto pos = std::distance(names.begin(), std::find(names.begin(), names.end(), name.replace_extension("").string()));
@@ -150,7 +150,7 @@ void Level::OnActivate() {
 	// load audio & initialize music selector
     {
         int music_id = 0;
-        App::Resources->IterateDirectory("sounds", [&](const string& track) {
+        App::GetResources().IterateDirectory("sounds", [&](const string& track) {
             auto path = std::filesystem::path(track);
             if (path.extension() == ".mp3") {
                 auto leaf_name = path.filename();

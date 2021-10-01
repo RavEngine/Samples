@@ -12,8 +12,8 @@ struct FPSSystem : public RavEngine::AutoCTTI {
         gui->EnqueueUIUpdate([=]{
             doc->GetElementById(element)->SetInnerRML(RavEngine::StrFormat("TPS: {} <br /> FPS: {} ({} ms)",
                                                                            std::round(RavEngine::App::CurrentTPS()),
-                                                                           std::round(RavEngine::App::Renderer->GetCurrentFPS()),
-                                                                           std::round(RavEngine::App::Renderer->GetLastFrameTime())));
+                                                                           std::round(RavEngine::App::GetRenderEngine().GetCurrentFPS()),
+                                                                           std::round(RavEngine::App::GetRenderEngine().GetLastFrameTime())));
         });
     };
 };

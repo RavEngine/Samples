@@ -16,7 +16,7 @@ struct SingleEntityMarker : public Component, public Queryable<SingleEntityMarke
 struct FPSSystem : public AutoCTTI {
 	void Tick(float scale, Ref<SingleEntityMarker>){
 		App::DispatchMainThread([](){
-			App::SetWindowTitle(StrFormat("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::Renderer->GetCurrentBackendName(), (int)App::CurrentTPS(), (int)App::Renderer->GetCurrentFPS(), (int)App::Renderer->GetLastFrameTime()).c_str());
+			App::SetWindowTitle(StrFormat("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::GetRenderEngine().GetCurrentBackendName(), (int)App::CurrentTPS(), (int)App::GetRenderEngine().GetCurrentFPS(), (int)App::GetRenderEngine().GetLastFrameTime()).c_str());
 		});
 	}
 };

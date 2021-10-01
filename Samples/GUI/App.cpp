@@ -16,7 +16,7 @@ void ::App::OnStartup(int argc, char **argv){
 		
 	AddWorld(std::make_shared<::World>());
 	
-	SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, Renderer->GetCurrentBackendName()).c_str());
+	SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 }
 
 START_APP(::App)
