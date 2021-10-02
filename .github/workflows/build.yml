@@ -18,14 +18,14 @@ jobs:
         run: cd build/linux && cmake --build . --config release --target install 
       - name: Fix Permissions
         run: cd build/linux; chmod +x *.AppImage
-	  - name: Compress Samples
-	    run: cd build/linux/Release; zip -r -9 Samples_Linux.zip *.AppImage
+      - name: Compress Samples
+        run: cd build/linux; zip -r -9 Samples_Linux.zip *.AppImage 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name:  RavEngine_Samples_linux64
           path:  build/linux/Release/Samples_Linux.zip
-
+        
   build-mac:
     name: Build Samples for macOS
     runs-on: macos-latest
