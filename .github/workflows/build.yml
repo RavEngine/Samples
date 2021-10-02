@@ -39,12 +39,12 @@ jobs:
       - name: Build
         run: cd build; cmake --build . --config release --target install
       - name: Compress Samples
-        run: cd build; zip -r -9 Samples_Mac.zip *.app
+        run: cd build/release; zip -r -9 Samples_Mac.zip *.app
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_macOS
-          path: build/release/Samples.zip
+          path: build/release/Samples_Mac.zip
                 
   build-windows:
     name: Build samples for Windows
