@@ -8,6 +8,15 @@
 using namespace RavEngine;
 using namespace std;
 
+template<typename T>
+struct SliderUpdater : public Rml::EventListener{
+    T func;
+    SliderUpdater(const T& f) : func(f){}
+    void ProcessEvent(Rml::Event& evt) final{
+        func(evt);
+    }
+};
+
 struct Level : public World{
     float deltaTime = 0;
     
@@ -15,7 +24,8 @@ struct Level : public World{
     
     Ref<Entity> cameraRoot = Entity::New();
     Ref<Entity> cameraGimball = Entity::New();
-    
+    Ref<MeshAsset> mesh;
+    NavMeshComponent::Options nvopt;
     Ref<NavMeshComponent> navMesh;
     
     void CameraLR(float amt){
@@ -24,6 +34,10 @@ struct Level : public World{
     
     void CameraUD(float amt){
         cameraGimball->GetTransform()->LocalRotateDelta(vector3(-amt * deltaTime * cameraSpeed,0,0));
+    }
+    
+    void RecalculateNav(){
+        GetComponent<NavMeshComponent>().value()->UpdateNavMesh(mesh, nvopt);
     }
     
     void Init(){
@@ -63,14 +77,62 @@ struct Level : public World{
         auto mazeEntity = Entity::New();
         MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
-        auto mesh = MeshAsset::Manager::Get("maze.fbx", opt);
+        mesh = MeshAsset::Manager::Get("maze.fbx", opt);
         mazeEntity->EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-        auto nvopt = NavMeshComponent::Options();
-        //nvopt.agent.radius = 0.0001;
-        //nvopt.agent.maxClimb = 0.001;   // no climbing
+        nvopt.agent.radius = 0.0001;
+        nvopt.agent.maxClimb = 1;   // no climbing
+        nvopt.cellSize = 0.2;
+        nvopt.cellHeight = 0.2;
         navMesh = mazeEntity->EmplaceComponent<NavMeshComponent>(mesh,nvopt);
         navMesh->debugEnabled = true;
         //navMesh->CalculatePath(vector3(1,0,1), vector3(-1,0,-1));
+        
+        // connect the UI
+        auto cellUpdater = new SliderUpdater([&,gui,doc](Rml::Event& evt){
+            auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
+            auto value = std::stof(field->GetValue());
+            gui->EnqueueUIUpdate([=]{
+                doc->GetElementById("cellSizeDisp")->SetInnerRML(field->GetValue());
+            });
+            App::DispatchMainThread([value,this]{
+                
+                nvopt.cellSize = value;
+                nvopt.cellHeight = value;
+                RecalculateNav();
+            });
+           
+        });
+        doc->GetElementById("cellSize")->AddEventListener(Rml::EventId::Change, cellUpdater);
+        
+        auto radiusUpdater = new SliderUpdater([&,gui,doc](Rml::Event& evt){
+            auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
+            auto value = std::stof(field->GetValue());
+            gui->EnqueueUIUpdate([=]{
+                doc->GetElementById("agentRadiusDisp")->SetInnerRML(field->GetValue());
+            });
+            App::DispatchMainThread([value,this]{
+                
+                nvopt.agent.radius = value;
+                RecalculateNav();
+            });
+           
+        });
+        doc->GetElementById("agentRadius")->AddEventListener(Rml::EventId::Change, radiusUpdater);
+        
+        auto slopeUpdater = new SliderUpdater([&,gui,doc](Rml::Event& evt){
+            auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
+            auto value = std::stof(field->GetValue());
+            gui->EnqueueUIUpdate([=]{
+                doc->GetElementById("maxSlopeDisp")->SetInnerRML(field->GetValue());
+            });
+            App::DispatchMainThread([value,this]{
+                
+                nvopt.agent.maxSlope = value;
+                RecalculateNav();
+            });
+           
+        });
+        doc->GetElementById("maxSlope")->AddEventListener(Rml::EventId::Change, slopeUpdater);
         
         Spawn(cameraRoot);
         Spawn(cameraGimball);
@@ -87,7 +149,7 @@ struct Level : public World{
 
 struct NavApp : public App{
     NavApp() : App(APPNAME) {}
-    void OnStartup(int argc, char** argv) final {
+    void OnStartup(int argc, char** argv) final {        
         auto world = std::make_shared<Level>();
         world->Init();
         AddWorld(world);
