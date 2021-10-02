@@ -18,11 +18,13 @@ jobs:
         run: cd build/linux && cmake --build . --config release --target install 
       - name: Fix Permissions
         run: cd build/linux; chmod +x *.AppImage
+	  - name: Compress Samples
+	    run: cd build/linux/Release; zip -r -9 Samples_Linux.zip *.AppImage
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name:  RavEngine_Samples_linux64
-          path:  build/linux/Release/*.AppImage
+          path:  build/linux/Release/Samples_Linux.zip
 
   build-mac:
     name: Build Samples for macOS
@@ -36,13 +38,13 @@ jobs:
         run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release .. 
       - name: Build
         run: cd build; cmake --build . --config release --target install
-      - name: Fix Permissions
-        run: cd build/release && chmod +x */Contents/MacOS/*
+      - name: Compress Samples
+        run: cd build; zip -r -9 Samples_Mac.zip *.app
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_macOS
-          path: build/release/*.app
+          path: build/release/Samples.zip
                 
   build-windows:
     name: Build samples for Windows
