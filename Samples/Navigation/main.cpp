@@ -41,6 +41,8 @@ struct Level : public World{
     }
     
     void Init(){
+        InitPhysics();
+
         auto cameraEntity = Entity::New();
         auto camera = cameraEntity->EmplaceComponent<CameraComponent>();
         camera->SetActive(true);
@@ -79,6 +81,9 @@ struct Level : public World{
         opt.keepInSystemRAM = true;
         mesh = MeshAsset::Manager::Get("maze.fbx", opt);
         mazeEntity->EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+        mazeEntity->EmplaceComponent<RigidBodyStaticComponent>();
+        auto physmat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0.5);
+        mazeEntity->EmplaceComponent<MeshCollider>(mesh,physmat);
         nvopt.agent.radius = 0.0001;
         nvopt.agent.maxClimb = 1;   // no climbing
         nvopt.cellSize = 0.2;
@@ -134,12 +139,21 @@ struct Level : public World{
         });
         doc->GetElementById("maxSlope")->AddEventListener(Rml::EventId::Change, slopeUpdater);
         
+        auto ball = Entity::New();
+        ball->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+        ball->EmplaceComponent<RigidBodyDynamicComponent>();
+        ball->EmplaceComponent<BoxCollider>(vector3(1,1,1),physmat);
+        ball->GetTransform()->LocalTranslateDelta(vector3(0,10,0));
+        ball->GetComponent<StaticMesh>().value()->GetMaterial()->SetAlbedoColor({1,0,0,1});
+        
         Spawn(cameraRoot);
         Spawn(cameraGimball);
         Spawn(cameraEntity);
         Spawn(mazeEntity);
         Spawn(lightEntity);
         Spawn(guiEntity);
+        Spawn(ball);
+        
     }
     
     void PostTick(float d) final{

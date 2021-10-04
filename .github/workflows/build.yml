@@ -17,7 +17,7 @@ jobs:
       - name: Build
         run: cd build/linux && cmake --build . --config release --target install 
       - name: Fix Permissions
-        run: cd build/linux; chmod +x *.AppImage
+        run: cd build/linux/Release; chmod +x *.AppImage
       - name: Compress Samples
         run: cd build/linux; zip -r -9 Samples_Linux.zip *.AppImage 
       - name: Upload Artifacts
