@@ -309,6 +309,7 @@ Character::Character() {
 	// animator controllers are asynchronous to your other code
 	// so play and pause simply signal the controller to perform an action
 	animcomp->Play();
+    animcomp->debugEnabled = true;
 }
 
 void Character::Move(const vector3& dir, decimalType speedMultiplier){
