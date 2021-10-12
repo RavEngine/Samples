@@ -136,7 +136,7 @@ void Level::OnActivate() {
 			if (auto owning = world.lock()) {
 				auto sources = owning->GetAllComponentsOfType<AudioSourceComponent>();
 				auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
-				for (const auto& source : sources) {
+				for (const auto& source : sources.value()) {
 					auto player = static_pointer_cast<AudioSourceComponent>(source);
 					player->SetAudio(owning->tracks[selbox->GetSelection()]);
 					player->Restart();

@@ -217,13 +217,14 @@ void PerfC_World::PostTick(float scale){
 void PerfC_World::ToggleFullbright(){
 	fullbright = !fullbright;
 	
-	auto dls = GetAllComponentsOfType<AmbientLight>();
-	auto als = GetAllComponentsOfType<DirectionalLight>();
-	
-	for(auto dl : dls){
-		static_pointer_cast<DirectionalLight>(dl)->Intensity = fullbright ? 1 : 0.5;
-	}
-	for(auto al : als){
-        static_pointer_cast<AmbientLight>(al)->Intensity = fullbright ? 1 : 0.3;
-	}
+    if(auto& dls = GetAllComponentsOfType<AmbientLight>()){
+        for(auto dl : dls.value()){
+            static_pointer_cast<DirectionalLight>(dl)->Intensity = fullbright ? 1 : 0.5;
+        }
+    }
+    if(auto& als = GetAllComponentsOfType<DirectionalLight>()){
+        for(auto& al : als.value()){
+            static_pointer_cast<AmbientLight>(al)->Intensity = fullbright ? 1 : 0.3;
+        }
+    }
 }

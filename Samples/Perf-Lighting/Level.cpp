@@ -59,11 +59,11 @@ void Level::OnActivate() {
 
 			auto world = level.lock();
 			const auto objects = world->GetAllComponentsOfType<ObjectMarker>();
-			for (const auto& obj : objects) {
+			for (const auto& obj : objects.value()) {
 				obj->GetOwner().lock()->GetComponent<StaticMesh>().value()->Enabled = false;
 			}
 			int i = 1;
-			for (const auto& obj : objects) {
+			for (const auto& obj : objects.value()) {
 				obj->GetOwner().lock()->GetComponent<StaticMesh>().value()->Enabled = true;
 				if (i >= value) {
 					break;
