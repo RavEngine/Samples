@@ -27,6 +27,8 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - A virtual soundstage demonstrating the audio reverbation modeling feature 
 1. Flags
    - Mixing skeletal and vertex animation, along using vector graphics on textures
+1. Gravity
+   - Creating orbits using PhysX forces
 
 ## How to try the samples without building
 1. Sign in to GitHub in your browser. This is required for accessing the downloads.

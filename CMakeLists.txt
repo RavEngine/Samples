@@ -125,3 +125,5 @@ add_sample("SoundDynamics")
 add_sample("Flags")
 add_sample("Navigation")
 add_sample("HelloCube")
+add_sample("Gravity")
+
