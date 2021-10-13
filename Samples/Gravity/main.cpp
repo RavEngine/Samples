@@ -17,7 +17,7 @@ struct HeavyThing : public Entity{
         EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj",opt),matinst);
         if (mass < 1000){
             auto light = EmplaceComponent<PointLight>();
-            light->Intensity = scaleOverride * 10;
+            light->Intensity = scaleOverride * 7;
             light->color = colorOverride;
         }
     }
@@ -47,21 +47,28 @@ struct Level : public World{
         
         // lighting and cameras
         auto lightcam = Entity::New();
-        lightcam->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
+        lightcam->EmplaceComponent<AmbientLight>()->Intensity = 0.5;
         lightcam->EmplaceComponent<CameraComponent>()->SetActive(true);
         lightcam->GetTransform()->LocalRotateDelta(vector3(-PI/2,0,0));
         lightcam->GetTransform()->WorldTranslateDelta(vector3(0,30,0));
         Spawn(lightcam);
         
         // the black hole
-        auto blackhole = RavEngine::New<HeavyThing>(1000);
+        auto blackhole = RavEngine::New<HeavyThing>(1000,0.2,ColorRGBA{0,0,0,1});
         Spawn(blackhole);
         
         Array<int,5> stars      {50,20,10,30,40};
         Array<int, 5> startDist {10,15, 4,12,20};
+        Array<ColorRGBA, 5> colors{
+            ColorRGBA{0,0.2,1,1},
+            ColorRGBA{1,1,0,1},
+            ColorRGBA{1,0,0,1},
+            ColorRGBA{1,1,0,1},
+            ColorRGBA{0,0.8,1,1}
+        };
         
         for(int i = 0; i < stars.size(); i++){
-            auto star = RavEngine::New<HeavyThing>(stars[i],stars[i]/50.0);
+            auto star = RavEngine::New<HeavyThing>(stars[i],stars[i]/50.0,colors[i]);
             star->GetTransform()->SetLocalPosition(vector3(0,0,startDist[i]));
             Spawn(star);
             star->GetComponent<RigidBodyDynamicComponent>().value()->SetLinearVelocity(vector3(10,0,0),true);
