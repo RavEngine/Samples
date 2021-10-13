@@ -53,8 +53,10 @@ struct Level : public World{
         lightcam->GetTransform()->WorldTranslateDelta(vector3(0,30,0));
         Spawn(lightcam);
         
+        skybox.enabled = false;
+        
         // the black hole
-        auto blackhole = RavEngine::New<HeavyThing>(1000,0.2,ColorRGBA{0,0,0,1});
+        auto blackhole = RavEngine::New<HeavyThing>(1000,0.2,ColorRGBA{0.1,0.1,0.1,1});
         Spawn(blackhole);
         
         Array<int,5> stars      {50,20,10,30,40};
