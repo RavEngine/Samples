@@ -1,0 +1,16 @@
+<rml>
+    <head>
+        <link type="text/rcss" href="default.rcss"></link>
+        <style>
+            *{
+                font-size: 15dp;
+            }
+        </style>
+    </head>
+    <body>
+        Controls: <br />
+        WASD: Pan Camera <br/>
+        Arrow Up/Down: Zoom in / out<br/>
+        R: Reset camera
+    </body>
+</rml>
