@@ -112,6 +112,7 @@ struct Level : public World{
         
         Array<int,5> stars      {50,20,10,30,40};
         Array<int, 5> startDist {20,30,40,50,60};
+        Array<int, 5> startVel  { 5,8, 5, 2, 6};
         Array<ColorRGBA, 5> colors{
             ColorRGBA{0,0.2,1,1},
             ColorRGBA{1,1,0,1},
@@ -124,7 +125,7 @@ struct Level : public World{
             auto star = RavEngine::New<HeavyThing>(stars[i],stars[i]/50.0,colors[i]);
             star->GetTransform()->SetLocalPosition(vector3(0,0,startDist[i]));
             Spawn(star);
-            star->GetComponent<RigidBodyDynamicComponent>().value()->SetLinearVelocity(vector3(5,0,0),true);
+            star->GetComponent<RigidBodyDynamicComponent>().value()->SetLinearVelocity(vector3(startVel[i],0,0),true);
         }
        
         systemManager.EmplaceSystem<GravitySystem>(shared_from_this());
