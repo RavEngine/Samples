@@ -12,11 +12,10 @@ public:
 	Paddle(const RavEngine::ColorRGBA& color){
         RavEngine::MeshAssetOptions opt;
         opt.scale = 0.5;
-        auto mesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPaddle.obj",opt));
-		
-		Ref<RavEngine::PBRMaterialInstance> material = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
-		material->SetAlbedoColor(color);
-		mesh->SetMaterial(material);
+        
+        Ref<RavEngine::PBRMaterialInstance> material = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
+        material->SetAlbedoColor(color);
+        auto mesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPaddle.obj",opt),material);
 		
 		//PhysX doesn't have a cylinder primitive, so we use a sphere offset upwards and lock the axes
 		auto dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);

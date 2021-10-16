@@ -47,11 +47,15 @@ void PerfB_World::OnActivate() {
 	systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
 
 	// spawn demo entities
-
+#if 0
 	Debug::Log("Spawning {} entities",num_entities);
 	for (int i = 0; i < num_entities; i++) {
 		Spawn(make_shared<BasicEntity>(currentMesh,matinst));
 	}
+#else
+    Debug::Log("Spawning {} instances on entity",num_entities);
+    Spawn(make_shared<InstanceEntity>(currentMesh,matinst,num_entities));
+#endif
 
 	auto player = make_shared<Camera>();
 	Spawn(player);

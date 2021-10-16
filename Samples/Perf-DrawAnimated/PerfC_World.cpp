@@ -55,17 +55,16 @@ struct DemoObject : public RavEngine::Entity{
 		EmplaceComponent<ChildEntityComponent>(child);
         EmplaceComponent<SpinComponent>(vector3(spinrng(gen)/3,spinrng(gen)/3,spinrng(gen)/3));
 		
-		auto mesh = child->EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)]);		
-		if (!isLight){
-			inst->SetAlbedoColor({(float)colorrng(gen),(float)colorrng(gen),(float)colorrng(gen),1});
-		}
-		else{
-			auto light = child->EmplaceComponent<PointLight>();
-			inst->SetAlbedoColor({1,1,1,1});
-			light->Intensity = 5;
-		}
-		mesh->SetMaterial(inst);
-		
+        if (!isLight){
+            inst->SetAlbedoColor({(float)colorrng(gen),(float)colorrng(gen),(float)colorrng(gen),1});
+        }
+        else{
+            auto light = child->EmplaceComponent<PointLight>();
+            inst->SetAlbedoColor({1,1,1,1});
+            light->Intensity = 5;
+        }
+		auto mesh = child->EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)],inst);
+				
 		GetTransform()->AddChild(child->GetTransform());
 		
 		child->GetTransform()->LocalTranslateDelta(vector3(rng(gen),rng(gen),rng(gen)));

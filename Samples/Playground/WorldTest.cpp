@@ -129,7 +129,7 @@ void TestWorld::SetupInputs(){
 	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetDefault("cube.obj");
 	
 	anonymous = make_shared<RavEngine::Entity>();
-	anonymous->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
+	anonymous->EmplaceComponent<StaticMesh>(sharedMesh,material);
 	auto spotlight = anonymous->EmplaceComponent<SpotLight>();
 	spotlight->Intensity = 4;
 	spotlight->radius = 10;
@@ -139,7 +139,7 @@ void TestWorld::SetupInputs(){
 	InitPhysics();
 	
 	anonymousChild = make_shared<RavEngine::Entity>();
-	anonymousChild->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);;
+	anonymousChild->EmplaceComponent<StaticMesh>(sharedMesh,material);
 	anonymous->GetTransform()->AddChild(anonymousChild->GetTransform());
 	anonymousChild->GetTransform()->LocalTranslateDelta(vector3(17,0,0));
 	anonymousChild->EmplaceComponent<PointLight>()->Intensity = 4;
@@ -152,7 +152,7 @@ void TestWorld::SetupInputs(){
 	Spawn(anonymousChild);
 	
 	floorplane = make_shared<RavEngine::Entity>();
-	floorplane->EmplaceComponent<StaticMesh>(sharedMesh)->SetMaterial(material);
+	floorplane->EmplaceComponent<StaticMesh>(sharedMesh,material);
 	floorplane->GetTransform()->LocalScaleDelta(vector3(10, 0.5, 10));
 	floorplane->GetTransform()->LocalTranslateDelta(vector3(0, -20, 0));
 	floorplane->EmplaceComponent<RigidBodyStaticComponent>();

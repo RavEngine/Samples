@@ -27,12 +27,11 @@ atomic<int> TestEntityController::objectcount;
 void TestEntity::CommonInit(){
 	
 	//default staticmesh
-	auto mesh = EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("bunny_decimated.obj"));
-	if (!sharedMatInst) {
-		sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-	}
-	mesh->SetMaterial(sharedMatInst);
-
+    if (!sharedMatInst) {
+        sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+    }
+	auto mesh = EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("bunny_decimated.obj"),sharedMatInst);
+	
 	//RPC component
 	auto rpc = EmplaceComponent<RPCComponent>();
 	auto rpcFuncs = EmplaceComponent<TestEntityRPCs>();
