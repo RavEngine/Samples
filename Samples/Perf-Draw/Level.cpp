@@ -10,11 +10,11 @@
 using namespace std;
 using namespace RavEngine;
 
-static constexpr uint16_t num_entities =
+static constexpr uint32_t num_entities =
 #ifdef _DEBUG
 5000;
 #else
-50000;
+200000;
 #endif
 
 struct MetricsSystem : public AutoCTTI {
@@ -47,15 +47,8 @@ void PerfB_World::OnActivate() {
 	systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
 
 	// spawn demo entities
-#if 0
-	Debug::Log("Spawning {} entities",num_entities);
-	for (int i = 0; i < num_entities; i++) {
-		Spawn(make_shared<BasicEntity>(currentMesh,matinst));
-	}
-#else
     Debug::Log("Spawning {} instances on entity",num_entities);
-    Spawn(make_shared<InstanceEntity>(currentMesh,matinst,num_entities));
-#endif
+    Spawn(RavEngine::New<InstanceEntity>(currentMesh,matinst,num_entities));
 
 	auto player = make_shared<Camera>();
 	Spawn(player);

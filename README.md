@@ -12,7 +12,7 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
 1. Perf-ECS
    - ECS raw number crunching benchmark
 1. Perf-Draw
-   - autobatched instancing benchmark
+   - InstancedStaticMesh demo
 1. Perf-DrawAnimated
    - A stress test for high object count with animated lights
 1. Perf-Network
