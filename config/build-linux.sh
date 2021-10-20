@@ -4,4 +4,4 @@
 #export CXX=/usr/bin/clang++;
 ./init-linux.sh
 cd ../build/linux
-cmake --build . --config release --target install
+cmake --build . --config debug --target install
