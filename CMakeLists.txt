@@ -85,19 +85,21 @@ function (add_sample sample_dir)
 			COMPONENT Runtime
 		)
     elseif(LINUX)
-        INSTALL(CODE 
-			"include(../../appimage.cmake)
-			make_appimage(
-                EXE \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}\"
-                NAME \"${APPNAME}\"
-                ICON \"../../Samples/logo.png\"
-                DIR_ICON \"../../Samples/logo.png\"
-                OUTPUT_NAME \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.AppImage\"
-                ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.zip\"
+        if(CMAKE_BUILD_TYPE strequal Release)
+            INSTALL(CODE 
+                "include(../../appimage.cmake)
+                make_appimage(
+                    EXE \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}\"
+                    NAME \"${APPNAME}\"
+                    ICON \"../../Samples/logo.png\"
+                    DIR_ICON \"../../Samples/logo.png\"
+                    OUTPUT_NAME \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.AppImage\"
+                    ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.zip\"
+                )
+                " 
+                COMPONENT Runtime
             )
-			" 
-			COMPONENT Runtime
-		)
+        endif()
 	endif()
 
     # Strip binary for release builds
