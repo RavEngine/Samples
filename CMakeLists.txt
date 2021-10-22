@@ -85,8 +85,8 @@ function (add_sample sample_dir)
 			COMPONENT Runtime
 		)
     elseif(LINUX)
-        if(CMAKE_BUILD_TYPE strequal Release)
-            INSTALL(CODE 
+        if(CMAKE_BUILD_TYPE STREQUAL Release)
+            INSTALL(CODE
                 "include(../../appimage.cmake)
                 make_appimage(
                     EXE \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}\"
@@ -96,7 +96,7 @@ function (add_sample sample_dir)
                     OUTPUT_NAME \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.AppImage\"
                     ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.zip\"
                 )
-                " 
+                "
                 COMPONENT Runtime
             )
         endif()
