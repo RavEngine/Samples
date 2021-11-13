@@ -18,7 +18,7 @@ static constexpr uint32_t num_entities =
 #endif
 
 struct MetricsSystem : public AutoCTTI {
-	inline void Tick(float fpsScale, GUIComponent& gui) {
+	inline void operator()(float fpsScale, GUIComponent& gui) const{
 		auto doc = gui.GetDocument("main.rml");
 		auto elem = doc->GetElementById("diag");
 		gui.EnqueueUIUpdate([this,elem] {
@@ -62,17 +62,16 @@ void PerfB_World::OnActivate() {
 	
 	struct SelectionEventListener : public Rml::EventListener{
 		
-		WeakRef<PerfB_World> world;
-		SelectionEventListener(WeakRef<PerfB_World> s) : world(s){}
+		PerfB_World* world;
+		SelectionEventListener(PerfB_World* s) : world(s){}
 		
 		void ProcessEvent(Rml::Event& evt) override{
 			auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
-			world.lock()->SwitchMesh(static_cast<meshes>(selbox->GetSelection()));
+            world->SwitchMesh(static_cast<meshes>(selbox->GetSelection()));
 		}
 	};
 	
-    //TODO: FIX
-	//doc.GetElementById("sel")->AddEventListener(Rml::EventId::Change, new SelectionEventListener(static_pointer_cast<PerfB_World>(shared_from_this())));
+	doc->GetElementById("sel")->AddEventListener(Rml::EventId::Change, new SelectionEventListener(this));
     
 	// input manager for the GUI
 	Ref<InputManager> im = make_shared<InputManager>();
@@ -90,13 +89,12 @@ void PerfB_World::OnActivate() {
 	im->AddAxisMap("ROTATE_X", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
 	im->AddAxisMap("ZOOM", ControllerAxis::SDL_CONTROLLER_AXIS_RIGHTY, -1);
 
-    //TODO: FIX
-//	im->BindAxis("MouseX", gui, &GUIComponent::MouseX, CID::ANY, 0);
-//	im->BindAxis("MouseY", gui, &GUIComponent::MouseY, CID::ANY, 0);
-//	im->BindAnyAction(gui);
+    ComponentHandle<GUIComponent> g(control);
+	im->BindAxis("MouseX", g, &GUIComponent::MouseX, CID::ANY, 0);
+	im->BindAxis("MouseY", g, &GUIComponent::MouseY, CID::ANY, 0);
+    im->BindAnyAction(g->GetData());
 
 	//player controls
-    //TODO: FIX
     ComponentHandle<Player> h(player);
 	im->BindAxis("ZOOM", h, &Player::Zoom, CID::ANY);
 	im->BindAxis("ROTATE_Y", h, &Player::RotateLR, CID::ANY);
@@ -105,6 +103,8 @@ void PerfB_World::OnActivate() {
 	App::inputManager = im;
 
     // load systems
-    PlayerSystem p;
-    EmplaceSystem<PlayerSystem,Player>(p);
+    EmplaceSystem<PlayerSystem,Player>();
+    EmplaceTimedSystem<MetricsSystem,GUIComponent>(std::chrono::seconds(1));
+    
+    ExportTaskGraph(cout);
 }
