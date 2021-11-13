@@ -3,6 +3,7 @@
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/App.hpp>
+#include <RavEngine/ComponentHandle.hpp>
 #include <chrono>
 
 using namespace std;
@@ -11,10 +12,10 @@ using namespace RavEngine;
 STATIC(PA_Entity::num_objects);
 
 struct MetricsSystem : public AutoCTTI {
-	inline void Tick(float fpsScale, Ref<GUIComponent> gui) {
-		auto doc = gui->GetDocument("ui.rml");
+	inline void operator()(float fpsScale, GUIComponent& gui) const{
+		auto doc = gui.GetDocument("ui.rml");
 		auto elem = doc->GetElementById("diag");
-		gui->EnqueueUIUpdate([this,elem] {
+		gui.EnqueueUIUpdate([this,elem] {
 			elem->SetInnerRML(StrFormat(R"(<p>
 FPS: {}({} ms) <br />
 TPS : {} ({} ops/s) <br />
@@ -34,29 +35,30 @@ Entities : {} <br />
 void PerfA_World::OnActivate() {
 
 	// register system
-	systemManager.EmplaceSystem<CalcSystem>();
-	systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
+    
+	EmplaceSystem<CalcSystem,SineComponent,CosComponent>();
+	EmplaceTimedSystem<MetricsSystem,GUIComponent>(std::chrono::seconds(1));
 
 	// spawn demo entities
 	for (int i = 0; i < 60000; i++) {
-		Spawn(make_shared<PA_Entity>());
+        CreatePrototype<PA_Entity>();
 	}
 
 	// spawn Control entity
-	Ref<Entity> control = make_shared<Entity>();
-	auto gui = control->EmplaceComponent<GUIComponent>();
-	gui->AddDocument("ui.rml");
+	auto control = CreatePrototype<Entity>();
+	auto gui = control.EmplaceComponent<GUIComponent>();
+    gui.AddDocument("ui.rml");
 
-	Spawn(control);
 
 	// input manager for the GUI
 	Ref<InputManager> im = make_shared<InputManager>();
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
 
-	im->BindAxis("MouseX", gui, &GUIComponent::MouseX, CID::ANY, 0);
-	im->BindAxis("MouseY", gui, &GUIComponent::MouseY, CID::ANY, 0);
-	im->BindAnyAction(gui);
+    ComponentHandle<GUIComponent> g(control);
+	im->BindAxis("MouseX", g, &GUIComponent::MouseX, CID::ANY, 0);
+	im->BindAxis("MouseY", g, &GUIComponent::MouseY, CID::ANY, 0);
+    im->BindAnyAction(g->GetData());
 
 	App::inputManager = im;
 
