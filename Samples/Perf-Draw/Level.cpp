@@ -18,10 +18,10 @@ static constexpr uint32_t num_entities =
 #endif
 
 struct MetricsSystem : public AutoCTTI {
-	inline void Tick(float fpsScale, Ref<GUIComponent> gui) {
-		auto doc = gui->GetDocument("main.rml");
+	inline void Tick(float fpsScale, GUIComponent& gui) {
+		auto doc = gui.GetDocument("main.rml");
 		auto elem = doc->GetElementById("diag");
-		gui->EnqueueUIUpdate([this,elem] {
+		gui.EnqueueUIUpdate([this,elem] {
 			elem->SetInnerRML(StrFormat(
 				"FPS: {} ({} ms) <br /> TPS: {} <br /> Num Entities: {}",
 				(int)App::GetRenderEngine().GetCurrentFPS(), (int)App::GetRenderEngine().GetLastFrameTime(),
@@ -44,7 +44,7 @@ void PerfB_World::OnActivate() {
 	currentMesh->Exchange(cube);
     currentMesh->destroyOnDestruction = false;
 	
-	systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
+	//systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
 
 	// spawn demo entities
     Debug::Log("Spawning {} instances on entity",num_entities);
@@ -97,11 +97,14 @@ void PerfB_World::OnActivate() {
 
 	//player controls
     //TODO: FIX
-//	auto cam = player->GetComponent<Player>();
-//	im->BindAxis("ZOOM", cam, &Player::Zoom, CID::ANY);
-//	im->BindAxis("ROTATE_Y", cam, &Player::RotateLR, CID::ANY);
-//	im->BindAxis("ROTATE_X", cam, &Player::RotateUD, CID::ANY);
+    ComponentHandle<Player> h(player);
+	im->BindAxis("ZOOM", h, &Player::Zoom, CID::ANY);
+	im->BindAxis("ROTATE_Y", h, &Player::RotateLR, CID::ANY);
+	im->BindAxis("ROTATE_X", h, &Player::RotateUD, CID::ANY);
 
 	App::inputManager = im;
 
+    // load systems
+    PlayerSystem p;
+    EmplaceSystem<PlayerSystem,Player>(p);
 }

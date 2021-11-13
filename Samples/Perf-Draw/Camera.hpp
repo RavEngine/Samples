@@ -4,9 +4,9 @@
 #include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/CameraComponent.hpp>
 
-struct Player : public RavEngine::ScriptComponent {
+struct Player : public RavEngine::ComponentWithOwner {
     
-    Player(entity_t owner) : ScriptComponent(owner){}
+    Player(entity_t owner) : ComponentWithOwner(owner){}
     
 	float zoomspeed = 1;
 
@@ -25,9 +25,15 @@ struct Player : public RavEngine::ScriptComponent {
 		GetOwner().GetTransform().LocalRotateDelta((double)fpsScale * vector3(glm::radians(amt), 0, 0));
 	}
 
-	void Tick(float scale) override {
+	void Tick(float scale) {
 		fpsScale = scale;
 	}
+};
+
+struct PlayerSystem{
+    inline void operator()(float scale, Player& p) const{
+        p.Tick(scale);
+    }
 };
 
 struct Camera : public RavEngine::GameObject {
