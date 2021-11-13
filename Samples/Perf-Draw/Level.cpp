@@ -48,18 +48,17 @@ void PerfB_World::OnActivate() {
 
 	// spawn demo entities
     Debug::Log("Spawning {} instances on entity",num_entities);
-    Spawn(RavEngine::New<InstanceEntity>(currentMesh,matinst,num_entities));
+    CreatePrototype<InstanceEntity>(currentMesh,matinst,num_entities);
 
-	auto player = make_shared<Camera>();
-	Spawn(player);
+    auto player = CreatePrototype<Camera>();
 
 	// spawn Control entity
-	Ref<Entity> control = make_shared<Entity>();
-	auto gui = control->EmplaceComponent<GUIComponent>();
-	auto dirlight = control->EmplaceComponent<DirectionalLight>();
-	auto ambientLight = control->EmplaceComponent<AmbientLight>();
-	ambientLight->Intensity = 0.3;
-	auto doc = gui->AddDocument("main.rml");
+    auto control = CreatePrototype<GameObject>();
+	auto& gui = control.EmplaceComponent<GUIComponent>();
+	auto& dirlight = control.EmplaceComponent<DirectionalLight>();
+	auto& ambientLight = control.EmplaceComponent<AmbientLight>();
+	ambientLight.Intensity = 0.3;
+	auto doc = gui.AddDocument("main.rml");
 	
 	struct SelectionEventListener : public Rml::EventListener{
 		
@@ -72,10 +71,9 @@ void PerfB_World::OnActivate() {
 		}
 	};
 	
-	doc->GetElementById("sel")->AddEventListener(Rml::EventId::Change, new SelectionEventListener(static_pointer_cast<PerfB_World>(shared_from_this())));
+    //TODO: FIX
+	//doc.GetElementById("sel")->AddEventListener(Rml::EventId::Change, new SelectionEventListener(static_pointer_cast<PerfB_World>(shared_from_this())));
     
-	Spawn(control);
-
 	// input manager for the GUI
 	Ref<InputManager> im = make_shared<InputManager>();
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
@@ -92,15 +90,17 @@ void PerfB_World::OnActivate() {
 	im->AddAxisMap("ROTATE_X", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
 	im->AddAxisMap("ZOOM", ControllerAxis::SDL_CONTROLLER_AXIS_RIGHTY, -1);
 
-	im->BindAxis("MouseX", gui, &GUIComponent::MouseX, CID::ANY, 0);
-	im->BindAxis("MouseY", gui, &GUIComponent::MouseY, CID::ANY, 0);
-	im->BindAnyAction(gui);
+    //TODO: FIX
+//	im->BindAxis("MouseX", gui, &GUIComponent::MouseX, CID::ANY, 0);
+//	im->BindAxis("MouseY", gui, &GUIComponent::MouseY, CID::ANY, 0);
+//	im->BindAnyAction(gui);
 
 	//player controls
-	auto cam = player->GetComponent<Player>().value();
-	im->BindAxis("ZOOM", cam, &Player::Zoom, CID::ANY);
-	im->BindAxis("ROTATE_Y", cam, &Player::RotateLR, CID::ANY);
-	im->BindAxis("ROTATE_X", cam, &Player::RotateUD, CID::ANY);
+    //TODO: FIX
+//	auto cam = player->GetComponent<Player>();
+//	im->BindAxis("ZOOM", cam, &Player::Zoom, CID::ANY);
+//	im->BindAxis("ROTATE_Y", cam, &Player::RotateLR, CID::ANY);
+//	im->BindAxis("ROTATE_X", cam, &Player::RotateUD, CID::ANY);
 
 	App::inputManager = im;
 
