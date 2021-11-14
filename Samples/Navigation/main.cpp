@@ -4,6 +4,8 @@
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/NavMeshComponent.hpp>
+#include <RavEngine/GameObject.hpp>
+#include <RavEngine/CameraComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -22,50 +24,50 @@ struct Level : public World{
     
     float cameraSpeed = 0.02;
     
-    Ref<Entity> cameraRoot = Entity::New();
-    Ref<Entity> cameraGimball = Entity::New();
+    Entity cameraRoot;
+    Entity cameraGimball;
     Ref<MeshAsset> mesh;
     NavMeshComponent::Options nvopt;
     Ref<NavMeshComponent> navMesh;
     
     void CameraLR(float amt){
-        cameraRoot->GetTransform()->LocalRotateDelta(vector3(0,amt * deltaTime * cameraSpeed,0));
+        cameraRoot.GetTransform().LocalRotateDelta(vector3(0,amt * deltaTime * cameraSpeed,0));
     }
     
     void CameraUD(float amt){
-        cameraGimball->GetTransform()->LocalRotateDelta(vector3(-amt * deltaTime * cameraSpeed,0,0));
+        cameraGimball.GetTransform().LocalRotateDelta(vector3(-amt * deltaTime * cameraSpeed,0,0));
     }
     
     void RecalculateNav(){
-        GetComponent<NavMeshComponent>().value()->UpdateNavMesh(mesh, nvopt);
+        GetComponent<NavMeshComponent>().UpdateNavMesh(mesh, nvopt);
     }
     
     void Init(){
         InitPhysics();
 
-        auto cameraEntity = Entity::New();
-        auto camera = cameraEntity->EmplaceComponent<CameraComponent>();
-        camera->SetActive(true);
-        cameraEntity->GetTransform()->LocalTranslateDelta(vector3(0,0,50));
+        auto cameraEntity = CreatePrototype<GameObject>();
+        auto& camera = cameraEntity.EmplaceComponent<CameraComponent>();
+        camera.SetActive(true);
+        cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,0,50));
         
-        cameraRoot->GetTransform()->AddChild(cameraGimball->GetTransform());
-        cameraGimball->GetTransform()->AddChild(cameraEntity->GetTransform());
+        cameraRoot.GetTransform().AddChild(ComponentHandle<Transform>(cameraGimball));
+        cameraGimball.GetTransform().AddChild(ComponentHandle<Transform>(cameraEntity));
         
-        auto lightEntity = Entity::New();
-        lightEntity->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
-        lightEntity->EmplaceComponent<DirectionalLight>();
-        lightEntity->GetTransform()->LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
+        auto lightEntity = CreatePrototype<GameObject>();
+        lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;
+        lightEntity.EmplaceComponent<DirectionalLight>();
+        lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
-        auto guiEntity = Entity::New();
-        auto gui = guiEntity->EmplaceComponent<GUIComponent>();
-        auto doc = gui->AddDocument("ui.rml");
+        auto guiEntity = CreatePrototype<GameObject>();
+        auto& gui = guiEntity.EmplaceComponent<GUIComponent>();
+        auto doc = gui.AddDocument("ui.rml");
         
         auto im = App::inputManager = RavEngine::New<InputManager>();
         im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
         im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
         im->BindAxis("MouseX", gui, &GUIComponent::MouseX, CID::ANY);
         im->BindAxis("MouseY", gui, &GUIComponent::MouseY, CID::ANY);
-        im->BindAnyAction(gui);
+        im->BindAnyAction(gui.GetData());
         
         im->AddAxisMap("CUD", SDL_SCANCODE_W);
         im->AddAxisMap("CUD", SDL_SCANCODE_S,-1);
@@ -76,12 +78,12 @@ struct Level : public World{
         im->BindAxis("CLR", static_pointer_cast<Level>(shared_from_this()), &Level::CameraLR, CID::ANY);
         
         // create the navigation object
-        auto mazeEntity = Entity::New();
+        auto mazeEntity = CreatePrototype<GameObject>();
         MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
         mesh = MeshAsset::Manager::Get("maze.fbx", opt);
-        mazeEntity->EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-        mazeEntity->EmplaceComponent<RigidBodyStaticComponent>();
+        mazeEntity.EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+        mazeEntity.EmplaceComponent<RigidBodyStaticComponent>();
         auto physmat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0.5);
         mazeEntity->EmplaceComponent<MeshCollider>(mesh,physmat);
         nvopt.agent.radius = 0.0001;

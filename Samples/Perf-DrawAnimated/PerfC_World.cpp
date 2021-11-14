@@ -18,6 +18,7 @@ using namespace std;
 STATIC(PerfC_World::meshes);
 STATIC(PerfC_World::textures);
 STATIC(PerfC_World::TexturesEnabled) = true;
+STATIC(PerfC_World::paused) = false;
 
 static std::random_device rd; // obtain a random number from hardware
 static std::mt19937 gen(rd()); // seed the generator
@@ -48,9 +49,11 @@ struct DemoMaterialInstance : public RavEngine::PBRMaterialInstance{
 	}
 };
 
-struct DemoObject : public RavEngine::Entity{
-	DemoObject(Ref<DemoMaterialInstance> inst,bool isLight = false){
-		Ref<Entity> child = make_shared<Entity>();
+struct DemoObject : public RavEngine::GameObject{
+	void Create(Ref<DemoMaterialInstance> inst,bool isLight = false){
+        GameObject::Create();
+        
+		auto child = GetWorld()->CreatePrototype<GameObject>();
 		
 		EmplaceComponent<ChildEntityComponent>(child);
         EmplaceComponent<SpinComponent>(vector3(spinrng(gen)/3,spinrng(gen)/3,spinrng(gen)/3));
@@ -59,17 +62,17 @@ struct DemoObject : public RavEngine::Entity{
             inst->SetAlbedoColor({(float)colorrng(gen),(float)colorrng(gen),(float)colorrng(gen),1});
         }
         else{
-            auto light = child->EmplaceComponent<PointLight>();
+            auto& light = child.EmplaceComponent<PointLight>();
             inst->SetAlbedoColor({1,1,1,1});
-            light->Intensity = 5;
+            light.Intensity = 5;
         }
-		auto mesh = child->EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)],inst);
+		auto& mesh = child.EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)],inst);
 				
-		GetTransform()->AddChild(child->GetTransform());
+		GetTransform().AddChild(ComponentHandle<Transform>(child));
 		
-		child->GetTransform()->LocalTranslateDelta(vector3(rng(gen),rng(gen),rng(gen)));
+		child.GetTransform().LocalTranslateDelta(vector3(rng(gen),rng(gen),rng(gen)));
 		
-		child->EmplaceComponent<SpinComponent>(vector3(spinrng(gen),spinrng(gen),spinrng(gen)));
+		child.EmplaceComponent<SpinComponent>(vector3(spinrng(gen),spinrng(gen),spinrng(gen)));
 	}
 };
 
@@ -79,19 +82,15 @@ void PerfC_World::OnActivate(){
 	meshes[2] = MeshAsset::Manager::GetDefault("cone.obj");
 	meshes[3] = MeshAsset::Manager::GetDefault("cylinder.obj");
 	
-	Ref<Camera> cam = make_shared<Camera>();
+	auto cam = CreatePrototype<Camera>();
+			
+	lightEntity = CreatePrototype<GameObject>();
+	auto& al = lightEntity.EmplaceComponent<AmbientLight>();
+	al.Intensity = 0.3;
 	
-	const auto shared_ptr_hack = std::shared_ptr<PerfC_World>(this, [](PerfC_World*){});
-	
-	Spawn(cam);
-	
-	lightEntity = make_shared<Entity>();
-	auto al = lightEntity->EmplaceComponent<AmbientLight>();
-	al->Intensity = 0.3;
-	
-	auto dl = lightEntity->EmplaceComponent<DirectionalLight>();
-	dl->color = {0.7,1,1,1};
-	dl->Intensity = 0.5;
+	auto& dl = lightEntity.EmplaceComponent<DirectionalLight>();
+	dl.color = {0.7,1,1,1};
+	dl.Intensity = 0.5;
 	
 	//load textures
 	
@@ -102,26 +101,23 @@ void PerfC_World::OnActivate(){
 		textures[i] = Texture::Manager::Get(StrFormat("tx{}.png",i+1));
 		materialInstances[i] = make_shared<DemoMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		materialInstances[i]->SetAlbedoTexture(textures[i]);
-			}
+    }
 	
 	Debug::Log("Loading {} objects", num_objects);
 	//spawn the polygons
 	for(int i = 0; i < num_objects; i++){
 		Ref<DemoMaterialInstance> inst = materialInstances[texturerng(gen)];
-		Spawn(make_shared<DemoObject>(inst));
+        CreatePrototype<DemoObject>(inst);
 	}
 	
 	//spawn the lights
 	for(int i = 0; i < 3; i++){
 		Ref<DemoMaterialInstance> inst = materialInstances[texturerng(gen)];
-		Spawn(make_shared<DemoObject>(inst,true));
+        CreatePrototype<DemoObject>(inst,true);
 	}
-	
-	Spawn(lightEntity);
-	
-	spinsys = make_shared<SpinSystem>();
-	
-	systemManager.RegisterSystem<SpinSystem>(spinsys);
+			
+	EmplaceSystem<SpinSystem,SpinComponent, RavEngine::Transform>();
+    EmplaceSystem<PlayerSystem,Player>();
 	
 	//bind inputs
 	Ref<InputManager> im = make_shared<InputManager>();
@@ -136,63 +132,58 @@ void PerfC_World::OnActivate(){
 	im->AddAxisMap("ROTATE_X", ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
 	im->AddAxisMap("ZOOM", ControllerAxis::SDL_CONTROLLER_AXIS_RIGHTY,-1);
 
-	auto player = cam->GetComponent<Player>().value();
-	
-	im->BindAxis("ZOOM", player, &Player::Zoom, CID::ANY);
-	im->BindAxis("ROTATE_Y", player, &Player::RotateLR, CID::ANY);
-	im->BindAxis("ROTATE_X", player, &Player::RotateUD, CID::ANY);
+    ComponentHandle<Player> p(cam);
+    	
+	im->BindAxis("ZOOM", p, &Player::Zoom, CID::ANY);
+	im->BindAxis("ROTATE_Y", p, &Player::RotateLR, CID::ANY);
+	im->BindAxis("ROTATE_X", p, &Player::RotateUD, CID::ANY);
 	
 	App::inputManager = im;
 	
 	//create HUD
-	Ref<Entity> hudentity = make_shared<Entity>();
-	hud = hudentity->EmplaceComponent<GUIComponent>();
+	auto hudentity = CreatePrototype<Entity>();
+    hudentity.EmplaceComponent<GUIComponent>();
+    hud = ComponentHandle<GUIComponent>(hudentity);
 	auto doc = hud->AddDocument("main.rml");
 	fpslabel = doc->GetElementById("fps");
 	
 	//button event listeners
 	struct PauseEvtListener : public Rml::EventListener{
 		
-		WeakRef<PerfC_World> world;
-		PauseEvtListener(WeakRef<PerfC_World> s) : world(s){}
+		PerfC_World* world;
+		PauseEvtListener(decltype(world) s) : world(s){}
 		
 		void ProcessEvent(Rml::Event& evt) override{
-			world.lock()->TogglePause();
+			world->TogglePause();
 		}
 	};
 	
 	struct ToggleTxEvtListener : public Rml::EventListener{
 		
-		WeakRef<PerfC_World> world;
-		ToggleTxEvtListener(WeakRef<PerfC_World> w) : world(w){}
+        PerfC_World* world;
+		ToggleTxEvtListener(decltype(world) w) : world(w){}
 		
 		void ProcessEvent(Rml::Event& evt) override{
-			world.lock()->ToggleTextures();
+			world->ToggleTextures();
 		}
 	};
 	
 	struct ToggleLightListener : public Rml::EventListener{
-		WeakRef<PerfC_World> world;
+        PerfC_World* world;
 		
-		ToggleLightListener(WeakRef<PerfC_World> w) : world(w){}
+		ToggleLightListener(decltype(world) w) : world(w){}
 		
 		void ProcessEvent(Rml::Event& evt) override{
-			if(!world.expired()){
-				world.lock()->ToggleFullbright();
-			}
+            world->ToggleFullbright();
 		}
 	};
-	
-	auto ptr = shared_from_this();
-	
-	doc->GetElementById("pause")->AddEventListener(Rml::EventId::Click, new PauseEvtListener(static_pointer_cast<PerfC_World>(ptr)));
-	doc->GetElementById("toggletex")->AddEventListener(Rml::EventId::Click, new ToggleTxEvtListener(static_pointer_cast<PerfC_World>(ptr)));
-	doc->GetElementById("toggleLighting")->AddEventListener(Rml::EventId::Click, new ToggleLightListener(static_pointer_cast<PerfC_World>(ptr)));
-	
-	Spawn(hudentity);
-	
+		
+	doc->GetElementById("pause")->AddEventListener(Rml::EventId::Click, new PauseEvtListener(this));
+	doc->GetElementById("toggletex")->AddEventListener(Rml::EventId::Click, new ToggleTxEvtListener(this));
+	doc->GetElementById("toggleLighting")->AddEventListener(Rml::EventId::Click, new ToggleLightListener(this));
+		
 	// GUI bindings for mouse
-	im->BindAnyAction(hud);
+	im->BindAnyAction(hud->GetData());
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
 	im->BindAxis("MouseX", hud, &GUIComponent::MouseX, CID::ANY,0);
@@ -202,9 +193,11 @@ void PerfC_World::OnActivate(){
 	im->AddActionMap("PauseSim", ControllerButton::SDL_CONTROLLER_BUTTON_A);
 	im->AddActionMap("ToggleTex", ControllerButton::SDL_CONTROLLER_BUTTON_B);
 	im->AddActionMap("ToggleLight", ControllerButton::SDL_CONTROLLER_BUTTON_X);
-	im->BindAction("PauseSim", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::TogglePause, ActionState::Pressed, CID::ANY);
-	im->BindAction("ToggleTex", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::ToggleTextures, ActionState::Pressed, CID::ANY);
-	im->BindAction("ToggleLight", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::ToggleFullbright, ActionState::Pressed, CID::ANY);
+    
+    //TODO: FIX
+//	im->BindAction("PauseSim", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::TogglePause, ActionState::Pressed, CID::ANY);
+//	im->BindAction("ToggleTex", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::ToggleTextures, ActionState::Pressed, CID::ANY);
+//	im->BindAction("ToggleLight", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::ToggleFullbright, ActionState::Pressed, CID::ANY);
 }
 
 void PerfC_World::PostTick(float scale){
@@ -216,14 +209,10 @@ void PerfC_World::PostTick(float scale){
 void PerfC_World::ToggleFullbright(){
 	fullbright = !fullbright;
 	
-    if(auto& dls = GetAllComponentsOfType<AmbientLight>()){
-        for(auto dl : dls.value()){
-            static_pointer_cast<DirectionalLight>(dl)->Intensity = fullbright ? 1 : 0.5;
-        }
-    }
-    if(auto& als = GetAllComponentsOfType<DirectionalLight>()){
-        for(auto& al : als.value()){
-            static_pointer_cast<AmbientLight>(al)->Intensity = fullbright ? 1 : 0.3;
-        }
-    }
+    Filter<AmbientLight>([this](float f, auto& al){
+        al.Intensity = fullbright ? 1 : 0.5;
+    });
+    Filter<DirectionalLight>([this](float f, auto& dl){
+        dl.Intensity = fullbright ? 1 : 0.3;
+    });
 }

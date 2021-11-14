@@ -1,6 +1,6 @@
 #pragma once
 #include <RavEngine/World.hpp>
-#include <RavEngine/Entity.hpp>
+#include <RavEngine/GameObject.hpp>
 #include <RavEngine/MeshAsset.hpp>
 #include <RavEngine/Texture.hpp>
 #include <RavEngine/GUI.hpp>
@@ -11,7 +11,7 @@ class PerfC_World : public RavEngine::World{
 public:
 	void OnActivate() override;
 	
-	Ref<RavEngine::Entity> lightEntity;
+	RavEngine::GameObject lightEntity;
 	
 	static constexpr size_t num_meshes = 4;
 	static RavEngine::Array<Ref<RavEngine::MeshAsset>,num_meshes> meshes;
@@ -26,14 +26,15 @@ public:
 #endif
 	
 	static bool TexturesEnabled;
-	
+	static bool paused;
+    
 	bool fullbright = false;
 	
 	/**
 	 Pause or unpause the spinning animations
 	 */
 	void TogglePause(){
-		spinsys->paused = !spinsys->paused;
+		paused = !paused;
 	}
 	
 	/**
@@ -47,13 +48,22 @@ public:
 	 Enable or disable fullbright lighting
 	 */
 	void ToggleFullbright();
-	
+    
 protected:
 
 	Rml::Element* fpslabel = nullptr;
-	Ref<RavEngine::GUIComponent> hud;
-	
-	Ref<SpinSystem> spinsys;
-	
+	RavEngine::ComponentHandle<RavEngine::GUIComponent> hud;
+    
 	void PostTick(float) override;
 };
+
+struct SpinSystem : public RavEngine::AutoCTTI {
+    
+    inline void operator()(float fpsScale, const SpinComponent& c, RavEngine::Transform& tr) const{
+        //get the entity and spin it based on the component data
+        if (!PerfC_World::paused){
+            tr.LocalRotateDelta((double)fpsScale * c.spinamt);
+        }
+    }
+};
+
