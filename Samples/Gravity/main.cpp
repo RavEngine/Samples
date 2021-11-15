@@ -7,6 +7,7 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/CameraComponent.hpp>
+#include <RavEngine/PhysicsLinkSystem.hpp>
 using namespace RavEngine;
 
 struct HeavyThing : public GameObject{
@@ -38,7 +39,7 @@ struct GravitySystem : public AutoCTTI{
     inline void operator()(float fpsScale, RigidBodyDynamicComponent& body) const{
         auto world = body.GetOwner().GetWorld();
         auto myPos = body.GetOwner().GetTransform().GetWorldPosition();
-        world->Filter<RigidBodyDynamicComponent>([&](float, auto& b){
+        world->Filter<RigidBodyDynamicComponent>([&](float, const auto& b){
             if (&b != &body){
                 // add a force corresponding to the mass of that other body
                 auto otherPos = b.GetOwner().GetTransform().GetWorldPosition();
@@ -126,6 +127,7 @@ struct Level : public World{
         }
        
         EmplaceSystem<GravitySystem,RigidBodyDynamicComponent>();
+        CreateDependency<GravitySystem,PhysicsLinkSystemRead>();
         InitPhysics();
         
         // setup input manager
@@ -138,20 +140,14 @@ struct Level : public World{
         im->AddAxisMap(Mappings::CameraZoom, SDL_SCANCODE_DOWN);
         im->AddActionMap(Mappings::Reset, SDL_SCANCODE_R);
         
-        struct owner{
-            Level* ptr;
-            size_t get_id() const{
-                return reinterpret_cast<size_t>(ptr);
-            }
-            Level* get() const{
-                return ptr;
-            }
-        } owner {this};
+        auto wib = GetInput(this);
         
-        im->BindAxis(Mappings::CameraUD, owner, &Level::MoveUD, CID::ANY);
-        im->BindAxis(Mappings::CameraLR, owner, &Level::MoveLR, CID::ANY);
-        im->BindAxis(Mappings::CameraZoom, owner, &Level::Zoom, CID::ANY);
-        im->BindAction(Mappings::Reset, owner, &Level::Reset, ActionState::Pressed, CID::ANY);
+        im->BindAxis(Mappings::CameraUD, wib, &Level::MoveUD, CID::ANY);
+        im->BindAxis(Mappings::CameraLR, wib, &Level::MoveLR, CID::ANY);
+        im->BindAxis(Mappings::CameraZoom, wib, &Level::Zoom, CID::ANY);
+        im->BindAction(Mappings::Reset, wib, &Level::Reset, ActionState::Pressed, CID::ANY);
+        
+        ExportTaskGraph(std::cout);
     }
     
     void PreTick(float fpsScale) final {

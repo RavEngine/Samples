@@ -13,7 +13,7 @@ struct Player : public RavEngine::ComponentWithOwner{
 		
 	void Zoom(float amt){
 		auto zoomAmt = amt * zoomspeed;
-		auto child = GetOwner().GetComponent<RavEngine::ChildEntityComponent>().GetEntity().GetTransform();
+		auto& child = GetOwner().GetComponent<RavEngine::ChildEntityComponent>().GetEntity().GetTransform();
 		child.LocalTranslateDelta(vector3(0, 0, zoomAmt * fpsScale) * child.Forward());
 	}
 	void RotateLR(float amt){

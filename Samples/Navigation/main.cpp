@@ -6,6 +6,7 @@
 #include <RavEngine/NavMeshComponent.hpp>
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/CameraComponent.hpp>
+#include <RavEngine/PhysicsBodyComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -24,13 +25,15 @@ struct Level : public World{
     
     float cameraSpeed = 0.02;
     
-    Entity cameraRoot;
-    Entity cameraGimball;
+    GameObject cameraRoot;
+    GameObject cameraGimball;
+    GameObject cameraEntity;
     Ref<MeshAsset> mesh;
     NavMeshComponent::Options nvopt;
-    Ref<NavMeshComponent> navMesh;
+    ComponentHandle<NavMeshComponent> navMesh;
     
     void CameraLR(float amt){
+        cameraRoot.GetTransform().CalculateWorldMatrix();
         cameraRoot.GetTransform().LocalRotateDelta(vector3(0,amt * deltaTime * cameraSpeed,0));
     }
     
@@ -44,8 +47,11 @@ struct Level : public World{
     
     void Init(){
         InitPhysics();
+        
+        cameraRoot = CreatePrototype<GameObject>();
+        cameraGimball = CreatePrototype<GameObject>();
 
-        auto cameraEntity = CreatePrototype<GameObject>();
+        cameraEntity = CreatePrototype<GameObject>();
         auto& camera = cameraEntity.EmplaceComponent<CameraComponent>();
         camera.SetActive(true);
         cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,0,50));
@@ -61,12 +67,13 @@ struct Level : public World{
         auto guiEntity = CreatePrototype<GameObject>();
         auto& gui = guiEntity.EmplaceComponent<GUIComponent>();
         auto doc = gui.AddDocument("ui.rml");
+        ComponentHandle<GUIComponent> gh(guiEntity);
         
         auto im = App::inputManager = RavEngine::New<InputManager>();
         im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
         im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
-        im->BindAxis("MouseX", gui, &GUIComponent::MouseX, CID::ANY);
-        im->BindAxis("MouseY", gui, &GUIComponent::MouseY, CID::ANY);
+        im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY);
+        im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY);
         im->BindAnyAction(gui.GetData());
         
         im->AddAxisMap("CUD", SDL_SCANCODE_W);
@@ -74,8 +81,10 @@ struct Level : public World{
         im->AddAxisMap("CLR", SDL_SCANCODE_A,-1);
         im->AddAxisMap("CLR", SDL_SCANCODE_D);
         
-        im->BindAxis("CUD", static_pointer_cast<Level>(shared_from_this()), &Level::CameraUD, CID::ANY);
-        im->BindAxis("CLR", static_pointer_cast<Level>(shared_from_this()), &Level::CameraLR, CID::ANY);
+        auto owner = GetInput(this);
+        
+        im->BindAxis("CUD", owner, &Level::CameraUD, CID::ANY);
+        im->BindAxis("CLR", owner, &Level::CameraLR, CID::ANY);
         
         // create the navigation object
         auto mazeEntity = CreatePrototype<GameObject>();
@@ -85,20 +94,21 @@ struct Level : public World{
         mazeEntity.EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
         mazeEntity.EmplaceComponent<RigidBodyStaticComponent>();
         auto physmat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0.5);
-        mazeEntity->EmplaceComponent<MeshCollider>(mesh,physmat);
+        mazeEntity.EmplaceComponent<MeshCollider>(mesh,physmat);
         nvopt.agent.radius = 0.0001;
         nvopt.agent.maxClimb = 1;   // no climbing
         nvopt.cellSize = 0.2;
         nvopt.cellHeight = 0.2;
-        navMesh = mazeEntity->EmplaceComponent<NavMeshComponent>(mesh,nvopt);
+        mazeEntity.EmplaceComponent<NavMeshComponent>(mesh,nvopt);
+        navMesh = ComponentHandle<NavMeshComponent>(mazeEntity);
         navMesh->debugEnabled = true;
         //navMesh->CalculatePath(vector3(1,0,1), vector3(-1,0,-1));
         
         // connect the UI
-        auto cellUpdater = new SliderUpdater([&,gui,doc](Rml::Event& evt){
+        auto cellUpdater = new SliderUpdater([&,gh,doc](Rml::Event& evt) mutable{
             auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
             auto value = std::stof(field->GetValue());
-            gui->EnqueueUIUpdate([=]{
+            gh->EnqueueUIUpdate([=]{
                 doc->GetElementById("cellSizeDisp")->SetInnerRML(field->GetValue());
             });
             App::DispatchMainThread([value,this]{
@@ -111,10 +121,10 @@ struct Level : public World{
         });
         doc->GetElementById("cellSize")->AddEventListener(Rml::EventId::Change, cellUpdater);
         
-        auto radiusUpdater = new SliderUpdater([&,gui,doc](Rml::Event& evt){
+        auto radiusUpdater = new SliderUpdater([&,gh,doc](Rml::Event& evt) mutable{
             auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
             auto value = std::stof(field->GetValue());
-            gui->EnqueueUIUpdate([=]{
+            gh->EnqueueUIUpdate([=]{
                 doc->GetElementById("agentRadiusDisp")->SetInnerRML(field->GetValue());
             });
             App::DispatchMainThread([value,this]{
@@ -126,10 +136,10 @@ struct Level : public World{
         });
         doc->GetElementById("agentRadius")->AddEventListener(Rml::EventId::Change, radiusUpdater);
         
-        auto slopeUpdater = new SliderUpdater([&,gui,doc](Rml::Event& evt){
+        auto slopeUpdater = new SliderUpdater([&,gh,doc](Rml::Event& evt) mutable{
             auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
             auto value = std::stof(field->GetValue());
-            gui->EnqueueUIUpdate([=]{
+            gh->EnqueueUIUpdate([=]{
                 doc->GetElementById("maxSlopeDisp")->SetInnerRML(field->GetValue());
             });
             App::DispatchMainThread([value,this]{
@@ -141,20 +151,13 @@ struct Level : public World{
         });
         doc->GetElementById("maxSlope")->AddEventListener(Rml::EventId::Change, slopeUpdater);
         
-        auto ball = Entity::New();
-        ball->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-        ball->EmplaceComponent<RigidBodyDynamicComponent>();
-        ball->EmplaceComponent<BoxCollider>(vector3(1,1,1),physmat);
-        ball->GetTransform()->LocalTranslateDelta(vector3(0,10,0));
-        ball->GetComponent<StaticMesh>().value()->GetMaterial()->SetAlbedoColor({1,0,0,1});
-        
-        Spawn(cameraRoot);
-        Spawn(cameraGimball);
-        Spawn(cameraEntity);
-        Spawn(mazeEntity);
-        Spawn(lightEntity);
-        Spawn(guiEntity);
-        Spawn(ball);
+        //TODO: FIX
+//        auto ball = Entity::New();
+//        ball->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+//        ball->EmplaceComponent<RigidBodyDynamicComponent>();
+//        ball->EmplaceComponent<BoxCollider>(vector3(1,1,1),physmat);
+//        ball->GetTransform()->LocalTranslateDelta(vector3(0,10,0));
+//        ball->GetComponent<StaticMesh>().value()->GetMaterial()->SetAlbedoColor({1,0,0,1});
         
     }
     
