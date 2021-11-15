@@ -1,15 +1,19 @@
 #pragma once
-#include "RavEngine/Entity.hpp"
+#include "RavEngine/GameObject.hpp"
 #include "RavEngine/CameraComponent.hpp"
 #include "RavEngine/IInputListener.hpp"
 #include "RavEngine/ScriptComponent.hpp"
 #include "RavEngine/ChildEntityComponent.hpp"
 #include <RavEngine/AudioSource.hpp>
+#include <RavEngine/Transform.hpp>
+#include <RavEngine/ComponentWithOwner.hpp>
 
 class PlayerActor;
-class PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInputListener {
+class PlayerScript : public RavEngine::ComponentWithOwner, public RavEngine::IInputListener {
 public:
-	Ref<RavEngine::Entity> cameraEntity;
+    PlayerScript(entity_t owner) : ComponentWithOwner(owner){}
+    
+	RavEngine::Entity cameraEntity;
 	decimalType dt = 0;
 	decimalType movementSpeed = 0.3;
 	decimalType sensitivity = 0.1;
@@ -23,29 +27,29 @@ public:
 	}
 
 	void MoveForward(float amt) {
-		GetTransform()->LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Forward());
+		GetOwner().GetTransform().LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Forward());
 	}
 	void MoveRight(float amt) {
-		GetTransform()->LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Right());
+        GetOwner().GetTransform().LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Right());
 	}
 
 	void MoveUp(float amt) {
-		GetTransform()->LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Up());
+        GetOwner().GetTransform().LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Up());
 	}
 
 	void LookUp(float amt) {
-		cameraEntity->GetTransform()->LocalRotateDelta(vector3(scaleRotation(amt), 0, 0));
+		cameraEntity.GetTransform().LocalRotateDelta(vector3(scaleRotation(amt), 0, 0));
 	}
 	void LookRight(float amt) {
-		GetTransform()->LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
+        GetOwner().GetTransform().LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
 	}
 
-	virtual void Tick(float scale) override{
+    void Tick(float scale){
 		dt = scale;
 		//prevent camera from flipping over
-		vector3 rotation = glm::eulerAngles(cameraEntity->GetTransform()->GetLocalRotation());
+		vector3 rotation = glm::eulerAngles(cameraEntity.GetTransform().GetLocalRotation());
 		rotation.x = std::clamp(rotation.x, -RavEngine::PI/2.0, RavEngine::PI /2.0);
-		cameraEntity->GetTransform()->SetLocalRotation(rotation);
+		cameraEntity.GetTransform().SetLocalRotation(rotation);
 	}
 };
 

@@ -30,8 +30,7 @@ static int ct = 0;
 
 void TestWorld::SpawnEntities(float f) {
     if (f > 0.99) {
-		Ref<TestEntity> e = std::make_shared<TestEntity>();
-		Spawn(e);
+        CreatePrototype<TestEntity>();
     }
 //	if (f > 0.99){
 //		for(int i = 0; i < 8; i++){
@@ -43,8 +42,8 @@ void TestWorld::SpawnEntities(float f) {
 }
 
 void TestWorld::ResetCam() {
-	player->GetTransform()->SetWorldPosition(vector3(0, -10, 50));
-	player->GetTransform()->SetWorldRotation(quaternion());
+	player.GetTransform().SetWorldPosition(vector3(0, -10, 50));
+	player.GetTransform().SetWorldRotation(quaternion());
 }
 
 void TestWorld::PostTick(float fpsScale){
@@ -63,6 +62,7 @@ void TestWorld::PostTick(float fpsScale){
 
 void TestWorld::SetupInputs(){
 	Debug::Log("name = {}",__PRETTY_FUNCTION__);
+    player = CreatePrototype<PlayerActor>();
 
 	//setup inputs
 	Ref<RavEngine::InputManager> is = make_shared<RavEngine::InputManager>();
