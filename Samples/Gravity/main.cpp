@@ -155,7 +155,7 @@ struct Level : public World{
         im->BindAction(Mappings::Reset, wib, &Level::Reset, ActionState::Pressed, CID::ANY);
         
         int count = 0;
-        FilterPolymorphic<PhysicsBodyComponent>([&](auto, auto& component){
+        FilterPolymorphic<PhysicsBodyComponent,Transform>([&](auto, const auto& pb, const auto& tr){
             count++;
         });
         cout << count << endl;
