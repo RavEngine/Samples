@@ -8,7 +8,9 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/PhysicsLinkSystem.hpp>
+#include <RavEngine/Debug.hpp>
 using namespace RavEngine;
+using namespace std;
 
 struct HeavyThing : public GameObject{
     void Create(decimalType mass, float scaleOverride = 0.2, ColorRGBA colorOverride = {1,1,1,1}){
@@ -46,6 +48,11 @@ struct GravitySystem : public AutoCTTI{
                 
                 // calculate M/r^2 * r^
                 auto r = glm::distance(otherPos, myPos);
+                
+                if (r < 0.1){
+                    return;
+                }
+                
                 auto rhat = glm::normalize(otherPos - myPos);
                 auto vec =(b.GetMass()/(r*r)) * rhat;
                 body.AddForce(vec);
@@ -146,6 +153,12 @@ struct Level : public World{
         im->BindAxis(Mappings::CameraLR, wib, &Level::MoveLR, CID::ANY);
         im->BindAxis(Mappings::CameraZoom, wib, &Level::Zoom, CID::ANY);
         im->BindAction(Mappings::Reset, wib, &Level::Reset, ActionState::Pressed, CID::ANY);
+        
+        int count = 0;
+        FilterPolymorphic<PhysicsBodyComponent>([&](auto, auto& component){
+            count++;
+        });
+        cout << count << endl;
         
         ExportTaskGraph(std::cout);
     }
