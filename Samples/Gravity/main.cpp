@@ -155,10 +155,10 @@ struct Level : public World{
         im->BindAction(Mappings::Reset, wib, &Level::Reset, ActionState::Pressed, CID::ANY);
         
         int count = 0;
-        FilterPolymorphic<PhysicsBodyComponent,Transform>([&](auto, const auto& pb, const auto& tr){
+        FilterPolymorphic<Light,Transform>([&](auto, const auto& pb, const auto& tr){
             count++;
         });
-        cout << count << endl;
+        Debug::Log("There are {} object deriving from Light and containing Transforms",count);
         
         ExportTaskGraph(std::cout);
     }
