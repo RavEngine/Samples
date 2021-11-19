@@ -9,6 +9,7 @@
 #include "MainMenu.hpp"
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/AudioRoom.hpp>
+#include <RavEngine/Ref.hpp>
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
@@ -18,46 +19,39 @@ Tween<decimalType,decimalType> t;
 GameWorld::GameWorld(int numplayers) : numplayers(numplayers){}
 
 void GameWorld::OnActivate(){
-	Ref<Entity> cameraActor = make_shared<Entity>();
-	cameraActor->EmplaceComponent<CameraComponent>()->SetActive(true);
-	cameraActor->EmplaceComponent<AudioListener>();
-	cameraBoom->GetTransform()->SetWorldPosition(vector3(0,0,0));
+	auto cameraActor = CreatePrototype<GameObject>();
+	cameraActor.EmplaceComponent<CameraComponent>().SetActive(true);
+	cameraActor.EmplaceComponent<AudioListener>();
+	cameraBoom.GetTransform().SetWorldPosition(vector3(0,0,0));
 	
-	cameraBoom->GetTransform()->AddChild(cameraActor->GetTransform());
-	cameraActor->GetTransform()->LocalTranslateDelta(vector3(0,3,3));
-	cameraActor->GetTransform()->LocalRotateDelta(vector3(glm::radians(-90.0),0,0));
-	
-	Spawn(cameraActor);
-	Spawn(cameraBoom);
-	Spawn(hockeytable);
-	
+	cameraBoom.GetTransform().AddChild(ComponentHandle<Transform>(cameraActor));
+	cameraActor.GetTransform().LocalTranslateDelta(vector3(0,3,3));
+	cameraActor.GetTransform().LocalRotateDelta(vector3(glm::radians(-90.0),0,0));
+		
 	//create the puck
-	puck->GetTransform()->LocalTranslateDelta(vector3(0,3,0));
-	Spawn(puck);
+	puck.GetTransform().LocalTranslateDelta(vector3(0,3,0));
 	
 	InitPhysics();
 	
 	//intro animation
-	t = Tween<decimalType,decimalType>([=](decimalType d, decimalType p){
-		cameraBoom->GetTransform()->SetLocalRotation(vector3(glm::radians(d),glm::radians(90.0),0));
-		cameraActor->GetTransform()->SetLocalPosition(vector3(0,p,0));
+	t = Tween<decimalType,decimalType>([=](decimalType d, decimalType p) mutable{
+		cameraBoom.GetTransform().SetLocalRotation(vector3(glm::radians(d),glm::radians(90.0),0));
+		cameraActor.GetTransform().SetLocalPosition(vector3(0,p,0));
 	},90,15);
 	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,7);
 	
-	Ref<Entity> lightmain = make_shared<Entity>();
-	auto key = lightmain->EmplaceComponent<DirectionalLight>();
-	key->Intensity = 1;
-	key->color = {1,0.6,0.404,1};
-	auto fill = lightmain->EmplaceComponent<AmbientLight>();
-	fill->Intensity=0.4;
-	fill->color = {0,0,1,1};
-	lightmain->GetTransform()->LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
-	auto room = lightmain->EmplaceComponent<AudioRoom>();
-	room->SetRoomDimensions(vector3(30,30,30));
-	room->WallMaterials()[0] = RoomMat::kMarble;
-	
-	Spawn(lightmain);
-	
+	auto lightmain = CreatePrototype<GameObject>();
+	auto& key = lightmain.EmplaceComponent<DirectionalLight>();
+	key.Intensity = 1;
+	key.color = {1,0.6,0.404,1};
+	auto& fill = lightmain.EmplaceComponent<AmbientLight>();
+	fill.Intensity=0.4;
+	fill.color = {0,0,1,1};
+	lightmain.GetTransform().LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
+	auto& room = lightmain.EmplaceComponent<AudioRoom>();
+	room.SetRoomDimensions(vector3(30,30,30));
+	room.WallMaterials()[0] = RoomMat::kMarble;
+		
 	//inputs
 	Ref<InputManager> is = make_shared<InputManager>();
 	is->AddAxisMap("P1MoveUD", SDL_SCANCODE_W,-1);
@@ -70,24 +64,24 @@ void GameWorld::OnActivate(){
 	is->AddAxisMap("P2MoveLR", SDL_SCANCODE_RIGHT,-1);
 	is->AddAxisMap("P2MoveLR", SDL_SCANCODE_LEFT);
 	
-	p1 = make_shared<Paddle>(ColorRGBA{1,0,0,1});
-	auto p1s = p1->EmplaceComponent<Player>();
+	p1 = CreatePrototype<Paddle>(ColorRGBA{1,0,0,1});
+	auto& p1s = p1.EmplaceComponent<Player>();
 	
-	p2 = make_shared<Paddle>(ColorRGBA{0,1,0,1});
-	auto p2s = p2->EmplaceComponent<Player>();
-	
+	p2 = CreatePrototype<Paddle>(ColorRGBA{0,1,0,1});
+	auto& p2s = p2.EmplaceComponent<Player>();
+    ComponentHandle<Player> p2h(p2), p1h(p1);
 	switch(numplayers){
 		case 2:
-			is->BindAxis("P2MoveUD", p2s, &Player::MoveUpDown, CID::ANY);
-			is->BindAxis("P2MoveLR", p2s, &Player::MoveLeftRight, CID::ANY);
+			is->BindAxis("P2MoveUD", p2h, &Player::MoveUpDown, CID::ANY);
+			is->BindAxis("P2MoveLR", p2h, &Player::MoveLeftRight, CID::ANY);
 			break;
 		case 0:
 			//set p1 as a bot
-			p1->EmplaceComponent<BotPlayer>(p1s, true);
+			p1.EmplaceComponent<BotPlayer>(p1h, true);
 			// no break here, want to create a bot for p2 in either case
 		case 1:
 			//create a bot player
-			p2->EmplaceComponent<BotPlayer>(p2s, false);
+			p2.EmplaceComponent<BotPlayer>(p2h, false);
 			break;
 		default:
 			Debug::Fatal("Invalid number of players: {}", numplayers);
@@ -95,20 +89,14 @@ void GameWorld::OnActivate(){
 	
 	if (numplayers > 0){
 		//bind inputs
-		is->BindAxis("P1MoveUD", p1s, &Player::MoveUpDown, CID::ANY);
-		is->BindAxis("P1MoveLR", p1s, &Player::MoveLeftRight, CID::ANY);
+		is->BindAxis("P1MoveUD", p1h, &Player::MoveUpDown, CID::ANY);
+		is->BindAxis("P1MoveLR", p1h, &Player::MoveLeftRight, CID::ANY);
 	}
 	
-	Spawn(p1);
-	Spawn(p2);
-	
-	
-	Ref<Entity> gamegui = make_shared<Entity>();
-	auto context = gamegui->EmplaceComponent<GUIComponent>();
-	auto doc = context->AddDocument("demo.rml");
+	auto gamegui = CreatePrototype<Entity>();
+	auto& context = gamegui.EmplaceComponent<GUIComponent>();
+	auto doc = context.AddDocument("demo.rml");
 	Scoreboard = doc->GetElementById("scoreboard");
-	Spawn(gamegui);
-	
 	App::inputManager = is;
 	
 	Reset();
@@ -119,7 +107,7 @@ void GameWorld::PostTick(float f)
 	t.Step(f);
 	
 	//if the puck's z position > 6 then the right side must have scored
-	auto pos = puck->GetTransform()->GetWorldPosition();
+	auto pos = puck.GetTransform().GetWorldPosition();
 	if (pos.z > 6){
 		p2score++;
 		Reset();
@@ -131,13 +119,13 @@ void GameWorld::PostTick(float f)
 }
 
 void GameWorld::Reset(){
-	puck->GetTransform()->SetWorldPosition(vector3(0,2,0));
-	p1->GetTransform()->SetWorldPosition(vector3(2,2,3));
-	p2->GetTransform()->SetWorldPosition(vector3(-2,2,-3));
+	puck.GetTransform().SetWorldPosition(vector3(0,2,0));
+	p1.GetTransform().SetWorldPosition(vector3(2,2,3));
+	p2.GetTransform().SetWorldPosition(vector3(-2,2,-3));
 
 	//clear velocities
-	auto zerovel = [](Ref<Entity> e){
-		e->GetComponent<RigidBodyDynamicComponent>().value()->SetLinearVelocity(vector3(0,0,0), false);
+	auto zerovel = [](Entity e){
+		e.GetComponent<RigidBodyDynamicComponent>().SetLinearVelocity(vector3(0,0,0), false);
 	};
 	
 	zerovel(p1);
@@ -157,9 +145,9 @@ void GameWorld::Reset(){
 
 void GameWorld::GameOver(){
 	
-	Ref<Entity> gameOverMenu = make_shared<Entity>();
-	auto ctx = gameOverMenu->EmplaceComponent<GUIComponent>();
-	auto doc = ctx->AddDocument("gameover.rml");
+	Entity gameOverMenu = CreatePrototype<Entity>();
+	auto& ctx = gameOverMenu.EmplaceComponent<GUIComponent>();
+	auto doc = ctx.AddDocument("gameover.rml");
 	
 	struct MenuEventListener: public Rml::EventListener{
 		WeakRef<GameWorld> gm;
@@ -194,13 +182,13 @@ void GameWorld::GameOver(){
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
 	
-	im->BindAxis("MouseX", ctx, &GUIComponent::MouseX, CID::ANY, 0);
-	im->BindAxis("MouseY", ctx, &GUIComponent::MouseY, CID::ANY, 0);
-	im->BindAnyAction(ctx);
+    ComponentHandle<GUIComponent> gh(gameOverMenu);
+	im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY, 0);
+	im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY, 0);
+    //TODO: FIX
+	//im->BindAnyAction(ctx);
 	
 	App::inputManager = im;
-
-	Spawn(gameOverMenu);
 }
 
 GameWorld::GameWorld(const GameWorld& other) : GameWorld(other.numplayers){}

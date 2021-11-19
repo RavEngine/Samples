@@ -4,10 +4,11 @@
 #include "Paddle.hpp"
 #include "Player.hpp"
 #include <RavEngine/GUI.hpp>
+#include <RavEngine/SharedObject.hpp>
 
 using namespace RavEngine;
 
-class GameWorld : public RavEngine::World {
+class GameWorld : public RavEngine::World, public RavEngine::virtual_enable_shared_from_this<GameWorld> {
 public:
 	GameWorld(int numplayers);
 	
@@ -19,13 +20,13 @@ public:
 	
     
 protected:
-    Ref<Table> hockeytable = std::make_shared<Table>();
-    Ref<Puck> puck = std::make_shared<Puck>();
+    GameObject hockeytable = CreatePrototype<Table>();
+    GameObject puck = CreatePrototype<Puck>();
 	
-	Ref<Entity> cameraBoom = std::make_shared<Entity>();
+	GameObject cameraBoom = CreatePrototype<GameObject>();
 	
-	Ref<Paddle> p1;
-	Ref<Paddle> p2;
+	Paddle p1;
+	Paddle p2;
 
 	int numplayers;
 	

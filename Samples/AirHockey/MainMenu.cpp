@@ -1,5 +1,4 @@
 #include "MainMenu.hpp"
-#include <RavEngine/Entity.hpp>
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/App.hpp>
@@ -10,11 +9,11 @@ using namespace RavEngine;
 using namespace std;
 
 void MainMenu::OnActivate(){
-	mainMenu = make_shared<Entity>();
+	mainMenu = CreatePrototype<RavEngine::Entity>();
 	
-	auto menu = mainMenu->EmplaceComponent<GUIComponent>();
-	auto doc = menu->AddDocument("mainmenu.rml");
-	menu->AddDocument("loading.rml")->Hide();
+	auto& menu = mainMenu.EmplaceComponent<GUIComponent>();
+	auto doc = menu.AddDocument("mainmenu.rml");
+	menu.AddDocument("loading.rml")->Hide();
 	
 	// shown here is an example of how to bind separate event listeners
 	// You can also share event listeners by reading data from the event object
@@ -48,30 +47,31 @@ void MainMenu::OnActivate(){
 	auto ptr = shared_from_this();
 	
 	doc->GetElementById("quitbtn")->AddEventListener(Rml::EventId::Click, new QuitEventListener());
-	doc->GetElementById("playsingle")->AddEventListener(Rml::EventId::Click, new StartEventListener(static_pointer_cast<MainMenu>(ptr)));
-	doc->GetElementById("playmulti")->AddEventListener(Rml::EventId::Click, new StartMultiplayerEventListener(static_pointer_cast<MainMenu>(ptr)));
-	doc->GetElementById("playzero")->AddEventListener(Rml::EventId::Click, new StartZeroplayerEventListener(static_pointer_cast<MainMenu>(ptr)));
+	doc->GetElementById("playsingle")->AddEventListener(Rml::EventId::Click, new StartEventListener(ptr));
+	doc->GetElementById("playmulti")->AddEventListener(Rml::EventId::Click, new StartMultiplayerEventListener(ptr));
+	doc->GetElementById("playzero")->AddEventListener(Rml::EventId::Click, new StartZeroplayerEventListener(ptr));
 	
-	
-	Spawn(mainMenu);
-	
+		
 	Ref<InputManager> im = make_shared<InputManager>();
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
+    
+    ComponentHandle<GUIComponent> gh(mainMenu);
 	
-	im->BindAxis("MouseX", menu, &GUIComponent::MouseX, CID::ANY, 0);
-	im->BindAxis("MouseY", menu, &GUIComponent::MouseY, CID::ANY, 0);
-	im->BindAnyAction(menu);
+	im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY, 0);
+	im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY, 0);
+    //TODO: FIX
+	//im->BindAnyAction(menu);
 	
 	App::inputManager = im;
 	
-	menu->Debug();
+	menu.Debug();
 }
 
 void MainMenu::LoadGame(int numplayers){
-	auto gui = mainMenu->GetComponent<GUIComponent>().value();
-	gui->GetDocument("mainmenu.rml")->Hide();
-	gui->GetDocument("loading.rml")->Show();
+	auto& gui = mainMenu.GetComponent<GUIComponent>();
+	gui.GetDocument("mainmenu.rml")->Hide();
+	gui.GetDocument("loading.rml")->Show();
 	
 	std::thread worker([=]{
 		Ref<GameWorld> g = make_shared<GameWorld>(numplayers);

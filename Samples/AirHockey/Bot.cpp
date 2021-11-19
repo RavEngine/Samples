@@ -8,30 +8,26 @@ using namespace RavEngine;
 
 
 void BotPlayer::Tick(float scale){
-	//get all the pucks
-	auto pucks = GetWorld()->GetAllComponentsOfType<PuckComponent>();
-	
 	//define the goal position
 	vector3 goalpos(0,0, leftSide? 3 : -3);
 
 	//find the closest puck to the goal
-	
-	Ref<Entity> closestPuck(static_pointer_cast<PuckComponent>(*pucks.value().begin())->GetOwner());
-	auto worldpos = Ref<Entity>(GetOwner())->GetTransform()->GetWorldPosition();
-	float closestDist = 1000;
-	for(auto puck : pucks.value()){
-        auto p = static_pointer_cast<PuckComponent>(puck);
-		Ref<Entity> e(p->GetOwner());
-		
-		auto dist = glm::distance(e->GetTransform()->GetWorldPosition(), goalpos);
-		if (dist <= closestDist){
-			closestDist = dist;
-			closestPuck = e;
-		}
-	}
-	
+    Entity closestPuck = GetOwner().GetWorld()->GetComponent<PuckComponent>().GetOwner();
+    auto worldpos = GetOwner().GetTransform().GetWorldPosition();
+    float closestDist = 1000;
+    
+    auto filterfn = [&](auto fps, const auto& puck, const auto& transform) mutable{
+        auto dist = glm::distance(transform.GetWorldPosition(), goalpos);
+        if (dist <= closestDist){
+            closestDist = dist;
+            closestPuck = puck.GetOwner();
+        }
+    };
+
+    GetOwner().GetWorld()->Filter<PuckComponent,Transform>(filterfn);
+
 	//if puck is on bot's side of the field, move towards that puck
-	auto pos = closestPuck->GetTransform()->GetWorldPosition();
+	auto pos = closestPuck.GetTransform().GetWorldPosition();
 	
 	bool shouldChase = (!leftSide && pos.z < 0) || (leftSide && pos.z >= 0);
 	
