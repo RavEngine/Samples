@@ -185,8 +185,7 @@ void GameWorld::GameOver(){
     ComponentHandle<GUIComponent> gh(gameOverMenu);
 	im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY, 0);
 	im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY, 0);
-    //TODO: FIX
-	//im->BindAnyAction(ctx);
+	im->BindAnyAction(gh->GetData());
 	
 	App::inputManager = im;
 }

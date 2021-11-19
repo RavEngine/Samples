@@ -41,7 +41,8 @@ struct GravitySystem : public AutoCTTI{
     inline void operator()(float fpsScale, RigidBodyDynamicComponent& body) const{
         auto world = body.GetOwner().GetWorld();
         auto myPos = body.GetOwner().GetTransform().GetWorldPosition();
-        world->Filter<RigidBodyDynamicComponent>([&](float, const auto& b){
+        
+        auto fn = [&](float, const auto& b){
             if (&b != &body){
                 // add a force corresponding to the mass of that other body
                 auto otherPos = b.GetOwner().GetTransform().GetWorldPosition();
@@ -57,7 +58,8 @@ struct GravitySystem : public AutoCTTI{
                 auto vec =(b.GetMass()/(r*r)) * rhat;
                 body.AddForce(vec);
             }
-        });
+        };
+        world->Filter<RigidBodyDynamicComponent>(fn);
     }
 };
 
@@ -154,13 +156,6 @@ struct Level : public World{
         im->BindAxis(Mappings::CameraZoom, wib, &Level::Zoom, CID::ANY);
         im->BindAction(Mappings::Reset, wib, &Level::Reset, ActionState::Pressed, CID::ANY);
         
-        int count = 0;
-        FilterPolymorphic<Light,Transform>([&](auto, const auto& pb, const auto& tr){
-            count++;
-        });
-        Debug::Log("There are {} object deriving from Light and containing Transforms",count);
-        
-        ExportTaskGraph(std::cout);
     }
     
     void PreTick(float fpsScale) final {
