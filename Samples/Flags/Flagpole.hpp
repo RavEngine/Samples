@@ -1,7 +1,6 @@
 #pragma once
-#include <RavEngine/Entity.hpp>
+#include <RavEngine/GameObject.hpp>
 #include <RavEngine/BuiltinMaterials.hpp>
-#include <vector>
 
 struct FlagMat : public RavEngine::PBRMaterial{
     FlagMat() : PBRMaterial("flag"){}
@@ -12,8 +11,8 @@ struct FlagMatInst : public RavEngine::PBRMaterialInstance{
 };
 
 
-struct Flagpole : public RavEngine::Entity{
-    Flagpole();
+struct Flagpole : public RavEngine::GameObject{
+    void Create();
     struct entry{
         std::string name;
         Ref<RavEngine::PBRMaterialInstance> matInst;

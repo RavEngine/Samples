@@ -9,7 +9,8 @@
 using namespace RavEngine;
 using namespace std;
 
-Flagpole::Flagpole(){
+void Flagpole::Create(){
+    GameObject::Create();
     // load meshes
     SceneLoader sl("flagpole.fbx");
     etl::vector<Ref<MeshAsset>, 2> meshes;
@@ -27,12 +28,12 @@ Flagpole::Flagpole(){
     auto clips = RavEngine::New<AnimationAsset>("flag.fbx",skeleton);
     auto meshAssetSkinned = MeshAssetSkinned::Manager::Get("flag.fbx",skeleton);
     
-    auto flagEntity = Entity::New();
+    auto flagEntity = GetWorld()->CreatePrototype<GameObject>();
     EmplaceComponent<ChildEntityComponent>(flagEntity);
-    flagEntity->GetTransform()->LocalTranslateDelta(vector3(0,8,0));
-    flagEntity->GetTransform()->LocalScaleDelta(vector3(2));
+    flagEntity.GetTransform().LocalTranslateDelta(vector3(0,8,0));
+    flagEntity.GetTransform().LocalScaleDelta(vector3(2));
     
-    auto skinnedMesh = flagEntity->EmplaceComponent<SkinnedMeshComponent>(skeleton,meshAssetSkinned);
+    auto& skinnedMesh = flagEntity.EmplaceComponent<SkinnedMeshComponent>(skeleton,meshAssetSkinned);
     
     // load the flags
     struct name_file{
@@ -61,18 +62,18 @@ Flagpole::Flagpole(){
     
     SwitchToFlag(0);
     
-    auto animcomp = flagEntity->EmplaceComponent<AnimatorComponent>(skeleton);
+    auto& animcomp = flagEntity.EmplaceComponent<AnimatorComponent>(skeleton);
     
     AnimatorComponent::State all_anim{ 0, clips };
     all_anim.isLooping = true;
-    animcomp->InsertState(all_anim);
-    animcomp->Goto(0,true);
-    animcomp->Play();
-    animcomp->debugEnabled = true;
+    animcomp.InsertState(all_anim);
+    animcomp.Goto(0,true);
+    animcomp.Play();
+    animcomp.debugEnabled = true;
     
     // load shaders
 }
 
 void Flagpole::SwitchToFlag(uint16_t idx){
-    GetComponent<ChildEntityComponent>().value()->GetEntity()->GetComponent<SkinnedMeshComponent>().value()->SetMaterial(flags[idx].matInst);
+    GetComponent<ChildEntityComponent>().GetEntity().GetComponent<SkinnedMeshComponent>().SetMaterial(flags[idx].matInst);
 }
