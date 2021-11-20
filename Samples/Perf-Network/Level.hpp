@@ -24,9 +24,9 @@ enum ManagerRPCs {
 
 struct ManagementRelay : public RavEngine::Entity, public RavEngine::NetworkReplicable {
 	inline void CommonInit() {
-		auto rpc = EmplaceComponent<RavEngine::RPCComponent>();
-		auto relay = EmplaceComponent<RelayComp>();
-		rpc->RegisterServerRPC(SpawnReq, relay, &RelayComp::RequestSpawnObject, RavEngine::RPCComponent::Directionality::Bidirectional);
+		auto& rpc = EmplaceComponent<RavEngine::RPCComponent>();
+		auto& relay = EmplaceComponent<RelayComp>();
+		rpc.RegisterServerRPC(SpawnReq, relay, &RelayComp::RequestSpawnObject, RavEngine::RPCComponent::Directionality::Bidirectional);
 	}
 
 	ManagementRelay() {

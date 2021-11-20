@@ -10,6 +10,7 @@
 #include "CameraEntity.hpp"
 #include <RavEngine/SceneLoader.hpp>
 #include <FPSSystem.hpp>
+#include <RavEngine/PhysicsBodyComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -25,22 +26,19 @@ struct InputNames{
 
 void Level::SetupInputs(){
 	
-	Ref<Entity> lights = make_shared<Entity>();
-	lights->EmplaceComponent<AmbientLight>()->Intensity = 0.2f;
-	lights->GetTransform()->LocalTranslateDelta(vector3(0,0.5,6));
-	lights->EmplaceComponent<DirectionalLight>();
-	lights->GetTransform()->LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
-    auto gui = lights->EmplaceComponent<GUIComponent>();
-    gui->AddDocument("ui.rml");
-	Spawn(lights);
+	auto lights = CreatePrototype<GameObject>();
+	lights.EmplaceComponent<AmbientLight>().Intensity = 0.2f;
+	lights.GetTransform().LocalTranslateDelta(vector3(0,0.5,6));
+	lights.EmplaceComponent<DirectionalLight>();
+	lights.GetTransform().LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
+    auto& gui = lights.EmplaceComponent<GUIComponent>();
+    gui.AddDocument("ui.rml");
 
-	auto character = make_shared<Character>();
-	character->GetTransform()->LocalTranslateDelta(vector3(0,5,0));
-	Spawn(character);
+	auto character = CreatePrototype<Character>();
+	character.GetTransform().LocalTranslateDelta(vector3(0,5,0));
 	
-	auto camera = make_shared<CameraEntity>(character);
-	camera->GetTransform()->LocalTranslateDelta(vector3(0,0,0));
-	Spawn(camera);
+	auto camera = CreatePrototype<CameraEntity>(character);
+	camera.GetTransform().LocalTranslateDelta(vector3(0,0,0));
 	
 	auto im = App::inputManager = make_shared<InputManager>();
 	// keyboard
@@ -74,26 +72,24 @@ void Level::SetupInputs(){
     opt.scale = 1.5;
     opt.keepInSystemRAM = true;
 	{
-		auto floorplane = make_shared<RavEngine::Entity>();
+		auto floorplane = CreatePrototype<RavEngine::GameObject>();
 		Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("level.fbx", "ground", opt);
 		material->SetAlbedoColor({ 174.f / 255,210.f / 255,234.f / 255,1 });
-        floorplane->EmplaceComponent<StaticMesh>(sharedMesh,material);
-		floorplane->EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
-		floorplane->EmplaceComponent<MeshCollider>(sharedMesh, physmat);
-		Spawn(floorplane);
+        floorplane.EmplaceComponent<StaticMesh>(sharedMesh,material);
+		floorplane.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
+		floorplane.EmplaceComponent<MeshCollider>(sharedMesh, physmat);
 	}
 
 	// load the walls
-	auto walls = make_shared<Entity>();
+	auto walls = CreatePrototype<GameObject>();
 	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("level.fbx", "walls", opt);
-    walls->EmplaceComponent<StaticMesh>(sharedMesh,material);
-	walls->EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls
-	walls->EmplaceComponent<MeshCollider>(sharedMesh, physmat);
-	Spawn(walls);
+    walls.EmplaceComponent<StaticMesh>(sharedMesh,material);
+	walls.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls
+	walls.EmplaceComponent<MeshCollider>(sharedMesh, physmat);
 
 	InitPhysics();
     
-    systemManager.EmplaceTimedSystem<FPSSystem>(std::chrono::seconds(1), "ui.rml", "metrics");
+    EmplaceTimedSystem<FPSSystem,GUIComponent>(std::chrono::seconds(1), "ui.rml", "metrics");
 }
 
 void Level::PostTick(float)

@@ -3,19 +3,22 @@
 #include <RavEngine/Queryable.hpp>
 #include <RavEngine/Tween.hpp>
 #include <RavEngine/RPCComponent.hpp>
+#include <RavEngine/Transform.hpp>
+#include <RavEngine/ComponentWithOwner.hpp>
 
 enum class RPCs {
 	UpdateTransform,
 };
 
-struct InterpolationTransform : public RavEngine::Component, public RavEngine::Queryable<InterpolationTransform> {
+struct InterpolationTransform {
 	RavEngine::SpinLock mtx;
 	RavEngine::Tween<decimalType, decimalType, decimalType> translate;
 	RavEngine::Tween<decimalType, decimalType, decimalType, decimalType> rotate;
 	bool ok = false;
 };
 
-struct NetTransform : public RavEngine::Component, public RavEngine::Queryable<NetTransform> {
+struct NetTransform : public RavEngine::ComponentWithOwner {
+    NetTransform(entity_t owner) : ComponentWithOwner(owner){}
 	void UpdateTransform(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin);
 };
 
@@ -28,18 +31,18 @@ struct PathData : public RavEngine::Component, public RavEngine::Queryable<PathD
 
 struct TweenEntities : public RavEngine::AutoCTTI {
 
-	inline void Tick(float fpsScale, Ref<InterpolationTransform> itr) {
-		if (itr->ok) {
-			itr->mtx.lock();
-			itr->translate.Step(fpsScale);
-			itr->rotate.Step(fpsScale);
-			itr->mtx.unlock();
+	inline void operator()(float fpsScale, InterpolationTransform& itr) const{
+		if (itr.ok) {
+			itr.mtx.lock();
+			itr.translate.Step(fpsScale);
+			itr.rotate.Step(fpsScale);
+			itr.mtx.unlock();
 		}
 	}
 };
 
 struct SyncNetTransforms : public RavEngine::AutoCTTI {
-	inline void Tick(float scale, Ref<NetTransform>, Ref<RavEngine::Transform> transform, Ref<RavEngine::RPCComponent> rpc) {
-		rpc->InvokeServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), RavEngine::NetworkBase::Reliability::Unreliable, Vec3toRaw(transform->GetWorldPosition()), QuatToRaw(transform->GetWorldRotation()));
+	inline void operator()(float scale, NetTransform&, RavEngine::Transform& transform, RavEngine::RPCComponent& rpc) {
+		rpc.InvokeServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), RavEngine::NetworkBase::Reliability::Unreliable, Vec3toRaw(transform.GetWorldPosition()), QuatToRaw(transform.GetWorldRotation()));
 	}
 };

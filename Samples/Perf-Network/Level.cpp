@@ -2,6 +2,8 @@
 #include "NetEntity.hpp"
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/InputManager.hpp>
+#include <RavEngine/GameObject.hpp>
+#include <RavEngine/CameraComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -11,18 +13,16 @@ STATIC(NetEntity::matinst);
 void Level::OnActivate() {
 
 	// create camera and lights
-	auto camEntity = make_shared<Entity>();
-	auto camera = camEntity->EmplaceComponent<CameraComponent>();
-	camera->SetActive(true);
-	camEntity->GetTransform()->LocalTranslateDelta(vector3(0, 0, 10));
-	Spawn(camEntity);
+	auto camEntity = CreatePrototype<GameObject>();
+	auto& camera = camEntity.EmplaceComponent<CameraComponent>();
+	camera.SetActive(true);
+	camEntity.GetTransform().LocalTranslateDelta(vector3(0, 0, 10));
 
-	auto lightEntity = make_shared<Entity>();
-	auto ambientLight = lightEntity->EmplaceComponent<AmbientLight>();
-	auto dirLight = lightEntity->EmplaceComponent<DirectionalLight>();
-	ambientLight->Intensity = 0.2;
-	lightEntity->GetTransform()->SetLocalRotation(vector3(0, glm::radians(45.0), glm::radians(45.0)));
-	Spawn(lightEntity);
+	auto lightEntity = CreatePrototype<GameObject>();
+	auto& ambientLight = lightEntity.EmplaceComponent<AmbientLight>();
+	auto& dirLight = lightEntity.EmplaceComponent<DirectionalLight>();
+	ambientLight.Intensity = 0.2;
+	lightEntity.GetTransform().SetLocalRotation(vector3(0, glm::radians(45.0), glm::radians(45.0)));
 
 	// spawn the management relay if on server
 	// if on client, this will be spawned automatically
@@ -37,8 +37,8 @@ void Level::OnActivate() {
 void Level::ServerUpdateGUI()
 {
 	// get the GUIComponent
-	auto gui = GetComponent<GUIComponent>().value();
-	auto doc = gui->GetDocument("server.rml");
+	auto& gui = GetComponent<GUIComponent>();
+	auto doc = gui.GetDocument("server.rml");
 	auto root = doc->GetElementById("root");
 	root->SetInnerRML("");	//clear element
 	for (const auto& con : App::networkManager.server->GetClients()) {
@@ -65,7 +65,7 @@ void Level::ServerUpdateGUI()
 
 void Level::SetupServer()
 {
-	Spawn(make_shared<ManagementRelay>());
+    CreatePrototype<ManagementRelay>()
 	systemManager.EmplaceSystem<TweenEntities>();
 	App::networkManager.server->OnClientConnected = [&](HSteamNetConnection) {
 		ServerUpdateGUI();
@@ -74,18 +74,17 @@ void Level::SetupServer()
 		ServerUpdateGUI();
 	};
 
-	auto guientity = make_shared<Entity>();
-	auto guic = guientity->EmplaceComponent<GUIComponent>();
+	auto guientity = CreatePrototype<Entity>();
+	auto& guic = guientity.EmplaceComponent<GUIComponent>();
 	guic->AddDocument("server.rml");
 
 	auto im = App::inputManager = std::make_shared<RavEngine::InputManager>();
+    ComponentHandle<GUIComponent> gh(guientity);
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
-	im->BindAxis("MouseX", guic, &GUIComponent::MouseX, CID::ANY, 0);
-	im->BindAxis("MouseY", guic, &GUIComponent::MouseY, CID::ANY, 0);
-	im->BindAnyAction(guic);
-
-	Spawn(guientity);
+	im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY, 0);
+	im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY, 0);
+	im->BindAnyAction(gh->GetData());
 }
 
 void Level::SetupClient()
@@ -112,17 +111,11 @@ void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 #endif
 		;
 
-    Array<Ref<NetEntity>, num_entities> entities;
+    Array<NetEntity, num_entities> entities;
 	for (int i = 0; i < entities.size(); i++) {
 		entities[i] = make_shared<NetEntity>();
 	}
-
-	// spawn them
-	auto w = GetOwner().lock()->GetWorld().lock();
-	for (const auto& entity : entities) {
-		w->Spawn(entity);
-	}
-
+    
 	// transfer their ownership to the client
 	for (const auto& entity : entities) {
 		App::networkManager.server->ChangeOwnership(origin, entity->GetComponent<NetworkIdentity>().value());

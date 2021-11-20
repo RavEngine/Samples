@@ -6,6 +6,8 @@
 #include <RavEngine/ScriptComponent.hpp>
 #include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/StaticMesh.hpp>
+#include <RavEngine/PhysicsBodyComponent.hpp>
+#include <RavEngine/SkinnedMeshComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -22,14 +24,14 @@ enum CharAnims {
 };
 
 struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor {
-	Ref<AnimatorComponent> animator;
-	Ref<RigidBodyDynamicComponent> rigidBody;
+	ComponentHandle<AnimatorComponent> animator;
+    ComponentHandle<RigidBodyDynamicComponent> rigidBody;
 	bool controlsEnabled = true;
 	constexpr static decimalType sprintSpeed = 2.5, walkSpeed = 2;
 
 	int16_t groundCounter = 0;
 
-	CharacterScript(const decltype(animator)& a, const decltype(rigidBody)& r) : animator(a), rigidBody(r) {}
+	CharacterScript(entity_t owner, const decltype(animator)& a, const decltype(rigidBody)& r) : animator(a), rigidBody(r), ScriptComponent(owner) {}
 
 	inline bool OnGround() const {
 		return groundCounter > 0;	
@@ -83,8 +85,8 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 				}
 			}
 		}
-		if (GetTransform()->GetWorldPosition().y < -10) {
-			GetTransform()->SetWorldPosition(vector3(0, 5, 0));
+		if (GetTransform().GetWorldPosition().y < -10) {
+			GetTransform().SetWorldPosition(vector3(0, 5, 0));
 		}
 	}
 
@@ -103,8 +105,8 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 				rigidBody->AddForce(dir * 5.0);
 			}
 			// face direction
-			auto rot = glm::quatLookAt(dir, GetTransform()->WorldUp());
-			GetTransform()->SetWorldRotation(glm::slerp(GetTransform()->GetWorldRotation(), rot, 0.2));
+			auto rot = glm::quatLookAt(dir, GetTransform().WorldUp());
+			GetTransform().SetWorldRotation(glm::slerp(GetTransform().GetWorldRotation(), rot, 0.2));
 		}
 	}
 
@@ -135,7 +137,7 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
 	{
 		if (other.lock()->filterGroup & FilterLayers::L0) {	// we use filter layer 0 to mark ground
-			auto worldpos = GetTransform()->GetWorldPosition();
+			auto worldpos = GetTransform().GetWorldPosition();
 			// is this contact point underneath the character?
 			for (int i = 0; i < numContactPoints; i++) {
 				auto diff = worldpos.y - contactPoints[i].position.y;
@@ -162,55 +164,57 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 };
 
 
-Character::Character() {
+void Character::Create() {
+    GameObject::Create();
 	// setup animation
 	// note: if you are loading multiple instances
 	// of an animated character, you will want to load and store
 	// the assets separately to avoid unnecessary disk i/o and parsing.
-	auto skeleton = make_shared<SkeletonAsset>("character_anims.fbx");
-	auto all_clips = make_shared<AnimationAsset>("character_anims.fbx", skeleton);
-	auto walk_anim = make_shared<AnimationAssetSegment>(all_clips, 0, 47);
-	auto idle_anim = make_shared<AnimationAssetSegment>(all_clips, 60,120);
-	auto run_anim = make_shared<AnimationAssetSegment>(all_clips, 131, 149);
-	auto jump_anim = make_shared<AnimationAssetSegment>(all_clips, 160, 163);
-	auto fall_anim = make_shared<AnimationAssetSegment>(all_clips, 171, 177);
-	auto pound_begin_anim = make_shared<AnimationAssetSegment>(all_clips, 180, 195);
-	auto pound_do_anim = make_shared<AnimationAssetSegment>(all_clips, 196, 200);
-	auto pound_end_anim = make_shared<AnimationAssetSegment>(all_clips, 201, 207);
-	auto mesh = make_shared<MeshAssetSkinned>("character_anims.fbx", skeleton);
-	auto material = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+	auto skeleton = RavEngine::New<SkeletonAsset>("character_anims.fbx");
+	auto all_clips = RavEngine::New<AnimationAsset>("character_anims.fbx", skeleton);
+	auto walk_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 0, 47);
+	auto idle_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 60,120);
+	auto run_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 131, 149);
+	auto jump_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 160, 163);
+	auto fall_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 171, 177);
+	auto pound_begin_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 180, 195);
+	auto pound_do_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 196, 200);
+	auto pound_end_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 201, 207);
+	auto mesh = RavEngine::New<MeshAssetSkinned>("character_anims.fbx", skeleton);
+	auto material = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	material->SetAlbedoColor({1,0.4,0.2,1});
 
-	auto childEntity = make_shared<Entity>();										// I made the animation facing the wrong way
-	GetTransform()->AddChild(childEntity->GetTransform());								// so I need a child entity to rotate it back
-	childEntity->GetTransform()->LocalRotateDelta(vector3(0, glm::radians(180.f), 0));	// if your animations are the correct orientation you don't need this
+	auto childEntity = GetWorld()->CreatePrototype<GameObject>();										// I made the animation facing the wrong way
+	GetTransform().AddChild(ComponentHandle<Transform>(childEntity));								// so I need a child entity to rotate it back
+	childEntity.GetTransform().LocalRotateDelta(vector3(0, glm::radians(180.f), 0));	// if your animations are the correct orientation you don't need this
 	EmplaceComponent<ChildEntityComponent>(childEntity);
 
 	// load the mesh and material onto the character
-	auto cubemesh = childEntity->EmplaceComponent<SkinnedMeshComponent>(skeleton, mesh);
-	cubemesh->SetMaterial(material);
+	auto& cubemesh = childEntity.EmplaceComponent<SkinnedMeshComponent>(skeleton, mesh);
+	cubemesh.SetMaterial(material);
 
 	// load the collider and physics settings
-	rigidBody = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
-	EmplaceComponent<CapsuleCollider>(0.6, 1.3, make_shared<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,1.7,0),vector3(0,0,glm::radians(90.0)));
-	rigidBody->SetAxisLock(RigidBodyDynamicComponent::AxisLock::Angular_X | RigidBodyDynamicComponent::AxisLock::Angular_Z);
-	rigidBody->SetWantsContactData(true);
+    auto& r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
+    rigidBody = ComponentHandle<RigidBodyDynamicComponent>(this);
+	r.EmplaceCollider<CapsuleCollider>(0.6, 1.3, make_shared<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,1.7,0),vector3(0,0,glm::radians(90.0)));
+	r.SetAxisLock(RigidBodyDynamicComponent::AxisLock::Angular_X | RigidBodyDynamicComponent::AxisLock::Angular_Z);
+	r.SetWantsContactData(true);
 
 	// load the animation
-	auto animcomp = childEntity->EmplaceComponent<AnimatorComponent>(skeleton);
+	auto animcomp = childEntity.EmplaceComponent<AnimatorComponent>(skeleton);
 
 	// the Sockets feature allows you to expose transforms at bones on an animated skeleton as though they were their own entities.
 	// this is useful for attaching an object to a character's hand, as shown below.
-	auto handEntity = make_shared<Entity>();
+	auto handEntity = GetWorld()->CreatePrototype<GameObject>();
     MeshAssetOptions opt;
     opt.scale = 0.4f;
-	handEntity->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-	auto handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
-	auto handsocket = animcomp->AddSocket("character:hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
+	handEntity.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+	auto& handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
+	auto& handsocket = animcomp.AddSocket("character:hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
 
-	handsocket->AddChild(handEntity->GetTransform());
+	handsocket->AddChild(ComponentHandle<Transform>(handEntity));
 	// since this is just a normal transform, we can add an additional transformation
-	handEntity->GetTransform()->LocalTranslateDelta(vector3(0,-0.5,0));
+	handEntity.GetTransform().LocalTranslateDelta(vector3(0,-0.5,0));
 
 	// create the animation state machine
 	AnimatorComponent::State
@@ -272,44 +276,42 @@ Character::Character() {
 		;
 
 	// this script controls the animation
-	script = EmplaceComponent<CharacterScript>(animcomp, rigidBody);
+	EmplaceComponent<CharacterScript>(animcomp, rigidBody);
+    script = ComponentHandle<CharacterScript>(this);
 	rigidBody->AddReceiver(script);
 
-	// need to avoid a cyclical reference here
-	WeakRef<CharacterScript> scriptref(script);
-	pound_begin_state.SetBeginCallback([scriptref](uint16_t nextState) {
-		auto ref = scriptref.lock();
-		ref->rigidBody->SetGravityEnabled(false);
-		ref->controlsEnabled = false;
+	pound_begin_state.SetBeginCallback([this](uint16_t nextState) {
+		script->rigidBody->SetGravityEnabled(false);
+        script->controlsEnabled = false;
 	});
-	pound_do_state.SetBeginCallback([=] (uint16_t nextState) {
-		scriptref.lock()->StartPounding();
+	pound_do_state.SetBeginCallback([this] (uint16_t nextState) {
+        script->StartPounding();
 	});
-	pound_end_state.SetEndCallback([=] (uint16_t nextState) {
-		scriptref.lock()->controlsEnabled = true;
+	pound_end_state.SetEndCallback([this] (uint16_t nextState) {
+        script->controlsEnabled = true;
 	});
 
 	// add transitions to the animator component
 	// note that these are copied into the component, so making changes
 	// to states after insertion will not work!
-	animcomp->InsertState(walk_state);
-	animcomp->InsertState(idle_state);
-	animcomp->InsertState(run_state);
-	animcomp->InsertState(jump_state);
-	animcomp->InsertState(fall_state);
-	animcomp->InsertState(pound_begin_state);
-	animcomp->InsertState(pound_end_state);
-	animcomp->InsertState(pound_do_state);
+	animcomp.InsertState(walk_state);
+	animcomp.InsertState(idle_state);
+	animcomp.InsertState(run_state);
+	animcomp.InsertState(jump_state);
+	animcomp.InsertState(fall_state);
+	animcomp.InsertState(pound_begin_state);
+	animcomp.InsertState(pound_end_state);
+	animcomp.InsertState(pound_do_state);
 
 	// initialize the state machine
 	// if an entry state is not set before play, your game will crash.
-	animcomp->Goto(CharAnims::Idle, true);
+	animcomp.Goto(CharAnims::Idle, true);
 
 	// begin playing the animator controller.
 	// animator controllers are asynchronous to your other code
 	// so play and pause simply signal the controller to perform an action
-	animcomp->Play();
-    animcomp->debugEnabled = true;
+	animcomp.Play();
+    animcomp.debugEnabled = true;
 }
 
 void Character::Move(const vector3& dir, decimalType speedMultiplier){
