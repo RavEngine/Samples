@@ -5,8 +5,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
 set(CMAKE_XCODE_ATTRIBUTE_EXCLUDED_ARCHS[sdk=iphonesimulator*] "arm64" CACHE INTERNAL "")
 
-add_definitions(-ftemplate-backtrace-limit=0)
-
 # linux detection
 if(UNIX AND NOT APPLE)
 	set(LINUX TRUE CACHE INTERNAL "")
@@ -80,6 +78,7 @@ function (add_sample sample_dir)
 
 	# fixup mac bundle, or generate Linux AppImage
 	if(APPLE)
+		target_compile_definitions("${APPNAME}" PUBLIC -ftemplate-backtrace-limit=0)	# clang arg to facilitate template debugging
 		INSTALL(CODE 
 			"include(BundleUtilities)
 			fixup_bundle(\"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.app\" \"\" \"\")

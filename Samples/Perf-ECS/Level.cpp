@@ -31,12 +31,43 @@ Entities : {} <br />
 	}
 };
 
+void PerfA_World::SetECSMode(int mode) {
+	switch (lastMode) {
+	case -1:
+		break;	// nothing to do
+	case 0:
+		RemoveSystem<CalcSystem>();
+		break;
+	case 1:
+		RemoveSystem<SingleSineSystem>();	
+	case 2:
+		RemoveSystem<SingleSineSystem>();
+		RemoveSystem<SingleCosSystem>();
+		break;
+	}
+
+	switch (mode) {
+	case 0:
+		EmplaceSystem<CalcSystem, SineComponent, CosComponent>();
+		break;
+	case 1:
+		EmplaceSystem<SingleSineSystem, SineComponent>();
+		break;
+	case 2:
+		EmplaceSystem<SingleSineSystem, SineComponent>();
+		EmplaceSystem<SingleCosSystem, CosComponent>();
+		break;
+	default:
+		Debug::Fatal("Invalid ECS Mode : {}",mode);
+	}
+	lastMode = mode;
+}
+
 
 void PerfA_World::OnActivate() {
 
 	// register system
-    
-	EmplaceSystem<CalcSystem,SineComponent,CosComponent>();
+	SetECSMode(0);
 	EmplaceTimedSystem<MetricsSystem,GUIComponent>(std::chrono::seconds(1));
 
 	// spawn demo entities
@@ -47,8 +78,25 @@ void PerfA_World::OnActivate() {
 	// spawn Control entity
 	auto control = CreatePrototype<Entity>();
 	auto gui = control.EmplaceComponent<GUIComponent>();
-    gui.AddDocument("ui.rml");
+	auto doc = gui.AddDocument("ui.rml");
 
+	// connect the dropdown
+	struct SelectionEventListener : public Rml::EventListener {
+
+		PerfA_World* world;
+		SelectionEventListener(PerfA_World* s) : world(s) {}
+
+		void ProcessEvent(Rml::Event& evt) override {
+			auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
+			auto idx = selbox->GetSelection();
+			auto wptr = world;
+			App::DispatchMainThread([wptr,idx] {
+				wptr->SetECSMode(idx);
+			});
+		}
+	};
+
+	doc->GetElementById("sel")->AddEventListener(Rml::EventId::Change, new SelectionEventListener(this));
 
 	// input manager for the GUI
 	Ref<InputManager> im = make_shared<InputManager>();

@@ -3,17 +3,25 @@
         <link type="text/rcss" href="default.rcss"></link>
 		<style>
 			*{
-				font-size: 40dp;
+				font-size: 30dp;
 			}
 		</style>
 	</head>
 	<body>
 		<p>
-			RavEngine Performance_A Performance Test
+			RavEngine ECS Benchmark
 		</p>
 		<br />
 		<p id="diag">
 			
 		</p>
+    <p>
+      Mode<br />
+      <select id="sel" style="width:100%">
+        <option selected>Combined Query</option>
+        <option>Single Query</option>
+        <option>Single Query Dual Instance</option>
+      </select>
+    </p>
 	</body>
 </rml>

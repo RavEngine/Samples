@@ -1,5 +1,4 @@
 #pragma once
-
 #include <RavEngine/Entity.hpp>
 #include <RavEngine/Component.hpp>
 #include <RavEngine/Utilities.hpp>
@@ -13,9 +12,21 @@ struct CosComponent: public RavEngine::AutoCTTI {
 	float value = RavEngine::Random::get(-1.0, 1.0);
 };
 
-struct CalcSystem : public RavEngine::AutoCTTI {
+struct CalcSystem {
 	inline void operator()(float fpsScale, SineComponent& sinecomp, CosComponent& coscomp) const{
 		sinecomp.value = std::sin(sinecomp.value + fpsScale);
+		coscomp.value = std::cos(coscomp.value + fpsScale);
+	}
+};
+
+struct SingleSineSystem {
+	inline void operator()(float fpsScale, SineComponent& sinecomp) {
+		sinecomp.value = std::sin(sinecomp.value + fpsScale);
+	}
+};
+
+struct SingleCosSystem {
+	inline void operator()(float fpsScale, CosComponent& coscomp) {
 		coscomp.value = std::cos(coscomp.value + fpsScale);
 	}
 };
