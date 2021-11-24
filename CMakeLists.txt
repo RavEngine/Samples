@@ -78,7 +78,7 @@ function (add_sample sample_dir)
 
 	# fixup mac bundle, or generate Linux AppImage
 	if(APPLE)
-		target_compile_definitions("${APPNAME}" PUBLIC -ftemplate-backtrace-limit=0)	# clang arg to facilitate template debugging
+		target_compile_options("${APPNAME}" PUBLIC -ftemplate-backtrace-limit=0)	# clang arg to facilitate template debugging
 		INSTALL(CODE 
 			"include(BundleUtilities)
 			fixup_bundle(\"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.app\" \"\" \"\")

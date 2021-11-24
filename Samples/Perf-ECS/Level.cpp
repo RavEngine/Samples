@@ -24,7 +24,7 @@ Entities : {} <br />
 )",
 			(int)App::GetRenderEngine().GetCurrentFPS(), (int)App::GetRenderEngine().GetLastFrameTime(),
 			FormatWithSep<int>(App::CurrentTPS()), FormatWithSep((int)App::CurrentTPS() * PA_Entity::num_objects * 2),
-			FormatWithSep(PA_Entity::num_objects.load())
+			FormatWithSep(PA_Entity::num_objects)
 			));
 		});
 
@@ -39,7 +39,8 @@ void PerfA_World::SetECSMode(int mode) {
 		RemoveSystem<CalcSystem>();
 		break;
 	case 1:
-		RemoveSystem<SingleSineSystem>();	
+		RemoveSystem<SingleSineSystem>();
+		break;
 	case 2:
 		RemoveSystem<SingleSineSystem>();
 		RemoveSystem<SingleCosSystem>();
@@ -70,8 +71,14 @@ void PerfA_World::OnActivate() {
 	SetECSMode(0);
 	EmplaceTimedSystem<MetricsSystem,GUIComponent>(std::chrono::seconds(1));
 
+#ifdef _DEBUG
+	static constexpr size_t num_objects = 600'000;	//reduced for demo because debug builds are slower
+#else
+	static constexpr size_t num_objects = 6'000'000;
+#endif
+
 	// spawn demo entities
-	for (int i = 0; i < 60000; i++) {
+	for (int i = 0; i < num_objects; i++) {
         CreatePrototype<PA_Entity>();
 	}
 

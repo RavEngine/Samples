@@ -32,7 +32,7 @@ struct SingleCosSystem {
 };
 
 struct PA_Entity : public RavEngine::Entity {
-	static std::atomic<uint16_t> num_objects;
+	static uint32_t num_objects;
 	void Create() {
 		EmplaceComponent<SineComponent>();
 		EmplaceComponent<CosComponent>();

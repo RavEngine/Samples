@@ -9,6 +9,9 @@ struct LightingApp : public RavEngine::App {
 
 	void OnStartup(int argc, char** argv) final{
 
+		App::GetRenderEngine().VideoSettings.vsync = false;
+		App::GetRenderEngine().SyncVideoSettings();
+
 		AddWorld(make_shared<Level>());
 
 		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
