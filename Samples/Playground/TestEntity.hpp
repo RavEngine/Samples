@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "RavEngine/Entity.hpp"
+#include "RavEngine/GameObject.hpp"
 #include "RavEngine/PhysicsCollider.hpp"
 #include "RavEngine/PhysicsBodyComponent.hpp"
 #include "RavEngine/WeakRef.hpp"
@@ -25,58 +25,32 @@
 #include <RavEngine/Debug.hpp>
 #include <uuids.h>
 #include <atomic>
-#include <RavEngine/SyncVar.hpp>
+#include <RavEngine/Queryable.hpp>
 
-//RPC IDs
-struct TestEntityCodes {
-	enum {
-		ServerRPC = 0,
-		ClientRPC,
-	};
-};
-
-
-class TestEntityController : public RavEngine::ScriptComponent, public RavEngine::PhysicsCallback {
-public:
+struct TestEntityController : public RavEngine::ScriptComponent, public RavEngine::Queryable<TestEntityController,ScriptComponent> {
+	using RavEngine::Queryable<TestEntityController, ScriptComponent>::GetQueryTypes;
+	TestEntityController(entity_t owner) : ScriptComponent(owner) {}
     void Tick(float scale) override;
 
-    void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) override;
-	void OnColliderExit(const WeakRef<RavEngine::PhysicsBodyComponent>&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) override;
+	void OnColliderEnter(RavEngine::PhysicsBodyComponent&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) {
+		contactCount++;
+	}
+	void OnColliderExit(RavEngine::PhysicsBodyComponent&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) {
+		contactCount--;
+	}
 	
-	void Start() override;
 	static std::atomic<int> objectcount;
 	std::atomic<int> contactCount;
-
-	RavEngine::SyncVar<float> my_x;
 };
 
-struct TestEntityRPCs : public RavEngine::Component, public RavEngine::Queryable<TestEntityRPCs> {
-	void ServerRPCTest(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin) {
-		auto A = upk.Get<int>().value();
-		auto B = upk.Get<float>().value();
-		RavEngine::Debug::Log("Server message! Values are {} and {}", A, B);
-	}
-
-	void ClientRPCTest(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin) {
-		//auto A = upk.get<int>().value();
-		//auto B = upk.get<float>().value();
-		//RavEngine::Debug::Log("Client message! Values are {} and {}", A, B);
-
-		////get the value in collision, and send an RPC back to the server with the same number again
-		//getOwner().lock()->GetComponent<RavEngine::RPCComponent>().value()->InvokeServerRPC(TestEntityCodes::ServerRPC,RavEngine::NetworkBase::Reliability::Reliable,A,B);
-	}
-};
-
-class TestEntity : public RavEngine::Entity, public RavEngine::PhysicsCallback, public RavEngine::NetworkReplicable {
+class TestEntity : public RavEngine::GameObject, public RavEngine::PhysicsCallback{
 protected:
     static Ref<RavEngine::PhysicsMaterial> sharedMat;
     static Ref<RavEngine::PBRMaterialInstance> sharedMatInst;
 	void CommonInit();
 public:
-    TestEntity();
-	TestEntity(const uuids::uuid&);	//for netspawn
-
-	RavEngine::ctti_t NetTypeID() const override {
-		return RavEngine::CTTI<TestEntity>();
+	void Create() {
+		GameObject::Create();
+		CommonInit();
 	}
 };

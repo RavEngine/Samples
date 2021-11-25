@@ -27,14 +27,17 @@ public:
 	}
 
 	void MoveForward(float amt) {
-		GetOwner().GetTransform().LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Forward());
+		auto& tn = GetOwner().GetTransform();
+		tn.LocalTranslateDelta(scaleMovement(amt) * tn.Forward());
 	}
 	void MoveRight(float amt) {
-        GetOwner().GetTransform().LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Right());
+		auto& tn = GetOwner().GetTransform();
+		tn.LocalTranslateDelta(scaleMovement(amt) * tn.Right());
 	}
 
 	void MoveUp(float amt) {
-        GetOwner().GetTransform().LocalTranslateDelta(scaleMovement(amt) * GetTransform()->Up());
+		auto& tn = GetOwner().GetTransform();
+       tn.LocalTranslateDelta(scaleMovement(amt) * tn.Up());
 	}
 
 	void LookUp(float amt) {
@@ -53,25 +56,24 @@ public:
 	}
 };
 
-class PlayerActor : public RavEngine::Entity, public RavEngine::IInputListener {
+class PlayerActor : public RavEngine::GameObject, public RavEngine::IInputListener {
 public:
-	Ref<PlayerScript> script;
-	PlayerActor() : Entity() {
-		script = EmplaceComponent<PlayerScript>();
+	RavEngine::ComponentHandle<PlayerScript> script = RavEngine::ComponentHandle<PlayerScript>(this);
+	void Create() {
+		GameObject::Create();
+		EmplaceComponent<PlayerScript>();
 		
 		//create a child entity for the camera
-		auto cameraEntity = std::make_shared<Entity>();
-		auto cam = cameraEntity->EmplaceComponent<RavEngine::CameraComponent>();
+		auto cameraEntity = GetWorld()->CreatePrototype<RavEngine::GameObject>();
+		auto& cam = cameraEntity.EmplaceComponent<RavEngine::CameraComponent>();
 		script->cameraEntity = cameraEntity;
 		
 		//set the active camera
-		cam->SetActive(true);
+		cam.SetActive(true);
 		
-		GetTransform()->AddChild(cameraEntity->GetTransform());
+		GetTransform().AddChild(RavEngine::ComponentHandle<RavEngine::Transform>(cameraEntity));
         EmplaceComponent<RavEngine::ChildEntityComponent>(cameraEntity);
 		
 		EmplaceComponent<RavEngine::AudioListener>();
 	}
-
-	virtual ~PlayerActor(){}
 };

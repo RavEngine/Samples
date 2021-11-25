@@ -31,61 +31,38 @@ void TestEntity::CommonInit(){
         sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
     }
 	auto mesh = EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("bunny_decimated.obj"),sharedMatInst);
-	
-	//RPC component
-	auto rpc = EmplaceComponent<RPCComponent>();
-	auto rpcFuncs = EmplaceComponent<TestEntityRPCs>();
-	rpc->RegisterServerRPC(TestEntityCodes::ServerRPC,rpcFuncs,&TestEntityRPCs::ServerRPCTest, RPCComponent::Directionality::Bidirectional);	//clients can run this even if they are not owners of the object
-	rpc->RegisterClientRPC(TestEntityCodes::ClientRPC, rpcFuncs, &TestEntityRPCs::ClientRPCTest);
+
+    auto& script = EmplaceComponent<TestEntityController>();
+	auto& r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
+
+	auto handler = RavEngine::New<PhysicsCallback>();
+	ComponentHandle<TestEntityController> scripthandle(this);
+	handler->OnColliderEnter = [scripthandle](RavEngine::PhysicsBodyComponent& other, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) mutable{
+		scripthandle->OnColliderEnter(other,contactPoints,numContactPoints);
+	};
+
+	handler->OnColliderExit = [scripthandle](RavEngine::PhysicsBodyComponent& other, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) mutable{
+		scripthandle->OnColliderExit(other,contactPoints,numContactPoints);
+	};
+
+	r.AddReceiver(handler);
+
+	//add a box collision to the PhysX component
+	if (!sharedMat) {
+		sharedMat = make_shared<PhysicsMaterial>(0.5, 0.5, 0.5);
+	}
+	r.EmplaceCollider<CapsuleCollider>(1, 1, sharedMat);
+
+	GetTransform().SetWorldPosition(vector3(rand() % 10 - 5, rand() % 10 - 5, rand() % 10 - 5));
+
+	script.objectcount++;
 }
 
-TestEntity::TestEntity() : Entity(){
-
-    //attach the script
-    auto script = EmplaceComponent<TestEntityController>();
-
-    //set the filter layers
-    auto r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
-    r->AddReceiver(script);
-
-    //add a box collision to the PhysX component
-    if (!sharedMat) {
-        sharedMat = make_shared<PhysicsMaterial>(0.5, 0.5, 0.5);
-    }
-    EmplaceComponent<CapsuleCollider>(1,1,sharedMat);
-	
-	CommonInit();
-		
-	EmplaceComponent<NetworkIdentity>();
-}
-
-TestEntity::TestEntity(const uuids::uuid& uuid) : Entity(){
-	CommonInit();
-	
-	EmplaceComponent<NetworkIdentity>(uuid);
-}
 
 void TestEntityController::Tick(float scale) {
 
-    if (GetTransform()->GetWorldPosition().y < -40) {
-        Destroy();
+    if (GetOwner().GetTransform().GetWorldPosition().y < -40) {
+        GetOwner().Destroy();
         objectcount--;
     }
-	my_x = GetTransform()->GetWorldPosition().x;
-}
-
-void TestEntityController::OnColliderEnter(const WeakRef<PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
-{
-	auto pos = other.lock()->GetOwner().lock()->GetTransform()->GetWorldPosition();
-	GetOwner().lock()->GetComponent<RPCComponent>().value()->InvokeClientRPC(TestEntityCodes::ClientRPC,RavEngine::NetworkBase::Reliability::Reliable,(int)pos.x,(float)pos.z);
-	contactCount++;
-}
-
-void TestEntityController::OnColliderExit(const WeakRef<PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints){
-	contactCount--;
-}
-
-void TestEntityController::Start(){
-	GetTransform()->SetWorldPosition(vector3(rand()%10-5,rand()%10-5,rand()%10-5));
-    objectcount++;
 }

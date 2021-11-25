@@ -22,15 +22,6 @@ private:
 		RavEngine::RenderEngine::VideoSettings.width = 800;
 		RavEngine::RenderEngine::VideoSettings.height = 480;
 		
-		App::networkManager.server = std::make_unique<RavEngine::NetworkServer>();
-		App::networkManager.server->Start(6969);
-		
-		App::networkManager.client = std::make_unique<RavEngine::NetworkClient>();
-		App::networkManager.client->Connect("127.0.0.1",6969);
-		
-		//what entities are allowed to spawn networked?
-		App::networkManager.RegisterNetworkedEntity<TestEntity>();
-		
 		//create a world
 		auto world = std::make_shared<TestWorld>();
 		world->SetupInputs();

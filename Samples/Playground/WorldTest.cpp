@@ -21,11 +21,11 @@
 
 using namespace RavEngine;
 using namespace std;
-static Ref<RavEngine::Entity> anonymous;
-static Ref<RavEngine::Entity> anonymousChild;
-static Ref<RavEngine::Entity> floorplane;
-static Ref<Entity> ambientLight1;
-static Ref<Entity> dl;
+static GameObject anonymous;
+static GameObject anonymousChild;
+static GameObject floorplane;
+static GameObject ambientLight1;
+static GameObject dl;
 static int ct = 0;
 
 void TestWorld::SpawnEntities(float f) {
@@ -48,7 +48,7 @@ void TestWorld::ResetCam() {
 
 void TestWorld::PostTick(float fpsScale){
     auto rotation = quaternion(vector3(0, 0, 0.01 * fpsScale));
-    anonymous->GetTransform()->LocalRotateDelta(rotation);
+    anonymous.GetTransform().LocalRotateDelta(rotation);
     scale = fpsScale;
     
     RenderEngine::DebugPrint(1, 0x4f, "TPS: {}", round(App::CurrentTPS()));
@@ -57,7 +57,7 @@ void TestWorld::PostTick(float fpsScale){
     RenderEngine::DebugPrint(4, 0x4f, "Frame Time: {} ms", App::GetRenderEngine().GetLastFrameTime());
     RenderEngine::DebugPrint(5, 0x4f, "Physics Bodies: {}", TestEntityController::objectcount.load());
 	
-	dl->GetTransform()->LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
+	dl.GetTransform().LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
 }
 
 void TestWorld::SetupInputs(){
@@ -93,32 +93,29 @@ void TestWorld::SetupInputs(){
 	auto con = CID::ANY;
 	
 	//bind controls
-	auto playerscript = player->GetComponent<PlayerScript>().value();
-	is->BindAxis("MoveForward", playerscript, &PlayerScript::MoveForward,con);
-	is->BindAxis("MoveRight", playerscript, &PlayerScript::MoveRight,con);
-	is->BindAxis("MoveUp", playerscript,&PlayerScript::MoveUp,con);
-	is->BindAxis("LookUp", playerscript,&PlayerScript::LookUp,con);
-	is->BindAxis("LookRight", playerscript, &PlayerScript::LookRight,con);
-	
-	auto ptr = std::static_pointer_cast<TestWorld>(shared_from_this());
-	
-	is->BindAxis("SpawnTest", ptr, &TestWorld::SpawnEntities,con);
-	is->BindAction("ResetCam", ptr, &TestWorld::ResetCam, ActionState::Pressed,con);
+	auto scHandle = ComponentHandle<PlayerScript>(player);
+	is->BindAxis("MoveForward", scHandle, &PlayerScript::MoveForward,con);
+	is->BindAxis("MoveRight", scHandle, &PlayerScript::MoveRight,con);
+	is->BindAxis("MoveUp", scHandle,&PlayerScript::MoveUp,con);
+	is->BindAxis("LookUp", scHandle,&PlayerScript::LookUp,con);
+	is->BindAxis("LookRight", scHandle, &PlayerScript::LookRight,con);
+		
+	is->BindAxis("SpawnTest", GetInput(this), &TestWorld::SpawnEntities, con);
+	is->BindAction("ResetCam", GetInput(this), &TestWorld::ResetCam, ActionState::Pressed,con);
 	
 	//test unbinding
 	//	is->UnbindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
 	//	is->UnbindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
 	
-	is->BindAxis("SpawnTest", ptr, &TestWorld::SpawnEntities,con);
-	is->BindAction("ResetCam", ptr, &TestWorld::ResetCam, ActionState::Pressed,con);
-	is->BindAction("SampleFPS",ptr, &TestWorld::SampleFPS,ActionState::Pressed,con);
+	is->BindAxis("SpawnTest", GetInput(this), &TestWorld::SpawnEntities,con);
+	is->BindAction("ResetCam", GetInput(this), &TestWorld::ResetCam, ActionState::Pressed,con);
+	is->BindAction("SampleFPS", GetInput(this), &TestWorld::SampleFPS,ActionState::Pressed,con);
 	//is->BindAction("Click", click, ActionState::Released);
 	RavEngine::App::inputManager = is;
 	
 	InputManager::SetRelativeMouseMode(true);
 	
 	//spawn player (it will make its camera active)
-	Spawn(player);
 	ResetCam();
 	
 	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
@@ -128,40 +125,38 @@ void TestWorld::SetupInputs(){
 	
 	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetDefault("cube.obj");
 	
-	anonymous = make_shared<RavEngine::Entity>();
-	anonymous->EmplaceComponent<StaticMesh>(sharedMesh,material);
-	auto spotlight = anonymous->EmplaceComponent<SpotLight>();
-	spotlight->Intensity = 4;
-	spotlight->radius = 10;
-	Spawn(anonymous);
-	anonymous->GetTransform()->LocalTranslateDelta(vector3(0, 1, 0));
+	anonymous = CreatePrototype<GameObject>();
+	anonymous.EmplaceComponent<StaticMesh>(sharedMesh,material);
+	auto& spotlight = anonymous.EmplaceComponent<SpotLight>();
+	spotlight.Intensity = 4;
+	spotlight.radius = 10;
+	anonymous.GetTransform().LocalTranslateDelta(vector3(0, 1, 0));
 	
 	InitPhysics();
 	
-	anonymousChild = make_shared<RavEngine::Entity>();
-	anonymousChild->EmplaceComponent<StaticMesh>(sharedMesh,material);
-	anonymous->GetTransform()->AddChild(anonymousChild->GetTransform());
-	anonymousChild->GetTransform()->LocalTranslateDelta(vector3(17,0,0));
-	anonymousChild->EmplaceComponent<PointLight>()->Intensity = 4;
-	anonymousChild->EmplaceComponent<RigidBodyStaticComponent>();
-	anonymousChild->EmplaceComponent<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5));
+	anonymousChild = CreatePrototype<GameObject>();
+	anonymousChild.EmplaceComponent<StaticMesh>(sharedMesh,material);
+	anonymous.GetTransform().AddChild(ComponentHandle<Transform>(anonymousChild));
+	anonymousChild.GetTransform().LocalTranslateDelta(vector3(17,0,0));
+	anonymousChild.EmplaceComponent<PointLight>().Intensity = 4;
+	auto& rs = anonymousChild.EmplaceComponent<RigidBodyStaticComponent>();
+	rs.EmplaceCollider<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5));
 	//auto audioAsset = std::make_shared<RavEngine::AudioAsset>("creative2-3.ogg",2);
 	//auto audiosource = anonymousChild->EmplaceComponent<RavEngine::AmbientAudioSourceComponent>(audioAsset);
 	// PlaySound(InstantaneousAudioSource(audioAsset,vector3(0,0,0),2));
 	//PlayAmbientSound(InstantaneousAmbientAudioSource(audioAsset));
-	Spawn(anonymousChild);
 	
-	floorplane = make_shared<RavEngine::Entity>();
-	floorplane->EmplaceComponent<StaticMesh>(sharedMesh,material);
-	floorplane->GetTransform()->LocalScaleDelta(vector3(10, 0.5, 10));
-	floorplane->GetTransform()->LocalTranslateDelta(vector3(0, -20, 0));
-	floorplane->EmplaceComponent<RigidBodyStaticComponent>();
-	floorplane->EmplaceComponent<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5));
+	floorplane = CreatePrototype<GameObject>();
+	floorplane.EmplaceComponent<StaticMesh>(sharedMesh,material);
+	floorplane.GetTransform().LocalScaleDelta(vector3(10, 0.5, 10));
+	floorplane.GetTransform().LocalTranslateDelta(vector3(0, -20, 0));
+	auto& s = floorplane.EmplaceComponent<RigidBodyStaticComponent>();
+	s.EmplaceCollider<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5));
 	
-	auto room = floorplane->EmplaceComponent<AudioRoom>();
+	auto& room = floorplane.EmplaceComponent<AudioRoom>();
 	RoomMaterial testMat({1,2,3,4,5,6,7,8});
-	room->SetRoomDimensions(vector3(5,30,5));
-	room->WallMaterials()[0] = RoomMat::kMarble;
+	room.SetRoomDimensions(vector3(5,30,5));
+	room.WallMaterials()[0] = RoomMat::kMarble;
 //	room->WallMaterials()[1] = RoomMat::kMarble;
 //	room->WallMaterials()[2] = RoomMat::kMarble;
 //	room->WallMaterials()[3] = RoomMat::kMarble;
@@ -173,22 +168,18 @@ void TestWorld::SetupInputs(){
 	//audiosource->Play();
 	//audiosource->SetLoop(true);
 //	audiosource->SetVolume(5);
-	
-	Spawn(floorplane);
-	
-	dl = make_shared<Entity>();
-	auto dll = dl->EmplaceComponent<DirectionalLight>();
+		
+	dl = CreatePrototype<GameObject>();
+	auto& dll = dl.EmplaceComponent<DirectionalLight>();
 	auto amt = glm::radians(45.0);
-	dl->GetTransform()->LocalRotateDelta(vector3(amt,0,0));
-	dl->GetTransform()->LocalTranslateDelta(vector3(0,1,1));
-	dll->color = {1,0.5,0};
-	Spawn(dl);
+	dl.GetTransform().LocalRotateDelta(vector3(amt,0,0));
+	dl.GetTransform().LocalTranslateDelta(vector3(0,1,1));
+	dll.color = {1,0.5,0};
 	
-	ambientLight1 = make_shared<Entity>();
-	auto light = ambientLight1->EmplaceComponent<AmbientLight>();
-	light->Intensity = 1;
-	light->color = {0.1, 0.2, 0.4};
-	Spawn(ambientLight1);
+	ambientLight1 = CreatePrototype<GameObject>();
+	auto& light = ambientLight1.EmplaceComponent<AmbientLight>();
+	light.Intensity = 1;
+	light.color = {0.1, 0.2, 0.4};
 }
 
 TestWorld::TestWorld() : World("plgrnd") {}
