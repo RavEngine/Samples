@@ -195,9 +195,9 @@ void PerfC_World::OnActivate(){
 	im->AddActionMap("ToggleLight", ControllerButton::SDL_CONTROLLER_BUTTON_X);
     
     //TODO: FIX
-//	im->BindAction("PauseSim", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::TogglePause, ActionState::Pressed, CID::ANY);
-//	im->BindAction("ToggleTex", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::ToggleTextures, ActionState::Pressed, CID::ANY);
-//	im->BindAction("ToggleLight", static_pointer_cast<PerfC_World>(ptr), &PerfC_World::ToggleFullbright, ActionState::Pressed, CID::ANY);
+	im->BindAction("PauseSim", GetInput(this), &PerfC_World::TogglePause, ActionState::Pressed, CID::ANY);
+	im->BindAction("ToggleTex", GetInput(this), &PerfC_World::ToggleTextures, ActionState::Pressed, CID::ANY);
+	im->BindAction("ToggleLight", GetInput(this), &PerfC_World::ToggleFullbright, ActionState::Pressed, CID::ANY);
 }
 
 void PerfC_World::PostTick(float scale){

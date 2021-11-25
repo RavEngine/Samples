@@ -203,7 +203,7 @@ void Character::Create() {
 	r.SetWantsContactData(true);
 
 	// load the animation
-	auto animcomp = childEntity.EmplaceComponent<AnimatorComponent>(skeleton);
+	auto& animcomp = childEntity.EmplaceComponent<AnimatorComponent>(skeleton);
 
 	// the Sockets feature allows you to expose transforms at bones on an animated skeleton as though they were their own entities.
 	// this is useful for attaching an object to a character's hand, as shown below.
@@ -293,15 +293,15 @@ void Character::Create() {
     
 	rigidBody->AddReceiver(callbacks);
 
-	pound_begin_state.SetBeginCallback([this](uint16_t nextState) {
-		script->rigidBody->SetGravityEnabled(false);
-        script->controlsEnabled = false;
+	pound_begin_state.SetBeginCallback([sccpy](uint16_t nextState) mutable {
+		sccpy->rigidBody->SetGravityEnabled(false);
+		sccpy->controlsEnabled = false;
 	});
-	pound_do_state.SetBeginCallback([this] (uint16_t nextState) {
-        script->StartPounding();
+	pound_do_state.SetBeginCallback([sccpy] (uint16_t nextState) mutable {
+		sccpy->StartPounding();
 	});
-	pound_end_state.SetEndCallback([this] (uint16_t nextState) {
-        script->controlsEnabled = true;
+	pound_end_state.SetEndCallback([sccpy] (uint16_t nextState) mutable {
+		sccpy->controlsEnabled = true;
 	});
 
 	// add transitions to the animator component
