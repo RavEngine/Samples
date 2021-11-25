@@ -23,7 +23,7 @@ enum CharAnims {
 	PoundEnd
 };
 
-struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor {
+struct CharacterScript : public ScriptComponent, public RavEngine::PhysicsCallback {
 	ComponentHandle<AnimatorComponent> animator;
     ComponentHandle<RigidBodyDynamicComponent> rigidBody;
 	bool controlsEnabled = true;
@@ -134,9 +134,9 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 		}
 	}
 
-	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
+	void OnColliderEnter(ComponentHandle<RavEngine::PhysicsBodyComponent> other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
 	{
-		if (other.lock()->filterGroup & FilterLayers::L0) {	// we use filter layer 0 to mark ground
+		if (other->filterGroup & FilterLayers::L0) {	// we use filter layer 0 to mark ground
 			auto worldpos = GetTransform().GetWorldPosition();
 			// is this contact point underneath the character?
 			for (int i = 0; i < numContactPoints; i++) {
@@ -150,9 +150,9 @@ struct CharacterScript : public ScriptComponent, public RavEngine::IPhysicsActor
 		}
 	}
 
-	void OnColliderExit(const WeakRef<RavEngine::PhysicsBodyComponent>& other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
+	void OnColliderExit(ComponentHandle<RavEngine::PhysicsBodyComponent> other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
 	{
-		if (other.lock()->filterGroup & FilterLayers::L0) {
+		if (other->filterGroup & FilterLayers::L0) {
 			groundCounter--;
 		}
 	}

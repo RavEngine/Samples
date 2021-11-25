@@ -18,7 +18,10 @@ struct PuckComponent : public RavEngine::ComponentWithOwner{
     PuckComponent(entity_t owner) : ComponentWithOwner(owner){}
 };
 
-struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor{
+struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::Queryable<PuckScript,RavEngine::ScriptComponent>{
+    
+    using RavEngine::Queryable<PuckScript,RavEngine::ScriptComponent>::GetQueryTypes;
+    
     RavEngine::Array<Ref<RavEngine::AudioAsset>,4> sounds{
 		std::make_shared<RavEngine::AudioAsset>("hockeyhit1.wav"),
 		std::make_shared<RavEngine::AudioAsset>("hockeyhit2.wav"),
@@ -27,7 +30,7 @@ struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::IPhysic
 	};
     PuckScript(entity_t owner) : ScriptComponent(owner){}
 	void Tick(float scale) override{}
-	void OnColliderEnter(const WeakRef<RavEngine::PhysicsBodyComponent>&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) override{
+	void OnColliderEnter(RavEngine::PhysicsBodyComponent&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints){
 		GetOwner().GetWorld()->PlaySound(RavEngine::InstantaneousAudioSource(sounds[std::rand() % 4],GetTransform().GetWorldPosition(),3));
 	}
 };
@@ -56,7 +59,7 @@ public:
 		
         EmplaceComponent<RavEngine::ChildEntityComponent>(lightEntity);
 		
-		auto light = lightEntity.EmplaceComponent<RavEngine::PointLight>();
+		auto& light = lightEntity.EmplaceComponent<RavEngine::PointLight>();
 		light.color = {0,0,1,1};
 		light.Intensity = 2;
 		
@@ -68,7 +71,12 @@ public:
 		
 		auto& scr = EmplaceComponent<PuckScript>();
         
-        //TODO: FIX collision receiver
-		//dyn.AddReceiver(scr);
+        auto callbackptr = std::make_shared<RavEngine::PhysicsCallback>();
+        auto me = *this;
+        callbackptr->OnColliderEnter = [me](RavEngine::PhysicsBodyComponent& other, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints){
+            me.GetComponent<PuckScript>().OnColliderEnter(other,contactPoints,numContactPoints);
+        };
+        
+		dyn.AddReceiver(callbackptr);
     }
 };

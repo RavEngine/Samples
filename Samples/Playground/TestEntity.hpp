@@ -13,7 +13,7 @@
 #include "RavEngine/WeakRef.hpp"
 #include "RavEngine/PhysicsMaterial.hpp"
 #include "RavEngine/Material.hpp"
-#include "RavEngine/IPhysicsActor.hpp"
+#include "RavEngine/PhysicsCallback.hpp"
 #include "RavEngine/ScriptComponent.hpp"
 #include "RavEngine/BuiltinMaterials.hpp"
 #include <RavEngine/MeshAsset.hpp>
@@ -36,7 +36,7 @@ struct TestEntityCodes {
 };
 
 
-class TestEntityController : public RavEngine::ScriptComponent, public RavEngine::IPhysicsActor {
+class TestEntityController : public RavEngine::ScriptComponent, public RavEngine::PhysicsCallback {
 public:
     void Tick(float scale) override;
 
@@ -67,7 +67,7 @@ struct TestEntityRPCs : public RavEngine::Component, public RavEngine::Queryable
 	}
 };
 
-class TestEntity : public RavEngine::Entity, public RavEngine::IPhysicsActor, public RavEngine::NetworkReplicable {
+class TestEntity : public RavEngine::Entity, public RavEngine::PhysicsCallback, public RavEngine::NetworkReplicable {
 protected:
     static Ref<RavEngine::PhysicsMaterial> sharedMat;
     static Ref<RavEngine::PBRMaterialInstance> sharedMatInst;

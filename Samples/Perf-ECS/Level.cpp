@@ -68,7 +68,7 @@ void PerfA_World::SetECSMode(int mode) {
 void PerfA_World::OnActivate() {
 
 	// register system
-	SetECSMode(0);
+	SetECSMode(1);
 	EmplaceTimedSystem<MetricsSystem,GUIComponent>(std::chrono::seconds(1));
 
 #ifdef _DEBUG
