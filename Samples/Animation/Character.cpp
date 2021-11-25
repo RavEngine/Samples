@@ -23,7 +23,9 @@ enum CharAnims {
 	PoundEnd
 };
 
-struct CharacterScript : public ScriptComponent, public RavEngine::PhysicsCallback {
+struct CharacterScript : public ScriptComponent, public Queryable<CharacterScript,ScriptComponent> {
+    using Queryable<CharacterScript,ScriptComponent>::GetQueryTypes;
+    
 	ComponentHandle<AnimatorComponent> animator;
     ComponentHandle<RigidBodyDynamicComponent> rigidBody;
 	bool controlsEnabled = true;
@@ -31,7 +33,7 @@ struct CharacterScript : public ScriptComponent, public RavEngine::PhysicsCallba
 
 	int16_t groundCounter = 0;
 
-	CharacterScript(entity_t owner, const decltype(animator)& a, const decltype(rigidBody)& r) : animator(a), rigidBody(r), ScriptComponent(owner) {}
+	CharacterScript(entity_t owner, decltype(animator) a, decltype(rigidBody) r) : animator(a), rigidBody(r), ScriptComponent(owner) {}
 
 	inline bool OnGround() const {
 		return groundCounter > 0;	
@@ -134,9 +136,9 @@ struct CharacterScript : public ScriptComponent, public RavEngine::PhysicsCallba
 		}
 	}
 
-	void OnColliderEnter(ComponentHandle<RavEngine::PhysicsBodyComponent> other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
+	void OnColliderEnter(PhysicsBodyComponent& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
 	{
-		if (other->filterGroup & FilterLayers::L0) {	// we use filter layer 0 to mark ground
+		if (other.filterGroup & FilterLayers::L0) {	// we use filter layer 0 to mark ground
 			auto worldpos = GetTransform().GetWorldPosition();
 			// is this contact point underneath the character?
 			for (int i = 0; i < numContactPoints; i++) {
@@ -150,9 +152,9 @@ struct CharacterScript : public ScriptComponent, public RavEngine::PhysicsCallba
 		}
 	}
 
-	void OnColliderExit(ComponentHandle<RavEngine::PhysicsBodyComponent> other, const ContactPairPoint* contactPoints, size_t numContactPoints) final
+	void OnColliderExit(PhysicsBodyComponent& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
 	{
-		if (other->filterGroup & FilterLayers::L0) {
+		if (other.filterGroup & FilterLayers::L0) {
 			groundCounter--;
 		}
 	}
@@ -210,12 +212,14 @@ void Character::Create() {
     opt.scale = 0.4f;
 	handEntity.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
 	auto& handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
+    //TODO: FIX
+    /*
 	auto& handsocket = animcomp.AddSocket("character:hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
 
 	handsocket->AddChild(ComponentHandle<Transform>(handEntity));
 	// since this is just a normal transform, we can add an additional transformation
 	handEntity.GetTransform().LocalTranslateDelta(vector3(0,-0.5,0));
-
+     */
 	// create the animation state machine
 	AnimatorComponent::State
 		idle_state{ CharAnims::Idle, idle_anim },
@@ -276,9 +280,18 @@ void Character::Create() {
 		;
 
 	// this script controls the animation
-	EmplaceComponent<CharacterScript>(animcomp, rigidBody);
+	EmplaceComponent<CharacterScript>(ComponentHandle<AnimatorComponent>(childEntity), ComponentHandle<RigidBodyDynamicComponent>(this));
     script = ComponentHandle<CharacterScript>(this);
-	rigidBody->AddReceiver(script);
+    auto sccpy = script;
+    auto callbacks = make_shared<PhysicsCallback>();
+    callbacks->OnColliderEnter = [sccpy](PhysicsBodyComponent& other, const ContactPairPoint* contactPoints, size_t numContactPoints) mutable{
+        sccpy->OnColliderEnter(other, contactPoints, numContactPoints);
+    };
+    callbacks->OnColliderExit = [sccpy](PhysicsBodyComponent& other, const ContactPairPoint* contactPoints, size_t numContactPoints) mutable{
+        sccpy->OnColliderExit(other, contactPoints, numContactPoints);
+    };
+    
+	rigidBody->AddReceiver(callbacks);
 
 	pound_begin_state.SetBeginCallback([this](uint16_t nextState) {
 		script->rigidBody->SetGravityEnabled(false);

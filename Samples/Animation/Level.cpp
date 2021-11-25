@@ -76,16 +76,16 @@ void Level::SetupInputs(){
 		Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("level.fbx", "ground", opt);
 		material->SetAlbedoColor({ 174.f / 255,210.f / 255,234.f / 255,1 });
         floorplane.EmplaceComponent<StaticMesh>(sharedMesh,material);
-		floorplane.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
-		floorplane.EmplaceComponent<MeshCollider>(sharedMesh, physmat);
+		auto& r = floorplane.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
+		r.EmplaceCollider<MeshCollider>(sharedMesh, physmat);
 	}
 
 	// load the walls
 	auto walls = CreatePrototype<GameObject>();
 	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("level.fbx", "walls", opt);
     walls.EmplaceComponent<StaticMesh>(sharedMesh,material);
-	walls.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls
-	walls.EmplaceComponent<MeshCollider>(sharedMesh, physmat);
+	auto& s = walls.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls
+    s.EmplaceCollider<MeshCollider>(sharedMesh, physmat);
 
 	InitPhysics();
     

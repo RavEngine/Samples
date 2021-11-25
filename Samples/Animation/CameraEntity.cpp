@@ -42,7 +42,7 @@ struct CameraScript : public RavEngine::ScriptComponent {
 };
 
 void CameraEntity::Create(Character cm){
-	
+    GameObject::Create();
 	// tip node with the camera, used for height-adjust and x-axis swivel
 	cameraEntity = GetWorld()->CreatePrototype<GameObject>();
 	cameraEntity.EmplaceComponent<CameraComponent>().SetActive(true);
