@@ -208,11 +208,9 @@ void PerfC_World::PostTick(float scale){
 
 void PerfC_World::ToggleFullbright(){
 	fullbright = !fullbright;
-	
-    Filter<AmbientLight>([this](float f, auto& al){
-        al.Intensity = fullbright ? 1 : 0.5;
-    });
-    Filter<DirectionalLight>([this](float f, auto& dl){
-        dl.Intensity = fullbright ? 1 : 0.3;
-    });
+	auto fn = [this](float f, auto& al){
+		al.Intensity = fullbright ? 1 : 0.5;
+	};
+    Filter<AmbientLight>(fn);
+    Filter<DirectionalLight>(fn);
 }
