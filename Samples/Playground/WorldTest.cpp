@@ -32,13 +32,6 @@ void TestWorld::SpawnEntities(float f) {
     if (f > 0.99) {
         CreatePrototype<TestEntity>();
     }
-//	if (f > 0.99){
-//		for(int i = 0; i < 8; i++){
-//			Ref<Entity> e = new Entity();
-//			Spawn(e);
-//		}
-//		TestEntityController::objectcount+=8;
-//	}
 }
 
 void TestWorld::ResetCam() {
@@ -180,5 +173,3 @@ void TestWorld::SetupInputs(){
 	light.Intensity = 1;
 	light.color = {0.1, 0.2, 0.4};
 }
-
-TestWorld::TestWorld() : World("plgrnd") {}

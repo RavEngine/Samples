@@ -16,7 +16,6 @@
 class TestWorld : public RavEngine::World{
 public:
     void PostTick(float fpsScale) override;
-    TestWorld();
     PlayerActor player;
 
 	void ResetCam();
