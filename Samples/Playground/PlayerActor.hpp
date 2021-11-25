@@ -58,10 +58,11 @@ public:
 
 class PlayerActor : public RavEngine::GameObject, public RavEngine::IInputListener {
 public:
-	RavEngine::ComponentHandle<PlayerScript> script = RavEngine::ComponentHandle<PlayerScript>(this);
+	RavEngine::ComponentHandle<PlayerScript> script;
 	void Create() {
 		GameObject::Create();
 		EmplaceComponent<PlayerScript>();
+		script = RavEngine::ComponentHandle<PlayerScript>(this);
 		
 		//create a child entity for the camera
 		auto cameraEntity = GetWorld()->CreatePrototype<RavEngine::GameObject>();

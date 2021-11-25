@@ -20,9 +20,9 @@ using namespace std;
 using namespace physx;
 using namespace RavEngine;
 
-Ref<RavEngine::PhysicsMaterial> TestEntity::sharedMat;
-Ref<RavEngine::PBRMaterialInstance> TestEntity::sharedMatInst;
-atomic<int> TestEntityController::objectcount;
+STATIC(TestEntity::sharedMat);
+STATIC(TestEntity::sharedMatInst);
+STATIC(TestEntityController::objectcount);
 
 void TestEntity::CommonInit(){
 	

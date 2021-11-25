@@ -27,8 +27,8 @@
 #include <atomic>
 #include <RavEngine/Queryable.hpp>
 
-struct TestEntityController : public RavEngine::ScriptComponent, public RavEngine::Queryable<TestEntityController,ScriptComponent> {
-	using RavEngine::Queryable<TestEntityController, ScriptComponent>::GetQueryTypes;
+struct TestEntityController : public RavEngine::ScriptComponent, public RavEngine::Queryable<TestEntityController, RavEngine::ScriptComponent> {
+	using RavEngine::Queryable<TestEntityController, RavEngine::ScriptComponent>::GetQueryTypes;
 	TestEntityController(entity_t owner) : ScriptComponent(owner) {}
     void Tick(float scale) override;
 
@@ -39,8 +39,8 @@ struct TestEntityController : public RavEngine::ScriptComponent, public RavEngin
 		contactCount--;
 	}
 	
-	static std::atomic<int> objectcount;
-	std::atomic<int> contactCount;
+	static int objectcount;
+	int contactCount;
 };
 
 class TestEntity : public RavEngine::GameObject, public RavEngine::PhysicsCallback{
