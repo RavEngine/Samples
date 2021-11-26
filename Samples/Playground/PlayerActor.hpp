@@ -9,9 +9,10 @@
 #include <RavEngine/ComponentWithOwner.hpp>
 
 class PlayerActor;
-class PlayerScript : public RavEngine::ComponentWithOwner, public RavEngine::IInputListener {
-public:
-    PlayerScript(entity_t owner) : ComponentWithOwner(owner){}
+struct PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInputListener, public RavEngine::Queryable<PlayerScript,RavEngine::ScriptComponent> {
+	using Queryable<PlayerScript, RavEngine::ScriptComponent>::GetQueryTypes;
+
+    PlayerScript(entity_t owner) : ScriptComponent(owner){}
     
 	RavEngine::Entity cameraEntity;
 	decimalType dt = 0;
@@ -47,7 +48,7 @@ public:
         GetOwner().GetTransform().LocalRotateDelta(quaternion(vector3(0, scaleRotation(amt), 0)));
 	}
 
-    void Tick(float scale){
+    void Tick(float scale) override{
 		dt = scale;
 		//prevent camera from flipping over
 		vector3 rotation = glm::eulerAngles(cameraEntity.GetTransform().GetLocalRotation());

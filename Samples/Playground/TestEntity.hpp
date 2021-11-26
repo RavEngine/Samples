@@ -40,7 +40,7 @@ struct TestEntityController : public RavEngine::ScriptComponent, public RavEngin
 	}
 	
 	static int objectcount;
-	int contactCount;
+	int contactCount = 0;
 };
 
 class TestEntity : public RavEngine::GameObject, public RavEngine::PhysicsCallback{

@@ -30,7 +30,7 @@ static int ct = 0;
 
 void TestWorld::SpawnEntities(float f) {
     if (f > 0.99) {
-        CreatePrototype<TestEntity>();
+		CreatePrototype<TestEntity>();
     }
 }
 
