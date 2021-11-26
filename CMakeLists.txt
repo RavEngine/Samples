@@ -88,12 +88,12 @@ function (add_sample sample_dir)
     elseif(LINUX)
         if(CMAKE_BUILD_TYPE STREQUAL Release)
             INSTALL(CODE
-                "include(../../appimage.cmake)
+                "include(${CMAKE_CURRENT_SOURCE_DIR}/appimage.cmake)
                 make_appimage(
                     EXE \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}\"
                     NAME \"${APPNAME}\"
-                    ICON \"../../Samples/logo.png\"
-                    DIR_ICON \"../../Samples/logo.png\"
+                    ICON \"${CMAKE_CURRENT_SOURCE_DIR}/Samples/logo.png\"
+                    DIR_ICON \"${CMAKE_CURRENT_SOURCE_DIR}/Samples/logo.png\"
                     OUTPUT_NAME \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.AppImage\"
                     ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.zip\"
                 )
@@ -129,4 +129,3 @@ add_sample("Flags")
 add_sample("Navigation")
 add_sample("HelloCube")
 add_sample("Gravity")
-
