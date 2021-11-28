@@ -63,6 +63,8 @@ void TestEntityController::Tick(float scale) {
 
     if (GetOwner().GetTransform().GetWorldPosition().y < -40) {
 		auto e = GetOwner();
+        assert(markedForDeletion == false);
+        markedForDeletion = true;
 		App::DispatchMainThread([e]() mutable {
 			e.Destroy();
 			objectcount--;

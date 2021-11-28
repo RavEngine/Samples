@@ -41,6 +41,7 @@ struct TestEntityController : public RavEngine::ScriptComponent, public RavEngin
 	
 	static int objectcount;
 	int contactCount = 0;
+    bool markedForDeletion = false;
 };
 
 class TestEntity : public RavEngine::GameObject, public RavEngine::PhysicsCallback{
