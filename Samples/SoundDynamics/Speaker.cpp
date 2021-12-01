@@ -7,20 +7,20 @@ using namespace std;
 
 STATIC(Speaker::speakerInstance);
 
-Speaker::Speaker(Ref<AudioAsset> a) {
+void Speaker::Create(Ref<AudioAsset> a) {
+    GameObject::Create();
 	// audio source
-	auto sourceEntity = make_shared<Entity>();
-	EmplaceComponent<ChildEntityComponent>(sourceEntity);
-	auto audio = sourceEntity->EmplaceComponent<RavEngine::AudioSourceComponent>(a);
+	auto sourceEntity = GetWorld()->CreatePrototype<GameObject>();
+	auto& audio = sourceEntity.EmplaceComponent<RavEngine::AudioSourceComponent>(a);
 
-	GetTransform()->AddChild(sourceEntity->GetTransform());
-	sourceEntity->GetTransform()->LocalTranslateDelta(vector3(0, 3, 0));
+	GetTransform().AddChild(ComponentHandle<Transform>(sourceEntity));
+	sourceEntity.GetTransform().LocalTranslateDelta(vector3(0, 3, 0));
 
 	if (!speakerInstance) {
 		speakerInstance = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		auto texture = Texture::Manager::Get("speaker.png");
 		speakerInstance->SetAlbedoTexture(texture);
 	}
-	audio->Play();
+	audio.Play();
     EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("speaker.obj"),speakerInstance);
 }

@@ -5,6 +5,8 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/AudioRoom.hpp>
+#include <RavEngine/GameObject.hpp>
+#include <RavEngine/Transform.hpp>
 #include <filesystem>
 
 using namespace RavEngine;
@@ -27,27 +29,23 @@ void Level::ToggleMouse(){
 
 void Level::OnActivate() {
 	// lights
-	auto lightEntity = make_shared<Entity>();
-	lightEntity->EmplaceComponent<AmbientLight>()->Intensity = 0.2;
-	lightEntity->EmplaceComponent<DirectionalLight>();
-	lightEntity->GetTransform()->LocalRotateDelta(vector3{glm::radians(35.0),glm::radians(-30.0),0});
-	Spawn(lightEntity);
+	auto lightEntity = CreatePrototype<GameObject>();
+	lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;
+	lightEntity.EmplaceComponent<DirectionalLight>();
+	lightEntity.GetTransform().LocalRotateDelta(vector3{glm::radians(35.0),glm::radians(-30.0),0});
 
 	// create the audio room
-	auto stage = make_shared<Stage>();
-	Spawn(stage);
+	auto stage = CreatePrototype<Stage>();
 
 	// create player 
-	auto player = make_shared<Player>();
-	Spawn(player);
-	player->GetTransform()->SetLocalRotation(vector3(0, glm::radians(-90.f), 0));
-	player->GetTransform()->SetLocalPosition(vector3(-5,2,0));
+	auto player = CreatePrototype<Player>();
+	player.GetTransform().SetLocalRotation(vector3(0, glm::radians(-90.f), 0));
+	player.GetTransform().SetLocalPosition(vector3(-5,2,0));
 
 	// load UI
-	auto uiEntity = make_shared<Entity>();
-	auto ui = uiEntity->EmplaceComponent<GUIComponent>();
-	auto doc = ui->AddDocument("main.rml");
-	Spawn(uiEntity);
+	auto uiEntity = CreatePrototype<Entity>();
+	auto& ui = uiEntity.EmplaceComponent<GUIComponent>();
+	auto doc = ui.AddDocument("main.rml");
 
     Array<std::string, RoomMat::kNumMaterialNames> names{
 		"Transparent",
@@ -107,45 +105,39 @@ void Level::OnActivate() {
 		// change event listener
 		struct WallMaterialChangeEventListener : public Rml::EventListener {
 			uint8 roomFace;
-			Ref<AudioRoom> room;
-			Ref<Stage> stage;
-			WallMaterialChangeEventListener(decltype(roomFace) rf, decltype(room) room, decltype(stage) stage) : stage(stage), roomFace(rf), room(room){}
+			Stage stage;
+			WallMaterialChangeEventListener(decltype(roomFace) rf, decltype(stage) stage) : stage(stage), roomFace(rf){}
 
 			void ProcessEvent(Rml::Event& evt) final {
 				auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
-				room->WallMaterials()[roomFace] = static_cast<RoomMat>(selbox->GetSelection());
-				auto owner = room->GetOwner().lock();
-				auto world = static_pointer_cast<Level>(owner->GetWorld().lock());
-				auto material = stage->wallMaterials[roomFace];
-				auto tex = world->wallTextures[selbox->GetSelection()];
+				stage.GetRoom()->WallMaterials()[roomFace] = static_cast<RoomMat>(selbox->GetSelection());
+				auto material = stage.wallMaterials[roomFace];
+				auto tex = static_cast<Level*>(stage.GetWorld())->wallTextures[selbox->GetSelection()];
 				material->SetAlbedoTexture(tex);
 			}
 		};
 
-		sel->AddEventListener(Rml::EventId::Change, new WallMaterialChangeEventListener(i,stage->GetRoom(),stage));
+		sel->AddEventListener(Rml::EventId::Change, new WallMaterialChangeEventListener(i,stage));
 
 		doc->GetElementById("materials")->AppendChild(std::move(sel));
 	}
 
 	struct MusicChangeEventListener : public Rml::EventListener {
-		WeakRef<Level> world;
+		Level* world;
 
 		MusicChangeEventListener(decltype(world) world) : world(world) {}
 
-		void ProcessEvent(Rml::Event& evt) final {
-			if (auto owning = world.lock()) {
-				auto sources = owning->GetAllComponentsOfType<AudioSourceComponent>();
-				auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
-				for (const auto& source : sources.value()) {
-					auto player = static_pointer_cast<AudioSourceComponent>(source);
-					player->SetAudio(owning->tracks[selbox->GetSelection()]);
-					player->Restart();
-				}
-			}
+        void ProcessEvent(Rml::Event& evt) final {
+            auto sources = world->GetAllComponentsOfType<AudioSourceComponent>();
+            auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
+            for (auto& player : *sources.value()) {
+                player.SetAudio(world->tracks[selbox->GetSelection()]);
+                player.Restart();
+            }
 		}
 	};
 	auto musicsel = doc->GetElementById("music");
-	musicsel->AddEventListener(Rml::EventId::Change, new MusicChangeEventListener(static_pointer_cast<Level>(shared_from_this())));
+	musicsel->AddEventListener(Rml::EventId::Change, new MusicChangeEventListener(this));
 	
 	// load audio & initialize music selector
     {
@@ -168,13 +160,11 @@ void Level::OnActivate() {
 	firstopt->SetAttribute("selected", true);
 
 	// create speakers
-	auto speaker1 = make_shared<Speaker>(tracks[0]);
-	speaker1->GetTransform()->LocalTranslateDelta(vector3(5, 0, -2));
-	Spawn(speaker1);
+	auto speaker1 = CreatePrototype<Speaker>(tracks[0]);
+	speaker1.GetTransform().LocalTranslateDelta(vector3(5, 0, -2));
 
-	auto speaker2 = make_shared<Speaker>(tracks[0]);
-	speaker2->GetTransform()->LocalTranslateDelta(vector3(5, 0, 2));
-	Spawn(speaker2);
+	auto speaker2 = CreatePrototype<Speaker>(tracks[0]);
+	speaker2.GetTransform().LocalTranslateDelta(vector3(5, 0, 2));
 
 	// setup inputs
 	auto im = App::inputManager = make_shared<InputManager>();
@@ -193,22 +183,24 @@ void Level::OnActivate() {
 	im->AddAxisMap(InputNames::LookRight,Special::MOUSEMOVE_XVEL,-1);
 	im->AddAxisMap(InputNames::LookUp,Special::MOUSEMOVE_YVEL,-1);
 
-	im->BindAxis(InputNames::MoveForward, player, &Player::MoveForward, CID::ANY);
-	im->BindAxis(InputNames::MoveRight, player, &Player::MoveRight, CID::ANY);
-	im->BindAxis(InputNames::MoveUp, player, &Player::MoveUp, CID::ANY);
-	im->BindAxis(InputNames::LookRight, player, &Player::LookRight, CID::ANY);
-	im->BindAxis(InputNames::LookUp, player, &Player::LookUp, CID::ANY);
-    im->BindAction(InputNames::ToggleMouse, static_pointer_cast<Level>(shared_from_this()), &Level::ToggleMouse, Pressed, CID::ANY);
+    ComponentHandle<PlayerController> pc(player);
+	im->BindAxis(InputNames::MoveForward, pc, &PlayerController::MoveForward, CID::ANY);
+	im->BindAxis(InputNames::MoveRight, pc, &PlayerController::MoveRight, CID::ANY);
+	im->BindAxis(InputNames::MoveUp, pc, &PlayerController::MoveUp, CID::ANY);
+	im->BindAxis(InputNames::LookRight, pc, &PlayerController::LookRight, CID::ANY);
+	im->BindAxis(InputNames::LookUp, pc, &PlayerController::LookUp, CID::ANY);
+    im->BindAction(InputNames::ToggleMouse, GetInput(this), &Level::ToggleMouse, Pressed, CID::ANY);
     
     // default to camera control
     im->SetRelativeMouseMode(true);
 
 	// for gui
+    ComponentHandle<GUIComponent> gh(uiEntity);
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
-	im->BindAxis("MouseX", ui, &GUIComponent::MouseX, CID::ANY, 0);
-	im->BindAxis("MouseY", ui, &GUIComponent::MouseY, CID::ANY, 0);
-	im->BindAnyAction(ui);
+	im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY, 0);
+	im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY, 0);
+	im->BindAnyAction(ui.GetData());
 
 	// initialize physics
 	InitPhysics();

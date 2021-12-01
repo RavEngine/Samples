@@ -7,14 +7,14 @@
 using namespace std;
 using namespace RavEngine;
 
-Stage::Stage() {
-	auto roomEntity = make_shared<Entity>();
+void Stage::Create() {
+    GameObject::Create();
+    roomEntity = GetWorld()->CreatePrototype<GameObject>();
 
-	auto audioRoom = roomEntity->EmplaceComponent<AudioRoom>();
-	audioRoom->SetRoomDimensions(vector3(20, 10, 20));
+	auto& audioRoom = roomEntity.EmplaceComponent<AudioRoom>();
+	audioRoom.SetRoomDimensions(vector3(20, 10, 20));
 
-	EmplaceComponent<ChildEntityComponent>(roomEntity);
-	GetTransform()->AddChild(roomEntity->GetTransform());
+	GetTransform().AddChild(ComponentHandle<Transform>(roomEntity));
 
     Array<string_view, 6> faceOrder{
 		"wall_negx",
@@ -37,11 +37,11 @@ Stage::Stage() {
 		EmplaceComponent<StaticMesh>(rm, inst);
 		this->wallMaterials[pos] = inst;
 	});
-	GetTransform()->LocalTranslateDelta(vector3(0,audioRoom->GetRoomDimensions().y / 2,0));
+	GetTransform().LocalTranslateDelta(vector3(0,audioRoom.GetRoomDimensions().y / 2,0));
 
 }
 
-Ref<AudioRoom> Stage::GetRoom()
+ComponentHandle<AudioRoom> Stage::GetRoom()
 {
-	return GetComponent<ChildEntityComponent>().value()->GetEntity()->GetComponent<AudioRoom>().value();
+	return ComponentHandle<AudioRoom>(roomEntity);
 }
