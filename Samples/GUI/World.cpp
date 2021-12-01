@@ -11,7 +11,7 @@
 using namespace RavEngine;
 using namespace std;
 
-struct SingleEntityMarker : public Component, public Queryable<SingleEntityMarker>{};
+struct SingleEntityMarker : public Queryable<SingleEntityMarker>{};
 
 struct FPSSystem : public AutoCTTI {
 	void operator()(float scale, const SingleEntityMarker& s) const{
