@@ -1,0 +1,10 @@
+<rml>
+    <head>
+        <link type="text/rcss" href="default.rcss"></link>
+        
+    </head>
+    <body>
+       <p id="view"></p>
+    </body>
+</rml>
+

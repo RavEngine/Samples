@@ -1,0 +1,73 @@
+#include "AppInfo.hpp"
+#include <RavEngine/App.hpp>
+#include <RavEngine/World.hpp>
+#include <RavEngine/Entity.hpp>
+#include <RavEngine/SystemInfo.hpp>
+
+using namespace RavEngine;
+
+static const char* GetRating(){
+    // these ratings have absolutely nothing
+    // to do with the specs being displayed
+    const char* messages[] = {
+        "Amazing!",
+        "Could be better...",
+        "Top notch!",
+        "*Yawn*",
+        "What is this?!",
+        "I sure do like being inside this fancy computer",
+        "Seal of approval!",
+        "Drag racing champion!",
+        "Tell your friends!",
+    };
+    return messages[rand() % sizeof(messages)/sizeof(messages[0])];
+}
+
+struct Level : public World{
+    Level(){
+        auto guientity = CreatePrototype<Entity>();
+        auto& gui = guientity.EmplaceComponent<GUIComponent>();
+        auto doc = gui.AddDocument("ui.rml");
+        auto view = doc->GetElementById("view");
+        
+        auto v = SystemInfo::OperatingSystemVersion();
+                
+        view->SetInnerRML(StrFormat(
+R"(
+Platform<br/>
+{} {} {} v{}.{}.{}.{}<br/><br/>
+
+Core<br/>
+{}x {}<br/>
+{} MB<br/>
+<br/>
+
+Graphics<br/>
+{}<br/>
+{} MB ( used)<br/>
+<br/>
+{}
+)",
+                                    SystemInfo::OperatingSystemNameString(), SystemInfo::ArchitectureString(),  SystemInfo::IsMobile()?"Mobile":"Desktop", v.major,v.minor,v.patch,v.extra,
+                                    
+                                    SystemInfo::NumLogicalProcessors(),SystemInfo::CPUBrandString(),
+                                    SystemInfo::SystemRAM(),
+                                    
+                                    SystemInfo::GPUBrandString(), SystemInfo::GPUVRAM(),
+                                    
+                                    GetRating()
+                      ));
+    }
+};
+
+struct SystemApp : public App{
+    SystemApp() : App(APPNAME){}
+    
+    void OnStartup(int argc, char **argv) final{
+        AddWorld(RavEngine::New<Level>());
+        
+        SetWindowTitle(StrFormat("{} | {}", APPNAME, App::GetRenderEngine().GetCurrentBackendName()).c_str());
+    }
+};
+
+START_APP(SystemApp)
