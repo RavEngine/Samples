@@ -5,6 +5,7 @@
 #include <RavEngine/SystemInfo.hpp>
 
 using namespace RavEngine;
+using namespace std;
 
 static const char* GetRating(){
     // these ratings have absolutely nothing
@@ -30,9 +31,37 @@ struct Level : public World{
         auto doc = gui.AddDocument("ui.rml");
         auto view = doc->GetElementById("view");
         
-        auto v = SystemInfo::OperatingSystemVersion();
-                
-        view->SetInnerRML(StrFormat(
+        
+        DispatchAsync([=]{
+            auto v = SystemInfo::OperatingSystemVersion();
+            
+            Vector<const char*> featuresStr;
+            auto features = SystemInfo::GetSupportedGPUFeatures();
+            if(features.DrawIndirect()){
+                featuresStr.push_back("Draw Indirect");
+            }
+            if(features.DMA()){
+                featuresStr.push_back("DMA");
+            }
+            if (features.HDRI10()){
+                featuresStr.push_back("HDR10");
+            }
+            if (features.OcclusionQuery()){
+                featuresStr.push_back("Occlusion Query");
+            }
+            if (features.Readback()){
+                featuresStr.push_back("Readback");
+            }
+            if (features.HalfAttribute()){
+                featuresStr.push_back("Half-width Attr");
+            }
+            if (features.Uint10Attribute()){
+                featuresStr.push_back("U10 Attr");
+            }
+            std::ostringstream oss;
+            std::copy(begin(featuresStr), end(featuresStr), std::ostream_iterator<decltype(featuresStr)::value_type>(oss, ", "));
+
+            view->SetInnerRML(StrFormat(
 R"(
 Platform<br/>
 {} {} {} v{}.{}.{}.{}<br/><br/>
@@ -44,19 +73,21 @@ Core<br/>
 
 Graphics<br/>
 {}<br/>
-{} MB ( used)<br/>
+{} MB ({} used)<br/>
+- {}<br/>
 <br/>
 {}
 )",
-                                    SystemInfo::OperatingSystemNameString(), SystemInfo::ArchitectureString(),  SystemInfo::IsMobile()?"Mobile":"Desktop", v.major,v.minor,v.patch,v.extra,
-                                    
-                                    SystemInfo::NumLogicalProcessors(),SystemInfo::CPUBrandString(),
-                                    SystemInfo::SystemRAM(),
-                                    
-                                    SystemInfo::GPUBrandString(), SystemInfo::GPUVRAM(),
-                                    
-                                    GetRating()
-                      ));
+                                        SystemInfo::OperatingSystemNameString(), SystemInfo::ArchitectureString(),  SystemInfo::IsMobile()?"Mobile":"Desktop", v.major,v.minor,v.patch,v.extra,
+                                        
+                                        SystemInfo::NumLogicalProcessors(),SystemInfo::CPUBrandString(),
+                                        SystemInfo::SystemRAM(),
+                                        
+                                        SystemInfo::GPUBrandString(), SystemInfo::GPUVRAM(), SystemInfo::GPUVRAMinUse(),
+                                        oss.str(),
+                                        GetRating()
+                          ));
+        },1);
     }
 };
 
