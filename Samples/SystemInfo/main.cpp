@@ -73,7 +73,7 @@ Core<br/>
 
 Graphics<br/>
 {}<br/>
-{} MB ({} used)<br/>
+{} MB ({} MB used)<br/>
 - {}<br/>
 <br/>
 {}
@@ -95,6 +95,7 @@ struct SystemApp : public App{
     SystemApp() : App(APPNAME){}
     
     void OnStartup(int argc, char **argv) final{
+        //SetMinTickTime(std::chrono::duration<double, std::milli>(33));  // limit to 30fps
         AddWorld(RavEngine::New<Level>());
         
         SetWindowTitle(StrFormat("{} | {}", APPNAME, App::GetRenderEngine().GetCurrentBackendName()).c_str());
