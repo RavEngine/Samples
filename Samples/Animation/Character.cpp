@@ -211,7 +211,7 @@ void Character::Create() {
     MeshAssetOptions opt;
     opt.scale = 0.4f;
 	handEntity.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-	auto& handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
+	//auto& handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
     //TODO: FIX
     /*
 	auto& handsocket = animcomp.AddSocket("character:hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
