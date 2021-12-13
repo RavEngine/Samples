@@ -204,6 +204,8 @@ void Level::OnActivate() {
 
 	// initialize physics
 	InitPhysics();
+    
+    ExportTaskGraph(cout);
 }
 
 Level::Level() {

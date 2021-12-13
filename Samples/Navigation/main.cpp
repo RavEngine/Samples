@@ -92,9 +92,9 @@ struct Level : public World{
         opt.keepInSystemRAM = true;
         mesh = MeshAsset::Manager::Get("maze.fbx", opt);
         mazeEntity.EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-        mazeEntity.EmplaceComponent<RigidBodyStaticComponent>();
+        auto& rigid = mazeEntity.EmplaceComponent<RigidBodyStaticComponent>();
         auto physmat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0.5);
-        mazeEntity.EmplaceComponent<MeshCollider>(mesh,physmat);
+        rigid.EmplaceCollider<MeshCollider>(mesh,physmat);
         nvopt.agent.radius = 0.0001;
         nvopt.agent.maxClimb = 1;   // no climbing
         nvopt.cellSize = 0.2;

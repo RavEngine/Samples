@@ -18,8 +18,8 @@
     <p>
       Mode<br />
       <select id="sel" style="width:100%">
-        <option selected>Combined Query</option>
-        <option>Single Query</option>
+        <option>Combined Query</option>
+        <option selected>Single Query</option>
         <option>Single Query Dual Instance</option>
       </select>
     </p>
