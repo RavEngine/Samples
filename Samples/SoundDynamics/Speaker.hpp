@@ -18,6 +18,8 @@ namespace RavEngine {
 struct Stage : public RavEngine::GameObject {
 	void Create();
     GameObject roomEntity;
-    RavEngine::ComponentHandle<RavEngine::AudioRoom> GetRoom();
+	RavEngine::ComponentHandle<RavEngine::AudioRoom> GetRoom() {
+		return RavEngine::ComponentHandle<RavEngine::AudioRoom>(roomEntity);
+	}
 	RavEngine::Array<Ref<RavEngine::PBRMaterialInstance>, 6> wallMaterials;
 };

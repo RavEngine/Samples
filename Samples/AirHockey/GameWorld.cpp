@@ -50,7 +50,7 @@ void GameWorld::OnActivate(){
 	lightmain.GetTransform().LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
 	auto& room = lightmain.EmplaceComponent<AudioRoom>();
 	room.SetRoomDimensions(vector3(30,30,30));
-	room.WallMaterials()[0] = RoomMat::kMarble;
+	//room.WallMaterials()[0] = RoomMat::kMarble;
 		
 	//inputs
 	Ref<InputManager> is = make_shared<InputManager>();

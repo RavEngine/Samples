@@ -40,8 +40,3 @@ void Stage::Create() {
 	GetTransform().LocalTranslateDelta(vector3(0,audioRoom.GetRoomDimensions().y / 2,0));
 
 }
-
-ComponentHandle<AudioRoom> Stage::GetRoom()
-{
-	return ComponentHandle<AudioRoom>(roomEntity);
-}
