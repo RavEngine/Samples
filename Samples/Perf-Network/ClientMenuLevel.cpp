@@ -44,8 +44,8 @@ void ClientMenu::ConnectToServer(const std::string& addr) {
 	cl->Connect(addr,PORT);
 		cl->OnConnected = [&](HSteamNetConnection) {
 			Debug::Log("Client successfully connected");
-			App::RemoveAllWorlds();
-			App::AddWorld(make_shared<Level>());
+            App::inputManager.reset();
+			App::AddReplaceWorld(this->shared_from_this(), make_shared<Level>());
 		};
 		cl->OnLostConnection = [&](HSteamNetConnection) {
 			Debug::Log("Client disconnected");
