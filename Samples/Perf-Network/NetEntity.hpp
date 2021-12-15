@@ -27,7 +27,7 @@ struct MoveEntities : public RavEngine::AutoCTTI {
 };
 
 
-struct NetEntity : public RavEngine::GameObject, public RavEngine::AutoCTTI {
+struct NetEntity : public RavEngine::GameObject {
 
 	static Ref<RavEngine::PBRMaterialInstance> matinst;
 
@@ -61,8 +61,4 @@ struct NetEntity : public RavEngine::GameObject, public RavEngine::AutoCTTI {
 //		EmplaceComponent<RavEngine::NetworkIdentity>(id);
 //		EmplaceComponent<PathData>();		// since clients control their objects, the server does not need to allocate this
 //	}
-
-	RavEngine::ctti_t NetTypeID() const override {
-		return RavEngine::CTTI<NetEntity>();
-	}
 };

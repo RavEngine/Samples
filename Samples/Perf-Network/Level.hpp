@@ -23,7 +23,7 @@ enum ManagerRPCs {
 	UpdateReq
 };
 
-struct ManagementRelay : public RavEngine::Entity, public RavEngine::AutoCTTI {
+struct ManagementRelay : public RavEngine::Entity {
 	inline void Create() {
 		auto& rpc = EmplaceComponent<RavEngine::RPCComponent>();
 		EmplaceComponent<RelayComp>();

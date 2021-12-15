@@ -118,6 +118,6 @@ void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
     
 	// transfer their ownership to the client
 	for (const auto& entity : entities) {
-		App::networkManager.server->ChangeOwnership(origin, entity.GetComponent<NetworkIdentity>());
+		App::networkManager.server->ChangeOwnership(origin, ComponentHandle<NetworkIdentity>(entity));
 	}
 }
