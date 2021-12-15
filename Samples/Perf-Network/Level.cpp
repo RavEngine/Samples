@@ -65,8 +65,8 @@ void Level::ServerUpdateGUI()
 
 void Level::SetupServer()
 {
-    CreatePrototype<ManagementRelay>()
-	systemManager.EmplaceSystem<TweenEntities>();
+    CreatePrototype<ManagementRelay>();
+	EmplaceSystem<TweenEntities,InterpolationTransform>();
 	App::networkManager.server->OnClientConnected = [&](HSteamNetConnection) {
 		ServerUpdateGUI();
 	};
@@ -76,7 +76,7 @@ void Level::SetupServer()
 
 	auto guientity = CreatePrototype<Entity>();
 	auto& guic = guientity.EmplaceComponent<GUIComponent>();
-	guic->AddDocument("server.rml");
+	guic.AddDocument("server.rml");
 
 	auto im = App::inputManager = std::make_shared<RavEngine::InputManager>();
     ComponentHandle<GUIComponent> gh(guientity);
@@ -89,15 +89,15 @@ void Level::SetupServer()
 
 void Level::SetupClient()
 {
-	App::networkManager.client->SetNetSpawnHook<ManagementRelay>([](Ref<Entity> e, Ref<World> w) -> void {
+	App::networkManager.client->SetNetSpawnHook<ManagementRelay>([](Entity e, Ref<World> w) -> void {
 		// the management relay is here, so now we want to spawn objects with their ownership transfered here
-		auto rpc = e->GetComponent<RPCComponent>().value();
-		rpc->InvokeServerRPC(SpawnReq, NetworkBase::Reliability::Reliable, (int)0);
+		auto& rpc = e.GetComponent<RPCComponent>();
+		rpc.InvokeServerRPC(SpawnReq, NetworkBase::Reliability::Reliable, (int)0);
 	});
 	// only the clients move objects and need to push changes up
 	// the server will automatically replicate changes from the other clients
-	systemManager.EmplaceTimedSystem<SyncNetTransforms>(std::chrono::milliseconds(100));
-	systemManager.EmplaceSystem<MoveEntities>();
+    EmplaceTimedSystem<SyncNetTransforms, NetTransform,Transform,RPCComponent>(std::chrono::milliseconds(100));
+    EmplaceSystem<MoveEntities, PathData,NetworkIdentity,Transform>();
 }
 
 void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin)
@@ -110,14 +110,14 @@ void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 		500
 #endif
 		;
-
+    auto wptr = GetOwner().GetWorld();
     Array<NetEntity, num_entities> entities;
 	for (int i = 0; i < entities.size(); i++) {
-		entities[i] = make_shared<NetEntity>();
+		entities[i] = wptr->CreatePrototype<NetEntity>();
 	}
     
 	// transfer their ownership to the client
 	for (const auto& entity : entities) {
-		App::networkManager.server->ChangeOwnership(origin, entity->GetComponent<NetworkIdentity>().value());
+		App::networkManager.server->ChangeOwnership(origin, entity.GetComponent<NetworkIdentity>());
 	}
 }

@@ -10,7 +10,7 @@ enum class RPCs {
 	UpdateTransform,
 };
 
-struct InterpolationTransform {
+struct InterpolationTransform : public RavEngine::AutoCTTI {
 	RavEngine::SpinLock mtx;
 	RavEngine::Tween<decimalType, decimalType, decimalType> translate;
 	RavEngine::Tween<decimalType, decimalType, decimalType, decimalType> rotate;

@@ -1,7 +1,7 @@
 #pragma once
 #include <RavEngine/World.hpp>
 #include <RavEngine/RPCComponent.hpp>
-#include <RavEngine/NetworkReplicable.hpp>
+#include <RavEngine/ComponentHandle.hpp>
 
 struct Level : public RavEngine::World {
 	Level() : World("level") {}
@@ -13,8 +13,9 @@ private:
 	void SetupClient();
 };
 
-struct RelayComp : public RavEngine::Component, public RavEngine::Queryable<RelayComp> {
+struct RelayComp : public RavEngine::ComponentWithOwner, public RavEngine::Queryable<RelayComp> {
 	void RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin);
+    RelayComp(entity_t owner) : ComponentWithOwner(owner){}
 };
 
 enum ManagerRPCs {
@@ -22,25 +23,13 @@ enum ManagerRPCs {
 	UpdateReq
 };
 
-struct ManagementRelay : public RavEngine::Entity, public RavEngine::NetworkReplicable {
-	inline void CommonInit() {
+struct ManagementRelay : public RavEngine::Entity, public RavEngine::AutoCTTI {
+	inline void Create() {
 		auto& rpc = EmplaceComponent<RavEngine::RPCComponent>();
-		auto& relay = EmplaceComponent<RelayComp>();
-		rpc.RegisterServerRPC(SpawnReq, relay, &RelayComp::RequestSpawnObject, RavEngine::RPCComponent::Directionality::Bidirectional);
-	}
-
-	ManagementRelay() {
-		CommonInit();
-
-		EmplaceComponent<RavEngine::NetworkIdentity>();
-	}
-
-	ManagementRelay(const uuids::uuid& id) {
-		CommonInit();
-		EmplaceComponent<RavEngine::NetworkIdentity>(id);
-	}
-
-	RavEngine::ctti_t NetTypeID() const override {
-		return RavEngine::CTTI<ManagementRelay>();
+		EmplaceComponent<RelayComp>();
+        RavEngine::ComponentHandle<RelayComp> relay(this);
+        rpc.RegisterServerRPC(SpawnReq, [relay](auto& a, auto b) mutable{
+            relay->RequestSpawnObject(a,b);
+        }, RavEngine::RPCComponent::Directionality::Bidirectional);
 	}
 };

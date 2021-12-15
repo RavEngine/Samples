@@ -1,5 +1,5 @@
 #pragma once
-#include <RavEngine/Entity.hpp>
+#include <RavEngine/GameObject.hpp>
 #include <RavEngine/RPCComponent.hpp>
 #include <RavEngine/Utilities.hpp>
 #include <RavEngine/StaticMesh.hpp>
@@ -7,35 +7,41 @@
 #include "NetTransform.hpp"
 
 struct MoveEntities : public RavEngine::AutoCTTI {
-	inline void Tick(float fpsScale, Ref<PathData> pathdata, Ref<RavEngine::Transform> transform, Ref<RavEngine::NetworkIdentity> netid) {
+	inline void operator()(float fpsScale, PathData& pathdata, RavEngine::NetworkIdentity& netid, RavEngine::Transform& transform) const{
 
 		// use the sine of global time
-		if (netid->IsOwner()) {
+		if (netid.IsOwner()) {
 
 			auto t = RavEngine::App::GetCurrentTime();
 
 			auto pos = vector3(
-				std::sin(t * pathdata->xtiming + pathdata->offset) * pathdata->scale,
-				std::sin(t * pathdata->ytiming + pathdata->offset) * pathdata->scale,
-				std::sin(t * pathdata->ztiming + pathdata->offset) * pathdata->scale
+				std::sin(t * pathdata.xtiming + pathdata.offset) * pathdata.scale,
+				std::sin(t * pathdata.ytiming + pathdata.offset) * pathdata.scale,
+				std::sin(t * pathdata.ztiming + pathdata.offset) * pathdata.scale
 			);
-			transform->SetWorldPosition(pos);
+			transform.SetWorldPosition(pos);
 			auto rot = quaternion(pos);
-			transform->SetLocalRotation(rot);
+			transform.SetLocalRotation(rot);
 		}
 	}
 };
 
 
-struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable {
+struct NetEntity : public RavEngine::GameObject, public RavEngine::AutoCTTI {
 
 	static Ref<RavEngine::PBRMaterialInstance> matinst;
 
-	inline void CommonInit() {
-		auto rpc = EmplaceComponent<RavEngine::RPCComponent>();
-		auto rpccomp = EmplaceComponent<NetTransform>();
-		rpc->RegisterServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), rpccomp, &NetTransform::UpdateTransform);
-		rpc->RegisterClientRPC(RavEngine::to_underlying(RPCs::UpdateTransform), rpccomp, &NetTransform::UpdateTransform);
+	inline void Create() {
+        GameObject::Create();
+		auto& rpc = EmplaceComponent<RavEngine::RPCComponent>();
+		EmplaceComponent<NetTransform>();
+        RavEngine::ComponentHandle<NetTransform> nettransform;
+        
+        auto fn = [nettransform](auto& a, auto b) mutable{
+            nettransform->UpdateTransform(a,b);
+        };
+        rpc.RegisterServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), fn);
+		rpc.RegisterClientRPC(RavEngine::to_underlying(RPCs::UpdateTransform), fn);
 
 		if (!matinst) {
 			matinst = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
@@ -46,18 +52,15 @@ struct NetEntity : public RavEngine::Entity, public RavEngine::NetworkReplicable
 		EmplaceComponent<InterpolationTransform>();
 	}
 
-	// server constructor
-	NetEntity() {
-		CommonInit();
-		EmplaceComponent<RavEngine::NetworkIdentity>();
-	}
+
 
 	// invoked when spawned over the network
-	NetEntity(const uuids::uuid& id) {
-		CommonInit();
-		EmplaceComponent<RavEngine::NetworkIdentity>(id);
-		EmplaceComponent<PathData>();		// since clients control their objects, the server does not need to allocate this
-	}
+    //TODO: Fix
+//	NetEntity(const uuids::uuid& id) {
+//		CommonInit();
+//		EmplaceComponent<RavEngine::NetworkIdentity>(id);
+//		EmplaceComponent<PathData>();		// since clients control their objects, the server does not need to allocate this
+//	}
 
 	RavEngine::ctti_t NetTypeID() const override {
 		return RavEngine::CTTI<NetEntity>();
