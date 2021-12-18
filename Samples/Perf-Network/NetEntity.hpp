@@ -57,8 +57,6 @@ struct NetEntity : public RavEngine::GameObject {
 	// invoked when spawned over the network
     //TODO: Fix
 //	NetEntity(const uuids::uuid& id) {
-//		CommonInit();
-//		EmplaceComponent<RavEngine::NetworkIdentity>(id);
 //		EmplaceComponent<PathData>();		// since clients control their objects, the server does not need to allocate this
 //	}
 };
