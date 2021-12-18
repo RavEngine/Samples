@@ -35,7 +35,7 @@ struct NetEntity : public RavEngine::GameObject {
         GameObject::Create();
 		auto& rpc = EmplaceComponent<RavEngine::RPCComponent>();
 		EmplaceComponent<NetTransform>();
-        RavEngine::ComponentHandle<NetTransform> nettransform;
+        RavEngine::ComponentHandle<NetTransform> nettransform(this);
         
         auto fn = [nettransform](auto& a, auto b) mutable{
             nettransform->UpdateTransform(a,b);
@@ -52,11 +52,9 @@ struct NetEntity : public RavEngine::GameObject {
 		EmplaceComponent<InterpolationTransform>();
 	}
 
-
-
 	// invoked when spawned over the network
-    //TODO: Fix
-//	NetEntity(const uuids::uuid& id) {
-//		EmplaceComponent<PathData>();		// since clients control their objects, the server does not need to allocate this
-//	}
+	// called *in addition to* not *instead of* Create()
+	inline void ClientCreate() {
+		EmplaceComponent<PathData>();
+	}
 };
