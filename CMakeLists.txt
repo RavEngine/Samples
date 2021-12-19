@@ -65,7 +65,7 @@ function (add_sample sample_dir)
 	file(GLOB objects "${sample_dir}/objects/*.fbx" "${sample_dir}/objects/*.dae" "${sample_dir}/objects/*.ozz" "${sample_dir}/objects/*.obj", "${sample_dir}/objects/*.ply")
 	file(GLOB textures "${sample_dir}/textures/*.jpg", "${sample_dir}/textures/*.png" "${sample_dir}/textures/*.svg")
 	file(GLOB shaders "${sample_dir}/shaders/*.cmake")
-	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png" "${sample_dir}/ui/*.json")
+	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png" "${sample_dir}/ui/*.json" "${sample_dir}/ui/*.ids")
 	file(GLOB sounds "${sample_dir}/sounds/*.mp3", "${sample_dir}/sounds/*.wav", "${sample_dir}/sounds/*.ogg", "${sample_dir}/sounds/*.midi")
 
 	pack_resources(TARGET "${APPNAME}"

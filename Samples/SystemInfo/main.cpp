@@ -31,6 +31,50 @@ struct Level : public World{
         auto doc = gui.AddDocument("ui.rml");
         auto view = doc->GetElementById("view");
         
+        // get the name of the GPU
+        // we have to embed every possible PCI device into the app
+        // then search it for the ID
+
+        // get PCI vendor and device IDs
+        auto data = SystemInfo::GPUPCIData();
+
+        // read the file containing all ids and strings
+        auto filedata = GetApp()->GetResources().FileContentsAt<Vector<char>>("/uis/pci.ids");
+
+        string_view allids(filedata.data(), filedata.size());
+
+        stringstream stream;
+        stream << std::hex << data.vendorID;
+        // do we know about this vendor?
+        auto pos = allids.find(stream.str());
+        string brandstring;
+        if (pos == string_view::npos) {
+            brandstring = "Unknown Vendor - Unknown GPU";
+        }
+        else {
+            // get the vendor name
+            size_t start =  pos + stream.str().size() + 1;  // + 1 tab
+            size_t size = 0;
+            for (size_t i = start; i < allids.size() && allids[i] != '\n'; size = i++ - start);
+            string_view vendor(allids.data() + start,++size);
+            brandstring += vendor;
+
+            stream.str("");
+            stream.clear();
+            stream << std::hex << data.deviceID;
+
+            // get the device name
+            pos = allids.find(stream.str(), start + size);
+            if (pos == string_view::npos) {
+                brandstring += " - Unknown GPU";
+            }
+            else {
+                start = pos + stream.str().size() + 1;  // + 1 tab
+                for (size_t i = start; i < allids.size() && allids[i] != '\n'; size = i++ - start);
+                string_view device(allids.data() + start, ++size);
+                brandstring += StrFormat(" - {}",device);
+            }
+        }
         
         DispatchAsync([=]{
             auto v = SystemInfo::OperatingSystemVersion();
@@ -83,7 +127,7 @@ Graphics<br/>
                                         SystemInfo::NumLogicalProcessors(),SystemInfo::CPUBrandString(),
                                         SystemInfo::SystemRAM(),
                                         
-                                        SystemInfo::GPUBrandString(), SystemInfo::GPUVRAM(), SystemInfo::GPUVRAMinUse(),
+                                        brandstring, SystemInfo::GPUVRAM(), SystemInfo::GPUVRAMinUse(),
                                         oss.str(),
                                         GetRating()
                           ));
