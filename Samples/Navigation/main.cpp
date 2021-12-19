@@ -69,7 +69,7 @@ struct Level : public World{
         auto doc = gui.AddDocument("ui.rml");
         ComponentHandle<GUIComponent> gh(guiEntity);
         
-        auto im = App::inputManager = RavEngine::New<InputManager>();
+        auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
         im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
         im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
         im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY);
@@ -111,7 +111,7 @@ struct Level : public World{
             gh->EnqueueUIUpdate([=]{
                 doc->GetElementById("cellSizeDisp")->SetInnerRML(field->GetValue());
             });
-            App::DispatchMainThread([value,this]{
+            GetApp()->DispatchMainThread([value,this]{
                 
                 nvopt.cellSize = value;
                 nvopt.cellHeight = value;
@@ -127,7 +127,7 @@ struct Level : public World{
             gh->EnqueueUIUpdate([=]{
                 doc->GetElementById("agentRadiusDisp")->SetInnerRML(field->GetValue());
             });
-            App::DispatchMainThread([value,this]{
+            GetApp()->DispatchMainThread([value,this]{
                 
                 nvopt.agent.radius = value;
                 RecalculateNav();
@@ -142,7 +142,7 @@ struct Level : public World{
             gh->EnqueueUIUpdate([=]{
                 doc->GetElementById("maxSlopeDisp")->SetInnerRML(field->GetValue());
             });
-            App::DispatchMainThread([value,this]{
+            GetApp()->DispatchMainThread([value,this]{
                 
                 nvopt.agent.maxSlope = value;
                 RecalculateNav();

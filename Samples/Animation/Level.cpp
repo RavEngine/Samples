@@ -40,7 +40,7 @@ void Level::SetupInputs(){
 	auto camera = CreatePrototype<CameraEntity>(character);
 	camera.GetTransform().LocalTranslateDelta(vector3(0,0,0));
 	
-	auto im = App::inputManager = make_shared<InputManager>();
+	auto im = GetApp()->inputManager = make_shared<InputManager>();
 	// keyboard
 	im->AddAxisMap(InputNames::MoveForward,SDL_SCANCODE_W);
 	im->AddAxisMap(InputNames::MoveForward, SDL_SCANCODE_S,-1);
@@ -94,5 +94,5 @@ void Level::SetupInputs(){
 
 void Level::PostTick(float)
 {
-	App::GetRenderEngine().DebugPrint(0,0x4F,"{}",App::GetRenderEngine().GetCurrentBackendName());
+	GetApp()->GetRenderEngine().DebugPrint(0,0x4F,"{}", GetApp()->GetRenderEngine().GetCurrentBackendName());
 }

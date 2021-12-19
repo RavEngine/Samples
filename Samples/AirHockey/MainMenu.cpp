@@ -19,7 +19,7 @@ void MainMenu::OnActivate(){
 	// You can also share event listeners by reading data from the event object
 	struct QuitEventListener: public Rml::EventListener{
 		void ProcessEvent(Rml::Event& event) override{
-			App::Quit();
+			GetApp()->Quit();
 		}
 	};
 	struct StartEventListener: public Rml::EventListener{
@@ -62,7 +62,7 @@ void MainMenu::OnActivate(){
 	im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY, 0);
 	im->BindAnyAction(gh->GetData());
 	
-	App::inputManager = im;
+	GetApp()->inputManager = im;
 	
 	menu.Debug();
 }
@@ -75,8 +75,8 @@ void MainMenu::LoadGame(int numplayers){
 	std::thread worker([=]{
 		Ref<GameWorld> g = make_shared<GameWorld>(numplayers);
 
-		App::DispatchMainThread([=]{
-			App::AddReplaceWorld(shared_from_this(), g);
+		GetApp()->DispatchMainThread([=]{
+			GetApp()->AddReplaceWorld(shared_from_this(), g);
 		});
 	});
 	worker.detach();

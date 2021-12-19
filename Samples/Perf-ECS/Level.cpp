@@ -22,8 +22,8 @@ TPS : {} ({} ops/s) <br />
 Entities : {} <br />
 </p> 
 )",
-			(int)App::GetRenderEngine().GetCurrentFPS(), (int)App::GetRenderEngine().GetLastFrameTime(),
-			FormatWithSep<int>(App::CurrentTPS()), FormatWithSep((int)App::CurrentTPS() * PA_Entity::num_objects * 2),
+			(int)GetApp()->GetRenderEngine().GetCurrentFPS(), (int)GetApp()->GetRenderEngine().GetLastFrameTime(),
+			FormatWithSep<int>(GetApp()->CurrentTPS()), FormatWithSep((int)GetApp()->CurrentTPS() * PA_Entity::num_objects * 2),
 			FormatWithSep(PA_Entity::num_objects)
 			));
 		});
@@ -97,7 +97,7 @@ void PerfA_World::OnActivate() {
 			auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
 			auto idx = selbox->GetSelection();
 			auto wptr = world;
-			App::DispatchMainThread([wptr,idx] {
+			GetApp()->DispatchMainThread([wptr,idx] {
 				wptr->SetECSMode(idx);
 			});
 		}
@@ -115,6 +115,6 @@ void PerfA_World::OnActivate() {
 	im->BindAxis("MouseY", g, &GUIComponent::MouseY, CID::ANY, 0);
     im->BindAnyAction(g->GetData());
 
-	App::inputManager = im;
+	GetApp()->inputManager = im;
 
 }

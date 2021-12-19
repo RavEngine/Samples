@@ -15,8 +15,8 @@ struct SingleEntityMarker : public Queryable<SingleEntityMarker>{};
 
 struct FPSSystem : public AutoCTTI {
 	void operator()(float scale, const SingleEntityMarker& s) const{
-		App::DispatchMainThread([](){
-			App::SetWindowTitle(StrFormat("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", App::GetRenderEngine().GetCurrentBackendName(), (int)App::CurrentTPS(), (int)App::GetRenderEngine().GetCurrentFPS(), (int)App::GetRenderEngine().GetLastFrameTime()).c_str());
+		GetApp()->DispatchMainThread([](){
+			GetApp()->SetWindowTitle(StrFormat("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", GetApp()->GetRenderEngine().GetCurrentBackendName(), (int)GetApp()->CurrentTPS(), (int)GetApp()->GetRenderEngine().GetCurrentFPS(), (int)GetApp()->GetRenderEngine().GetLastFrameTime()).c_str());
 		});
 	}
 };
@@ -54,7 +54,7 @@ void ::World::OnActivate(){
 	im->BindAxis("MouseY", g, &GUIComponent::MouseY, CID::ANY,0);
 	im->BindAnyAction(g->GetData());
 	
-	App::inputManager = im;
+	GetApp()->inputManager = im;
 	
 	//FPS updating system
 	EmplaceTimedSystem<FPSSystem,SingleEntityMarker>(std::chrono::seconds(1));

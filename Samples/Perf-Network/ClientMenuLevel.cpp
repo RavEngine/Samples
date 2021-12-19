@@ -15,7 +15,7 @@ void ClientMenu::OnActivate()
 	auto doc = guic.AddDocument("client.rml");
 
 	// input manager to make GUI interactive
-	auto im = App::inputManager = std::make_shared<RavEngine::InputManager>();
+	auto im = GetApp()->inputManager = std::make_shared<RavEngine::InputManager>();
     ComponentHandle<GUIComponent> gh(guientity);
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
@@ -40,15 +40,15 @@ void ClientMenu::OnActivate()
 }
 
 void ClientMenu::ConnectToServer(const std::string& addr) {
-	auto& cl = App::networkManager.client;
+	auto& cl = GetApp()->networkManager.client;
 	cl->Connect(addr,PORT);
 		cl->OnConnected = [&](HSteamNetConnection) {
 			Debug::Log("Client successfully connected");
-            App::inputManager.reset();
-			App::AddReplaceWorld(this->shared_from_this(), make_shared<Level>());
+			GetApp()->inputManager.reset();
+			GetApp()->AddReplaceWorld(this->shared_from_this(), make_shared<Level>());
 		};
 		cl->OnLostConnection = [&](HSteamNetConnection) {
 			Debug::Log("Client disconnected");
-			App::Quit();
+			GetApp()->Quit();
 		};
 }

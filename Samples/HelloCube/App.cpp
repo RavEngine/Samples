@@ -3,7 +3,7 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/World.hpp>
 #include <RavEngine/CameraComponent.hpp>
-#include <RavEngine/Transform.hpp>
+#include <RavEngine/GameObject.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -19,12 +19,6 @@ struct HelloCubeApp : public RavEngine::App {
 	// Next, implement OnStartup. This is called when your application launches.
 	// You are passed argc and argv from the command line. 
 	void OnStartup(int argc, char** argv) final;
-};
-
-struct BasicEntity : public RavEngine::Entity{
-    void Create(){
-        EmplaceComponent<Transform>();
-    }
 };
 
 // After defining an App, define a World by creating a class that derives from RavEngine::World.
@@ -44,8 +38,10 @@ struct HelloCubeWorld : public RavEngine::World {
         // Instead, think of an Entity as a handle to a collection of components stored elsewhere.
         // Unlike other ECS implementations, Entity handles are global, and also have convenience
         // member functions.
+		// RavEngine Entities do not come with a Transform by default. For convenience, a "GameObject" is also provided. However, this
+		// is just an entity with a transform component applied automatically, do not confuse it with the higher-level concept.
         // When you call this, it immediately creates the entity in the world.
-		auto cubeEntity = CreatePrototype<BasicEntity>();
+		auto cubeEntity = CreatePrototype<GameObject>();
 
 		// We want to display a cube in this world. RavEngine uses a component-based composition model 
 		// for describing scene objects. However, you can also subclass RavEngine::Entity and perform
@@ -68,7 +64,7 @@ struct HelloCubeWorld : public RavEngine::World {
 
 		// We want to be able to see our cube, so we need a camera. In RavEngine, cameras are also components, so 
 		// we need another entity to hold that. 
-		auto cameraEntity = CreatePrototype<BasicEntity>();
+		auto cameraEntity = CreatePrototype<GameObject>();
 
 		// Create the CameraComponent. The EmplaceComponent call returns an owning pointer to the constructed component.
 		// Be wary of storing these to avoid reference cycles that lead to memory leaks. 
@@ -82,7 +78,7 @@ struct HelloCubeWorld : public RavEngine::World {
         cubeEntity.GetTransform().LocalTranslateDelta(vector3(0,0,-5));
 
 		// We want some lighting on our cube. In RavEngine, lights are also components, so we'll need an entity for those.
-		auto lightsEntity = CreatePrototype<BasicEntity>();
+		auto lightsEntity = CreatePrototype<GameObject>();
 		lightsEntity.EmplaceComponent<DirectionalLight>();					// a light that mimics the sun
 		lightsEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;	// a weak fill light that affects all surfaces equally
 

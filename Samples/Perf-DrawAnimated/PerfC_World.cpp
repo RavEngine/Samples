@@ -138,7 +138,7 @@ void PerfC_World::OnActivate(){
 	im->BindAxis("ROTATE_Y", p, &Player::RotateLR, CID::ANY);
 	im->BindAxis("ROTATE_X", p, &Player::RotateUD, CID::ANY);
 	
-	App::inputManager = im;
+	GetApp()->inputManager = im;
 	
 	//create HUD
 	auto hudentity = CreatePrototype<Entity>();
@@ -202,7 +202,7 @@ void PerfC_World::OnActivate(){
 
 void PerfC_World::PostTick(float scale){
 	hud->EnqueueUIUpdate([this] {
-		fpslabel->SetInnerRML(StrFormat("TPS: {}, FPS: {} ({} ms)", (int)App::CurrentTPS(),(int)App::GetRenderEngine().GetCurrentFPS(), (int)App::GetRenderEngine().GetLastFrameTime()));
+		fpslabel->SetInnerRML(StrFormat("TPS: {}, FPS: {} ({} ms)", (int)GetApp()->CurrentTPS(),(int)GetApp()->GetRenderEngine().GetCurrentFPS(), (int)GetApp()->GetRenderEngine().GetLastFrameTime()));
 	});
 }
 

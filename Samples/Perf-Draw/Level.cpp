@@ -24,8 +24,8 @@ struct MetricsSystem : public AutoCTTI {
 		gui.EnqueueUIUpdate([this,elem] {
 			elem->SetInnerRML(StrFormat(
 				"FPS: {} ({} ms) <br /> TPS: {} <br /> Num Entities: {}",
-				(int)App::GetRenderEngine().GetCurrentFPS(), (int)App::GetRenderEngine().GetLastFrameTime(),
-				(int)App::CurrentTPS(),
+				(int)GetApp()->GetRenderEngine().GetCurrentFPS(), (int)GetApp()->GetRenderEngine().GetLastFrameTime(),
+				(int)GetApp()->CurrentTPS(),
 				num_entities
 			));
 		});
@@ -100,7 +100,7 @@ void PerfB_World::OnActivate() {
 	im->BindAxis("ROTATE_Y", h, &Player::RotateLR, CID::ANY);
 	im->BindAxis("ROTATE_X", h, &Player::RotateUD, CID::ANY);
 
-	App::inputManager = im;
+	GetApp()->inputManager = im;
 
     // load systems
     EmplaceSystem<PlayerSystem,Player>();

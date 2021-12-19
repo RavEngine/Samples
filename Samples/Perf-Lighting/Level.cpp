@@ -39,9 +39,6 @@ struct StaticMeshEntity : public GameObject {
 
 
 void Level::OnActivate() {
-
-	Debug::Log("{}", SystemInfo::GPUBrandString());
-
 	// load camera and lights
     auto camera = CreatePrototype<GameObject>();
 	camera.EmplaceComponent<CameraComponent>().SetActive(true);
@@ -80,7 +77,7 @@ void Level::OnActivate() {
 	doc->GetElementById("numobjs")->AddEventListener(Rml::EventId::Change, new SliderHandler(this, doc));
 
 	// inputs
-	auto im = App::inputManager = std::make_shared<RavEngine::InputManager>();
+	auto im = GetApp()->inputManager = std::make_shared<RavEngine::InputManager>();
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
     

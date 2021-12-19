@@ -97,7 +97,7 @@ void GameWorld::OnActivate(){
 	auto& context = gamegui.EmplaceComponent<GUIComponent>();
 	auto doc = context.AddDocument("demo.rml");
 	Scoreboard = doc->GetElementById("scoreboard");
-	App::inputManager = is;
+	GetApp()->inputManager = is;
 	
 	Reset();
 }
@@ -153,9 +153,9 @@ void GameWorld::GameOver(){
 		WeakRef<GameWorld> gm;
 		MenuEventListener(WeakRef<GameWorld> w) : gm(w){}
 		void ProcessEvent(Rml::Event& event) override{
-			App::DispatchMainThread([=]{
+			GetApp()->DispatchMainThread([=]{
 				auto world = make_shared<MainMenu>();
-				App::AddReplaceWorld(gm.lock(),world);
+				GetApp()->AddReplaceWorld(gm.lock(),world);
 			});
 		}
 	};
@@ -166,9 +166,9 @@ void GameWorld::GameOver(){
 		void ProcessEvent(Rml::Event& event) override{
 			if (!isLoading){
 				isLoading = true;
-				App::DispatchMainThread([=]{
+				GetApp()->DispatchMainThread([=]{
 					auto world = make_shared<GameWorld>(gm.lock()->numplayers);
-					App::AddReplaceWorld(gm.lock(),world);
+					GetApp()->AddReplaceWorld(gm.lock(),world);
 				});
 			}
 		}
@@ -187,7 +187,7 @@ void GameWorld::GameOver(){
 	im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY, 0);
 	im->BindAnyAction(gh->GetData());
 	
-	App::inputManager = im;
+	GetApp()->inputManager = im;
 }
 
 GameWorld::GameWorld(const GameWorld& other) : GameWorld(other.numplayers){}

@@ -12,7 +12,7 @@ struct MoveEntities : public RavEngine::AutoCTTI {
 		// use the sine of global time
 		if (netid.IsOwner()) {
 
-			auto t = RavEngine::App::GetCurrentTime();
+			auto t = RavEngine::GetApp()->GetCurrentTime();
 
 			auto pos = vector3(
 				std::sin(t * pathdata.xtiming + pathdata.offset) * pathdata.scale,

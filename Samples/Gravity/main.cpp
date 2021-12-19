@@ -140,7 +140,7 @@ struct Level : public World{
         InitPhysics();
         
         // setup input manager
-        auto im = App::inputManager = RavEngine::New<InputManager>();
+        auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
         im->AddAxisMap(Mappings::CameraUD,SDL_SCANCODE_W,-1);
         im->AddAxisMap(Mappings::CameraUD,SDL_SCANCODE_S);
         im->AddAxisMap(Mappings::CameraLR, SDL_SCANCODE_A,-1);

@@ -24,7 +24,7 @@ struct InputNames {
 };
 
 void Level::ToggleMouse(){
-    App::inputManager->SetRelativeMouseMode(!App::inputManager->GetRelativeMouseMode());
+	GetApp()->inputManager->SetRelativeMouseMode(!GetApp()->inputManager->GetRelativeMouseMode());
 }
 
 void Level::OnActivate() {
@@ -75,7 +75,7 @@ void Level::OnActivate() {
 
 	wallTextures[0] = TextureManager::defaultTexture;
 	wallTextures[23] = TextureManager::defaultTexture;
-	App::GetResources().IterateDirectory("textures", [&](const string& file) {
+	GetApp()->GetResources().IterateDirectory("textures", [&](const string& file) {
 		auto name = std::filesystem::path(file).filename();
 		auto tex = Texture::Manager::Get(name.string());
 		auto pos = std::distance(names.begin(), std::find(names.begin(), names.end(), name.replace_extension("").string()));
@@ -142,7 +142,7 @@ void Level::OnActivate() {
 	// load audio & initialize music selector
     {
         int music_id = 0;
-        App::GetResources().IterateDirectory("sounds", [&](const string& track) {
+		GetApp()->GetResources().IterateDirectory("sounds", [&](const string& track) {
             auto path = std::filesystem::path(track);
             if (path.extension() == ".mp3") {
                 auto leaf_name = path.filename();
@@ -167,7 +167,7 @@ void Level::OnActivate() {
 	speaker2.GetTransform().LocalTranslateDelta(vector3(5, 0, 2));
 
 	// setup inputs
-	auto im = App::inputManager = make_shared<InputManager>();
+	auto im = GetApp()->inputManager = make_shared<InputManager>();
 	
 	im->AddAxisMap(InputNames::MoveForward, ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
 	im->AddAxisMap(InputNames::MoveRight, ControllerAxis::SDL_CONTROLLER_AXIS_LEFTX);

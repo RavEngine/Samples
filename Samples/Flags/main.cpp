@@ -46,7 +46,7 @@ struct Level : public World{
         auto doc = gui.AddDocument("ui.rml");
         
         ComponentHandle<GUIComponent> gh(guiEntity);
-        auto im = App::inputManager = RavEngine::New<InputManager>();
+        auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
         im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
         im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
         im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY);

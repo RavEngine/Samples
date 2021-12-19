@@ -65,7 +65,7 @@ void TestEntityController::Tick(float scale) {
 		auto e = GetOwner();
         assert(markedForDeletion == false);
         markedForDeletion = true;
-		App::DispatchMainThread([e]() mutable {
+		GetApp()->DispatchMainThread([e]() mutable {
 			e.Destroy();
 			objectcount--;
 		});

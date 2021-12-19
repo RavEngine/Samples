@@ -28,7 +28,7 @@ public:
 	void SetupInputs();
 
     void SampleFPS() {
-		RavEngine::Debug::Log("TPS: {}", RavEngine::App::CurrentTPS());
+		RavEngine::Debug::Log("TPS: {}", RavEngine::GetApp()->CurrentTPS());
     }
 protected: 
        float scale = 1;
