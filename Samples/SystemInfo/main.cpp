@@ -1,8 +1,9 @@
 #include "AppInfo.hpp"
 #include <RavEngine/App.hpp>
 #include <RavEngine/World.hpp>
-#include <RavEngine/Entity.hpp>
+#include <RavEngine/GameObject.hpp>
 #include <RavEngine/SystemInfo.hpp>
+#include <RavEngine/CameraComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -16,17 +17,19 @@ static const char* GetRating(){
         "Top notch!",
         "*Yawn*",
         "What is this?!",
-        "I sure do like being inside this fancy computer",
         "Seal of approval!",
         "Drag racing champion!",
         "Tell your friends!",
+        "The latest and greatest, maybe!",
+        "Fancy!",
     };
     return messages[rand() % sizeof(messages)/sizeof(messages[0])];
 }
 
 struct Level : public World{
     Level(){
-        auto guientity = CreatePrototype<Entity>();
+        auto guientity = CreatePrototype<GameObject>();
+        guientity.EmplaceComponent<CameraComponent>().SetActive(true);
         auto& gui = guientity.EmplaceComponent<GUIComponent>();
         auto doc = gui.AddDocument("ui.rml");
         auto view = doc->GetElementById("view");
