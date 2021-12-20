@@ -46,7 +46,20 @@ struct Level : public World{
         stringstream stream;
         stream << std::hex << data.vendorID;
         // do we know about this vendor?
-        auto pos = allids.find(stream.str());
+		auto vendorid_str = stream.str();
+		size_t pos = 0;
+		for(; pos < allids.size(); pos++){
+			// check the first n bytes after pos
+			if (strncmp(vendorid_str.data(), allids.data() + pos, vendorid_str.size()) == 0){
+				break;
+			}
+			else{
+				// read to the end of the line
+				for( ; pos < allids.size() && allids[pos] != '\n'; pos++);
+			}
+		}
+		
+        //auto pos = allids.find(stream.str());
         string brandstring;
         if (pos == string_view::npos) {
             brandstring = "Unknown Vendor - Unknown GPU";
