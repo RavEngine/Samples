@@ -34,7 +34,7 @@ struct RespawnSystem : public RavEngine::AutoCTTI{
 	}
 };
 
-struct SpawnerMarker : public RavEngine::Component, public RavEngine::Queryable<SpawnerMarker>{};
+struct SpawnerMarker : public AutoCTTI{};
 
 struct SpawnerSystem : public RavEngine::AutoCTTI{
 	Level* ownWorld;

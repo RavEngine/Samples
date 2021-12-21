@@ -1,6 +1,5 @@
 #pragma once
 #include <RavEngine/Entity.hpp>
-#include <RavEngine/Component.hpp>
 #include <RavEngine/Utilities.hpp>
 #include <atomic>
 

@@ -1,5 +1,4 @@
 #pragma once
-#include <RavEngine/Component.hpp>
 #include <RavEngine/Queryable.hpp>
 #include <RavEngine/App.hpp>
 #include <RavEngine/GameObject.hpp>

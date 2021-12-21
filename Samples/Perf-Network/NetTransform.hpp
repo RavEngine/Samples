@@ -1,5 +1,4 @@
 #pragma once
-#include <RavEngine/Component.hpp>
 #include <RavEngine/Queryable.hpp>
 #include <RavEngine/Tween.hpp>
 #include <RavEngine/RPCComponent.hpp>
@@ -23,7 +22,7 @@ struct NetTransform : public RavEngine::ComponentWithOwner {
 };
 
 // stores the information for animating objects on the client
-struct PathData : public RavEngine::Component, public RavEngine::Queryable<PathData> {
+struct PathData: public RavEngine::AutoCTTI {
 	float xtiming = RavEngine::Random::get(0.1,0.5), ytiming = RavEngine::Random::get(0.1, 0.5), ztiming = RavEngine::Random::get(0.1, 0.5);
 	float offset = RavEngine::Random::get(-10.0, 10.0);
 	float scale = 4;
