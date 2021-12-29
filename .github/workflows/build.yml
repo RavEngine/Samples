@@ -25,6 +25,30 @@ jobs:
         with:
           name:  RavEngine_Samples_linux64
           path:  build/linux/Release/Samples_Linux.zip
+
+  build-linux-arm:
+    name: Build Samples for Linux aarch64
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install cmake ninja-build libgl1-mesa-dev libasound2-dev gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
+      - name: Configure
+        run: mkdir -p build; mkdir -p build/linuxarm; cd build/linuxarm; export CC=/usr/bin/aarch64-linux-gnu-gcc; export CXX=/usr/bin/aarch64-linux-gnu-g++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
+      - name: Build
+        run: cd build/linuxarm && cmake --build . --config release --target install 
+      - name: Fix Permissions
+        run: cd build/linuxarm/Release; chmod +x *.AppImage
+      - name: Compress Samples
+        run: cd build/linuxarm/Release; zip -r -9 Samples_LinuxARM.zip *.AppImage 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name:  RavEngine_Samples_linux64
+          path:  build/linuxarm/Release/Samples_LinuxARM.zip
         
   build-mac:
     name: Build Samples for macOS
