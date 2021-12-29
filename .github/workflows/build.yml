@@ -35,7 +35,7 @@ jobs:
         with:
           submodules: true
       - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install cmake ninja-build libgl1-mesa-dev libasound2-dev gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
+        run: sudo apt-get update && sudo apt-get install cmake ninja-build libgl1-mesa-dev:aarch64 libasound2-dev:aarch64 libx11-dev:aarch64 ibxext-dev:aarch64 libxrender-dev:aarch64 libxrandr-dev:aarch64 libxtst-dev:aarch64 libxt-dev:aarch64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
       - name: Configure
         run: mkdir -p build; mkdir -p build/linuxarm; cd build/linuxarm; export CC=/usr/bin/aarch64-linux-gnu-gcc; export CXX=/usr/bin/aarch64-linux-gnu-g++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
       - name: Build
