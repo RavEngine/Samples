@@ -35,7 +35,7 @@ struct Level : public World{
         auto doc = gui.AddDocument("ui.rml");
         auto view = doc->GetElementById("view");
 
-
+		DispatchAsync([=]{
             auto v = SystemInfo::OperatingSystemVersion();
             
             Vector<const char*> featuresStr;
@@ -90,6 +90,7 @@ Graphics<br/>
                                         oss.str(),
                                         GetRating()
                           ));
+          },1);
     }
 };
 
