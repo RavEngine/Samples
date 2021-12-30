@@ -34,6 +34,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
+      - name: Inspect sources
+        run: cat /etc/apt/sources.list
       - name: Add Ports Repository
         run: sudo echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe | sudo tee -a /etc/apt/sources.list ; sudo echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted multiverse universe | sudo tee -a /etc/apt/sources.list
       - name: Add arm64 as architecture
