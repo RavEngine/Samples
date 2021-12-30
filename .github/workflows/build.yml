@@ -27,15 +27,21 @@ jobs:
           path:  build/linux/Release/Samples_Linux.zip
 
   build-linux-arm:
-    name: Build Samples for Linux aarch64
+    name: Build Samples for Linux arm64
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Install Dependencies
-        run: sudo apt-get update && sudo apt-get install cmake ninja-build libgl1-mesa-dev:aarch64 libasound2-dev:aarch64 libx11-dev:aarch64 ibxext-dev:aarch64 libxrender-dev:aarch64 libxrandr-dev:aarch64 libxtst-dev:aarch64 libxt-dev:aarch64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
+      - name: Add Ports Repository
+        run: sudo echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe >> /etc/apt/sources.lst ; sudo echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted multiverse universe >> /etc/apt/sources.lst
+      - name: Add arm64 as architecture
+        run: sudo dpkg --add-architecture arm64
+      - name: Install Target Dependencies
+        run: sudo apt-get update && sudo apt-get install libgl1-mesa-dev:aarch64 libasound2-dev:aarch64 libx11-dev:aarch64 ibxext-dev:aarch64 libxrender-dev:aarch64 libxrandr-dev:aarch64 libxtst-dev:aarch64 libxt-dev:aarch64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
+      - name: Install Host Dependencies
+        run: sudo apt-get install cmake ninja-build libgl1-mesa-dev libx11-dev gcc g++ -y --no-install-recommends
       - name: Configure
         run: mkdir -p build; mkdir -p build/linuxarm; cd build/linuxarm; export CC=/usr/bin/aarch64-linux-gnu-gcc; export CXX=/usr/bin/aarch64-linux-gnu-g++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
       - name: Build
