@@ -34,14 +34,15 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Inspect sources
-        run: cat /etc/apt/sources.list
       - name: Add Ports Repository
         run: sudo echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe | sudo tee -a /etc/apt/sources.list ; sudo echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted multiverse universe | sudo tee -a /etc/apt/sources.list
       - name: Add arm64 as architecture
         run: sudo dpkg --add-architecture arm64
+      - name: Update APT
+        run: sudo apt-get update
+        continue-on-error: true
       - name: Install Target Dependencies
-        run: sudo apt-get update && sudo apt-get install libgl1-mesa-dev:aarch64 libasound2-dev:aarch64 libx11-dev:aarch64 ibxext-dev:aarch64 libxrender-dev:aarch64 libxrandr-dev:aarch64 libxtst-dev:aarch64 libxt-dev:aarch64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
+        run: sudo apt-get install libgl1-mesa-dev:aarch64 libasound2-dev:aarch64 libx11-dev:aarch64 ibxext-dev:aarch64 libxrender-dev:aarch64 libxrandr-dev:aarch64 libxtst-dev:aarch64 libxt-dev:aarch64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
       - name: Install Host Dependencies
         run: sudo apt-get install cmake ninja-build libgl1-mesa-dev libx11-dev gcc g++ -y --no-install-recommends
       - name: Configure
