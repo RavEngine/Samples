@@ -87,6 +87,16 @@ function (add_sample sample_dir)
 		)
     elseif(LINUX)
         if(CMAKE_BUILD_TYPE STREQUAL Release)
+        	if (NOT DEFINED TARGET_ARCH)
+        		set(TARGET_ARCH ${CMAKE_HOST_SYSTEM_PROCESSOR} CACHE INTERNAL "")
+        	endif()
+        	if(${TARGET_ARCH} STREQUAL ${CMAKE_HOST_SYSTEM_PROCESSOR})
+        		set(IS_CROSSCOMP OFF CACHE INTERNAL "")
+        	else()
+			set(IS_CROSSCOMP ON CACHE INTERNAL "")
+        	endif()
+
+        	message("Cross compiling = ${IS_CROSSCOMP}")
             INSTALL(CODE
                 "include(${CMAKE_CURRENT_SOURCE_DIR}/appimage.cmake)
                 make_appimage(
@@ -95,6 +105,8 @@ function (add_sample sample_dir)
                     ICON \"${CMAKE_CURRENT_SOURCE_DIR}/Samples/logo.png\"
                     DIR_ICON \"${CMAKE_CURRENT_SOURCE_DIR}/Samples/logo.png\"
                     OUTPUT_NAME \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.AppImage\"
+                    OUTPUT_ARCH \"${TARGET_ARCH}\"
+                    CROSSCOMP ${IS_CROSSCOMP}
                     ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.zip\"
                 )
                 "
@@ -106,9 +118,9 @@ function (add_sample sample_dir)
     # Strip binary for release builds
     if (CMAKE_BUILD_TYPE STREQUAL Release)
 		if(LINUX)
-			add_custom_command(TARGET ${APPNAME} POST_BUILD COMMAND ${CMAKE_STRIP} ${CMAKE_BUILD_TYPE}/${APPNAME})
+			#add_custom_command(TARGET ${APPNAME} POST_BUILD COMMAND ${CMAKE_STRIP} ${CMAKE_BUILD_TYPE}/${APPNAME})
 		elseif(APPLE)
-			add_custom_command(TARGET ${APPNAME} POST_BUILD COMMAND ${CMAKE_STRIP} ${CMAKE_BUILD_TYPE}/${APPNAME}.app/Contents/MacOS/${APPNAME})
+			#add_custom_command(TARGET ${APPNAME} POST_BUILD COMMAND ${CMAKE_STRIP} ${CMAKE_BUILD_TYPE}/${APPNAME}.app/Contents/MacOS/${APPNAME})
 		endif()
     endif ()
 

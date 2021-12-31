@@ -1,6 +1,6 @@
 function(make_appimage)
 	set(optional)
-	set(args EXE NAME DIR_ICON ICON OUTPUT_NAME)
+	set(args EXE NAME DIR_ICON ICON OUTPUT_NAME OUTPUT_ARCH CROSSCOMP) 
 	set(list_args ASSETS)
 	cmake_parse_arguments(
 		PARSE_ARGV 0
@@ -16,9 +16,9 @@ function(make_appimage)
 
 
     # download AppImageTool if needed (TODO: non-x86 build machine?)
-    SET(AIT_PATH "${CMAKE_BINARY_DIR}/AppImageTool.AppImage" CACHE INTERNAL "")
+    SET(AIT_PATH "${CMAKE_BINARY_DIR}/AppImageTool-${ARGS_OUTPUT_ARCH}.AppImage" CACHE INTERNAL "")
     if (NOT EXISTS "${AIT_PATH}")
-        file(DOWNLOAD https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage "${AIT_PATH}")
+        file(DOWNLOAD https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-${ARGS_OUTPUT_ARCH}.AppImage "${AIT_PATH}")
         execute_process(COMMAND chmod +x ${AIT_PATH})
     endif()
 
@@ -63,9 +63,11 @@ Categories=X-None;"
     )
 
     # Invoke AppImageTool
-    set(ENV{ARCH} ${CMAKE_SYSTEM_PROCESSOR})
-    execute_process(COMMAND ${AIT_PATH} ${APPDIR} ${ARGS_OUTPUT_NAME})
-    file(REMOVE_RECURSE "${APPDIR}")
+    if(ARGS_CROSSCOMP)
+    	set(AIT_WRAPPER "qemu-${ARGS_OUTPUT_ARCH}" CACHE INTERNAL "")
+    endif()
+    execute_process(COMMAND ${AIT_WRAPPER} ${AIT_PATH} ${APPDIR} ${ARGS_OUTPUT_NAME})
+    #file(REMOVE_RECURSE "${APPDIR}")
 
 endfunction()
 
