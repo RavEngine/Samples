@@ -63,6 +63,7 @@ Categories=X-None;"
     )
 
     # Invoke AppImageTool
+    set(ENV{ARCH} ${CMAKE_SYSTEM_PROCESSOR})
     execute_process(COMMAND ${AIT_PATH} ${APPDIR} ${ARGS_OUTPUT_NAME})
     file(REMOVE_RECURSE "${APPDIR}")
 
