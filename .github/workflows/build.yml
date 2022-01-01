@@ -39,12 +39,12 @@ jobs:
       - name: Add arm64 as architecture
         run: sudo dpkg --add-architecture arm64
       - name: Update APT
-        run: sudo apt-get update; sudo apt-get install -f; sudo dpkg --configure -a; sudo apt-get install -f; sudo apt-get update;
+        run: sudo apt-get update;
         continue-on-error: true
       - name: Install Host Dependencies
         run: sudo apt-get install cmake ninja-build libgl1-mesa-dev libx11-dev gcc g++ qemu-user -y --no-install-recommends
       - name: Install Target Dependencies
-        run: sudo apt-get install libgl1-mesa-dev:arm64 libasound2-dev:arm64 libfuse-dev:arm64 libglib2.0-0:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
+        run: sudo apt-get install libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
       - name: Configure
         run: mkdir -p build; mkdir -p build/linuxarm; cd build/linuxarm; export CC=/usr/bin/aarch64-linux-gnu-gcc; export CXX=/usr/bin/aarch64-linux-gnu-g++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
       - name: Build
