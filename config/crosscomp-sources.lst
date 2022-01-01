@@ -1,0 +1,7 @@
+deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal main restricted universe
+deb [arch=amd64] http://security.ubuntu.com/ubuntu/ focal-security main restricted universe
+deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe
+
+deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe
+deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted multiverse universe
+

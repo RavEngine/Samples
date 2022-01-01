@@ -34,8 +34,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Add Ports Repository
-        run: echo deb [arch=x86_64] http://archive.ubuntu.com/ubuntu/ focal main restricted universe | sudo tee /etc/sources.list; echo deb [arch=x86_64] http://security.ubuntu.com/ubuntu/ focal-security main restricted universe | sudo tee -a /etc/apt/sources.list; echo deb [arch=x86_64] http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe | sudo tee -a /etc/apt/sources.list; echo deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe | sudo tee -a /etc/apt/sources.list ; sudo echo deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted multiverse universe | sudo tee -a /etc/apt/sources.list;
+      - name: Setup Repositories
+        run: sudo mv config/crosscomp-sources.lst /etc/apt/sources.lst;
       - name: Check apt sources
         run: cat /etc/apt/sources.list
       - name: Add arm64 as architecture
@@ -44,9 +44,9 @@ jobs:
         run: sudo apt-get update;
         continue-on-error: true
       - name: Install Host Dependencies
-        run: sudo apt-get install cmake ninja-build libgl1-mesa-dev libx11-dev gcc g++ qemu-user -y --no-install-recommends
+        run: sudo apt-get install cmake:amd64 ninja-build:amd64 libgl1-mesa-dev:amd64 libx11-dev:amd64 gcc:amd64 g++:amd64 qemu-user:amd64 -y --no-install-recommends
       - name: Install Target Dependencies
-        run: sudo apt-get install libfuse-dev:arm64 libglib2.0-0:arm64 libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
+        run: sudo apt-get install libfuse-dev:arm64 libglib2.0-0:arm64 libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 gcc-aarch64-linux-gnu:amd64 g++-aarch64-linux-gnu:amd64 -y --no-install-recommends 
       - name: Configure
         run: mkdir -p build; mkdir -p build/linuxarm; cd build/linuxarm; export CC=/usr/bin/aarch64-linux-gnu-gcc; export CXX=/usr/bin/aarch64-linux-gnu-g++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
       - name: Build
