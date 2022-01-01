@@ -35,7 +35,9 @@ jobs:
         with:
           submodules: true
       - name: Add Ports Repository
-        run: sudo echo deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe | sudo tee -a /etc/apt/sources.list ; sudo echo deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted multiverse universe | sudo tee -a /etc/apt/sources.list
+        run: echo deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe | sudo tee /etc/sources.list; echo deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe | sudo tee -a /etc/apt/sources.list; echo deb http://archive.ubuntu.com/ubuntu/ focal-updates main restricted universe | sudo tee -a /etc/apt/sources.list; echo deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe | sudo tee /etc/apt/sources.list ; sudo echo deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted multiverse universe | sudo tee -a /etc/apt/sources.list;
+      - name: Check apt sources
+        run: cat /etc/apt/sources.list
       - name: Add arm64 as architecture
         run: sudo dpkg --add-architecture arm64
       - name: Update APT
@@ -44,7 +46,7 @@ jobs:
       - name: Install Host Dependencies
         run: sudo apt-get install cmake ninja-build libgl1-mesa-dev libx11-dev gcc g++ qemu-user -y --no-install-recommends
       - name: Install Target Dependencies
-        run: sudo apt-get install libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
+        run: sudo apt-get install libfuse-dev:arm64 libglib2.0-0:arm64 libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu -y --no-install-recommends 
       - name: Configure
         run: mkdir -p build; mkdir -p build/linuxarm; cd build/linuxarm; export CC=/usr/bin/aarch64-linux-gnu-gcc; export CXX=/usr/bin/aarch64-linux-gnu-g++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
       - name: Build
