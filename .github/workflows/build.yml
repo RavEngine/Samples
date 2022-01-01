@@ -39,7 +39,7 @@ jobs:
       - name: Add arm64 as architecture
         run: sudo dpkg --add-architecture arm64
       - name: Update APT
-        run: sudo apt-get update
+        run: sudo apt-get update; sudo apt-get install -f; sudo dpkg --configure -a; sudo apt-get install -f; sudo apt-get update;
         continue-on-error: true
       - name: Install Host Dependencies
         run: sudo apt-get install cmake ninja-build libgl1-mesa-dev libx11-dev gcc g++ qemu-user -y --no-install-recommends
