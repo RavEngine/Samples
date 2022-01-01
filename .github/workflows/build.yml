@@ -35,7 +35,7 @@ jobs:
         with:
           submodules: true
       - name: Add Ports Repository
-        run: sudo echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe | sudo tee -a /etc/apt/sources.list ; sudo echo deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted multiverse universe | sudo tee -a /etc/apt/sources.list
+        run: sudo echo deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ focal main restricted multiverse universe | sudo tee -a /etc/apt/sources.list ; sudo echo deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ focal-updates main restricted multiverse universe | sudo tee -a /etc/apt/sources.list
       - name: Add arm64 as architecture
         run: sudo dpkg --add-architecture arm64
       - name: Update APT
