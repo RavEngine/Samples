@@ -96,7 +96,6 @@ function (add_sample sample_dir)
 			set(IS_CROSSCOMP ON CACHE INTERNAL "")
         	endif()
 
-        	message("Cross compiling = ${IS_CROSSCOMP}")
             INSTALL(CODE
                 "include(${CMAKE_CURRENT_SOURCE_DIR}/appimage.cmake)
                 make_appimage(

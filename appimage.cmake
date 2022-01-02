@@ -16,11 +16,17 @@ function(make_appimage)
 
 
     # download AppImageTool if needed (TODO: non-x86 build machine?)
-    SET(AIT_PATH "${CMAKE_BINARY_DIR}/AppImageTool-${ARGS_OUTPUT_ARCH}.AppImage" CACHE INTERNAL "")
+    SET(AIT_PATH "${CMAKE_BINARY_DIR}/AppImageTool-x86_64.AppImage" CACHE INTERNAL "")
     if (NOT EXISTS "${AIT_PATH}")
-        file(DOWNLOAD https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-${ARGS_OUTPUT_ARCH}.AppImage "${AIT_PATH}")
+        file(DOWNLOAD https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage "${AIT_PATH}")
         execute_process(COMMAND chmod +x ${AIT_PATH})
     endif()
+	if(ARGS_CROSSCOMP)	# need to also download runtime
+		SET(AIT_RUNTIME_PATH "${CMAKE_BINARY_DIR}/runtime-${ARGS_OUTPUT_ARCH}" CACHE INTERNAL "")
+		if (NOT EXISTS "${AIT_RUNTIME_PATH}")
+			file(DOWNLOAD https://github.com/AppImage/AppImageKit/releases/download/continuous/runtime-${ARGS_OUTPUT_ARCH} "${AIT_RUNTIME_PATH}")
+		endif()
+	endif()
 
     # make the AppDir
     set(APPDIR "${CMAKE_BINARY_DIR}/AppDir")
@@ -64,10 +70,11 @@ Categories=X-None;"
 
     # Invoke AppImageTool
     if(ARGS_CROSSCOMP)
-    	set(AIT_WRAPPER "qemu-${ARGS_OUTPUT_ARCH}" CACHE INTERNAL "")
+    	# when cross-compiling, set runtime file
+    	set(AIT_RUNTIME "--runtime-file" CACHE INTERNAL "")
     endif()
-    execute_process(COMMAND ${AIT_WRAPPER} ${AIT_PATH} ${APPDIR} ${ARGS_OUTPUT_NAME})
-    #file(REMOVE_RECURSE "${APPDIR}")
+    execute_process(COMMAND ${AIT_PATH} ${APPDIR} ${ARGS_OUTPUT_NAME} ${AIT_RUNTIME} ${AIT_RUNTIME_PATH})
+    file(REMOVE_RECURSE "${APPDIR}")
 
 endfunction()
 
