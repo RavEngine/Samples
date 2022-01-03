@@ -14,7 +14,7 @@ void ::App::OnStartup(int argc, char **argv){
 	RavEngine::RenderEngine::VideoSettings.width = 800;
 	RavEngine::RenderEngine::VideoSettings.height = 480;
 		
-	AddWorld(std::make_shared<::World>());
+	AddWorld(RavEngine::New<::World>());
 	
 	SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 }

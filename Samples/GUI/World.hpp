@@ -3,9 +3,9 @@
 #include <RavEngine/World.hpp>
 #include <RavEngine/GameObject.hpp>
 
-class World : public RavEngine::World{
-	void OnActivate() override;
+struct World : public RavEngine::World{
+	World();
 	void PostTick(float) override;
-protected:
+private:
 	RavEngine::GameObject cube;
 };

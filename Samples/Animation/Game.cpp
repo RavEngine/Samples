@@ -10,9 +10,7 @@ public:
 
 
 void Game::OnStartup(int argc, char** argv){
-	auto world = std::make_shared<Level>();
-	world->SetupInputs();
-	AddWorld(world);
+	AddWorld(RavEngine::New<Level>());
 	
 	SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 }

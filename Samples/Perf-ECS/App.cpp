@@ -16,9 +16,12 @@ void Performance_A::OnStartup(int argc, char** argv) {
 	
 	//unlock tickrate
 	SetMinTickTime(std::chrono::duration<double, std::milli>(0));
+	
+	GetRenderEngine().VideoSettings.vsync = false;
+	GetRenderEngine().SyncVideoSettings();
 
 	// load world
-	AddWorld(make_shared<PerfA_World>());
+	AddWorld(RavEngine::New<PerfA_World>());
 
     SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 }

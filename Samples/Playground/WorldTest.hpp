@@ -21,11 +21,7 @@ public:
 	void ResetCam();
 	void SpawnEntities(float);
 	
-	/**
-	 Because you can't call shared_from_this in a constructor, to bind inputs to functions on the World, you must
-	 use an external function. See TestApp.h
-	 */
-	void SetupInputs();
+	TestWorld();
 
     void SampleFPS() {
 		RavEngine::Debug::Log("TPS: {}", RavEngine::GetApp()->CurrentTPS());

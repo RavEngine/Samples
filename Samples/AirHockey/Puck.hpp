@@ -23,10 +23,10 @@ struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::Queryab
     using RavEngine::Queryable<PuckScript,RavEngine::ScriptComponent>::GetQueryTypes;
     
     RavEngine::Array<Ref<RavEngine::AudioAsset>,4> sounds{
-		std::make_shared<RavEngine::AudioAsset>("hockeyhit1.wav"),
-		std::make_shared<RavEngine::AudioAsset>("hockeyhit2.wav"),
-		std::make_shared<RavEngine::AudioAsset>("hockeyhit3.wav"),
-		std::make_shared<RavEngine::AudioAsset>("hockeyhit4.wav")
+		RavEngine::New<RavEngine::AudioAsset>("hockeyhit1.wav"),
+		RavEngine::New<RavEngine::AudioAsset>("hockeyhit2.wav"),
+		RavEngine::New<RavEngine::AudioAsset>("hockeyhit3.wav"),
+		RavEngine::New<RavEngine::AudioAsset>("hockeyhit4.wav")
 	};
     PuckScript(entity_t owner) : ScriptComponent(owner){}
 	void Tick(float scale) override{}
@@ -43,13 +43,13 @@ public:
         RavEngine::MeshAssetOptions opt;
         opt.scale = 0.03;
         if(material == nullptr){
-            material = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
+            material = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
             material->SetAlbedoColor({0.2,0.2,0.2,1});
         }
         auto& puckmesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPuck.obj",opt),material);
       
         auto& dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
-        dyn.EmplaceCollider<RavEngine::SphereCollider>(0.3,std::make_shared<RavEngine::PhysicsMaterial>(0,0,1),vector3(0,0.3,0));
+        dyn.EmplaceCollider<RavEngine::SphereCollider>(0.3,RavEngine::New<RavEngine::PhysicsMaterial>(0,0,1),vector3(0,0.3,0));
 		
 		//prevent puck from falling over
 		dyn.SetAxisLock(RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_X | RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_Z);
@@ -71,7 +71,7 @@ public:
 		
 		auto& scr = EmplaceComponent<PuckScript>();
         
-        auto callbackptr = std::make_shared<RavEngine::PhysicsCallback>();
+        auto callbackptr = RavEngine::New<RavEngine::PhysicsCallback>();
         auto me = *this;
         callbackptr->OnColliderEnter = [me](RavEngine::PhysicsBodyComponent& other, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints){
             me.GetComponent<PuckScript>().OnColliderEnter(other,contactPoints,numContactPoints);

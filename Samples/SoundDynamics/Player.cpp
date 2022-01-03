@@ -25,7 +25,7 @@ void Player::Create() {
 	// static rigid body
 	auto& body = EmplaceComponent<RigidBodyStaticComponent>();
 
-	auto physicsMaterial = make_shared<PhysicsMaterial>(0,0,0);
+	auto physicsMaterial = RavEngine::New<PhysicsMaterial>(0,0,0);
 	body.EmplaceCollider<SphereCollider>(1,physicsMaterial);
 
     ComponentHandle<Transform> ctr(cameraEntity);

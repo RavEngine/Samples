@@ -24,7 +24,7 @@ struct InputNames{
 		* Pound = "Pound";
 };
 
-void Level::SetupInputs(){
+Level::Level(){
 	
 	auto lights = CreatePrototype<GameObject>();
 	lights.EmplaceComponent<AmbientLight>().Intensity = 0.2f;
@@ -40,7 +40,7 @@ void Level::SetupInputs(){
 	auto camera = CreatePrototype<CameraEntity>(character);
 	camera.GetTransform().LocalTranslateDelta(vector3(0,0,0));
 	
-	auto im = GetApp()->inputManager = make_shared<InputManager>();
+	auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 	// keyboard
 	im->AddAxisMap(InputNames::MoveForward,SDL_SCANCODE_W);
 	im->AddAxisMap(InputNames::MoveForward, SDL_SCANCODE_S,-1);
@@ -66,8 +66,8 @@ void Level::SetupInputs(){
 	im->BindAction(InputNames::Pound, character, &Character::Pound, ActionState::Pressed, CID::ANY);
 
 	// load the game level
-	Ref<PBRMaterialInstance> material = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-	auto physmat = make_shared<PhysicsMaterial>(0.5, 0.5, 0);
+	Ref<PBRMaterialInstance> material = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+	auto physmat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0);
     MeshAssetOptions opt;
     opt.scale = 1.5;
     opt.keepInSystemRAM = true;

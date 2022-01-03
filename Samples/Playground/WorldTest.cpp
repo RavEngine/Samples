@@ -53,7 +53,7 @@ void TestWorld::PostTick(float fpsScale){
 	dl.GetTransform().LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
 }
 
-void TestWorld::SetupInputs(){
+TestWorld::TestWorld(){
     player = CreatePrototype<PlayerActor>();
 
 	//setup inputs
@@ -94,10 +94,6 @@ void TestWorld::SetupInputs(){
 		
 	is->BindAxis("SpawnTest", GetInput(this), &TestWorld::SpawnEntities, con);
 	is->BindAction("ResetCam", GetInput(this), &TestWorld::ResetCam, ActionState::Pressed,con);
-	
-	//test unbinding
-	//	is->UnbindAxis("SpawnTest", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::SpawnEntities,con);
-	//	is->UnbindAction("ResetCam", std::static_pointer_cast<TestWorld>(shared_from_this()), &TestWorld::ResetCam, ActionState::Pressed,con);
 	
 	is->BindAxis("SpawnTest", GetInput(this), &TestWorld::SpawnEntities,con);
 	is->BindAction("ResetCam", GetInput(this), &TestWorld::ResetCam, ActionState::Pressed,con);

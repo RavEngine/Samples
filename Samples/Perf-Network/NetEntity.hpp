@@ -44,7 +44,7 @@ struct NetEntity : public RavEngine::GameObject {
 		rpc.RegisterClientRPC(RavEngine::to_underlying(RPCs::UpdateTransform), fn);
 
 		if (!matinst) {
-			matinst = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
+			matinst = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
 		}
         RavEngine::MeshAssetOptions opt;
         opt.scale = 0.1;

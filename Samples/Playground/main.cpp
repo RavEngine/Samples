@@ -23,9 +23,7 @@ private:
 		RavEngine::RenderEngine::VideoSettings.height = 480;
 		
 		//create a world
-		auto world = std::make_shared<TestWorld>();
-		world->SetupInputs();
-		AddWorld(world);
+		AddWorld(RavEngine::New<TestWorld>());
 		
 		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}

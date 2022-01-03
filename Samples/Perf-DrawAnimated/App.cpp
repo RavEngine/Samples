@@ -22,7 +22,7 @@ void Performance_C::OnStartup(int argc, char **argv){
     //unlock the tickrate
     SetMinTickTime(std::chrono::duration<double, std::milli>(0));
 	
-	AddWorld(std::make_shared<PerfC_World>());
+	AddWorld(RavEngine::New<PerfC_World>());
 	
 	SetWindowTitle(StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 }

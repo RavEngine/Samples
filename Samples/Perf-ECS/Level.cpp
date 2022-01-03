@@ -65,7 +65,7 @@ void PerfA_World::SetECSMode(int mode) {
 }
 
 
-void PerfA_World::OnActivate() {
+PerfA_World::PerfA_World() {
 
 	// register system
 	SetECSMode(1);
@@ -106,7 +106,7 @@ void PerfA_World::OnActivate() {
 	doc->GetElementById("sel")->AddEventListener(Rml::EventId::Change, new SelectionEventListener(this));
 
 	// input manager for the GUI
-	Ref<InputManager> im = make_shared<InputManager>();
+	Ref<InputManager> im = RavEngine::New<InputManager>();
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
 

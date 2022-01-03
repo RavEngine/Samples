@@ -4,8 +4,7 @@
 #include <RavEngine/ComponentHandle.hpp>
 
 struct Level : public RavEngine::World {
-	Level() : World("level") {}
-	void OnActivate() final;
+	Level();
 
 private:
 	void ServerUpdateGUI();

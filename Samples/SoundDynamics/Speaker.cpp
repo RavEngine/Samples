@@ -17,7 +17,7 @@ void Speaker::Create(Ref<AudioAsset> a) {
 	sourceEntity.GetTransform().LocalTranslateDelta(vector3(0, 3, 0));
 
 	if (!speakerInstance) {
-		speakerInstance = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+		speakerInstance = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		auto texture = Texture::Manager::Get("speaker.png");
 		speakerInstance->SetAlbedoTexture(texture);
 	}

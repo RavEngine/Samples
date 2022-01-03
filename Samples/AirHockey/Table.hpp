@@ -14,12 +14,12 @@ public:
     void Create(){
         GameObject::Create();
         //create the table
-        Ref<RavEngine::PBRMaterialInstance> matinst = std::make_shared< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
+        Ref<RavEngine::PBRMaterialInstance> matinst = RavEngine::New< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
         auto& tablemesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetDefault("HockeyTable.obj"),matinst);
         
         //low-friction
-        Ref<RavEngine::PhysicsMaterial> physmat = std::make_shared<RavEngine::PhysicsMaterial>(0, 0, 1.5);
-		Ref<RavEngine::PhysicsMaterial> floorphysmat = std::make_shared<RavEngine::PhysicsMaterial>(0.03, 0.03, 0);	//version for floor that is not bouncy
+        Ref<RavEngine::PhysicsMaterial> physmat = RavEngine::New<RavEngine::PhysicsMaterial>(0, 0, 1.5);
+		Ref<RavEngine::PhysicsMaterial> floorphysmat = RavEngine::New<RavEngine::PhysicsMaterial>(0.03, 0.03, 0);	//version for floor that is not bouncy
 
         auto& dyn = EmplaceComponent<RavEngine::RigidBodyStaticComponent>(/*FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1*/);
         dyn.EmplaceCollider<RavEngine::BoxCollider>(vector3(3, 1.3, 5),floorphysmat);
@@ -55,7 +55,7 @@ public:
 		}
 
 		//load texture
-		Ref<RavEngine::Texture> t = std::make_shared<RavEngine::Texture>("HockeyTable.png");
+		Ref<RavEngine::Texture> t = RavEngine::New<RavEngine::Texture>("HockeyTable.png");
         matinst->SetAlbedoTexture(t);
     }
 };

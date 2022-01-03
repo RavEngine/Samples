@@ -20,11 +20,9 @@ struct FPSSystem : public AutoCTTI {
 		});
 	}
 };
-//System::list_type FPSSystem::queries;
 
-void ::World::OnActivate(){
+::World::World(){
 	//camera and cube
-	
 	auto camlights = CreatePrototype<GameObject>();
 	camlights.EmplaceComponent<CameraComponent>().SetActive(true);
 	camlights.EmplaceComponent<SingleEntityMarker>();
@@ -36,7 +34,7 @@ void ::World::OnActivate(){
 	dirlight.GetTransform().LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
 	
 	cube = CreatePrototype<GameObject>();
-	auto& cubemesh = cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("cube.obj"),make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+	auto& cubemesh = cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("cube.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
 	
 	auto gui = CreatePrototype<Entity>();
 	auto& doc = gui.EmplaceComponent<GUIComponent>();
@@ -45,7 +43,7 @@ void ::World::OnActivate(){
 	doc.Debug();
 	
 	//input manager
-	Ref<InputManager> im = make_shared<InputManager>();
+	Ref<InputManager> im = RavEngine::New<InputManager>();
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
 	

@@ -19,7 +19,7 @@ struct CirculateSystem : public RavEngine::AutoCTTI {
 struct LightEntity : public RavEngine::GameObject {
 	void Create() {
         GameObject::Create();
-		auto mat = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
+		auto mat = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
         RavEngine::MeshAssetOptions opt;
         opt.scale = 0.03;
         EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("sphere.obj",opt),mat);

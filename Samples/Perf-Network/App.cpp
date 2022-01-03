@@ -34,7 +34,7 @@ struct NetApp : public RavEngine::App {
 			};
 			this->networkManager.server->Start(PORT);
 			Debug::Log("Started server on {}",PORT);
-			AddWorld(make_shared<Level>());
+			AddWorld(RavEngine::New<Level>());
 		}
 		// otherwise we will launch as a client
 		else {
@@ -45,7 +45,7 @@ struct NetApp : public RavEngine::App {
 			networkManager.client->OnConnected = [](auto a) {
 				Debug::Log("Sucessfully connected to server, id = {}", a);
 			};
-			AddWorld(make_shared<ClientMenu>());
+			AddWorld(RavEngine::New<ClientMenu>());
 
 			Debug::Log("Started client on {}", PORT);
 		}

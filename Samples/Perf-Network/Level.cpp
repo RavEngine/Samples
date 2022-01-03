@@ -10,7 +10,7 @@ using namespace std;
 
 STATIC(NetEntity::matinst);
 
-void Level::OnActivate() {
+Level::Level() : World("level") {
 
 	// create camera and lights
 	auto camEntity = CreatePrototype<GameObject>();
@@ -78,7 +78,7 @@ void Level::SetupServer()
 	auto& guic = guientity.EmplaceComponent<GUIComponent>();
 	guic.AddDocument("server.rml");
 
-	auto im = GetApp()->inputManager = std::make_shared<RavEngine::InputManager>();
+	auto im = GetApp()->inputManager = RavEngine::New<RavEngine::InputManager>();
     ComponentHandle<GUIComponent> gh(guientity);
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);

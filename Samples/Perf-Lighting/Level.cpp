@@ -38,7 +38,7 @@ struct StaticMeshEntity : public GameObject {
 };
 
 
-void Level::OnActivate() {
+Level::Level() {
 	// load camera and lights
     auto camera = CreatePrototype<GameObject>();
 	camera.EmplaceComponent<CameraComponent>().SetActive(true);
@@ -77,7 +77,7 @@ void Level::OnActivate() {
 	doc->GetElementById("numobjs")->AddEventListener(Rml::EventId::Change, new SliderHandler(this, doc));
 
 	// inputs
-	auto im = GetApp()->inputManager = std::make_shared<RavEngine::InputManager>();
+	auto im = GetApp()->inputManager = RavEngine::New<RavEngine::InputManager>();
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
     
@@ -96,14 +96,14 @@ void Level::OnActivate() {
     MeshAssetOptions opt;
     opt.scale = 1.2;
 	auto mesh = MeshAsset::Manager::Get("quad.obj",opt);
-	auto mat = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+	auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	mat->SetAlbedoColor({0.2,0.2,0.2,1.0});
 	ground.EmplaceComponent<StaticMesh>(mesh,mat);
 
 	// load the stanford dragon
     opt.scale = 2;
 	auto hmesh = MeshAsset::Manager::Get("dragon_vrip.ply", opt);
-	auto hmat = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+	auto hmat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	
 	for (int i = 0; i < 150; i++) {
 		auto e = CreatePrototype<StaticMeshEntity>(hmesh, hmat);

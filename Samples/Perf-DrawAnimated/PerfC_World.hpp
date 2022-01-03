@@ -9,7 +9,7 @@
 
 class PerfC_World : public RavEngine::World{
 public:
-	void OnActivate() override;
+	PerfC_World();
 	
 	RavEngine::GameObject lightEntity;
 	

@@ -11,14 +11,14 @@ struct RotationComponent : public RavEngine::AutoCTTI{
 struct Ground : public RavEngine::GameObject{
 	void Create(){
         GameObject::Create();
-		auto mat = std::make_shared<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
+		auto mat = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
         RavEngine::MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
 		auto mesh = RavEngine::MeshAsset::Manager::Get("ground.obj",opt);	//need to retain the mesh data in system memory 
 		EmplaceComponent<RavEngine::StaticMesh>(mesh,mat);
 		EmplaceComponent<RotationComponent>();
 		auto& rs = EmplaceComponent<RavEngine::RigidBodyStaticComponent>();
-        rs.EmplaceCollider<RavEngine::MeshCollider>(mesh,std::make_shared<RavEngine::PhysicsMaterial>(0.3,0.3,0.1));
+        rs.EmplaceCollider<RavEngine::MeshCollider>(mesh,RavEngine::New<RavEngine::PhysicsMaterial>(0.3,0.3,0.1));
 		
 		// system memory copy is no longer needed
 		//mesh->DeallocSystemCopy();

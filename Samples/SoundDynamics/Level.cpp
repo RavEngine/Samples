@@ -27,7 +27,7 @@ void Level::ToggleMouse(){
 	GetApp()->inputManager->SetRelativeMouseMode(!GetApp()->inputManager->GetRelativeMouseMode());
 }
 
-void Level::OnActivate() {
+Level::Level(){
 	// lights
 	auto lightEntity = CreatePrototype<GameObject>();
 	lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;
@@ -146,7 +146,7 @@ void Level::OnActivate() {
             auto path = std::filesystem::path(track);
             if (path.extension() == ".mp3") {
                 auto leaf_name = path.filename();
-                tracks.push_back(make_shared<AudioAsset>(leaf_name.string()));
+                tracks.push_back(RavEngine::New<AudioAsset>(leaf_name.string()));
                 auto opt = doc->CreateElement("option");
                 opt->SetAttribute("value", StrFormat("{}",music_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
                 opt->SetInnerRML(leaf_name.string());
@@ -167,7 +167,7 @@ void Level::OnActivate() {
 	speaker2.GetTransform().LocalTranslateDelta(vector3(5, 0, 2));
 
 	// setup inputs
-	auto im = GetApp()->inputManager = make_shared<InputManager>();
+	auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 	
 	im->AddAxisMap(InputNames::MoveForward, ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY);
 	im->AddAxisMap(InputNames::MoveRight, ControllerAxis::SDL_CONTROLLER_AXIS_LEFTX);
@@ -208,6 +208,3 @@ void Level::OnActivate() {
     ExportTaskGraph(cout);
 }
 
-Level::Level() {
-
-}

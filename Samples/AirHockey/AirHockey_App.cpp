@@ -25,7 +25,7 @@ void AirHockey::OnStartup(int argc, char** argv)
 
     SetMinTickTime(std::chrono::duration<double,std::milli>(1.0/120 * 1000));
     
-	AddWorld(std::make_shared<MainMenu>());
+	AddWorld(RavEngine::New<MainMenu>());
 }
 
 int AirHockey::OnShutdown()

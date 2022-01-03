@@ -198,7 +198,7 @@ void Character::Create() {
 	// load the collider and physics settings
     auto& r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
     rigidBody = ComponentHandle<RigidBodyDynamicComponent>(this);
-	r.EmplaceCollider<CapsuleCollider>(0.6, 1.3, make_shared<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,1.7,0),vector3(0,0,glm::radians(90.0)));
+	r.EmplaceCollider<CapsuleCollider>(0.6, 1.3, RavEngine::New<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,1.7,0),vector3(0,0,glm::radians(90.0)));
 	r.SetAxisLock(RigidBodyDynamicComponent::AxisLock::Angular_X | RigidBodyDynamicComponent::AxisLock::Angular_Z);
 	r.SetWantsContactData(true);
 
@@ -210,7 +210,7 @@ void Character::Create() {
 	auto handEntity = GetWorld()->CreatePrototype<GameObject>();
     MeshAssetOptions opt;
     opt.scale = 0.4f;
-	handEntity.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+	handEntity.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
 	//auto& handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
     //TODO: FIX
     /*
@@ -283,7 +283,7 @@ void Character::Create() {
 	EmplaceComponent<CharacterScript>(ComponentHandle<AnimatorComponent>(childEntity), ComponentHandle<RigidBodyDynamicComponent>(this));
     script = ComponentHandle<CharacterScript>(this);
     auto sccpy = script;
-    auto callbacks = make_shared<PhysicsCallback>();
+    auto callbacks = RavEngine::New<PhysicsCallback>();
     callbacks->OnColliderEnter = [sccpy](PhysicsBodyComponent& other, const ContactPairPoint* contactPoints, size_t numContactPoints) mutable{
         sccpy->OnColliderEnter(other, contactPoints, numContactPoints);
     };

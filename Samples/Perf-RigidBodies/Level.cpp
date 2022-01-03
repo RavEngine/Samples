@@ -45,8 +45,8 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
     ComponentHandle<GUIComponent> gh;
 	
 	SpawnerSystem(decltype(ownWorld) world, decltype(gh) gh_i) :
-		mat(std::make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())),
-		physmat(std::make_shared<PhysicsMaterial>(0.3, 0.3, 0.1)),
+		mat(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())),
+		physmat(RavEngine::New<PhysicsMaterial>(0.3, 0.3, 0.1)),
 		texture(Texture::Manager::Get("checkerboard.png")),
 		ownWorld(world),
         gh(gh_i)
@@ -89,7 +89,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
             else{
                 auto spawned = total - count;
                 guic.EnqueueUIUpdate([=]{
-                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls (Detected dip in performance, stopping)", spawned,total));
+                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls (sustained < 30tps, stopping)", spawned,total));
                 });
                 ownWorld->DispatchAsync([](){
                     Debug::Log("Ran dispatched fun");
@@ -100,7 +100,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 	}
 };
 
-void Level::OnActivate(){
+Level::Level(){
 	
 	// create camera and lights
 	auto camEntity = CreatePrototype<GameObject>();

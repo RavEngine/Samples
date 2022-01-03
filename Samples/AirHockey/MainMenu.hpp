@@ -5,7 +5,7 @@
 
 class MainMenu : public RavEngine::World, public RavEngine::IInputListener, public RavEngine::virtual_enable_shared_from_this<MainMenu>{
 public:
-	void OnActivate() override;
+	MainMenu();
 private:
 	void LoadGame(int);
 	RavEngine::Entity mainMenu;

@@ -76,7 +76,7 @@ struct DemoObject : public RavEngine::GameObject{
 	}
 };
 
-void PerfC_World::OnActivate(){
+PerfC_World::PerfC_World(){
 	meshes[0] = MeshAsset::Manager::GetDefault("cube.obj");
 	meshes[1] = MeshAsset::Manager::GetDefault("sphere.obj");
 	meshes[2] = MeshAsset::Manager::GetDefault("cone.obj");
@@ -99,7 +99,7 @@ void PerfC_World::OnActivate(){
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
 		textures[i] = Texture::Manager::Get(StrFormat("tx{}.png",i+1));
-		materialInstances[i] = make_shared<DemoMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+		materialInstances[i] = RavEngine::New<DemoMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		materialInstances[i]->SetAlbedoTexture(textures[i]);
     }
 	
@@ -120,7 +120,7 @@ void PerfC_World::OnActivate(){
     EmplaceSystem<PlayerSystem,Player>();
 	
 	//bind inputs
-	Ref<InputManager> im = make_shared<InputManager>();
+	Ref<InputManager> im = RavEngine::New<InputManager>();
 	im->AddAxisMap("ZOOM", SDL_SCANCODE_UP);
 	im->AddAxisMap("ZOOM", SDL_SCANCODE_DOWN, -1);
 	im->AddAxisMap("ROTATE_Y", SDL_SCANCODE_A, -1);

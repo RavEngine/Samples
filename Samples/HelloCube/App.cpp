@@ -25,10 +25,8 @@ struct HelloCubeApp : public RavEngine::App {
 // A world is akin to a Scene in Unity or a Level in Unreal. Worlds contain all the action in a game.
 struct HelloCubeWorld : public RavEngine::World {
 
-	// Implement OnActivate. The engine invokes this method automatically when an instance of this
-	// world has become Active. Active worlds are connected to the render engine. RavEngine can have multiple
-	// worlds loaded and running at once, but only one Active world. Do not worry about this yet. 
-	void OnActivate() final {
+	// Implement the World constructor.
+	HelloCubeWorld() {
 
 		// We can do basic world construction in this method for the convenience of this tutorial. 
 		// If this world will be loaded and unloaded, do not do initialization in this method as
@@ -53,7 +51,7 @@ struct HelloCubeWorld : public RavEngine::World {
 		// Next we need to define a material for the cube. We can use the default material.
 		// RavEngine can optimize your rendering for you by batching if you minimize the number of Material Instances you create,
 		// and share them wherever possible. 
-		auto cubeMat = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+		auto cubeMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 
 		// A StaticMesh defines a fixed (non-deforming) rendered polygon, which is perfect for our cube.
 		// Note that all StaticMeshes must have a material bound to them. A StaticMesh without a material will cause
@@ -100,10 +98,9 @@ struct HelloCubeWorld : public RavEngine::World {
         // RavEngine expects rotations in radians. Use glm::radians to convert to degrees.
         auto rotVec = vector3(glm::radians(1.0), glm::radians(2.0), glm::radians(-0.5));
 
-        // Unlike most engines, RavEngine's render engine is asynchronous. This means that the engine 'ticks'
-        // at a different rate that it renders frames. One tick =/= one frame. In addition, if the engine were to fall behind,
-        // we need to ensure our game does not run in slow motion. To accomplish this, we simply multiply our movements by
-        // a scale factor passed into this method. RavEngine has already calcuated the scale factor for us. This is *not* a deltaTime,
+        // If the engine were to fall behind, we need to ensure our game does not run in slow motion.
+		// To accomplish this, we simply multiply our movements by a scale factor passed into this method.
+		// RavEngine has already calcuated the scale factor for us. This is *not* a deltaTime,
         // like in Unity.
         rotVec *= tickrateScale;
 
@@ -117,10 +114,10 @@ struct HelloCubeWorld : public RavEngine::World {
 void HelloCubeApp::OnStartup(int argc, char** argv) {
 
 	// make an instance of the world
-	auto level = make_shared<HelloCubeWorld>();
+	auto level = RavEngine::New<HelloCubeWorld>();
 
 	// Tell the engine to switch to this world.
-	// If the engine has no worlds active, it will automatically set the first one as the active world.
+	// If the engine has no worlds active, it will automatically set the first one as the active (rendered) world.
 	AddWorld(level);
 }
 

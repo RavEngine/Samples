@@ -26,7 +26,7 @@ struct Level : public World{
         cameraGimball.GetTransform().LocalRotateDelta(vector3(-amt * deltaTime * cameraSpeed,0,0));
     }
     
-    void Init(){
+    Level(){
         auto cameraEntity = CreatePrototype<GameObject>();
         auto& camera = cameraEntity.EmplaceComponent<CameraComponent>();
         camera.SetActive(true);
@@ -62,7 +62,7 @@ struct Level : public World{
         im->BindAxis("CLR", GetInput(this), &Level::CameraLR, CID::ANY);
         
         auto ground = CreatePrototype<GameObject>();
-        ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),make_shared<PBRMaterialInstance>( Material::Manager::Get<PBRMaterial>()));
+        ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),RavEngine::New<PBRMaterialInstance>( Material::Manager::Get<PBRMaterial>()));
         ground.GetTransform().LocalScaleDelta(vector3(10));
         
         auto flagpole = CreatePrototype<Flagpole>();
@@ -97,9 +97,7 @@ struct Level : public World{
 struct FlagsApp : public App{
     FlagsApp() : App(APPNAME) {}
     void OnStartup(int argc, char** argv) final {
-        auto world = std::make_shared<Level>();
-        world->Init();
-        AddWorld(world);
+        AddWorld(RavEngine::New<Level>());
 
         SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }

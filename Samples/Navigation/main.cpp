@@ -45,7 +45,7 @@ struct Level : public World{
         GetComponent<NavMeshComponent>().UpdateNavMesh(mesh, nvopt);
     }
     
-    void Init(){
+    Level(){
         InitPhysics();
         
         cameraRoot = CreatePrototype<GameObject>();
@@ -169,8 +169,7 @@ struct Level : public World{
 struct NavApp : public App{
     NavApp() : App(APPNAME) {}
     void OnStartup(int argc, char** argv) final {        
-        auto world = std::make_shared<Level>();
-        world->Init();
+        auto world = RavEngine::New<Level>();
         AddWorld(world);
 
         SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());

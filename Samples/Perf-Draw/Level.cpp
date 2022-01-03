@@ -32,11 +32,11 @@ struct MetricsSystem : public AutoCTTI {
 	}
 };
 
-void PerfB_World::OnActivate() {
+PerfB_World::PerfB_World() {
 
 	Debug::Log("Loading Assets");
-	auto matinst = make_shared<InstanceColorMatInstance>(make_shared<InstanceColorMat>());
-	currentMesh = make_shared<MeshAsset>();
+	auto matinst = RavEngine::New<InstanceColorMatInstance>(Material::Manager::Get<InstanceColorMat>());
+	currentMesh = RavEngine::New<MeshAsset>();
 	cube = RavEngine::MeshAsset::Manager::GetDefault("cube.obj");
 	cone = RavEngine::MeshAsset::Manager::GetDefault("cone.obj");
 	sphere = RavEngine::MeshAsset::Manager::GetDefault("sphere.obj");
@@ -74,7 +74,7 @@ void PerfB_World::OnActivate() {
 	doc->GetElementById("sel")->AddEventListener(Rml::EventId::Change, new SelectionEventListener(this));
     
 	// input manager for the GUI
-	Ref<InputManager> im = make_shared<InputManager>();
+	Ref<InputManager> im = RavEngine::New<InputManager>();
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
 

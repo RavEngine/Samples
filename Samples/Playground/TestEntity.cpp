@@ -28,7 +28,7 @@ void TestEntity::CommonInit(){
 	
 	//default staticmesh
     if (!sharedMatInst) {
-        sharedMatInst = make_shared<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        sharedMatInst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
     }
 	auto mesh = EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("bunny_decimated.obj"),sharedMatInst);
 
@@ -49,7 +49,7 @@ void TestEntity::CommonInit(){
 
 	//add a box collision to the PhysX component
 	if (!sharedMat) {
-		sharedMat = make_shared<PhysicsMaterial>(0.5, 0.5, 0.5);
+		sharedMat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0.5);
 	}
 	r.EmplaceCollider<CapsuleCollider>(1, 1, sharedMat);
 

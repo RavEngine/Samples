@@ -101,7 +101,7 @@ struct Level : public World{
         t.SetWorldPosition(vector3(0,100,0));
     }
     
-    inline void init(){
+	Level(){
         // lighting and cameras
         auto lightcam = CreatePrototype<GameObject>();
         lightcam.EmplaceComponent<AmbientLight>().Intensity = 0.8;
@@ -166,9 +166,7 @@ struct Level : public World{
 struct GravityApp : public App{
     GravityApp() : App(APPNAME){}
     void OnStartup(int argc, char** argv) final{
-        auto level = RavEngine::New<Level>();
-        level->init();
-        AddWorld(level);
+        AddWorld(RavEngine::New<Level>());
         SetWindowTitle(StrFormat("RavEngine {} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
 };

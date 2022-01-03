@@ -18,7 +18,7 @@ void Performance_B::OnStartup(int argc, char** argv) {
 	//SetMinTickTime(std::chrono::duration<double, std::milli>(0));
 
 	// load world
-	AddWorld(make_shared<PerfB_World>());
+	AddWorld(RavEngine::New<PerfB_World>());
 
 	SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 }

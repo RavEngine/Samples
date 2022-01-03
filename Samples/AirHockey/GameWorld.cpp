@@ -53,7 +53,7 @@ void GameWorld::OnActivate(){
 	//room.WallMaterials()[0] = RoomMat::kMarble;
 		
 	//inputs
-	Ref<InputManager> is = make_shared<InputManager>();
+	Ref<InputManager> is = RavEngine::New<InputManager>();
 	is->AddAxisMap("P1MoveUD", SDL_SCANCODE_W,-1);
 	is->AddAxisMap("P1MoveUD", SDL_SCANCODE_S);
 	is->AddAxisMap("P1MoveLR", SDL_SCANCODE_D,-1);
@@ -154,7 +154,7 @@ void GameWorld::GameOver(){
 		MenuEventListener(WeakRef<GameWorld> w) : gm(w){}
 		void ProcessEvent(Rml::Event& event) override{
 			GetApp()->DispatchMainThread([=]{
-				auto world = make_shared<MainMenu>();
+				auto world = RavEngine::New<MainMenu>();
 				GetApp()->AddReplaceWorld(gm.lock(),world);
 			});
 		}
@@ -167,7 +167,7 @@ void GameWorld::GameOver(){
 			if (!isLoading){
 				isLoading = true;
 				GetApp()->DispatchMainThread([=]{
-					auto world = make_shared<GameWorld>(gm.lock()->numplayers);
+					auto world = RavEngine::New<GameWorld>(gm.lock()->numplayers);
 					GetApp()->AddReplaceWorld(gm.lock(),world);
 				});
 			}
@@ -177,7 +177,7 @@ void GameWorld::GameOver(){
 	doc->GetElementById("replay")->AddEventListener(Rml::EventId::Click, new ReplayEventListener(static_pointer_cast<GameWorld>(shared_from_this())));
 	
 	//create a new input manager to stop game inputs and enable UI inputs
-	Ref<InputManager> im = make_shared<InputManager>();
+	Ref<InputManager> im = RavEngine::New<InputManager>();
 	
 	im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
 	im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
