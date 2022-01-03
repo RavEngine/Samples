@@ -93,7 +93,7 @@ function (add_sample sample_dir)
         	if(${TARGET_ARCH} STREQUAL ${CMAKE_HOST_SYSTEM_PROCESSOR})
         		set(IS_CROSSCOMP OFF CACHE INTERNAL "")
         	else()
-			set(IS_CROSSCOMP ON CACHE INTERNAL "")
+				set(IS_CROSSCOMP ON CACHE INTERNAL "")
         	endif()
 
             INSTALL(CODE

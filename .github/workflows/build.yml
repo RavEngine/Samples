@@ -15,16 +15,12 @@ jobs:
       - name: Configure
         run: mkdir -p build; mkdir -p build/linux; cd build/linux; export CC=/usr/bin/gcc-8; export CXX=/usr/bin/g++-8; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
       - name: Build
-        run: cd build/linux && cmake --build . --config release --target install 
-      - name: Fix Permissions
-        run: cd build/linux/Release; chmod +x *.AppImage
-      - name: Compress Samples
-        run: cd build/linux/Release; zip -r -9 Samples_Linux.zip *.AppImage 
+        run: cd build/linux && cmake --build . --config release --target install  
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name:  RavEngine_Samples_linux64
-          path:  build/linux/Release/Samples_Linux.zip
+          path:  build/linux/Release/*.AppImage
 
   build-linux-arm:
     name: Build Samples for Linux arm64
@@ -48,7 +44,7 @@ jobs:
       - name: Install Target Dependencies
         run: sudo apt-get install libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 gcc-aarch64-linux-gnu:amd64 g++-aarch64-linux-gnu:amd64 -y --no-install-recommends
       - name: Configure
-        run: mkdir -p build; mkdir -p build/linuxarm; cd build/linuxarm; export CC=/usr/bin/aarch64-linux-gnu-gcc; export CXX=/usr/bin/aarch64-linux-gnu-g++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
+        run: mkdir -p build; mkdir -p build/linuxarm; cd build/linuxarm; export CC=/usr/bin/aarch64-linux-gnu-gcc; export CXX=/usr/bin/aarch64-linux-gnu-g++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=aarch64 ../.. 
       - name: Build
         run: cd build/linuxarm && cmake --build . --config release --target install 
       - name: Upload Artifacts
