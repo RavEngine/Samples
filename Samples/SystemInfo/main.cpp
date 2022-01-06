@@ -40,25 +40,25 @@ struct Level : public World{
             
             Vector<const char*> featuresStr;
             auto features = SystemInfo::GetSupportedGPUFeatures();
-            if(features.DrawIndirect()){
+            if(features.DrawIndirect){
                 featuresStr.push_back("Draw Indirect");
             }
-            if(features.DMA()){
+            if(features.DMA){
                 featuresStr.push_back("DMA");
             }
-            if (features.HDRI10()){
+            if (features.HDR10){
                 featuresStr.push_back("HDR10");
             }
-            if (features.OcclusionQuery()){
+            if (features.OcclusionQuery){
                 featuresStr.push_back("Occlusion Query");
             }
-            if (features.Readback()){
+            if (features.Readback){
                 featuresStr.push_back("Readback");
             }
-            if (features.HalfAttribute()){
+            if (features.HalfAttribute){
                 featuresStr.push_back("Half-width Attr");
             }
-            if (features.Uint10Attribute()){
+            if (features.Uint10Attribute){
                 featuresStr.push_back("U10 Attr");
             }
             std::ostringstream oss;
