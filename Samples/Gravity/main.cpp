@@ -9,6 +9,7 @@
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/PhysicsLinkSystem.hpp>
 #include <RavEngine/Debug.hpp>
+#include <RavEngine/Dialogs.hpp>
 using namespace RavEngine;
 using namespace std;
 
@@ -168,6 +169,9 @@ struct GravityApp : public App{
     void OnStartup(int argc, char** argv) final{
         AddWorld(RavEngine::New<Level>());
         SetWindowTitle(StrFormat("RavEngine {} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+    }
+    void OnFatal(const char* msg) final{
+        RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
     }
 };
 

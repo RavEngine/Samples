@@ -4,6 +4,7 @@
 #include <RavEngine/World.hpp>
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/GameObject.hpp>
+#include <RavEngine/Dialogs.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -19,6 +20,13 @@ struct HelloCubeApp : public RavEngine::App {
 	// Next, implement OnStartup. This is called when your application launches.
 	// You are passed argc and argv from the command line. 
 	void OnStartup(int argc, char** argv) final;
+    
+    // Finally, if there are any unrecoverable errors that occur, you can optionally override
+    // this method to perform a custom action before closing. In this case, we will display
+    // an error dialog to the user.
+    void OnFatal(const char* msg) final{
+        RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
+    }
 };
 
 // After defining an App, define a World by creating a class that derives from RavEngine::World.

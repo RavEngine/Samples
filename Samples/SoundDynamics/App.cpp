@@ -1,6 +1,7 @@
 #include <RavEngine/App.hpp>
 #include "AppInfo.hpp"
 #include "Level.hpp"
+#include <RavEngine/Dialogs.hpp>
 
 using namespace RavEngine;
 
@@ -12,6 +13,10 @@ struct SoundDynamics : public RavEngine::App {
 
 		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
+    
+    void OnFatal(const char* msg) final{
+        RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
+    }
 };
 
 START_APP(SoundDynamics)

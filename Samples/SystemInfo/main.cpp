@@ -5,6 +5,7 @@
 #include <RavEngine/SystemInfo.hpp>
 #include <RavEngine/CameraComponent.hpp>
 #include <bgfx/platform.h>
+#include <RavEngine/Dialogs.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -102,6 +103,9 @@ struct SystemApp : public App{
         AddWorld(RavEngine::New<Level>());
         
         SetWindowTitle(StrFormat("{} | {}", APPNAME, App::GetRenderEngine().GetCurrentBackendName()).c_str());
+    }
+    void OnFatal(const char* msg) final{
+        RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
     }
 };
 

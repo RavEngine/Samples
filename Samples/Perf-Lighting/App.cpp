@@ -1,6 +1,7 @@
 #include "Level.hpp"
 #include <RavEngine/App.hpp>
 #include "AppInfo.hpp"
+#include <RavEngine/Dialogs.hpp>
 
 using namespace std;
 
@@ -16,6 +17,9 @@ struct LightingApp : public RavEngine::App {
 
 		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
+    void OnFatal(const char* msg) final{
+        RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);
+    }
 };
 
 START_APP(LightingApp)

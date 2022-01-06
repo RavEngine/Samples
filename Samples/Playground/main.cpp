@@ -8,6 +8,7 @@
 #include "WorldTest.hpp"
 #include <RavEngine/App.hpp>
 #include <RavEngine/WeakRef.hpp>
+#include <RavEngine/Dialogs.hpp>
 #include "TestEntity.hpp"
 #include "AppInfo.hpp"
 
@@ -27,10 +28,9 @@ private:
 		
 		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
-	
-	int OnShutdown() override {
-		return 0;
-	}
+    void OnFatal(const char* msg) final{
+        RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);
+    }
 };
 
 

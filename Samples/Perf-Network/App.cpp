@@ -4,6 +4,7 @@
 #include <RavEngine/Debug.hpp>
 #include "NetEntity.hpp"
 #include "ClientMenuLevel.hpp"
+#include <RavEngine/Dialogs.hpp>
 
 using namespace std;
 using namespace RavEngine;
@@ -52,5 +53,8 @@ struct NetApp : public RavEngine::App {
 
 		SetWindowTitle(StrFormat("{} {} | {}", APPNAME, networkManager.IsServer()? "Server" : "Client", GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
+    void OnFatal(const char* msg) final{
+        RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
+    }
 };
 START_APP(NetApp)

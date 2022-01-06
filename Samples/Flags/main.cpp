@@ -6,6 +6,7 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/CameraComponent.hpp>
+#include <RavEngine/Dialogs.hpp>
 using namespace RavEngine;
 using namespace std;
 
@@ -101,7 +102,9 @@ struct FlagsApp : public App{
 
         SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
-    
+    void OnFatal(const char* msg) final{
+        RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);
+    }
 };
 
 START_APP(FlagsApp)

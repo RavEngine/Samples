@@ -7,6 +7,7 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
+#include <RavEngine/Dialogs.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -102,7 +103,10 @@ struct Level : public World{
         mazeEntity.EmplaceComponent<NavMeshComponent>(mesh,nvopt);
         navMesh = ComponentHandle<NavMeshComponent>(mazeEntity);
         navMesh->debugEnabled = true;
-        //navMesh->CalculatePath(vector3(1,0,1), vector3(-1,0,-1));
+        auto path = navMesh->CalculatePath(vector3(20,0,20), vector3(-20,0,-20));
+        for(int i = 0; i < path.size(); i++){
+            cout << path[i] << endl;
+        }
         
         // connect the UI
         auto cellUpdater = new SliderUpdater([&,gh,doc](Rml::Event& evt) mutable{
@@ -175,6 +179,9 @@ struct NavApp : public App{
         SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
     
+    void OnFatal(const char* msg) final{
+        RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
+    }
 };
 
 START_APP(NavApp)

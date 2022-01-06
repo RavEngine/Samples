@@ -133,6 +133,7 @@ Level::Level(){
             for (auto& player : *sources.value()) {
                 player.SetAudio(world->tracks[selbox->GetSelection()]);
                 player.Restart();
+                player.Play();  // if the song reaches the end, it will automatically stop, so we need to re-play.
             }
 		}
 	};
