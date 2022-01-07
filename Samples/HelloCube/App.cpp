@@ -36,17 +36,13 @@ struct HelloCubeWorld : public RavEngine::World {
 	// Implement the World constructor.
 	HelloCubeWorld() {
 
-		// We can do basic world construction in this method for the convenience of this tutorial. 
-		// If this world will be loaded and unloaded, do not do initialization in this method as
-		// each time the world is made active, code here runs.
-
 		// Create an Entity. RavEngine uses an ECS, so entities are not like Unity GameObjects.
-        // Instead, think of an Entity as a handle to a collection of components stored elsewhere.
-        // Unlike other ECS implementations, Entity handles are global, and also have convenience
-        // member functions.
+        	// Instead, think of an Entity as a handle to a collection of components stored elsewhere.
+        	// Unlike other ECS implementations, Entity handles are global, and also have convenience
+        	// member functions.
 		// RavEngine Entities do not come with a Transform by default. For convenience, a "GameObject" is also provided. However, this
 		// is just an entity with a transform component applied automatically, do not confuse it with the higher-level concept.
-        // When you call this, it immediately creates the entity in the world.
+        	// When you call this, it immediately creates the entity in the world.
 		auto cubeEntity = CreatePrototype<GameObject>();
 
 		// We want to display a cube in this world. RavEngine uses a component-based composition model 
@@ -65,7 +61,7 @@ struct HelloCubeWorld : public RavEngine::World {
 		// Note that all StaticMeshes must have a material bound to them. A StaticMesh without a material will cause
 		// the engine to crash, as that is an invalid state.
 		// The EmplaceComponent method constructs the component inline and attaches it to the entity.
-        cubeEntity.EmplaceComponent<StaticMesh>(cubeMesh, cubeMat);
+        	cubeEntity.EmplaceComponent<StaticMesh>(cubeMesh, cubeMat);
 
 
 		// We want to be able to see our cube, so we need a camera. In RavEngine, cameras are also components, so 
@@ -81,7 +77,7 @@ struct HelloCubeWorld : public RavEngine::World {
 
 
 		// As of this line, the camera is inside the cube. To rectify this, let's place the cube in front of the camera.
-        cubeEntity.GetTransform().LocalTranslateDelta(vector3(0,0,-5));
+        	cubeEntity.GetTransform().LocalTranslateDelta(vector3(0,0,-5));
 
 		// We want some lighting on our cube. In RavEngine, lights are also components, so we'll need an entity for those.
 		auto lightsEntity = CreatePrototype<GameObject>();
@@ -100,21 +96,21 @@ struct HelloCubeWorld : public RavEngine::World {
 		// one static mesh, we can use that to get our entity.
 		auto& meshComp = GetComponent<StaticMesh>();
 
-        auto entity = meshComp.GetOwner();	//convert to strong pointer
+        	auto entity = meshComp.GetOwner();	//convert to strong pointer
 
-        // Let's spin our cube.
-        // RavEngine expects rotations in radians. Use glm::radians to convert to degrees.
-        auto rotVec = vector3(glm::radians(1.0), glm::radians(2.0), glm::radians(-0.5));
+        	// Let's spin our cube.
+        	// RavEngine expects rotations in radians. Use glm::radians to convert to degrees.
+        	auto rotVec = vector3(glm::radians(1.0), glm::radians(2.0), glm::radians(-0.5));
 
-        // If the engine were to fall behind, we need to ensure our game does not run in slow motion.
+        	// If the engine were to fall behind, we need to ensure our game does not run in slow motion.
 		// To accomplish this, we simply multiply our movements by a scale factor passed into this method.
 		// RavEngine has already calcuated the scale factor for us. This is *not* a deltaTime,
-        // like in Unity.
-        rotVec *= tickrateScale;
+       		// like in Unity.
+        	rotVec *= tickrateScale;
 
-        // Entities can also be queried efficiently for components, just like worlds. Since Transforms are
-        // a very frequent access, Entities provide the convenience function GetTransform, to use instead.
-        entity.GetComponent<Transform>().LocalRotateDelta(rotVec);
+        	// Entities can also be queried efficiently for components, just like worlds. Since Transforms are
+        	// a very frequent access, Entities provide the convenience function GetTransform, to use instead.
+        	entity.GetComponent<Transform>().LocalRotateDelta(rotVec);
 	}
 };
 
