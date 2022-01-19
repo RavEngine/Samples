@@ -10,13 +10,11 @@ private:
     void OnStartup(int argc, char** argv) override{
         //setup video settings
         RenderEngine::VideoSettings.vsync = false;
-        RenderEngine::VideoSettings.width = 1280;
-        RenderEngine::VideoSettings.height = 720;
         
         GetRenderEngine().SyncVideoSettings();
         
         //unlock the tickrate
-        SetMinTickTime(std::chrono::duration<double, std::milli>(0));
+        //SetMinTickTime(std::chrono::duration<double, std::milli>(0));
         
         AddWorld(RavEngine::New<PerfC_World>());
         
