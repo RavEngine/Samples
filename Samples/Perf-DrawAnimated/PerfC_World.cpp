@@ -194,7 +194,6 @@ PerfC_World::PerfC_World(){
 	im->AddActionMap("ToggleTex", ControllerButton::SDL_CONTROLLER_BUTTON_B);
 	im->AddActionMap("ToggleLight", ControllerButton::SDL_CONTROLLER_BUTTON_X);
     
-    //TODO: FIX
 	im->BindAction("PauseSim", GetInput(this), &PerfC_World::TogglePause, ActionState::Pressed, CID::ANY);
 	im->BindAction("ToggleTex", GetInput(this), &PerfC_World::ToggleTextures, ActionState::Pressed, CID::ANY);
 	im->BindAction("ToggleLight", GetInput(this), &PerfC_World::ToggleFullbright, ActionState::Pressed, CID::ANY);

@@ -155,13 +155,10 @@ struct Level : public World{
         });
         doc->GetElementById("maxSlope")->AddEventListener(Rml::EventId::Change, slopeUpdater);
         
-        //TODO: FIX
-//        auto ball = Entity::New();
-//        ball->EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-//        ball->EmplaceComponent<RigidBodyDynamicComponent>();
-//        ball->EmplaceComponent<BoxCollider>(vector3(1,1,1),physmat);
-//        ball->GetTransform()->LocalTranslateDelta(vector3(0,10,0));
-//        ball->GetComponent<StaticMesh>().value()->GetMaterial()->SetAlbedoColor({1,0,0,1});
+        auto ball = CreatePrototype<GameObject>();
+        ball.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())).GetMaterial()->SetAlbedoColor({1,0,0,1});
+        ball.EmplaceComponent<RigidBodyDynamicComponent>().EmplaceCollider<SphereCollider>(1,physmat);
+        ball.GetTransform().LocalTranslateDelta(vector3(1,10,1));
         
     }
     
