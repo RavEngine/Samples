@@ -106,7 +106,7 @@ function (add_sample sample_dir)
                     OUTPUT_NAME \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.AppImage\"
                     OUTPUT_ARCH \"${TARGET_ARCH}\"
                     CROSSCOMP ${IS_CROSSCOMP}
-                    ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.zip\"
+                    ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.rvedata\"
                 )
                 "
                 COMPONENT Runtime
