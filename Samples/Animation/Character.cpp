@@ -4,7 +4,6 @@
 #include <RavEngine/BuiltinMaterials.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
 #include <RavEngine/ScriptComponent.hpp>
-#include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
@@ -187,9 +186,8 @@ void Character::Create() {
 	material->SetAlbedoColor({1,0.4,0.2,1});
 
 	auto childEntity = GetWorld()->CreatePrototype<GameObject>();										// I made the animation facing the wrong way
-	GetTransform().AddChild(ComponentHandle<Transform>(childEntity));								// so I need a child entity to rotate it back
+	GetTransform().AddChild(childEntity);								// so I need a child entity to rotate it back
 	childEntity.GetTransform().LocalRotateDelta(vector3(0, glm::radians(180.f), 0));	// if your animations are the correct orientation you don't need this
-	EmplaceComponent<ChildEntityComponent>(childEntity);
 
 	// load the mesh and material onto the character
 	auto& cubemesh = childEntity.EmplaceComponent<SkinnedMeshComponent>(skeleton, mesh);

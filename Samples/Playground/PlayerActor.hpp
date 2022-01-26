@@ -3,7 +3,6 @@
 #include "RavEngine/CameraComponent.hpp"
 #include "RavEngine/IInputListener.hpp"
 #include "RavEngine/ScriptComponent.hpp"
-#include "RavEngine/ChildEntityComponent.hpp"
 #include <RavEngine/AudioSource.hpp>
 #include <RavEngine/Transform.hpp>
 #include <RavEngine/ComponentWithOwner.hpp>
@@ -74,7 +73,6 @@ public:
 		cam.SetActive(true);
 		
 		GetTransform().AddChild(RavEngine::ComponentHandle<RavEngine::Transform>(cameraEntity));
-        EmplaceComponent<RavEngine::ChildEntityComponent>(cameraEntity);
 		
 		EmplaceComponent<RavEngine::AudioListener>();
 	}

@@ -1,7 +1,6 @@
 #pragma once
 #include <RavEngine/ScriptComponent.hpp>
 #include <RavEngine/GameObject.hpp>
-#include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/CameraComponent.hpp>
 
 struct Player : public RavEngine::ComponentWithOwner {
@@ -14,7 +13,7 @@ struct Player : public RavEngine::ComponentWithOwner {
 
 	void Zoom(float amt) {
 		auto zoomAmt = amt * zoomspeed;
-		auto& child = GetOwner().GetComponent<RavEngine::ChildEntityComponent>().GetEntity().GetTransform();
+		auto& child = GetOwner().GetTransform().GetChildren()[0].GetOwner().GetTransform();
 		child.LocalTranslateDelta(vector3(0, 0, zoomAmt * fpsScale) * child.Forward());
 	}
 	void RotateLR(float amt) {
@@ -42,12 +41,11 @@ struct Camera : public RavEngine::GameObject {
 
 		auto cameraBoom = GetWorld()->CreatePrototype<GameObject>();
 
-		EmplaceComponent<RavEngine::ChildEntityComponent>(cameraBoom);
 		EmplaceComponent<Player>();
 
         auto& ctr = cameraBoom.GetTransform();
 		ctr.LocalTranslateDelta(vector3(0, 0, 50));
-        GetTransform().AddChild(RavEngine::ComponentHandle<RavEngine::Transform>(cameraBoom));
+        GetTransform().AddChild(cameraBoom);
 
 		auto& camera = cameraBoom.EmplaceComponent<RavEngine::CameraComponent>();
 		camera.SetActive(true);

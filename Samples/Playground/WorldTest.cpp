@@ -123,7 +123,7 @@ TestWorld::TestWorld(){
 	
 	anonymousChild = CreatePrototype<GameObject>();
 	anonymousChild.EmplaceComponent<StaticMesh>(sharedMesh,material);
-	anonymous.GetTransform().AddChild(ComponentHandle<Transform>(anonymousChild));
+	anonymous.GetTransform().AddChild(anonymousChild);
 	anonymousChild.GetTransform().LocalTranslateDelta(vector3(17,0,0));
 	anonymousChild.EmplaceComponent<PointLight>().Intensity = 4;
 	auto& rs = anonymousChild.EmplaceComponent<RigidBodyStaticComponent>();

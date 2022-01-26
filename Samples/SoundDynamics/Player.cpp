@@ -3,7 +3,6 @@
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/PhysicsCollider.hpp>
 #include <RavEngine/AudioSource.hpp>
-#include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/InputManager.hpp>
 
 using namespace RavEngine;
@@ -20,7 +19,6 @@ void Player::Create() {
 	cameraEntity.EmplaceComponent<AudioListener>();
 
 	// child entity w/ camera
-	EmplaceComponent<ChildEntityComponent>(cameraEntity);
 
 	// static rigid body
 	auto& body = EmplaceComponent<RigidBodyStaticComponent>();

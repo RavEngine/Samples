@@ -1,6 +1,5 @@
 #include "Speaker.hpp"
 #include <RavEngine/AudioRoom.hpp>
-#include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/SceneLoader.hpp>
 
@@ -14,7 +13,7 @@ void Stage::Create() {
 	auto& audioRoom = roomEntity.EmplaceComponent<AudioRoom>();
 	audioRoom.SetRoomDimensions(vector3(20, 10, 20));
 
-	GetTransform().AddChild(ComponentHandle<Transform>(roomEntity));
+	GetTransform().AddChild(roomEntity);
 
     Array<string_view, 6> faceOrder{
 		"wall_negx",

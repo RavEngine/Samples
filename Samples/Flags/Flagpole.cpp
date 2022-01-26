@@ -1,7 +1,6 @@
 #include "Flagpole.hpp"
 #include <RavEngine/SceneLoader.hpp>
 #include <RavEngine/StaticMesh.hpp>
-#include <RavEngine/ChildEntityComponent.hpp>
 #include <etl/vector.h>
 #include <RavEngine/AnimatorComponent.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
@@ -29,7 +28,7 @@ void Flagpole::Create(){
     auto meshAssetSkinned = MeshAssetSkinned::Manager::Get("flag.fbx",skeleton);
     
     auto flagEntity = GetWorld()->CreatePrototype<GameObject>();
-    EmplaceComponent<ChildEntityComponent>(flagEntity);
+    GetTransform().AddChild(flagEntity);
     flagEntity.GetTransform().LocalTranslateDelta(vector3(0,8,0));
     flagEntity.GetTransform().LocalScaleDelta(vector3(2));
     
@@ -75,5 +74,5 @@ void Flagpole::Create(){
 }
 
 void Flagpole::SwitchToFlag(uint16_t idx){
-    GetComponent<ChildEntityComponent>().GetEntity().GetComponent<SkinnedMeshComponent>().SetMaterial(flags[idx].matInst);
+    GetTransform().GetChildren()[0].GetOwner().GetComponent<SkinnedMeshComponent>().SetMaterial(flags[idx].matInst);
 }

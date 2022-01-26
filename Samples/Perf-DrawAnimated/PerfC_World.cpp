@@ -3,7 +3,6 @@
 #include "Camera.hpp"
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/Light.hpp>
-#include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/App.hpp>
 #include <RavEngine/BuiltinMaterials.hpp>
@@ -55,7 +54,6 @@ struct DemoObject : public RavEngine::GameObject{
         
 		auto child = GetWorld()->CreatePrototype<GameObject>();
 		
-		EmplaceComponent<ChildEntityComponent>(child);
         EmplaceComponent<SpinComponent>(vector3(spinrng(gen)/3,spinrng(gen)/3,spinrng(gen)/3));
 		
         if (!isLight){
@@ -68,7 +66,7 @@ struct DemoObject : public RavEngine::GameObject{
         }
 		auto& mesh = child.EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)],inst);
 				
-		GetTransform().AddChild(ComponentHandle<Transform>(child));
+		GetTransform().AddChild(child);
 		
 		child.GetTransform().LocalTranslateDelta(vector3(rng(gen),rng(gen),rng(gen)));
 		

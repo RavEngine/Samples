@@ -7,7 +7,6 @@
 #include <RavEngine/Material.hpp>
 #include <RavEngine/PhysicsCollider.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
-#include <RavEngine/ChildEntityComponent.hpp>
 #include <RavEngine/Light.hpp>
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/AudioSource.hpp>
@@ -56,9 +55,7 @@ public:
 		dyn.SetMass(1.0);
 		
 		auto lightEntity = GetWorld()->CreatePrototype<RavEngine::GameObject>();
-		
-        EmplaceComponent<RavEngine::ChildEntityComponent>(lightEntity);
-		
+				
 		auto& light = lightEntity.EmplaceComponent<RavEngine::PointLight>();
 		light.color = {0,0,1,1};
 		light.Intensity = 2;

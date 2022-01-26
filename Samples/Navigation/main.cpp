@@ -57,8 +57,8 @@ struct Level : public World{
         camera.SetActive(true);
         cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,0,50));
         
-        cameraRoot.GetTransform().AddChild(ComponentHandle<Transform>(cameraGimball));
-        cameraGimball.GetTransform().AddChild(ComponentHandle<Transform>(cameraEntity));
+        cameraRoot.GetTransform().AddChild(cameraGimball);
+        cameraGimball.GetTransform().AddChild(cameraEntity);
         
         auto lightEntity = CreatePrototype<GameObject>();
         lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;

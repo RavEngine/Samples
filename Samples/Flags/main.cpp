@@ -33,8 +33,8 @@ struct Level : public World{
         camera.SetActive(true);
         cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,0,10));
         
-        cameraRoot.GetTransform().AddChild(ComponentHandle<Transform>(cameraGimball));
-        cameraGimball.GetTransform().AddChild(ComponentHandle<Transform>(cameraEntity));
+        cameraRoot.GetTransform().AddChild(cameraGimball);
+        cameraGimball.GetTransform().AddChild(cameraEntity);
         cameraRoot.GetTransform().LocalTranslateDelta(vector3(0,5,0));
         
         auto lightEntity = CreatePrototype<GameObject>();

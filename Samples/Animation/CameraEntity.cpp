@@ -1,7 +1,6 @@
 #include "CameraEntity.hpp"
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/ScriptComponent.hpp>
-#include <RavEngine/ChildEntityComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -49,14 +48,12 @@ void CameraEntity::Create(Character cm){
 	
 	// midway arm node used for distance-adjust and y-axis swivel
     cameraArmBase = GetWorld()->CreatePrototype<GameObject>();
-	cameraArmBase.GetTransform().AddChild(ComponentHandle<Transform>(cameraEntity));
-	cameraArmBase.EmplaceComponent<ChildEntityComponent>(cameraEntity);
+	cameraArmBase.GetTransform().AddChild(cameraEntity);
 	cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,3,0));
 	cameraEntity.GetTransform().LocalRotateDelta(vector3(glm::radians(-10.0),0,0));
 	
 	// attached to the root transform
-	EmplaceComponent<ChildEntityComponent>(cameraArmBase);
-	GetTransform().AddChild(ComponentHandle<Transform>(cameraArmBase));
+	GetTransform().AddChild(cameraArmBase);
 	cameraArmBase.GetTransform().LocalTranslateDelta(vector3(0,0,7));
 	
 	EmplaceComponent<CameraScript>(cm);
