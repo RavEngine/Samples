@@ -27,6 +27,9 @@ set(RAVENGINE_BUILD_TESTS ON CACHE INTERNAL "")
 add_subdirectory("RavEngine")
 
 file(GLOB COMMON_FILES "Samples/Common/*.hpp" "Samples/Common/*.cpp")
+if(CMAKE_SYSTEM_NAME MATCHES Emscripten)
+	set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
+endif()
 
 function (add_sample sample_dir)
 	# create the test executable

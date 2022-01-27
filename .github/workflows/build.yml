@@ -52,6 +52,31 @@ jobs:
         with:
           name:  RavEngine_Samples_linuxARM
           path:  build/linuxarm/Release/*.AppImage
+  
+  build-emscripten:
+    name: Build samples for Emscripten-Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Install Dependencies
+        run: sudo apt-get update && sudo apt-get install cmake clang python3 libgl1-mesa-dev libwayland-dev libxkbcommon-dev libegl-dev -y --no-install-recommends
+      - name: Setup Emscripten
+        run: git clone https://github.com/emscripten-core/emsdk.git --depth=1 && cd emsdk && ./emsdk install latest && ./emsdk activate latest && source ./emsdk_env.sh
+      - name: Configure
+        run: mkdir -p build && cd build; cmake -DCMAKE_TOOLCHAIN_FILE=../emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake .. 
+      - name: Build
+        run: cd build; cmake --build . --config Release --target install
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_Web
+          path: |
+                build/Release/*.js
+                build/Release/*.html
+                build/Release/*.wasm
         
   build-mac:
     name: Build Samples for macOS
