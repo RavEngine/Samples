@@ -10,7 +10,7 @@ if(UNIX AND NOT APPLE)
 	set(LINUX TRUE CACHE INTERNAL "")
 endif()
 
-if(LINUX)
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 	set(atomic_lib atomic CACHE INTERNAL "") # need libatomic on linux
 endif()
 
@@ -29,6 +29,9 @@ add_subdirectory("RavEngine")
 file(GLOB COMMON_FILES "Samples/Common/*.hpp" "Samples/Common/*.cpp")
 if(CMAKE_SYSTEM_NAME MATCHES Emscripten)
 	set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
+	# required for higher memory, atomics, and threads
+	add_definitions(-pthread)
+	add_definitions(-fexceptions)
 endif()
 
 function (add_sample sample_dir)
@@ -51,7 +54,7 @@ function (add_sample sample_dir)
 		XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"
 		VS_GLOBAL_OutputType AppContainerExe
 	)
-	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" ${atomic_lib})
+
 	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}" "${CMAKE_CURRENT_LIST_DIR}/Samples/Common")
 	target_compile_features(${APPNAME} PRIVATE cxx_std_17)
 	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
@@ -72,12 +75,19 @@ function (add_sample sample_dir)
 	file(GLOB sounds "${sample_dir}/sounds/*.mp3", "${sample_dir}/sounds/*.wav", "${sample_dir}/sounds/*.ogg", "${sample_dir}/sounds/*.midi")
 
 	pack_resources(TARGET "${APPNAME}"
+		OUTPUT_FILE DATA_PACK
 		OBJECTS ${objects}
 		SHADERS ${shaders}
 		TEXTURES ${textures}
 		UIS ${uis}
 		SOUNDS ${sounds}
 	)
+
+	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+		set(EM_LINK "--embed-file ${DATA_PACK}" "-fexceptions" "-s PROXY_TO_PTHREAD" "-s USE_PTHREADS" "-s LLD_REPORT_UNDEFINED" "-s NO_DISABLE_EXCEPTION_CATCHING" "-s NO_DISABLE_EXCEPTION_THROWING" "-s PTHREAD_POOL_SIZE=32" "-s ASSERTIONS=1" "-s ALLOW_MEMORY_GROWTH=1" "-s MAXIMUM_MEMORY=4GB" "-gsource-map" "--source-map-base=http://localhost:9090/" )
+	endif()
+
+	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" ${atomic_lib} ${EM_LINK})
 
 	# fixup mac bundle, or generate Linux AppImage
 	if(APPLE)
