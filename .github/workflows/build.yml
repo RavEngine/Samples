@@ -21,6 +21,10 @@ jobs:
         with:
           name:  RavEngine_Samples_linux64
           path:  build/linux/Release/*.AppImage
+      - name: Prepare Transfer upload
+        run: cd build/linux/Release ; zip -r -9 Samples.zip *.AppImage
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/linux/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linux.zip` ; echo "::notice file=.github/workflows/build.yml::Linux Download URL - $URL"
 
   build-linux-arm:
     name: Build Samples for Linux arm64
@@ -52,6 +56,10 @@ jobs:
         with:
           name:  RavEngine_Samples_linuxARM
           path:  build/linuxarm/Release/*.AppImage
+      - name: Prepare Transfer upload
+        run: cd build/linuxarm/Release ; zip -r -9 Samples.zip *.AppImage
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/linuxarm/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linuxARM.zip` ; echo "::notice file=.github/workflows/build.yml::Linux ARM Download URL - $URL"
   
   build-emscripten:
     if: ${{ false }}  # disable for now, since emscripten is not possible without WebGPU
@@ -98,6 +106,8 @@ jobs:
         with:
           name: RavEngine_Samples_macOS
           path: build/release/Samples_Mac.zip
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/release/Samples_Mac.zip https://transfer.sh/RavEngine_Samples_macOS.zip` ; echo "::notice file=.github/workflows/build.yml::macOS Download URL - $URL"
                 
   build-windows:
     name: Build samples for Windows
@@ -117,7 +127,7 @@ jobs:
           name: RavEngine_Samples_win64
           path: |
                 build\win\release\RavEngine*.exe 
-                build\win\release\RavEngine*.zip 
+                build\win\release\RavEngine*.zip
 
   build-uwp:
     name: Build samples for UWP
