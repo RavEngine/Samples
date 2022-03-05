@@ -54,6 +54,7 @@ jobs:
           path:  build/linuxarm/Release/*.AppImage
   
   build-emscripten:
+    if: ${{ false }}  # disable for now, since emscripten is not possible without WebGPU
     name: Build samples for Emscripten-Linux
     runs-on: ubuntu-latest
     steps:
