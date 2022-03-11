@@ -24,7 +24,7 @@ jobs:
       - name: Prepare Transfer upload
         run: cd build/linux/Release ; zip -r -9 Samples.zip *.AppImage
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/linux/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linux.zip` ; echo "::notice file=.github/workflows/build.yml::Linux Download URL - $URL"
+        run: URL=`curl --upload-file build/linux/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linux.zip` ; echo "::notice file=.github/workflows/build.yml::$URL"
 
   build-linux-arm:
     name: Build Samples for Linux arm64
@@ -59,7 +59,7 @@ jobs:
       - name: Prepare Transfer upload
         run: cd build/linuxarm/Release ; zip -r -9 Samples.zip *.AppImage
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/linuxarm/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linuxARM.zip` ; echo "::notice file=.github/workflows/build.yml::Linux ARM Download URL - $URL"
+        run: URL=`curl --upload-file build/linuxarm/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linuxARM.zip` ; echo "::notice file=.github/workflows/build.yml::$URL"
   
   build-emscripten:
     if: ${{ false }}  # disable for now, since emscripten is not possible without WebGPU
@@ -107,7 +107,7 @@ jobs:
           name: RavEngine_Samples_macOS
           path: build/release/Samples_Mac.zip
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/release/Samples_Mac.zip https://transfer.sh/RavEngine_Samples_macOS.zip` ; echo "::notice file=.github/workflows/build.yml::macOS Download URL - $URL"
+        run: URL=`curl --upload-file build/release/Samples_Mac.zip https://transfer.sh/RavEngine_Samples_macOS.zip` ; echo "::notice file=.github/workflows/build.yml::$URL"
                 
   build-windows:
     name: Build samples for Windows
@@ -128,6 +128,10 @@ jobs:
           path: |
                 build\win\release\RavEngine*.exe 
                 build\win\release\RavEngine*.zip
+      - name: Prepare Transfer.sh upload
+        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.zip -DestinationPath SamplesWin64.zip
+      - name: Upload to Transfer.sh
+        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_Win64.zip -Method PUT -InFile SamplesWin64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL"
 
   build-uwp:
     name: Build samples for UWP
@@ -148,3 +152,7 @@ jobs:
         with:
           name: RavEngine_Samples_uwp64
           path: build\uwp\AppPackages
+      - name: Prepare Transfer.sh upload
+        run: Compress-Archive -Path build\uwp\AppPackages\ -DestinationPath SamplesUWP64.zip
+      - name: Upload to Transfer.sh
+        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_UWP64.zip -Method PUT -InFile SamplesUWP64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL"
