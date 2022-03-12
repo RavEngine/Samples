@@ -42,31 +42,22 @@ function (add_sample sample_dir)
 	# create the helper header file
 	make_directory("${APPNAME}")
 	configure_file("Samples/AppInfo.hpp" "${CMAKE_BINARY_DIR}/${APPNAME}/" @ONLY)
+	configure_file("Samples/Sample.appxManifest" "${CMAKE_BINARY_DIR}/${APPNAME}" @ONLY)
 
 	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" )
 
 	# creates a mac app if applicable
-	add_executable("${APPNAME}" ${TEST_SOURCES} ${COMMON_FILES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard")
-	set_target_properties("${APPNAME}" 
-		PROPERTIES 
-		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Samples/Info.plist.in"
-		XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"		# with templated plist we can set this
-		XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"
-		VS_GLOBAL_OutputType AppContainerExe
-	)
+	add_executable("${APPNAME}" ${TEST_SOURCES} ${COMMON_FILES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard" "${CMAKE_BINARY_DIR}/${APPNAME}/Sample.appxManifest")
 
+	if(CMAKE_SYSTEM_NAME MATCHES "WindowsStore")
+		target_sources("${APPNAME}" PRIVATE "Samples/logo44.png" "Samples/logo150.png" "Samples/logo50.png" "Samples/logo620x300.png")
+	endif()
+	
 	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}" "${CMAKE_CURRENT_LIST_DIR}/Samples/Common")
 	target_compile_features(${APPNAME} PRIVATE cxx_std_17)
 	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
-
-	# UWP / Winstore deployment things
-	set(WINSTORE_MANIFEST "${CMAKE_CURRENT_LIST_DIR}/Samples/Sample.appxmanifest.in")
-	set(WINSTORE_ICONS "${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png")
-	set_property(SOURCE WINSTORE_MANIFEST PROPERTY VS_DEPLOYMENT_CONTENT 1)
-	set_property(SOURCE "${WINSTORE_ICONS}" PROPERTY VS_DEPLOYMENT_CONTENT 1)
-	set_property(SOURCE "${WINSTORE_ICONS}" PROPERTY VS_DEPLOYMENT_LOCATION "")
 
 	file(GLOB objects "${sample_dir}/objects/*.fbx" "${sample_dir}/objects/*.dae" "${sample_dir}/objects/*.ozz" "${sample_dir}/objects/*.obj", "${sample_dir}/objects/*.ply")
 	file(GLOB textures "${sample_dir}/textures/*.jpg", "${sample_dir}/textures/*.png" "${sample_dir}/textures/*.svg")
@@ -82,6 +73,15 @@ function (add_sample sample_dir)
 		UIS ${uis}
 		SOUNDS ${sounds}
 	)
+
+	set_target_properties("${APPNAME}" 
+		PROPERTIES 
+		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Samples/Info.plist.in"
+		XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"		# with templated plist we can set this
+		XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"
+		VS_GLOBAL_OutputType AppContainerExe
+	)
+
 
 	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 		set(EM_LINK "--embed-file ${DATA_PACK}" "-s MAX_WEBGL_VERSION=2" "-s MIN_WEBGL_VERSION=2" "-s FULL_ES3=1" "-s USE_WEBGPU" "-s GL_ASSERTIONS=1" "-s OFFSCREEN_FRAMEBUFFER=1" "-s OFFSCREENCANVAS_SUPPORT=1" "-s GL_DEBUG=1" "-fexceptions" "-s PROXY_TO_PTHREAD" "-s USE_PTHREADS" "-s LLD_REPORT_UNDEFINED" "-s NO_DISABLE_EXCEPTION_CATCHING" "-s NO_DISABLE_EXCEPTION_THROWING" "-s PTHREAD_POOL_SIZE=4" "-s ASSERTIONS=1" "-s ALLOW_MEMORY_GROWTH=1" "-s MAXIMUM_MEMORY=4GB")
