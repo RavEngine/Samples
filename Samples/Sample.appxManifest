@@ -22,7 +22,7 @@
 			<uap:VisualElements
 				DisplayName="@APPNAME@"
 				Description="@APPNAME@ UWP Build"
-				BackgroundColor="#555555"
+				BackgroundColor="#222222"
 				Square150x150Logo="logo150.png"
 				Square44x44Logo="logo44.png">
 				<uap:SplashScreen Image="logo620x300.png" />
