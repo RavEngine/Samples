@@ -62,6 +62,7 @@ struct Level : public RavEngine::World{
 		light.EmplaceComponent<DirectionalLight>().debugEnabled = true;
 		light.EmplaceComponent<AmbientLight>().Intensity = 0.2;
 		light.GetTransform().LocalRotateDelta(vector3(0, 0, glm::radians(90.f)));
+		light.GetTransform().LocalTranslateDelta(vector3(0,2,0));
 
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 		im->AddAxisMap(InputNames::TurnLR, SDL_SCANCODE_D);
