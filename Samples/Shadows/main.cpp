@@ -61,7 +61,7 @@ struct Level : public RavEngine::World{
 		auto light = CreatePrototype<GameObject>();
 		light.EmplaceComponent<DirectionalLight>().debugEnabled = true;
 		light.EmplaceComponent<AmbientLight>().Intensity = 0.2;
-		light.GetTransform().LocalRotateDelta(vector3(0, 0, glm::radians(88.f)));
+		light.GetTransform().LocalRotateDelta(vector3(0, 0, glm::radians(30.f)));
 		light.GetTransform().LocalTranslateDelta(vector3(0,2,0));
 
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
