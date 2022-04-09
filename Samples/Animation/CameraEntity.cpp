@@ -49,8 +49,7 @@ void CameraEntity::Create(Character cm){
 	// midway arm node used for distance-adjust and y-axis swivel
     cameraArmBase = GetWorld()->CreatePrototype<GameObject>();
 	cameraArmBase.GetTransform().AddChild(cameraEntity);
-	cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,3,0));
-	cameraEntity.GetTransform().LocalRotateDelta(vector3(glm::radians(-10.0),0,0));
+	cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,3,0)).LocalRotateDelta(vector3(glm::radians(-10.0),0,0));
 	
 	// attached to the root transform
 	GetTransform().AddChild(cameraArmBase);

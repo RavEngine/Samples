@@ -39,8 +39,7 @@ Level::Level(){
 
 	// create player 
 	auto player = CreatePrototype<Player>();
-	player.GetTransform().SetLocalRotation(vector3(0, glm::radians(-90.f), 0));
-	player.GetTransform().SetLocalPosition(vector3(-5,2,0));
+	player.GetTransform().SetLocalRotation(vector3(0, glm::radians(-90.f), 0)).SetLocalPosition(vector3(-5,2,0));
 
 	// load UI
 	auto uiEntity = CreatePrototype<Entity>();

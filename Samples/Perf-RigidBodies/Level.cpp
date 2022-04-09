@@ -69,8 +69,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 			GetApp()->DispatchMainThread([&](){
                 auto rigid = ownWorld->CreatePrototype<RigidBody>(mat,mesh, physmat, RigidBody::BodyType::Sphere);
                 
-                rigid.GetTransform().LocalTranslateDelta(GenSpawnpoint());
-                rigid.GetTransform().SetLocalScale(vector3(0.5,0.5,0.5));
+                rigid.GetTransform().LocalTranslateDelta(GenSpawnpoint()).SetLocalScale(vector3(0.5,0.5,0.5));
             });
             
 			count--;
@@ -78,18 +77,18 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
             auto lastTPS = GetApp()->CurrentTPS();
             auto lastFPS = GetApp()->GetRenderEngine().GetCurrentFPS();
             auto& guic = ownWorld->GetComponent<GUIComponent>();
-            if (total - count > 30 && ( lastTPS < 30 && lastFPS < 30)){
+            if (total - count > 30 && ( lastTPS < 20 && lastFPS < 20)){
                 totalLostTicks++;
             }
             if(totalLostTicks < maxLostTicks){
                 guic.EnqueueUIUpdate([=]{
-                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls", total - count,total));
+                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls (dropped {})", total - count,total,totalLostTicks));
                 });
             }
             else{
                 auto spawned = total - count;
                 guic.EnqueueUIUpdate([=]{
-                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls (sustained < 30tps, stopping)", spawned,total));
+                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls (sustained &lt; 20fps, stopping)", spawned,total));
                 });
                 ownWorld->DispatchAsync([](){
                     Debug::Log("Ran dispatched fun");
@@ -107,8 +106,7 @@ Level::Level(){
 	auto& camera = camEntity.EmplaceComponent<CameraComponent>();
 	camera.SetActive(true);
 	camera.farClip = 1000;
-	camEntity.GetTransform().LocalTranslateDelta(vector3(0,10*5,20*5));
-	camEntity.GetTransform().LocalRotateDelta(vector3(glm::radians(-30.0f),0,0));
+	camEntity.GetTransform().LocalTranslateDelta(vector3(0,10*5,20*5)).LocalRotateDelta(vector3(glm::radians(-30.0f),0,0));
     auto& gui = camEntity.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 	

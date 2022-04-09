@@ -28,15 +28,13 @@ Level::Level(){
 	
 	auto lights = CreatePrototype<GameObject>();
 	lights.EmplaceComponent<AmbientLight>().Intensity = 0.2f;
-	lights.GetTransform().LocalTranslateDelta(vector3(0,0.5,6));
 	lights.EmplaceComponent<DirectionalLight>();
-	lights.GetTransform().LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
+    lights.GetTransform().LocalTranslateDelta(vector3(0,0.5,6)).LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
     auto& gui = lights.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 
 	auto character = CreatePrototype<Character>();
-	character.GetTransform().LocalTranslateDelta(vector3(15,5,0));
-	character.GetTransform().LocalRotateDelta(vector3(0,glm::radians(90.f),0));
+	character.GetTransform().LocalTranslateDelta(vector3(15,5,0)).LocalRotateDelta(vector3(0,glm::radians(90.f),0));
 	
 	auto camera = CreatePrototype<CameraEntity>(character);
 	camera.GetTransform().LocalTranslateDelta(vector3(0,0,0));

@@ -48,9 +48,9 @@ struct Level : public RavEngine::World{
 		trimat->doubleSided = true;
 		trimat->SetAlbedoColor({ 1,0,0,1 });
 		tri.EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("triangle.obj"),trimat);
-		tri.GetTransform().LocalTranslateDelta(vector3(-1.5, 0.8, 0));
-		tri.GetTransform().LocalRotateDelta(vector3(glm::radians(90.f), glm::radians(90.f), glm::radians(180.f)));
-		tri.GetTransform().LocalRotateDelta(vector3(0, glm::radians(90.f), 0));
+		tri.GetTransform().LocalTranslateDelta(vector3(-1.5, 0.8, 0))
+            .LocalRotateDelta(vector3(glm::radians(90.f), glm::radians(90.f), glm::radians(180.f)))
+            .LocalRotateDelta(vector3(0, glm::radians(90.f), 0));
 
 		// create lights and camera
 		camera.EmplaceComponent<CameraComponent>().SetActive(true);
@@ -61,8 +61,7 @@ struct Level : public RavEngine::World{
 		auto light = CreatePrototype<GameObject>();
 		light.EmplaceComponent<DirectionalLight>().debugEnabled = true;
 		light.EmplaceComponent<AmbientLight>().Intensity = 0.2;
-		light.GetTransform().LocalRotateDelta(vector3(0, 0, glm::radians(30.f)));
-		light.GetTransform().LocalTranslateDelta(vector3(0,2,0));
+		light.GetTransform().LocalRotateDelta(vector3(0, 0, glm::radians(30.f))).LocalTranslateDelta(vector3(0,2,0));
 
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 		im->AddAxisMap(InputNames::TurnLR, SDL_SCANCODE_D);

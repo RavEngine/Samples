@@ -24,9 +24,7 @@ void GameWorld::OnActivate(){
 	cameraActor.EmplaceComponent<AudioListener>();
 	cameraBoom.GetTransform().SetWorldPosition(vector3(0,0,0));
 	
-	cameraBoom.GetTransform().AddChild(cameraActor);
-	cameraActor.GetTransform().LocalTranslateDelta(vector3(0,3,3));
-	cameraActor.GetTransform().LocalRotateDelta(vector3(glm::radians(-90.0),0,0));
+	cameraBoom.GetTransform().AddChild(cameraActor).LocalTranslateDelta(vector3(0,3,3)).LocalRotateDelta(vector3(glm::radians(-90.0),0,0));
 		
 	//create the puck
 	puck.GetTransform().LocalTranslateDelta(vector3(0,3,0));

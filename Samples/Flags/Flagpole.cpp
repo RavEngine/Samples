@@ -29,8 +29,7 @@ void Flagpole::Create(){
     
     auto flagEntity = GetWorld()->CreatePrototype<GameObject>();
     GetTransform().AddChild(flagEntity);
-    flagEntity.GetTransform().LocalTranslateDelta(vector3(0,8,0));
-    flagEntity.GetTransform().LocalScaleDelta(vector3(2));
+    flagEntity.GetTransform().LocalTranslateDelta(vector3(0,8,0)).LocalScaleDelta(vector3(2));
     
     auto& skinnedMesh = flagEntity.EmplaceComponent<SkinnedMeshComponent>(skeleton,meshAssetSkinned);
     

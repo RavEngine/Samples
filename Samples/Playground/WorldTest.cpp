@@ -34,8 +34,7 @@ void TestWorld::SpawnEntities(float f) {
 }
 
 void TestWorld::ResetCam() {
-	player.GetTransform().SetWorldPosition(vector3(0, -10, 50));
-	player.GetTransform().SetWorldRotation(quaternion());
+	player.GetTransform().SetWorldPosition(vector3(0, -10, 50)).SetWorldRotation(quaternion());
 }
 
 void TestWorld::PostTick(float fpsScale){
@@ -135,8 +134,7 @@ TestWorld::TestWorld(){
 	
 	floorplane = CreatePrototype<GameObject>();
 	floorplane.EmplaceComponent<StaticMesh>(sharedMesh,material);
-	floorplane.GetTransform().LocalScaleDelta(vector3(10, 0.5, 10));
-	floorplane.GetTransform().LocalTranslateDelta(vector3(0, -20, 0));
+	floorplane.GetTransform().LocalScaleDelta(vector3(10, 0.5, 10)).LocalTranslateDelta(vector3(0, -20, 0));
 	auto& s = floorplane.EmplaceComponent<RigidBodyStaticComponent>();
 	s.EmplaceCollider<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5));
 	
@@ -159,8 +157,7 @@ TestWorld::TestWorld(){
 	dl = CreatePrototype<GameObject>();
 	auto& dll = dl.EmplaceComponent<DirectionalLight>();
 	auto amt = glm::radians(45.0);
-	dl.GetTransform().LocalRotateDelta(vector3(amt,0,0));
-	dl.GetTransform().LocalTranslateDelta(vector3(0,1,1));
+	dl.GetTransform().LocalRotateDelta(vector3(amt,0,0)).LocalTranslateDelta(vector3(0,1,1));
 	dll.color = {1,0.5,0};
 	
 	ambientLight1 = CreatePrototype<GameObject>();
