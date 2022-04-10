@@ -60,8 +60,16 @@ struct Level : public RavEngine::World{
 
 		auto light = CreatePrototype<GameObject>();
 		light.EmplaceComponent<DirectionalLight>().debugEnabled = true;
+        light.GetComponent<DirectionalLight>().Intensity = 0.5;
 		light.EmplaceComponent<AmbientLight>().Intensity = 0.2;
 		light.GetTransform().LocalRotateDelta(vector3(0, 0, glm::radians(30.f))).LocalTranslateDelta(vector3(0,2,0));
+        
+        auto pointLight = CreatePrototype<GameObject>();
+        auto& pLight = pointLight.EmplaceComponent<PointLight>();
+        pLight.debugEnabled = true;
+        pLight.color = ColorRGBA{1,0,0,1};
+        pLight.Intensity = 2;
+        pointLight.GetTransform().LocalTranslateDelta(vector3(-2,1,-0.5));
 
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 		im->AddAxisMap(InputNames::TurnLR, SDL_SCANCODE_D);
