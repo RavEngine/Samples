@@ -108,6 +108,50 @@ jobs:
           path: build/release/Samples_Mac.zip
       - name: Upload to Transfer.sh
         run: URL=`curl --upload-file build/release/Samples_Mac.zip https://transfer.sh/RavEngine_Samples_macOS.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        
+  build-ios:
+    name: Build Samples for iOS (unsigned)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Configure
+        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED ..
+      - name: Build
+        run: cd build; cmake --build . --config release --target install
+      - name: Compress Samples
+        run: cd build/release; zip -r -9 Samples_iOS.zip *.app
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_iOS
+          path: build/release/Samples_iOS.zip
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/release/Samples_iOS.zip https://transfer.sh/RavEngine_Samples_iOS.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        
+  build-tvos:
+    name: Build Samples for tvOS (unsigned)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Configure
+        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=TVOSCOMBINED ..
+      - name: Build
+        run: cd build; cmake --build . --config release --target install
+      - name: Compress Samples
+        run: cd build/release; zip -r -9 Samples_tvOS.zip *.app
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_iOS
+          path: build/release/Samples_tvOS.zip
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/release/Samples_tvOS.zip https://transfer.sh/RavEngine_Samples_tvOS.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
                 
   build-windows:
     name: Build samples for Windows

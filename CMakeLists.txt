@@ -4,6 +4,7 @@ set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} CACHE INTERNAL "")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
 set(CMAKE_XCODE_ATTRIBUTE_EXCLUDED_ARCHS[sdk=iphonesimulator*] "arm64" CACHE INTERNAL "")
+set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO")    # disable codesign requirement
 
 # linux detection
 if(UNIX AND NOT APPLE)
@@ -90,7 +91,7 @@ function (add_sample sample_dir)
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" ${atomic_lib} ${EM_LINK})
 
 	# fixup mac bundle, or generate Linux AppImage
-	if(APPLE)
+	if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 		target_compile_options("${APPNAME}" PUBLIC -ftemplate-backtrace-limit=0)	# clang arg to facilitate template debugging
 		INSTALL(CODE 
 			"include(BundleUtilities)
