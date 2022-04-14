@@ -118,7 +118,7 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED ..
+        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64 ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
       - name: Compress Samples
@@ -130,6 +130,28 @@ jobs:
           path: build/release/Samples_iOS.zip
       - name: Upload to Transfer.sh
         run: URL=`curl --upload-file build/release/Samples_iOS.zip https://transfer.sh/RavEngine_Samples_iOS.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+            
+  build-ios-simulator:
+    name: Build Samples for iOS Simulator
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Configure
+        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR64 ..
+      - name: Build
+        run: cd build; cmake --build . --config release --target install
+      - name: Compress Samples
+        run: cd build/release; zip -r -9 Samples_iOS_Sim.zip *.app
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_iOS_Simulator
+          path: build/release/Samples_iOS_Sim.zip
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/release/Samples_iOS_Sim.zip https://transfer.sh/RavEngine_Samples_iOS_Sim.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
         
   build-tvos:
     name: Build Samples for tvOS (unsigned)
@@ -140,7 +162,7 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=TVOSCOMBINED ..
+        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=TVOS ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
       - name: Compress Samples
@@ -148,11 +170,33 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: RavEngine_Samples_iOS
+          name: RavEngine_Samples_tvOS
           path: build/release/Samples_tvOS.zip
       - name: Upload to Transfer.sh
         run: URL=`curl --upload-file build/release/Samples_tvOS.zip https://transfer.sh/RavEngine_Samples_tvOS.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
-                
+   
+  build-tvos-simulator:
+    name: Build Samples for tvOS Simulator
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Configure
+        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR_TVOS ..
+      - name: Build
+        run: cd build; cmake --build . --config release --target install
+      - name: Compress Samples
+        run: cd build/release; zip -r -9 Samples_tvOS_Sim.zip *.app
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_tvOS_Simulator
+          path: build/release/Samples_tvOS_Sim.zip
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/release/Samples_tvOS_Sim.zip https://transfer.sh/RavEngine_Samples_tvOS_Sim.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+   
   build-windows:
     name: Build samples for Windows
     runs-on: windows-latest
