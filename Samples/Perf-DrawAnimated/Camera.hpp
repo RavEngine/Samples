@@ -16,11 +16,11 @@ struct Player : public RavEngine::ComponentWithOwner{
 		child->LocalTranslateDelta(vector3(0, 0, zoomAmt * fpsScale) * child->Forward());
 	}
 	void RotateLR(float amt){
-		GetOwner().GetTransform().LocalRotateDelta((double)fpsScale * vector3(0, glm::radians(amt), 0));
+		GetOwner().GetTransform().LocalRotateDelta((decimalType)fpsScale * vector3(0, deg_to_rad(amt), 0));
 	}
 	
 	void RotateUD(float amt){
-		GetOwner().GetTransform().LocalRotateDelta((double)fpsScale * vector3(glm::radians(amt), 0, 0));
+		GetOwner().GetTransform().LocalRotateDelta((decimalType)fpsScale * vector3(deg_to_rad(amt), 0, 0));
 	}
 	
 	void Tick(float scale){

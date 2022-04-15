@@ -24,7 +24,7 @@ static std::mt19937 gen(rd()); // seed the generator
 static std::uniform_int_distribution<> rng(-40, 40);
 static std::uniform_int_distribution<> meshrng(0, PerfC_World::num_meshes - 1);
 static std::uniform_int_distribution<> texturerng(0,PerfC_World::num_textures - 1);
-static std::uniform_real_distribution<> spinrng(glm::radians(-1.0), glm::radians(1.0));
+static std::uniform_real_distribution<> spinrng(deg_to_rad(-1), deg_to_rad(1));
 static std::uniform_real_distribution<> colorrng(0.5,1);
 
 

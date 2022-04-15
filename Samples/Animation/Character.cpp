@@ -103,11 +103,11 @@ struct CharacterScript : public ScriptComponent, public Queryable<CharacterScrip
 			}
 			else {
 				// in the air, you can slightly nudge your character in a direction
-				rigidBody->AddForce(dir * 5.0);
+				rigidBody->AddForce(dir * 5.f);
 			}
 			// face direction
 			auto rot = glm::quatLookAt(dir, GetTransform().WorldUp());
-			GetTransform().SetWorldRotation(glm::slerp(GetTransform().GetWorldRotation(), rot, 0.2));
+			GetTransform().SetWorldRotation(Slerp(GetTransform().GetWorldRotation(), rot, 0.2));
 		}
 	}
 
@@ -187,7 +187,7 @@ void Character::Create() {
 
 	auto childEntity = GetWorld()->CreatePrototype<GameObject>();										// I made the animation facing the wrong way
 	GetTransform().AddChild(childEntity);								// so I need a child entity to rotate it back
-	childEntity.GetTransform().LocalRotateDelta(vector3(0, glm::radians(180.f), 0));	// if your animations are the correct orientation you don't need this
+	childEntity.GetTransform().LocalRotateDelta(vector3(0, deg_to_rad(180), 0));	// if your animations are the correct orientation you don't need this
 
 	// load the mesh and material onto the character
 	auto& cubemesh = childEntity.EmplaceComponent<SkinnedMeshComponent>(skeleton, mesh);
@@ -196,7 +196,7 @@ void Character::Create() {
 	// load the collider and physics settings
     auto& r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
     rigidBody = ComponentHandle<RigidBodyDynamicComponent>(this);
-	r.EmplaceCollider<CapsuleCollider>(0.6, 1.3, RavEngine::New<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,1.7,0),vector3(0,0,glm::radians(90.0)));
+	r.EmplaceCollider<CapsuleCollider>(0.6, 1.3, RavEngine::New<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,1.7,0),vector3(0,0,deg_to_rad(90)));
 	r.SetAxisLock(RigidBodyDynamicComponent::AxisLock::Angular_X | RigidBodyDynamicComponent::AxisLock::Angular_Z);
 	r.SetWantsContactData(true);
 

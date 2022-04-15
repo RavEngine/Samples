@@ -17,17 +17,17 @@ struct CameraScript : public RavEngine::ScriptComponent {
 		// where is the player? we should accelerate towards this position
 		auto& targetTransform = target.GetTransform();
 		auto& thisTransform = GetTransform();
-		auto dirvec = (thisTransform.GetWorldPosition() - targetTransform.GetWorldPosition()) * static_cast<double>(fpsScale) * -1.0;
+		auto dirvec = (thisTransform.GetWorldPosition() - targetTransform.GetWorldPosition()) * static_cast<decimalType>(fpsScale*  -1.f);
 		
 		// if we are close, we should decelerate / accelerate smoothly
 		if (glm::length(dirvec) > 4){
-			dirvec = glm::normalize(dirvec) * 4.0;
+			dirvec = glm::normalize(dirvec) * 4.f;
 		}
 		thisTransform.WorldTranslateDelta(dirvec);
 		
 		// which way is the player facing? we want to rotate to be behind them
 		auto facingRot = glm::quatLookAt(targetTransform.WorldForward(), GetTransform().WorldUp());
-		GetTransform().SetWorldRotation(glm::slerp(GetTransform().GetWorldRotation(), facingRot, 0.01 * fpsScale));
+		GetTransform().SetWorldRotation(Slerp(GetTransform().GetWorldRotation(), facingRot, 0.01 * fpsScale));
 		
 		// which way is the player moving? we want to swivel to a point ahead of them so they can see more easily
 		
@@ -49,7 +49,7 @@ void CameraEntity::Create(Character cm){
 	// midway arm node used for distance-adjust and y-axis swivel
     cameraArmBase = GetWorld()->CreatePrototype<GameObject>();
 	cameraArmBase.GetTransform().AddChild(cameraEntity);
-	cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,3,0)).LocalRotateDelta(vector3(glm::radians(-10.0),0,0));
+	cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,3,0)).LocalRotateDelta(vector3(deg_to_rad(-10),0,0));
 	
 	// attached to the root transform
 	GetTransform().AddChild(cameraArmBase);

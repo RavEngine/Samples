@@ -16,7 +16,7 @@ struct InstanceEntity : public RavEngine::GameObject{
             pos.y = RavEngine::Random::get(-range, range);
             pos.z = RavEngine::Random::get(-range, range);
 
-            vector3 rot(glm::radians(pos.x), glm::radians(pos.y), glm::radians(pos.z));
+            vector3 rot(deg_to_rad(pos.x), deg_to_rad(pos.y), deg_to_rad(pos.z));
             
             auto& inst = ism.AddInstance();
             inst.translate = pos;

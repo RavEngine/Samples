@@ -62,7 +62,7 @@ struct SpinSystem : public RavEngine::AutoCTTI {
     inline void operator()(float fpsScale, const SpinComponent& c, RavEngine::Transform& tr) const{
         //get the entity and spin it based on the component data
         if (!PerfC_World::paused){
-            tr.LocalRotateDelta((double)fpsScale * c.spinamt);
+            tr.LocalRotateDelta((decimalType)fpsScale * c.spinamt);
         }
     }
 };

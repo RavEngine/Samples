@@ -51,7 +51,7 @@ public:
 		constexpr cornerbox corners[] = {{3,4.5,48},{3,-4.5,-44},{-3,-4.5,40},{-3,4.5,-49}};
 
 		for(const auto& corner : corners){
-            dyn.EmplaceCollider<RavEngine::BoxCollider>(vector3(1, 1, 0.2), physmat, vector3(corner.x, height, corner.z), vector3(0,glm::radians(corner.angle),0));
+            dyn.EmplaceCollider<RavEngine::BoxCollider>(vector3(1, 1, 0.2), physmat, vector3(corner.x, height, corner.z), vector3(0,deg_to_rad(corner.angle),0));
 		}
 
 		//load texture

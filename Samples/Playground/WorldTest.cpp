@@ -48,7 +48,7 @@ void TestWorld::PostTick(float fpsScale){
     RenderEngine::DebugPrint(4, 0x4f, "Frame Time: {} ms", GetApp()->GetRenderEngine().GetLastFrameTime());
     RenderEngine::DebugPrint(5, 0x4f, "Physics Bodies: {}", TestEntityController::objectcount);
 	
-	dl.GetTransform().LocalRotateDelta(vector3(0,0,glm::radians(1*fpsScale)));
+	dl.GetTransform().LocalRotateDelta(vector3(0,0,deg_to_rad(1*fpsScale)));
 }
 
 TestWorld::TestWorld(){
@@ -156,7 +156,7 @@ TestWorld::TestWorld(){
 		
 	dl = CreatePrototype<GameObject>();
 	auto& dll = dl.EmplaceComponent<DirectionalLight>();
-	auto amt = glm::radians(45.0);
+	auto amt = deg_to_rad(45);
 	dl.GetTransform().LocalRotateDelta(vector3(amt,0,0)).LocalTranslateDelta(vector3(0,1,1));
 	dll.color = {1,0.5,0};
 	

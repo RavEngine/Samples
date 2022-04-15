@@ -18,7 +18,7 @@ struct SpinComponent : public AutoCTTI {
 struct SpinSystem : public RavEngine::AutoCTTI {
 
 	inline void operator()(float fpsScale, const SpinComponent& s, Transform& t) const {
-		t.LocalRotateDelta(vector3(0,glm::radians(fpsScale * s.speed),0));
+		t.LocalRotateDelta(vector3(0,deg_to_rad(fpsScale * s.speed),0));
 	}
 };
 
@@ -88,7 +88,7 @@ Level::Level() {
 
 	auto lights = CreatePrototype<GameObject>();
 	lights.EmplaceComponent<AmbientLight>().Intensity = 0.1;
-	lights.GetTransform().LocalRotateDelta(vector3(0,glm::radians(-30.f),glm::radians(45.f)));
+	lights.GetTransform().LocalRotateDelta(vector3(0,deg_to_rad(-30),deg_to_rad(45)));
 	
 
 	// load the ground plane

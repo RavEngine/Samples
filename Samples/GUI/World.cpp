@@ -31,7 +31,7 @@ struct FPSSystem : public AutoCTTI {
 	
 	auto dirlight = CreatePrototype<GameObject>();
 	dirlight.EmplaceComponent<DirectionalLight>();
-	dirlight.GetTransform().LocalRotateDelta(vector3(glm::radians(45.0),glm::radians(45.0),0));
+	dirlight.GetTransform().LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(45),0));
 	
 	cube = CreatePrototype<GameObject>();
 	auto& cubemesh = cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("cube.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
@@ -61,5 +61,5 @@ struct FPSSystem : public AutoCTTI {
 }
 
 void ::World::PostTick(float scale){
-    cube.GetTransform().LocalRotateDelta(vector3(glm::radians(1.0) * scale,glm::radians(-1.0 * scale),glm::radians(0.5) * scale));
+    cube.GetTransform().LocalRotateDelta(vector3(deg_to_rad(1) * scale,deg_to_rad(-1 * scale),deg_to_rad(0.5) * scale));
 }

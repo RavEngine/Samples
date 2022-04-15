@@ -32,14 +32,14 @@ Level::Level(){
 	auto lightEntity = CreatePrototype<GameObject>();
 	lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;
 	lightEntity.EmplaceComponent<DirectionalLight>();
-	lightEntity.GetTransform().LocalRotateDelta(vector3{glm::radians(35.0),glm::radians(-30.0),0});
+	lightEntity.GetTransform().LocalRotateDelta(vector3{deg_to_rad(35),deg_to_rad(-30),0});
 
 	// create the audio room
 	auto stage = CreatePrototype<Stage>();
 
 	// create player 
 	auto player = CreatePrototype<Player>();
-	player.GetTransform().SetLocalRotation(vector3(0, glm::radians(-90.f), 0)).SetLocalPosition(vector3(-5,2,0));
+	player.GetTransform().SetLocalRotation(vector3(0, deg_to_rad(-90), 0)).SetLocalPosition(vector3(-5,2,0));
 
 	// load UI
 	auto uiEntity = CreatePrototype<Entity>();

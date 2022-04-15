@@ -3,7 +3,7 @@
         <link type="text/rcss" href="default.rcss"></link>
         <style>
             *{
-                font-size: 40dp
+                font-size: 20dp
             }
         </style>
 	</head>

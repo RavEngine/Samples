@@ -24,7 +24,7 @@ void GameWorld::OnActivate(){
 	cameraActor.EmplaceComponent<AudioListener>();
 	cameraBoom.GetTransform().SetWorldPosition(vector3(0,0,0));
 	
-	cameraBoom.GetTransform().AddChild(cameraActor).LocalTranslateDelta(vector3(0,3,3)).LocalRotateDelta(vector3(glm::radians(-90.0),0,0));
+	cameraBoom.GetTransform().AddChild(cameraActor).LocalTranslateDelta(vector3(0,3,3)).LocalRotateDelta(vector3(deg_to_rad(-90),0,0));
 		
 	//create the puck
 	puck.GetTransform().LocalTranslateDelta(vector3(0,3,0));
@@ -33,7 +33,7 @@ void GameWorld::OnActivate(){
 	
 	//intro animation
 	t = Tween<decimalType,decimalType>([=](decimalType d, decimalType p) mutable{
-		cameraBoom.GetTransform().SetLocalRotation(vector3(glm::radians(d),glm::radians(90.0),0));
+		cameraBoom.GetTransform().SetLocalRotation(vector3(deg_to_rad(d),deg_to_rad(90),0));
 		cameraActor.GetTransform().SetLocalPosition(vector3(0,p,0));
 	},90,15);
 	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,7);
@@ -45,7 +45,7 @@ void GameWorld::OnActivate(){
 	auto& fill = lightmain.EmplaceComponent<AmbientLight>();
 	fill.Intensity=0.4;
 	fill.color = {0,0,1,1};
-	lightmain.GetTransform().LocalRotateDelta(vector3(glm::radians(45.0),0,glm::radians(-45.0)));
+	lightmain.GetTransform().LocalRotateDelta(vector3(deg_to_rad(45),0,deg_to_rad(-45)));
 	auto& room = lightmain.EmplaceComponent<AudioRoom>();
 	room.SetRoomDimensions(vector3(30,30,30));
 	//room.WallMaterials()[0] = RoomMat::kMarble;

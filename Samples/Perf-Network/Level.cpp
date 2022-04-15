@@ -22,7 +22,7 @@ Level::Level() : World("level") {
 	auto& ambientLight = lightEntity.EmplaceComponent<AmbientLight>();
 	auto& dirLight = lightEntity.EmplaceComponent<DirectionalLight>();
 	ambientLight.Intensity = 0.2;
-	lightEntity.GetTransform().SetLocalRotation(vector3(0, glm::radians(45.0), glm::radians(45.0)));
+	lightEntity.GetTransform().SetLocalRotation(vector3(0, deg_to_rad(45.0), deg_to_rad(45.0)));
 
 	// spawn the management relay if on server
 	// if on client, this will be spawned automatically

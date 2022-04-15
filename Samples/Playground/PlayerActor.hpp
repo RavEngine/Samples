@@ -23,7 +23,7 @@ struct PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInpu
 	}
 
 	decimalType scaleRotation(decimalType f) {
-		return glm::radians(sensitivity * dt * f);
+		return deg_to_rad(sensitivity * dt * f);
 	}
 
 	void MoveForward(float amt) {
@@ -51,7 +51,7 @@ struct PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInpu
 		dt = scale;
 		//prevent camera from flipping over
 		vector3 rotation = glm::eulerAngles(cameraEntity.GetTransform().GetLocalRotation());
-		rotation.x = std::clamp(rotation.x, -RavEngine::PI/2.0, RavEngine::PI /2.0);
+		rotation.x = std::clamp(rotation.x, -RavEngine::PI/2.f, RavEngine::PI/2.f);
 		cameraEntity.GetTransform().SetLocalRotation(rotation);
 	}
 };

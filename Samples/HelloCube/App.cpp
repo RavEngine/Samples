@@ -85,7 +85,7 @@ struct HelloCubeWorld : public RavEngine::World {
 		lightsEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;	// a weak fill light that affects all surfaces equally
 
 		// Lights use the transformation of their parent entity to determine their rotation and position.
-		lightsEntity.GetTransform().LocalRotateDelta(vector3{ glm::radians(45.0),glm::radians(45.0),0 });
+		lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 	}
 
 	// The engine calls it synchronously every tick after the rest of the pipeline has finished processing.
@@ -99,8 +99,8 @@ struct HelloCubeWorld : public RavEngine::World {
         auto entity = meshComp.GetOwner();	//convert to strong pointer
 
         // Let's spin our cube.
-        // RavEngine expects rotations in radians. Use glm::radians to convert to degrees.
-        auto rotVec = vector3(glm::radians(1.0), glm::radians(2.0), glm::radians(-0.5));
+        // RavEngine expects rotations in radians. Use deg_to_rad to convert to degrees.
+        auto rotVec = vector3(deg_to_rad(1), deg_to_rad(2), deg_to_rad(-0.5));
 
         // If the engine were to fall behind, we need to ensure our game does not run in slow motion.
 		// To accomplish this, we simply multiply our movements by a scale factor passed into this method.

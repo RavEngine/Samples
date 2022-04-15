@@ -10,7 +10,7 @@ using namespace RavEngine;
 using namespace std;
 
 struct Level : public RavEngine::World{
-	GameObject tri;
+	GameObject tri, cube;
 	GameObject cameraRoot = CreatePrototype<decltype(cameraRoot)>(),cameraBoom = CreatePrototype<decltype(cameraBoom)>(), camera = CreatePrototype<decltype(camera)>();
 
 	struct InputNames {
@@ -25,11 +25,11 @@ struct Level : public RavEngine::World{
 	static constexpr float turnSpeed = 1.2, moveSpeed = 0.2;
 	
 	void TurnLR(float amt) {
-		cameraRoot.GetTransform().LocalRotateDelta(vector3(0, glm::radians(turnSpeed * amt * fpsScale), 0));
+		cameraRoot.GetTransform().LocalRotateDelta(vector3(0, deg_to_rad(turnSpeed * amt * fpsScale), 0));
 	}
 	
 	void TurnUD(float amt) {
-		cameraBoom.GetTransform().LocalRotateDelta(vector3(glm::radians(turnSpeed * amt * fpsScale), 0, 0));
+		cameraBoom.GetTransform().LocalRotateDelta(vector3(deg_to_rad(turnSpeed * amt * fpsScale), 0, 0));
 	}
 
 	void Zoom(float amt) {
@@ -49,8 +49,19 @@ struct Level : public RavEngine::World{
 		trimat->SetAlbedoColor({ 1,0,0,1 });
 		tri.EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("triangle.obj"),trimat);
 		tri.GetTransform().LocalTranslateDelta(vector3(-1.5, 0.8, 0))
-            .LocalRotateDelta(vector3(glm::radians(90.f), glm::radians(90.f), glm::radians(180.f)))
-            .LocalRotateDelta(vector3(0, glm::radians(90.f), 0));
+            .LocalRotateDelta(vector3(deg_to_rad(90), deg_to_rad(90), deg_to_rad(180)))
+            .LocalRotateDelta(vector3(0, deg_to_rad(90), 0));
+        
+        cube = CreatePrototype<decltype(cube)>();
+        auto cubeMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        cubeMat->SetAlbedoColor({0,0,1,1});
+        cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("cube.obj"),cubeMat);
+        cube.GetTransform()
+            .LocalTranslateDelta(vector3(1,0.7,0))
+            .LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(90),0))
+            //.LocalRotateDelta(vector3(0,0,deg_to_rad(45)))
+            .SetLocalScale(0.5);
+            
 
 		// create lights and camera
 		camera.EmplaceComponent<CameraComponent>().SetActive(true);
@@ -59,17 +70,19 @@ struct Level : public RavEngine::World{
 		cameraBoom.GetTransform().AddChild(camera);
 
 		auto light = CreatePrototype<GameObject>();
-		light.EmplaceComponent<DirectionalLight>().debugEnabled = true;
-        light.GetComponent<DirectionalLight>().Intensity = 0.5;
+		light.EmplaceComponent<DirectionalLight>().debugEnabled = false;
+        light.GetComponent<DirectionalLight>().Intensity = 0.8;
 		light.EmplaceComponent<AmbientLight>().Intensity = 0.2;
-		light.GetTransform().LocalRotateDelta(vector3(0, 0, glm::radians(30.f))).LocalTranslateDelta(vector3(0,2,0));
+		light.GetTransform().LocalRotateDelta(vector3(0, 0, deg_to_rad(45))).LocalTranslateDelta(vector3(0,2,0));
         
+        /*
         auto pointLight = CreatePrototype<GameObject>();
         auto& pLight = pointLight.EmplaceComponent<PointLight>();
         pLight.debugEnabled = true;
         pLight.color = ColorRGBA{1,0,0,1};
         pLight.Intensity = 2;
         pointLight.GetTransform().LocalTranslateDelta(vector3(-2,1,-0.5));
+         */
 
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 		im->AddAxisMap(InputNames::TurnLR, SDL_SCANCODE_D);
@@ -81,7 +94,6 @@ struct Level : public RavEngine::World{
 		im->AddAxisMap(InputNames::Zoom, SDL_SCANCODE_UP,-1);
 		im->AddAxisMap(InputNames::Zoom, SDL_SCANCODE_DOWN);
 		im->BindAxis(InputNames::Zoom, GetInput(this), &Level::Zoom, CID::ANY);
-
 
 		// initial orientation
 		TurnUD(-5);

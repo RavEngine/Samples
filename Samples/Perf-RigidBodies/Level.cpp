@@ -21,7 +21,7 @@ struct RotationSystem : public RavEngine::AutoCTTI{
 		decimalType yrot = std::sin(time * rotation.yspeed) * rotation.maxDeg;
 		decimalType zrot = std::sin(time * rotation.zspeed) * rotation.maxDeg;
 		
-		transform.SetLocalRotation(vector3(glm::radians(xrot),glm::radians(yrot),glm::radians(zrot)));
+		transform.SetLocalRotation(vector3(deg_to_rad(xrot),deg_to_rad(yrot),deg_to_rad(zrot)));
 	}
 };
 
@@ -106,7 +106,7 @@ Level::Level(){
 	auto& camera = camEntity.EmplaceComponent<CameraComponent>();
 	camera.SetActive(true);
 	camera.farClip = 1000;
-	camEntity.GetTransform().LocalTranslateDelta(vector3(0,10*5,20*5)).LocalRotateDelta(vector3(glm::radians(-30.0f),0,0));
+	camEntity.GetTransform().LocalTranslateDelta(vector3(0,10*5,20*5)).LocalRotateDelta(vector3(deg_to_rad(-30),0,0));
     auto& gui = camEntity.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 	
@@ -116,7 +116,7 @@ Level::Level(){
 	lightEntity.EmplaceComponent<SpawnerMarker>();
 	dirLight.Intensity = 1.0;
 	ambientLight.Intensity = 0.2;
-	lightEntity.GetTransform().SetLocalRotation(vector3(0,glm::radians(45.0),glm::radians(45.0)));
+	lightEntity.GetTransform().SetLocalRotation(vector3(0,deg_to_rad(45),deg_to_rad(45)));
 	
 	// create ground
 	auto ground = CreatePrototype<Ground>();
