@@ -259,7 +259,7 @@ jobs:
       - name: Configure
         run: mkdir build; cd build; mkdir uwp; cd uwp; cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. ; cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\..;
       - name: Build & Publish
-        run: cd build\uwp ; & "MSbuild.exe" "RavEngine_Samples.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x64"
+        run: cd build\uwp ; & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x64"
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -283,7 +283,7 @@ jobs:
       - name: Configure
         run: mkdir build; cd build; mkdir uwp; cd uwp; cmake -AARM64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. ; cmake -Wno-dev ..\..;
       - name: Build & Publish
-        run: cd build\uwp ; & "MSbuild.exe" "RavEngine_Samples.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="ARM64"
+        run: cd build\uwp ; & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="ARM64"
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:

@@ -36,8 +36,8 @@
 	<true/>
 	<key>CFBundleIconFile</key>
 	<string>logo.png</string>
-
-
+    <key>UIRequiresFullScreen</key>
+    <true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

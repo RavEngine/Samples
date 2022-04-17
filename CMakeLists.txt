@@ -22,7 +22,7 @@ endif()
 #Enable iPad as well as iPhone (Universal)
 set(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2,3" CACHE INTERNAL "")
 
-project("RavEngine_Samples")
+project("RavEngine_Samples_${CMAKE_SYSTEM_NAME}")
 
 set(RAVENGINE_BUILD_TESTS ON CACHE INTERNAL "")
 add_subdirectory("RavEngine")
