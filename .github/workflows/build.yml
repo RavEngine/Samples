@@ -11,9 +11,9 @@ jobs:
         with:
           submodules: true
       - name: Install Dependencies
-        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo apt-get install cmake clang ninja-build libgl1-mesa-dev libasound2-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev -y --no-install-recommends 
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo apt-get install cmake g++-8 ninja-build libgl1-mesa-dev libasound2-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev -y --no-install-recommends 
       - name: Configure
-        run: mkdir -p build; mkdir -p build/linux; cd build/linux; export CC=/usr/bin/clang; export CXX=/usr/bin/clang++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
+        run: mkdir -p build; mkdir -p build/linux; cd build/linux; export CC=/usr/bin/gcc-8; export CXX=/usr/bin/g++-8; g++-8 -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
       - name: Build
         run: cd build/linux && cmake --build . --config release --target install  
       - name: Upload Artifacts
