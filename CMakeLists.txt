@@ -22,7 +22,22 @@ endif()
 #Enable iPad as well as iPhone (Universal)
 set(CMAKE_XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2,3" CACHE INTERNAL "")
 
-project("RavEngine_Samples_${CMAKE_SYSTEM_NAME}")
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "")
+	if (APPLE)
+		set(TARGET_NAME "macOS")
+	elseif(MSVC)
+		set(TARGET_NAME "win32")
+	elseif(UNIX AND NOT APPLE)
+		set(TARGET_NAME "Linux")
+	endif()
+else()
+	set(TARGET_NAME ${CMAKE_SYSTEM_NAME})
+endif()
+
+# set the project name to include the target system, because 
+# sometimes one works on multiple targets on the same host
+# and it can get confusing when using Open Recent without this
+project("RavEngine_Samples_${TARGET_NAME}")
 
 set(RAVENGINE_BUILD_TESTS ON CACHE INTERNAL "")
 add_subdirectory("RavEngine")
@@ -35,6 +50,8 @@ if(CMAKE_SYSTEM_NAME MATCHES Emscripten)
 	add_definitions(-fexceptions)
 endif()
 
+string(TIMESTAMP CURRENTYEAR "%Y")
+
 function (add_sample sample_dir)
 	# create the test executable
 	SET(APPNAME "RavEngine${sample_dir}")
@@ -44,6 +61,7 @@ function (add_sample sample_dir)
 	make_directory("${APPNAME}")
 	configure_file("Samples/AppInfo.hpp" "${CMAKE_BINARY_DIR}/${APPNAME}/" @ONLY)
 	configure_file("Samples/Sample.appxManifest" "${CMAKE_BINARY_DIR}/${APPNAME}" @ONLY)
+	source_group("Resources" FILES "${CMAKE_BINARY_DIR}/${APPNAME}/Sample.appxManifest")
 
 	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" )
 
@@ -80,6 +98,7 @@ function (add_sample sample_dir)
 		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Samples/Info.plist.in"
 		XCODE_ATTRIBUTE_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"		# with templated plist we can set this
 		XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.ravbug.${APPNAME}"
+		XCODE_ATTRIBUTE_CURRENTYEAR "${CURRENTYEAR}"
 		VS_GLOBAL_OutputType AppContainerExe
 	)
 
