@@ -30,7 +30,7 @@ void Stage::Create() {
 		// we want to load all meshes in this case
 		return true;
 
-	}, [&](Ref<MeshAsset> rm, const PreloadedAsset& pr) {
+	}, [&](Ref<MeshAsset> rm, Ref<PBRMaterialInstance>, const PreloadedAsset& pr) {
 		auto pos = std::distance(faceOrder.begin(),std::find(faceOrder.begin(), faceOrder.end(), pr.name));
 		auto inst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		EmplaceComponent<StaticMesh>(rm, inst);

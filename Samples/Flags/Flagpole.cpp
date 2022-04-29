@@ -15,7 +15,7 @@ void Flagpole::Create(){
     etl::vector<Ref<MeshAsset>, 2> meshes;
     sl.LoadMeshes([](const PreloadedAsset& asset){
         return true;
-    }, [&](Ref<MeshAsset> mesh, const PreloadedAsset & data){
+    }, [&](Ref<MeshAsset> mesh, Ref<PBRMaterialInstance> inst, const PreloadedAsset & data){
         meshes.push_back(mesh);
     });
     

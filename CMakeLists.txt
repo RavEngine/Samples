@@ -175,3 +175,8 @@ add_sample("HelloCube")
 add_sample("Gravity")
 add_sample("SystemInfo")
 add_sample("Shadows")
+add_sample("SceneViewer")
+
+# SceneViewer needs some additional dependencies
+add_subdirectory(lib/nativefiledialog-extended)
+target_link_libraries("RavEngineSceneViewer" PUBLIC nfd)
