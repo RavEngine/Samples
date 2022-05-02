@@ -175,8 +175,14 @@ add_sample("HelloCube")
 add_sample("Gravity")
 add_sample("SystemInfo")
 add_sample("Shadows")
-add_sample("SceneViewer")
 
-# SceneViewer needs some additional dependencies
-add_subdirectory(lib/nativefiledialog-extended)
-target_link_libraries("RavEngineSceneViewer" PUBLIC nfd)
+
+# exlcude the SceneViewer from iOS, tvOS, and UWP
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "tvOS" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore")
+else()
+	add_sample("SceneViewer")
+
+	# SceneViewer needs some additional dependencies
+	add_subdirectory(lib/nativefiledialog-extended EXCLUDE_FROM_ALL)
+	target_link_libraries("RavEngineSceneViewer" PUBLIC nfd)
+endif()
