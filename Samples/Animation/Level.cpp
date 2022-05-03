@@ -28,7 +28,8 @@ Level::Level(){
 	
 	auto lights = CreatePrototype<GameObject>();
 	lights.EmplaceComponent<AmbientLight>().Intensity = 0.2f;
-	lights.EmplaceComponent<DirectionalLight>();
+	auto& dl = lights.EmplaceComponent<DirectionalLight>();
+	dl.SetCastsShadows(true);
     lights.GetTransform().LocalTranslateDelta(vector3(0,0.5,6)).LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(45),0));
     auto& gui = lights.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
