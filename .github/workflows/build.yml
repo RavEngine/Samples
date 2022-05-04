@@ -28,7 +28,7 @@ jobs:
 
   build-linux-arm:
     name: Build Samples for Linux arm64
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -43,10 +43,12 @@ jobs:
       - name: Update APT
         run: sudo apt-get update;
         continue-on-error: true
+      - name: Remove old compilers
+        run: sudo apt remove build-essential
       - name: Install Host Dependencies
-        run: sudo apt-get install cmake:amd64 ninja-build:amd64 libgl1-mesa-dev:amd64 libx11-dev:amd64 gcc:amd64 g++:amd64 -y --no-install-recommends
+        run: sudo apt-get install cmake:amd64 ninja-build:amd64 libgl1-mesa-dev:amd64 libx11-dev:amd64 gcc-8:amd64 g++-8:amd64 gcc-8-aarch64-linux-gnu:amd64 g++-8-aarch64-linux-gnu:amd64 -y --no-install-recommends
       - name: Install Target Dependencies
-        run: sudo apt-get install libgl1-mesa-dev:arm64 libgtk-3-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 gcc-aarch64-linux-gnu:amd64 g++-aarch64-linux-gnu:amd64 -y --no-install-recommends
+        run: sudo apt-get install libgl1-mesa-dev:arm64 libgtk-3-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 -y --no-install-recommends
       - name: Configure
         run: mkdir -p build; mkdir -p build/linuxarm; cd build/linuxarm; export CC=/usr/bin/aarch64-linux-gnu-gcc; export CXX=/usr/bin/aarch64-linux-gnu-g++; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=aarch64 ../.. 
       - name: Build
