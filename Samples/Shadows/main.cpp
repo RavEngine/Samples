@@ -51,7 +51,7 @@ struct Level : public RavEngine::World{
 		tri.GetTransform().LocalTranslateDelta(vector3(-1.5, 0.8, 0))
             .LocalRotateDelta(vector3(deg_to_rad(90), deg_to_rad(90), deg_to_rad(180)))
             .LocalRotateDelta(vector3(0, deg_to_rad(90), 0));
-        
+  
         cube = CreatePrototype<decltype(cube)>();
         auto cubeMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         cubeMat->SetAlbedoColor({0,0,1,1});
@@ -60,8 +60,7 @@ struct Level : public RavEngine::World{
             .LocalTranslateDelta(vector3(1,0.7,0))
             .LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(90),0))
             //.LocalRotateDelta(vector3(0,0,deg_to_rad(45)))
-            .SetLocalScale(0.5);
-            
+            .SetLocalScale(0.5); 
 
 		// create lights and camera
 		camera.EmplaceComponent<CameraComponent>().SetActive(true);
@@ -70,8 +69,10 @@ struct Level : public RavEngine::World{
 		cameraBoom.GetTransform().AddChild(camera);
 
 		auto light = CreatePrototype<GameObject>();
-		light.EmplaceComponent<DirectionalLight>().debugEnabled = false;
-        light.GetComponent<DirectionalLight>().Intensity = 0.8;
+		auto& dl = light.EmplaceComponent<DirectionalLight>();
+		dl.debugEnabled = false;
+        dl.Intensity = 0.8;
+		dl.SetCastsShadows(true);
 		light.EmplaceComponent<AmbientLight>().Intensity = 0.2;
 		light.GetTransform().LocalRotateDelta(vector3(0, 0, deg_to_rad(45))).LocalTranslateDelta(vector3(0,2,0));
         
