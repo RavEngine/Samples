@@ -156,6 +156,7 @@ TestWorld::TestWorld(){
 		
 	dl = CreatePrototype<GameObject>();
 	auto& dll = dl.EmplaceComponent<DirectionalLight>();
+	dll.SetCastsShadows(true);
 	auto amt = deg_to_rad(45);
 	dl.GetTransform().LocalRotateDelta(vector3(amt,0,0)).LocalTranslateDelta(vector3(0,1,1));
 	dll.color = {1,0.5,0};

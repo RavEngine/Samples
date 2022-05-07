@@ -31,7 +31,7 @@ Level::Level(){
 	// lights
 	auto lightEntity = CreatePrototype<GameObject>();
 	lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;
-	lightEntity.EmplaceComponent<DirectionalLight>();
+	lightEntity.EmplaceComponent<DirectionalLight>().SetCastsShadows(true);
 	lightEntity.GetTransform().LocalRotateDelta(vector3{deg_to_rad(35),deg_to_rad(-30),0});
 
 	// create the audio room

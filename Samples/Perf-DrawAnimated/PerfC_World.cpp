@@ -89,6 +89,7 @@ PerfC_World::PerfC_World(){
 	auto& dl = lightEntity.EmplaceComponent<DirectionalLight>();
 	dl.color = {0.7,1,1,1};
 	dl.Intensity = 0.5;
+	dl.SetCastsShadows(true);
 	
 	//load textures
 	
