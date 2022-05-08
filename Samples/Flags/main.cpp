@@ -39,7 +39,7 @@ struct Level : public World{
         
         auto lightEntity = CreatePrototype<GameObject>();
         lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;
-        lightEntity.EmplaceComponent<DirectionalLight>();
+        lightEntity.EmplaceComponent<DirectionalLight>().SetCastsShadows(true);
         lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
         auto guiEntity = CreatePrototype<GameObject>();
