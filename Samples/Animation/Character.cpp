@@ -7,6 +7,7 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
+#include <RavEngine/Constraint.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -209,15 +210,16 @@ void Character::Create() {
     MeshAssetOptions opt;
     opt.scale = 0.4f;
 	handEntity.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-	//auto& handChildEntity = EmplaceComponent<ChildEntityComponent>(handEntity);
-    //TODO: FIX
-    /*
-	auto& handsocket = animcomp.AddSocket("character:hand_r");		// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
-
-	handsocket->AddChild(ComponentHandle<Transform>(handEntity));
-	// since this is just a normal transform, we can add an additional transformation
+	
+	childEntity.EmplaceComponent<ConstraintTarget>();
+	// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
+	auto handProxyEntity = GetWorld()->CreatePrototype<GameObject>();
+	handProxyEntity.EmplaceComponent<SocketConstraint>(childEntity,"character:hand_r");
+	handProxyEntity.GetTransform().AddChild(handEntity);
+   
+	// add an offset for the hand entity
 	handEntity.GetTransform().LocalTranslateDelta(vector3(0,-0.5,0));
-     */
+	
 	// create the animation state machine
 	AnimatorComponent::State
 		idle_state{ CharAnims::Idle, idle_anim },
