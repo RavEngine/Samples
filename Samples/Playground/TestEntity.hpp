@@ -22,7 +22,7 @@
 #include <RavEngine/CTTI.hpp>
 #include <RavEngine/RPCComponent.hpp>
 #include <RavEngine/Debug.hpp>
-#include <uuids.h>
+#include <RavEngine/Uuid.hpp>
 #include <atomic>
 #include <RavEngine/Queryable.hpp>
 
