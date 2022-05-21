@@ -11,7 +11,7 @@ jobs:
         with:
           submodules: true
       - name: Install Dependencies
-        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo apt-get install cmake g++-8 ninja-build libgl1-mesa-dev libgtk-3-dev libasound2-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libegl-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev -y --no-install-recommends 
+        run: sudo add-apt-repository ppa:ubuntu-toolchain-r/test && sudo apt-get update && sudo apt-get install cmake g++-8 ninja-build libgl1-mesa-dev libgtk-3-dev libasound2-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libegl1-mesa-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev -y --no-install-recommends 
       - name: Configure
         run: mkdir -p build; mkdir -p build/linux; cd build/linux; export CC=/usr/bin/gcc-8; export CXX=/usr/bin/g++-8; cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
       - name: Build
