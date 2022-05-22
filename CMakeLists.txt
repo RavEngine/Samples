@@ -177,8 +177,8 @@ add_sample("SystemInfo")
 add_sample("VR")
 add_sample("Shadows")
 
-# exlcude the SceneViewer from iOS, tvOS, and UWP
-if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "tvOS" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore")
+# exlcude the SceneViewer from iOS, tvOS, UWP, and ARM linux 
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "tvOS" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore" OR IS_CROSSCOMP)
 else()
 	add_sample("SceneViewer")
 
