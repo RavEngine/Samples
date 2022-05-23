@@ -18,9 +18,9 @@ void Flagpole::Create(){
     }, [&](Ref<MeshAsset> mesh, Ref<PBRMaterialInstance> inst, const PreloadedAsset & data){
         meshes.push_back(mesh);
     });
-    
-    EmplaceComponent<StaticMesh>(meshes[0],RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
-    EmplaceComponent<StaticMesh>(meshes[1],RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+    auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+    EmplaceComponent<StaticMesh>(meshes[0],mat);
+    EmplaceComponent<StaticMesh>(meshes[1],mat);
     
     // load animation
     auto skeleton = RavEngine::New<SkeletonAsset>("flag.fbx");
