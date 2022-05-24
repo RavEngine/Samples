@@ -54,7 +54,7 @@ struct Level : public World{
         auto doc = gui.AddDocument("ui.rml");
 
         // generate grass blades
-        if (1) {
+        {
             auto grassEntity = CreatePrototype<GameObject>();
             constexpr int nblades = 4096;
             auto grassmesh = MeshAsset::Manager::Get("grass.obj");
@@ -90,7 +90,9 @@ struct Level : public World{
         im->BindAxis("CZ", GetInput(this), &Level::CameraZoom, CID::ANY);
         
         auto ground = CreatePrototype<GameObject>();
-        ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),RavEngine::New<PBRMaterialInstance>( Material::Manager::Get<PBRMaterial>()));
+        auto groundMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        groundMat->SetAlbedoColor({ 92/255.f, 60/255.f, 29/255.f,1});
+        ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),groundMat);
         ground.GetTransform().LocalScaleDelta(vector3(10));
         
         auto flagpole = CreatePrototype<Flagpole>();
