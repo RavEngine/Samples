@@ -85,6 +85,12 @@ struct Level : public RavEngine::World{
         pointLight.GetTransform().LocalTranslateDelta(vector3(-2,1,-0.5));
          */
 
+		auto spotLightEntity = CreatePrototype<GameObject>();
+		auto& spotLight = spotLightEntity.EmplaceComponent<SpotLight>();
+		spotLight.debugEnabled = true;
+		spotLightEntity.GetTransform().LocalTranslateDelta(vector3(0,2,-2)).LocalRotateDelta(vector3(deg_to_rad(30),0,0));
+		spotLight.Intensity = 2;
+
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 		im->AddAxisMap(InputNames::TurnLR, SDL_SCANCODE_D);
 		im->AddAxisMap(InputNames::TurnLR, SDL_SCANCODE_A, -1);

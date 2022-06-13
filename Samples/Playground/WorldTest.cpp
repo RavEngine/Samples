@@ -115,7 +115,7 @@ TestWorld::TestWorld(){
 	anonymous.EmplaceComponent<StaticMesh>(sharedMesh,material);
 	auto& spotlight = anonymous.EmplaceComponent<SpotLight>();
 	spotlight.Intensity = 4;
-	spotlight.radius = 10;
+	spotlight.coneAngle = 10;
 	anonymous.GetTransform().LocalTranslateDelta(vector3(0, 1, 0));
 	
 	InitPhysics();
