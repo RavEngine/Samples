@@ -68,7 +68,7 @@ struct Level : public World{
             view->SetInnerRML(StrFormat(
 R"(
 Platform<br/>
-{} {} {} v{}.{}.{}.{}<br/><br/>
+{} {} v{}.{}.{}.{}<br/><br/>
 
 Core<br/>
 {}x {}<br/>
@@ -82,7 +82,7 @@ Graphics<br/>
 <br/>
 {}
 )",
-                                        SystemInfo::OperatingSystemNameString(), SystemInfo::ArchitectureString(),  SystemInfo::IsMobile()?"Mobile":"Desktop", v.major,v.minor,v.patch,v.extra,
+                                        SystemInfo::OperatingSystemNameString(), SystemInfo::ArchitectureString(), v.major,v.minor,v.patch,v.extra,
                                         
                                         SystemInfo::NumLogicalProcessors(),SystemInfo::CPUBrandString(),
                                         SystemInfo::SystemRAM(),
