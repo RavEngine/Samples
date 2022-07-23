@@ -8,6 +8,7 @@
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/Dialogs.hpp>
+#include <RavEngine/DebugDrawer.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -21,6 +22,8 @@ struct SliderUpdater : public Rml::EventListener{
     }
 };
 
+static DebugDrawer dbgdraw;
+
 struct Level : public World{
     float deltaTime = 0;
     
@@ -32,6 +35,8 @@ struct Level : public World{
     Ref<MeshAsset> mesh;
     NavMeshComponent::Options nvopt;
     ComponentHandle<NavMeshComponent> navMesh;
+	
+	RavEngine::Vector<vector3> path;
     
     void CameraLR(float amt){
         cameraRoot.GetTransform().CalculateWorldMatrix();
@@ -43,7 +48,8 @@ struct Level : public World{
     }
     
     void RecalculateNav(){
-        GetComponent<NavMeshComponent>().UpdateNavMesh(mesh, nvopt);
+        navMesh->UpdateNavMesh(mesh, nvopt);
+		path = navMesh->CalculatePath(vector3(20,0,20), vector3(-20,0,-20));
     }
     
     Level(){
@@ -102,11 +108,8 @@ struct Level : public World{
         nvopt.cellHeight = 0.2;
         mazeEntity.EmplaceComponent<NavMeshComponent>(mesh,nvopt);
         navMesh = ComponentHandle<NavMeshComponent>(mazeEntity);
-        navMesh->debugEnabled = true;
-        auto path = navMesh->CalculatePath(vector3(20,0,20), vector3(-20,0,-20));
-        for(int i = 0; i < path.size(); i++){
-            cout << path[i] << endl;
-        }
+        navMesh->debugEnabled = false;
+		RecalculateNav();
         
         // connect the UI
         auto cellUpdater = new SliderUpdater([&,gh,doc](Rml::Event& evt) mutable{
@@ -164,6 +167,9 @@ struct Level : public World{
     
     void PostTick(float d) final{
         deltaTime = d;
+		for (int i = 0; i < (int)path.size() - 1; i++){
+			dbgdraw.DrawArrow(path[i], path[i+1], 0xFF0000FF);
+		}
     }
 };
 
