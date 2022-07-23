@@ -90,6 +90,7 @@ struct Level : public RavEngine::World{
 		spotLight.debugEnabled = true;
 		spotLightEntity.GetTransform().LocalTranslateDelta(vector3(0,2,-2)).LocalRotateDelta(vector3(deg_to_rad(30),0,0));
 		spotLight.Intensity = 2;
+		auto sfwd = spotLightEntity.GetTransform().WorldForward();
 
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 		im->AddAxisMap(InputNames::TurnLR, SDL_SCANCODE_D);
