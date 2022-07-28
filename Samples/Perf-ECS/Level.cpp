@@ -49,14 +49,14 @@ void PerfA_World::SetECSMode(int mode) {
 
 	switch (mode) {
 	case 0:
-		EmplaceSystem<CalcSystem, SineComponent, CosComponent>();
+		EmplaceSystem<CalcSystem>();
 		break;
 	case 1:
-		EmplaceSystem<SingleSineSystem, SineComponent>();
+		EmplaceSystem<SingleSineSystem>();
 		break;
 	case 2:
-		EmplaceSystem<SingleSineSystem, SineComponent>();
-		EmplaceSystem<SingleCosSystem, CosComponent>();
+		EmplaceSystem<SingleSineSystem>();
+		EmplaceSystem<SingleCosSystem>();
 		break;
 	default:
 		Debug::Fatal("Invalid ECS Mode : {}",mode);
@@ -69,7 +69,7 @@ PerfA_World::PerfA_World() {
 
 	// register system
 	SetECSMode(1);
-	EmplaceTimedSystem<MetricsSystem,GUIComponent>(std::chrono::seconds(1));
+	EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
 
 #ifdef _DEBUG
 	static constexpr size_t num_objects = 600'000;	//reduced for demo because debug builds are slower

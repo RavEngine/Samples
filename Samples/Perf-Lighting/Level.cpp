@@ -113,9 +113,9 @@ Level::Level() {
 	}
 
 	// load Systems
-	EmplaceSystem<SpinSystem,SpinComponent,Transform>();
-	EmplaceSystem<CirculateSystem,CirculateComponent,Transform>();
-	EmplaceTimedSystem<FPSSystem,GUIComponent>(chrono::seconds(1),"ui.rml","metrics");
+	EmplaceSystem<SpinSystem>();
+	EmplaceSystem<CirculateSystem>();
+	EmplaceTimedSystem<FPSSystem>(chrono::seconds(1),"ui.rml","metrics");
 
 	// load lights
 	for (int i = 0; i < 5; i++) {

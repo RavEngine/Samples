@@ -73,7 +73,7 @@ function (add_sample sample_dir)
 	endif()
 	
 	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}" "${CMAKE_CURRENT_LIST_DIR}/Samples/Common")
-	target_compile_features(${APPNAME} PRIVATE cxx_std_17)
+	target_compile_features(${APPNAME} PRIVATE cxx_std_20)
 	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")

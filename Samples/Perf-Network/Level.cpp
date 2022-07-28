@@ -66,7 +66,7 @@ void Level::ServerUpdateGUI()
 void Level::SetupServer()
 {
     CreatePrototype<ManagementRelay>();
-	EmplaceSystem<TweenEntities,InterpolationTransform>();
+	EmplaceSystem<TweenEntities>();
 	GetApp()->networkManager.server->OnClientConnected = [&](HSteamNetConnection) {
 		ServerUpdateGUI();
 	};
@@ -96,8 +96,8 @@ void Level::SetupClient()
 	});
 	// only the clients move objects and need to push changes up
 	// the server will automatically replicate changes from the other clients
-    EmplaceTimedSystem<SyncNetTransforms, NetTransform,Transform,RPCComponent>(std::chrono::milliseconds(100));
-    EmplaceSystem<MoveEntities, PathData,NetworkIdentity,Transform>();
+    EmplaceTimedSystem<SyncNetTransforms>(std::chrono::milliseconds(100));
+    EmplaceSystem<MoveEntities>();
 }
 
 void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin)

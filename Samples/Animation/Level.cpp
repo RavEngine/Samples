@@ -89,7 +89,7 @@ Level::Level(){
 
 	InitPhysics();
     
-    EmplaceTimedSystem<FPSSystem,GUIComponent>(std::chrono::seconds(1), "ui.rml", "metrics");    
+    EmplaceTimedSystem<FPSSystem>(std::chrono::seconds(1), "ui.rml", "metrics");    
 }
 
 void Level::PostTick(float)

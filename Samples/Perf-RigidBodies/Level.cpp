@@ -126,16 +126,16 @@ Level::Level(){
 	InitPhysics();
 	
 	// load systems
-	EmplaceSystem<RotationSystem,RotationComponent,Transform>();
+	EmplaceSystem<RotationSystem>();
     
     CreateDependency<RotationSystem, PhysicsLinkSystemRead>();
     CreateDependency<RotationSystem, PhysicsLinkSystemWrite>();
     
-	EmplaceSystem<RespawnSystem,RigidBodyDynamicComponent,Transform>();
+	EmplaceSystem<RespawnSystem>();
     CreateDependency<RespawnSystem, PhysicsLinkSystemRead>();
     CreateDependency<RespawnSystem, PhysicsLinkSystemWrite>();
     
-	EmplaceTimedSystem<SpawnerSystem,SpawnerMarker>(std::chrono::milliseconds(50),this,ComponentHandle<GUIComponent>(camEntity));
-    EmplaceTimedSystem<FPSSystem,GUIComponent>(std::chrono::seconds(1),"ui.rml","metrics");
+	EmplaceTimedSystem<SpawnerSystem>(std::chrono::milliseconds(50),this,ComponentHandle<GUIComponent>(camEntity));
+    EmplaceTimedSystem<FPSSystem>(std::chrono::seconds(1),"ui.rml","metrics");
 
 }

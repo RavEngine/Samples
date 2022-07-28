@@ -44,8 +44,6 @@ PerfB_World::PerfB_World() {
 	currentMesh->Exchange(cube);
     currentMesh->destroyOnDestruction = false;
 	
-	//systemManager.EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
-
 	// spawn demo entities
     Debug::Log("Spawning {} instances on entity",num_entities);
     CreatePrototype<InstanceEntity>(currentMesh,matinst,num_entities);
@@ -104,8 +102,8 @@ PerfB_World::PerfB_World() {
 	GetApp()->inputManager = im;
 
     // load systems
-    EmplaceSystem<PlayerSystem,Player>();
-    EmplaceTimedSystem<MetricsSystem,GUIComponent>(std::chrono::seconds(1));
+    EmplaceSystem<PlayerSystem>();
+    EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
     
     ExportTaskGraph(cout);
 }

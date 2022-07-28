@@ -136,7 +136,7 @@ struct Level : public World{
             star.GetComponent<RigidBodyDynamicComponent>().SetLinearVelocity(vector3(startVel[i],0,0),true);
         }
        
-        EmplaceSystem<GravitySystem,RigidBodyDynamicComponent>();
+        EmplaceSystem<GravitySystem>();
         CreateDependency<GravitySystem,PhysicsLinkSystemRead>();
         InitPhysics();
         

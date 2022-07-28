@@ -38,7 +38,7 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
 
 ## How to build the samples
 1. Ensure RavEngine [supports your platform](https://github.com/ravbug/ravengine#supported-platforms).
-2. Ensure you have the minimum required CMake version (see `CMakeLists.txt`), as well as a C++17-compatible compiler and required SDKs for your platform. See the RavEngine repository for [additional dependency requirements](https://github.com/ravbug/ravengine#supported-platforms) for your platform.  
+2. Ensure you have the minimum required CMake version (see `CMakeLists.txt`), as well as a C++20-compatible compiler and required SDKs for your platform. See the RavEngine repository for [additional dependency requirements](https://github.com/ravbug/ravengine#supported-platforms) for your platform.  
 3. Execute in terminal: `git clone https://github.com/Ravbug/RavEngine-Samples --depth=1 --recurse-submodules` 
    - Do not use GitHub's Download as Zip, this will not include the required submodules.
 4. Navigate your terminal into the `RavEngine-Samples/config` directory, and execute the build script for your system.

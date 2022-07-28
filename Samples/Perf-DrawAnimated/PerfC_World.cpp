@@ -115,8 +115,8 @@ PerfC_World::PerfC_World(){
         CreatePrototype<DemoObject>(inst,true);
 	}
 			
-	EmplaceSystem<SpinSystem,SpinComponent, RavEngine::Transform>();
-    EmplaceSystem<PlayerSystem,Player>();
+	EmplaceSystem<SpinSystem>();
+    EmplaceSystem<PlayerSystem>();
 	
 	//bind inputs
 	Ref<InputManager> im = RavEngine::New<InputManager>();

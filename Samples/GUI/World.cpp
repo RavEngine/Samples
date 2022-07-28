@@ -55,7 +55,7 @@ struct FPSSystem : public AutoCTTI {
 	GetApp()->inputManager = im;
 	
 	//FPS updating system
-	EmplaceTimedSystem<FPSSystem,SingleEntityMarker>(std::chrono::seconds(1));
+	EmplaceTimedSystem<FPSSystem>(std::chrono::seconds(1));
 
 	Debug::Log("{} with ID: {}",type_name<GUIComponent>(),CTTI<GUIComponent>());
 }
