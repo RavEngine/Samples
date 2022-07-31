@@ -4,7 +4,7 @@ on: push
 jobs:
   build-linux:
     name: Build Samples for Linux x64
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
 
   build-linux-arm:
     name: Build Samples for Linux arm64
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
