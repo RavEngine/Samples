@@ -59,7 +59,7 @@ jobs:
             sudo apt-get update 
         continue-on-error: true
       - name: Install Host Dependencies
-        run: sudo apt-get install cmake:amd64 ninja-build:amd64 libx11-dev:amd64 libgl1-mesa-dev gcc-11:amd64 g++-11:amd64 gcc-11-aarch64-linux-gnu:amd64 g++-11-aarch64-linux-gnu:amd64 -y --no-install-recommends
+        run: sudo apt-get install cmake:amd64 ninja-build:amd64 libx11-dev:amd64 libgl1-mesa-dev gcc-11:amd64 g++-11:amd64 gcc-10-aarch64-linux-gnu:amd64 g++-10-aarch64-linux-gnu:amd64 -y --no-install-recommends
       - name: Install Target Dependencies
         run: sudo apt-get install libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 libegl1-mesa-dev:arm64 libvulkan-dev:arm64 libx11-xcb-dev:arm64 libxcb-dri2-0-dev:arm64 libxcb-glx0-dev:arm64 libxcb-icccm4-dev:arm64 libxcb-keysyms1-dev:arm64 libxcb-randr0-dev:arm64 libxrandr-dev:arm64 libxxf86vm-dev:arm64 mesa-common-dev:arm64 -y --no-install-recommends
       - name: Configure
@@ -67,7 +67,7 @@ jobs:
               mkdir -p build
               mkdir -p build/linuxarm
               cd build/linuxarm
-              CC=/usr/bin/aarch64-linux-gnu-gcc-11 CXX=/usr/bin/aarch64-linux-gnu-g++-11 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=aarch64 ../.. 
+              CC=/usr/bin/aarch64-linux-gnu-gcc-10 CXX=/usr/bin/aarch64-linux-gnu-g++-10 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=aarch64 ../.. 
       - name: Build
         run: cd build/linuxarm && cmake --build . --config release --target install 
       - name: Upload Artifacts
@@ -276,16 +276,27 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir build; cd build; mkdir uwp; cd uwp; cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. ; cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\..;
+        run: |
+              mkdir build
+              cd build
+              mkdir uwp
+              cd uwp
+              cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. 
+              cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\..
       - name: Build & Publish
-        run: cd build\uwp ; & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x64"
+        run: |
+              cd build\uwp 
+              & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x64"
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_uwp64
           path: build\uwp\AppPackages
       - name: Prepare Transfer.sh upload
-        run: Compress-Archive -Path build\uwp\AppPackages\ -DestinationPath SamplesUWP64.zip
+        run: |
+              Move-Item -Path build\uwp\AppPackages\ -Destination .
+              Remove-Item -Path build -Recursive
+              Compress-Archive -Path AppPackages\ -DestinationPath SamplesUWP64.zip
       - name: Upload to Transfer.sh
         run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_UWP64.zip -Method PUT -InFile SamplesUWP64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
 
@@ -300,15 +311,26 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir build; cd build; mkdir uwp; cd uwp; cmake -AARM64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. ; cmake -Wno-dev ..\..;
+        run: | 
+              mkdir build
+              cd build
+              mkdir uwp
+              cd uwp
+              cmake -AARM64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. 
+              cmake -Wno-dev ..\..;
       - name: Build & Publish
-        run: cd build\uwp ; & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="ARM64"
+        run: |
+              cd build\uwp 
+              & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="ARM64"
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_uwp64
           path: build\uwp\AppPackages
       - name: Prepare Transfer.sh upload
-        run: Compress-Archive -Path build\uwp\AppPackages\ -DestinationPath SamplesUWPARM64.zip
+        run: |
+              Move-Item -Path build\uwp\AppPackages\ -Destination .
+              Remove-Item -Path build -Recursive
+              Compress-Archive -Path AppPackages\ -DestinationPath SamplesUWPARM64.zip
       - name: Upload to Transfer.sh
         run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_UWPARM64.zip -Method PUT -InFile SamplesUWPARM64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
