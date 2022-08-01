@@ -14,9 +14,9 @@ using namespace RavEngine;
 using namespace std;
 
 template<typename T>
-struct SliderUpdater : public Rml::EventListener{
+struct RMLUpdater : public Rml::EventListener{
     T func;
-    SliderUpdater(const T& f) : func(f){}
+    RMLUpdater(const T& f) : func(f){}
     void ProcessEvent(Rml::Event& evt) final{
         func(evt);
     }
@@ -27,7 +27,7 @@ static DebugDrawer dbgdraw;
 struct Level : public World{
     float deltaTime = 0;
     
-    float cameraSpeed = 0.02;
+    float cameraSpeed = 0.02f;
     
     GameObject cameraRoot;
     GameObject cameraGimball;
@@ -37,6 +37,7 @@ struct Level : public World{
     ComponentHandle<NavMeshComponent> navMesh;
 	
 	RavEngine::Vector<vector3> path;
+    vector3 startPos{ 20,0,20 }, endPos{ -20,0,-20 };
     
     void CameraLR(float amt){
         cameraRoot.GetTransform().CalculateWorldMatrix();
@@ -49,7 +50,40 @@ struct Level : public World{
     
     void RecalculateNav(){
         navMesh->UpdateNavMesh(mesh, nvopt);
-		path = navMesh->CalculatePath(vector3(20,0,20), vector3(-20,0,-20));
+		path = navMesh->CalculatePath(startPos, endPos);
+    }
+
+    vector2 getMousePos() const {
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        return { x,y };
+    }
+
+    std::optional<PhysicsSolver::RaycastHit> RaycastFromPixel(const vector2& pixel) {
+        auto cam = cameraEntity.GetComponent<CameraComponent>();
+        auto camRay = cam.ScreenPointToRay(pixel);
+        auto camPos = cameraEntity.GetTransform().GetWorldPosition();
+        PhysicsSolver::RaycastHit out_hit;
+        bool hit = Solver.Raycast(camPos, camRay.second, 1000, out_hit);
+        std::optional<PhysicsSolver::RaycastHit> hitobj;
+        if (hit) {
+            hitobj.emplace(std::move(out_hit));
+        }
+        return hitobj;
+    }
+
+    void SelectStart() {
+        if (auto pos = RaycastFromPixel(getMousePos())) {
+            startPos = pos.value().hitPosition;
+            RecalculateNav();
+        }
+    }
+
+    void SelectEnd() {
+        if (auto pos = RaycastFromPixel(getMousePos())) {
+            endPos = pos.value().hitPosition;
+            RecalculateNav();
+        }
     }
     
     Level(){
@@ -67,7 +101,7 @@ struct Level : public World{
         cameraGimball.GetTransform().AddChild(cameraEntity);
         
         auto lightEntity = CreatePrototype<GameObject>();
-        lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;
+        lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2f;
         lightEntity.EmplaceComponent<DirectionalLight>().SetCastsShadows(true);
         lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
@@ -79,19 +113,24 @@ struct Level : public World{
         auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
         im->AddAxisMap("MouseX", Special::MOUSEMOVE_X);
         im->AddAxisMap("MouseY", Special::MOUSEMOVE_Y);
+        im->AddAxisMap("CUD", SDL_SCANCODE_W);
+        im->AddAxisMap("CUD", SDL_SCANCODE_S, -1);
+        im->AddAxisMap("CLR", SDL_SCANCODE_A, -1);
+        im->AddAxisMap("CLR", SDL_SCANCODE_D);
+
+        im->AddActionMap("ClickL", SDL_BUTTON_LEFT);
+        im->AddActionMap("ClickR", SDL_BUTTON_RIGHT);
+
         im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY);
         im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY);
         im->BindAnyAction(gui.GetData());
-        
-        im->AddAxisMap("CUD", SDL_SCANCODE_W);
-        im->AddAxisMap("CUD", SDL_SCANCODE_S,-1);
-        im->AddAxisMap("CLR", SDL_SCANCODE_A,-1);
-        im->AddAxisMap("CLR", SDL_SCANCODE_D);
-        
+
         auto owner = GetInput(this);
         
         im->BindAxis("CUD", owner, &Level::CameraUD, CID::ANY);
         im->BindAxis("CLR", owner, &Level::CameraLR, CID::ANY);
+        im->BindAction("ClickL", owner, &Level::SelectStart, ActionState::Pressed, CID::ANY);
+        im->BindAction("ClickR", owner, &Level::SelectEnd, ActionState::Pressed, CID::ANY);
         
         // create the navigation object
         auto mazeEntity = CreatePrototype<GameObject>();
@@ -112,7 +151,7 @@ struct Level : public World{
 		RecalculateNav();
         
         // connect the UI
-        auto cellUpdater = new SliderUpdater([&,gh,doc](Rml::Event& evt) mutable{
+        auto cellUpdater = new RMLUpdater([&,gh,doc](Rml::Event& evt) mutable{
             auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
             auto value = std::stof(field->GetValue());
             gh->EnqueueUIUpdate([=]{
@@ -128,7 +167,7 @@ struct Level : public World{
         });
         doc->GetElementById("cellSize")->AddEventListener(Rml::EventId::Change, cellUpdater);
         
-        auto radiusUpdater = new SliderUpdater([&,gh,doc](Rml::Event& evt) mutable{
+        auto radiusUpdater = new RMLUpdater([&,gh,doc](Rml::Event& evt) mutable{
             auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
             auto value = std::stof(field->GetValue());
             gh->EnqueueUIUpdate([=]{
@@ -143,7 +182,7 @@ struct Level : public World{
         });
         doc->GetElementById("agentRadius")->AddEventListener(Rml::EventId::Change, radiusUpdater);
         
-        auto slopeUpdater = new SliderUpdater([&,gh,doc](Rml::Event& evt) mutable{
+        auto slopeUpdater = new RMLUpdater([&,gh,doc](Rml::Event& evt) mutable{
             auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
             auto value = std::stof(field->GetValue());
             gh->EnqueueUIUpdate([=]{
@@ -157,6 +196,10 @@ struct Level : public World{
            
         });
         doc->GetElementById("maxSlope")->AddEventListener(Rml::EventId::Change, slopeUpdater);
+
+        doc->GetElementById("showNav")->AddEventListener(Rml::EventId::Change, new RMLUpdater([this](Rml::Event& evt) mutable {
+            navMesh->debugEnabled = evt.GetParameter("value", false);
+        }));
         
         auto ball = CreatePrototype<GameObject>();
         ball.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())).GetMaterial()->SetAlbedoColor({1,0,0,1});
@@ -170,6 +213,14 @@ struct Level : public World{
 		for (int i = 0; i < (int)path.size() - 1; i++){
 			dbgdraw.DrawArrow(path[i], path[i+1], 0xFF0000FF);
 		}
+        {
+            matrix4 transform(1);
+            dbgdraw.DrawSphere(glm::translate(transform, startPos), 0xFF0000FF, 3);
+        }
+        {
+            matrix4 transform(1);
+            dbgdraw.DrawSphere(glm::translate(transform, endPos), 0x00FF00FF, 3);
+        }
     }
 };
 

@@ -23,5 +23,8 @@
         Max Slope
         <input id="maxSlope" type="range" min="0" max="90" step="1" value="45" />
         <v id="maxSlopeDisp" />
+      
+        <br/>
+        <label><input type="checkbox" id="showNav" value="1"></input>Show Navmesh</label>
     </body>
 </rml>
