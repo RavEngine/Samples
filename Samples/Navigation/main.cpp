@@ -54,15 +54,9 @@ struct Level : public World{
 		path = navMesh->CalculatePath(startPos, endPos);
     }
 
-    vector2 getMousePos() const {
-        int x, y;
-        SDL_GetMouseState(&x, &y);
-        return { x,y };
-    }
-
     std::optional<PhysicsSolver::RaycastHit> RaycastFromPixel(const vector2& pixel) {
         auto cam = cameraEntity.GetComponent<CameraComponent>();
-        auto camRay = cam.ScreenPointToRay(pixel * GetApp()->GetRenderEngine().GetDPIScale());
+        auto camRay = cam.ScreenPointToRay(pixel);
         auto camPos = cameraEntity.GetTransform().GetWorldPosition();
         PhysicsSolver::RaycastHit out_hit;
         bool hit = Solver.Raycast(camPos, camRay.second, 1000, out_hit);
@@ -74,14 +68,14 @@ struct Level : public World{
     }
 
     void SelectStart() {
-        if (auto pos = RaycastFromPixel(getMousePos())) {
+        if (auto pos = RaycastFromPixel(InputManager::GetMousePosPixels())) {
             startPos = pos.value().hitPosition;
             RecalculateNav();
         }
     }
 
     void SelectEnd() {
-        if (auto pos = RaycastFromPixel(getMousePos())) {
+        if (auto pos = RaycastFromPixel(InputManager::GetMousePosPixels())) {
             endPos = pos.value().hitPosition;
             RecalculateNav();
         }
