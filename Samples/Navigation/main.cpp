@@ -35,6 +35,7 @@ struct Level : public World{
     Ref<MeshAsset> mesh;
     NavMeshComponent::Options nvopt;
     ComponentHandle<NavMeshComponent> navMesh;
+    PhysicsBodyComponent::ColliderHandle<SphereCollider> ballCollider;
 	
 	RavEngine::Vector<vector3> path;
     vector3 startPos{ 20,0,20 }, endPos{ -20,0,-20 };
@@ -61,7 +62,7 @@ struct Level : public World{
 
     std::optional<PhysicsSolver::RaycastHit> RaycastFromPixel(const vector2& pixel) {
         auto cam = cameraEntity.GetComponent<CameraComponent>();
-        auto camRay = cam.ScreenPointToRay(pixel);
+        auto camRay = cam.ScreenPointToRay(pixel * GetApp()->GetRenderEngine().GetDPIScale());
         auto camPos = cameraEntity.GetTransform().GetWorldPosition();
         PhysicsSolver::RaycastHit out_hit;
         bool hit = Solver.Raycast(camPos, camRay.second, 1000, out_hit);
@@ -150,6 +151,13 @@ struct Level : public World{
         navMesh->debugEnabled = false;
 		RecalculateNav();
         
+        // spawn the agent
+        auto ball = CreatePrototype<GameObject>();
+        ball.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())).GetMaterial()->SetAlbedoColor({1,0,0,1});
+        ballCollider = ball.EmplaceComponent<RigidBodyDynamicComponent>().EmplaceCollider<SphereCollider>(1,physmat);
+        ball.GetComponent<RigidBodyDynamicComponent>().debugEnabled = true;
+        ball.GetTransform().LocalTranslateDelta(vector3(1,10,1));
+        
         // connect the UI
         auto cellUpdater = new RMLUpdater([&,gh,doc](Rml::Event& evt) mutable{
             auto field = static_cast<Rml::ElementFormControlInput*>(evt.GetTargetElement());
@@ -173,8 +181,9 @@ struct Level : public World{
             gh->EnqueueUIUpdate([=]{
                 doc->GetElementById("agentRadiusDisp")->SetInnerRML(field->GetValue());
             });
-            GetApp()->DispatchMainThread([value,this]{
-                
+            GetApp()->DispatchMainThread([value,this/*,ball,physmat*/]{
+               // ball.GetComponent<RigidBodyDynamicComponent>().DestroyCollider(ballCollider);
+                //ballCollider = ball.GetComponent<RigidBodyDynamicComponent>().EmplaceCollider<SphereCollider>(value,physmat);
                 nvopt.agent.radius = value;
                 RecalculateNav();
             });
@@ -200,11 +209,6 @@ struct Level : public World{
         doc->GetElementById("showNav")->AddEventListener(Rml::EventId::Change, new RMLUpdater([this](Rml::Event& evt) mutable {
             navMesh->debugEnabled = evt.GetParameter("value", false);
         }));
-        
-        auto ball = CreatePrototype<GameObject>();
-        ball.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())).GetMaterial()->SetAlbedoColor({1,0,0,1});
-        ball.EmplaceComponent<RigidBodyDynamicComponent>().EmplaceCollider<SphereCollider>(1,physmat);
-        ball.GetTransform().LocalTranslateDelta(vector3(1,10,1));
         
     }
     
