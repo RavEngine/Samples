@@ -16,15 +16,14 @@ void BotPlayer::Tick(float scale){
     auto worldpos = GetOwner().GetTransform().GetWorldPosition();
     float closestDist = 1000;
     
-    auto filterfn = [&](auto fps, const auto& puck, const auto& transform) mutable{
-        auto dist = glm::distance(transform.GetWorldPosition(), goalpos);
-        if (dist <= closestDist){
-            closestDist = dist;
-            closestPuck = puck.GetOwner();
-        }
-    };
 
-    GetOwner().GetWorld()->Filter<PuckComponent,Transform>(filterfn);
+    GetOwner().GetWorld()->Filter([&](float fps, const PuckComponent& puck, const Transform& transform) mutable {
+		auto dist = glm::distance(transform.GetWorldPosition(), goalpos);
+		if (dist <= closestDist) {
+			closestDist = dist;
+			closestPuck = puck.GetOwner();
+		}
+	});
 
 	//if puck is on bot's side of the field, move towards that puck
 	auto pos = closestPuck.GetTransform().GetWorldPosition();

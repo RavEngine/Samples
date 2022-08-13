@@ -43,24 +43,23 @@ struct GravitySystem : public AutoCTTI{
         auto world = body.GetOwner().GetWorld();
         auto myPos = body.GetOwner().GetTransform().GetWorldPosition();
         
-        auto fn = [&](float, const auto& b){
-            if (&b != &body){
+        world->Filter<>([&](float, const RigidBodyDynamicComponent& b) {
+            if (&b != &body) {
                 // add a force corresponding to the mass of that other body
                 auto otherPos = b.GetOwner().GetTransform().GetWorldPosition();
-                
+
                 // calculate M/r^2 * r^
                 auto r = glm::distance(otherPos, myPos);
-                
-                if (r < 0.1){
+
+                if (r < 0.1) {
                     return;
                 }
-                
+
                 auto rhat = glm::normalize(otherPos - myPos);
-                auto vec =(b.GetMass()/(r*r)) * rhat;
+                auto vec = (b.GetMass() / (r * r)) * rhat;
                 body.AddForce(vec);
             }
-        };
-        world->Filter<RigidBodyDynamicComponent>(fn);
+        });
     }
 };
 

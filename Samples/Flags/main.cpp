@@ -64,6 +64,8 @@ struct Level : public World{
                 auto& transform = mesh.AddInstance();
                 transform.translate = decltype(soatransform::translate){Random::get(-10.0,10.0), 0, Random::get(-10.0, 10.0)};
                 transform.rotate = quat_identity();
+                transform.rotate.w = 1;
+                transform.rotate.y = Random::get(-0.75,0.75);
                 constexpr float scale = 0.3;
                 transform.scale = decltype(soatransform::scale)(Random::get(scale, scale * 2), Random::get(scale * 0.3, scale * 1.6), scale);
             }
