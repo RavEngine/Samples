@@ -3,8 +3,9 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/App.hpp>
 #include <chrono>
-#include "BasicEntity.hpp"
 #include "Camera.hpp"
+#include <RavEngine/StaticMesh.hpp>
+#include <RavEngine/Utilities.hpp>
 #include "CustomMaterials.hpp"
 
 using namespace std;
@@ -16,6 +17,14 @@ static constexpr uint32_t num_entities =
 #else
 200000;
 #endif
+
+struct InstanceEntity : public RavEngine::GameObject {
+	void Create(Ref<RavEngine::MeshAsset> mesh, Ref<InstanceColorMatInstance> matinst) {
+		GameObject::Create();
+		auto& ism = EmplaceComponent<RavEngine::StaticMesh>(mesh, matinst);
+	}
+};
+
 
 struct MetricsSystem : public AutoCTTI {
 	inline void operator()(float fpsScale, GUIComponent& gui) const{
@@ -45,8 +54,24 @@ PerfB_World::PerfB_World() {
     currentMesh->destroyOnDestruction = false;
 	
 	// spawn demo entities
-    Debug::Log("Spawning {} instances on entity",num_entities);
-    CreatePrototype<InstanceEntity>(currentMesh,matinst,num_entities);
+
+	int32_t range = 200;
+
+    Debug::Log("Spawning {} instances",num_entities);
+	for (uint32_t i = 0; i < num_entities; i++) {
+		auto e = CreatePrototype<InstanceEntity>(currentMesh, matinst);
+		auto& transform = e.GetTransform();
+
+		vector3 pos;
+		pos.x = RavEngine::Random::get(-range, range);
+		pos.y = RavEngine::Random::get(-range, range);
+		pos.z = RavEngine::Random::get(-range, range);
+
+		vector3 rot(deg_to_rad(pos.x), deg_to_rad(pos.y), deg_to_rad(pos.z));
+
+		transform.SetLocalPosition(pos);
+		transform.SetLocalRotation(rot);
+	}
 
     auto player = CreatePrototype<Camera>();
 
@@ -104,6 +129,4 @@ PerfB_World::PerfB_World() {
     // load systems
     EmplaceSystem<PlayerSystem>();
     EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
-    
-    ExportTaskGraph(cout);
 }

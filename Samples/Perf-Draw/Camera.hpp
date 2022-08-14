@@ -44,12 +44,12 @@ struct Camera : public RavEngine::GameObject {
 		EmplaceComponent<Player>();
 
         auto& ctr = cameraBoom.GetTransform();
-		ctr.LocalTranslateDelta(vector3(0, 0, 50));
+		ctr.LocalTranslateDelta(vector3(0, 0, 150));
         GetTransform().AddChild(cameraBoom);
 
 		auto& camera = cameraBoom.EmplaceComponent<RavEngine::CameraComponent>();
 		camera.SetActive(true);
-		camera.farClip = 500;
+		camera.farClip = 800;
 	}
 };
 

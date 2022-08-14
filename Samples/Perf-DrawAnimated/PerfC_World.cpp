@@ -21,7 +21,7 @@ STATIC(PerfC_World::paused) = false;
 
 static std::random_device rd; // obtain a random number from hardware
 static std::mt19937 gen(rd()); // seed the generator
-static std::uniform_int_distribution<> rng(-40, 40);
+static std::uniform_int_distribution<> rng(-100, 100);
 static std::uniform_int_distribution<> meshrng(0, PerfC_World::num_meshes - 1);
 static std::uniform_int_distribution<> texturerng(0,PerfC_World::num_textures - 1);
 static std::uniform_real_distribution<> spinrng(deg_to_rad(-1), deg_to_rad(1));
@@ -110,7 +110,7 @@ PerfC_World::PerfC_World(){
 	}
 	
 	//spawn the lights
-	for(int i = 0; i < 3; i++){
+	for(int i = 0; i < 10; i++){
 		Ref<DemoMaterialInstance> inst = materialInstances[texturerng(gen)];
         CreatePrototype<DemoObject>(inst,true);
 	}
