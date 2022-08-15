@@ -55,20 +55,21 @@ struct Level : public World{
 
         // generate grass blades
         {
-            auto grassEntity = CreatePrototype<GameObject>();
-            constexpr int nblades = 4096;
-            auto grassmesh = MeshAsset::Manager::Get("grass.obj");
-            auto& mesh = grassEntity.EmplaceComponent<InstancedStaticMesh>(grassmesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>("grass")));
-            mesh.Reserve(nblades);
-            for (int i = 0; i < nblades; i++) {
-                auto& transform = mesh.AddInstance();
-                transform.translate = decltype(soatransform::translate){Random::get(-10.0,10.0), 0, Random::get(-10.0, 10.0)};
-                transform.rotate = quat_identity();
-                transform.rotate.w = 1;
-                transform.rotate.y = Random::get(-0.75,0.75);
-                constexpr float scale = 0.3;
-                transform.scale = decltype(soatransform::scale)(Random::get(scale, scale * 2), Random::get(scale * 0.3, scale * 1.6), scale);
-            }
+			constexpr int nblades = 4096;
+			constexpr float scale = 0.3;
+			auto grassmesh = MeshAsset::Manager::Get("grass.obj");
+			auto grassMeshInstance = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>("grass"));
+			
+			for (int i = 0; i < nblades; i++) {
+				auto grassEntity = CreatePrototype<GameObject>();
+				auto& mesh = grassEntity.EmplaceComponent<StaticMesh>(grassmesh,grassMeshInstance);
+
+				auto& transform = grassEntity.GetTransform();
+
+				transform.SetLocalPosition({Random::get(-10.0,10.0), 0, Random::get(-10.0, 10.0)});
+				transform.SetWorldRotation(vector3{0,Random::get(-0.75f,0.75f),0});
+				transform.SetLocalScale({Random::get(scale, scale * 2), Random::get(scale * 0.3, scale * 1.6), scale});
+			}
         }
         
         ComponentHandle<GUIComponent> gh(guiEntity);
