@@ -29,7 +29,7 @@ struct ObjectMarker : public ComponentWithOwner {
 struct StaticMeshEntity : public GameObject {
 	void Create(Ref<MeshAsset> mesh, Ref<PBRMaterialInstance> mat) {
         GameObject::Create();
-		EmplaceComponent<StaticMesh>(mesh, mat).Enabled = false;
+		EmplaceComponent<StaticMesh>(mesh, mat).SetEnabled(false);
 		EmplaceComponent<SpinComponent>();
 		EmplaceComponent<ObjectMarker>();
 		constexpr float dist = 1.0;
@@ -59,11 +59,11 @@ Level::Level() {
 
 			const auto objects = world->GetAllComponentsOfType<ObjectMarker>();
 			for (const auto& obj : *objects.value()) {
-				obj.GetOwner().GetComponent<StaticMesh>().Enabled = false;
+				obj.GetOwner().GetComponent<StaticMesh>().SetEnabled(false);
 			}
 			int i = 1;
 			for (const auto& obj : *objects.value()) {
-				obj.GetOwner().GetComponent<StaticMesh>().Enabled = true;
+				obj.GetOwner().GetComponent<StaticMesh>().SetEnabled(true);
 				if (i >= value) {
 					break;
 				}
@@ -108,7 +108,7 @@ Level::Level() {
 	for (int i = 0; i < 150; i++) {
 		auto e = CreatePrototype<StaticMeshEntity>(hmesh, hmat);
 		if (i == 0) {
-			e.GetComponent<StaticMesh>().Enabled = true;
+			e.GetComponent<StaticMesh>().SetEnabled(true);
 		}
 	}
 
