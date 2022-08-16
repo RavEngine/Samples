@@ -234,7 +234,7 @@ jobs:
           name: RavEngine_Samples_win64
           path: |
                 build\win\release\RavEngine*.exe 
-                build\win\release\RavEngine*.zip
+                build\win\release\RavEngine*.rvedata
       - name: Prepare Transfer.sh upload
         run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata -DestinationPath SamplesWin64.zip
       - name: Upload to Transfer.sh
@@ -258,7 +258,7 @@ jobs:
           name: RavEngine_Samples_winARM64
           path: |
                 build\win\release\RavEngine*.exe 
-                build\win\release\RavEngine*.zip
+                build\win\release\RavEngine*.rvedata
       - name: Prepare Transfer.sh upload
         run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata -DestinationPath SamplesWinARM64.zip
       - name: Upload to Transfer.sh
