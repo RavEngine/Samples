@@ -24,7 +24,8 @@ void GameWorld::OnActivate(){
 	cameraActor.EmplaceComponent<AudioListener>();
 	cameraBoom.GetTransform().SetWorldPosition(vector3(0,0,0));
 	
-	cameraBoom.GetTransform().AddChild(cameraActor).LocalTranslateDelta(vector3(0,3,3)).LocalRotateDelta(vector3(deg_to_rad(-90),0,0));
+	cameraActor.GetTransform().SetWorldRotation(vector3(deg_to_rad(-90),0,0));
+	cameraBoom.GetTransform().AddChild(cameraActor).LocalTranslateDelta(vector3(0,3,0)).LocalRotateDelta(vector3(deg_to_rad(-90),deg_to_rad(90),0));
 		
 	//create the puck
 	puck.GetTransform().LocalTranslateDelta(vector3(0,3,0));
@@ -36,16 +37,17 @@ void GameWorld::OnActivate(){
 		cameraBoom.GetTransform().SetLocalRotation(vector3(deg_to_rad(d),deg_to_rad(90),0));
 		cameraActor.GetTransform().SetLocalPosition(vector3(0,p,0));
 	},90,15);
-	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,7);
+	t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,4);
 	
 	auto lightmain = CreatePrototype<GameObject>();
 	auto& key = lightmain.EmplaceComponent<DirectionalLight>();
 	key.Intensity = 1;
 	key.color = {1,0.6,0.404,1};
+	key.debugEnabled = true;
 	auto& fill = lightmain.EmplaceComponent<AmbientLight>();
 	fill.Intensity=0.4;
 	fill.color = {0,0,1,1};
-	lightmain.GetTransform().LocalRotateDelta(vector3(deg_to_rad(45),0,deg_to_rad(-45)));
+	lightmain.GetTransform().LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(45),0));
 	auto& room = lightmain.EmplaceComponent<AudioRoom>();
 	room.SetRoomDimensions(vector3(30,30,30));
 	//room.WallMaterials()[0] = RoomMat::kMarble;
