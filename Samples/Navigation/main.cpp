@@ -36,6 +36,10 @@ struct Level : public World{
     NavMeshComponent::Options nvopt;
     ComponentHandle<NavMeshComponent> navMesh;
     PhysicsBodyComponent::ColliderHandle<SphereCollider> ballCollider;
+    
+    Ref<PBRMaterialInstance> dottedLineMat, targetBeginMat, targetEndMat;
+    GameObject targetBegin, targetEnd;
+    
 	
 	RavEngine::Vector<vector3> path;
     vector3 startPos{ 20,0,20 }, endPos{ -20,0,-20 };
@@ -52,6 +56,7 @@ struct Level : public World{
     void RecalculateNav(){
         navMesh->UpdateNavMesh(mesh, nvopt);
 		path = navMesh->CalculatePath(startPos, endPos);
+        DisplayNavPathWithDottedLine();
     }
 
     std::optional<PhysicsSolver::RaycastHit> RaycastFromPixel(const vector2& pixel) {
@@ -81,11 +86,57 @@ struct Level : public World{
         }
     }
     
+    void DisplayNavPathWithDottedLine(){
+        struct DottedLineMarker : RavEngine::ComponentWithOwner{
+            DottedLineMarker(entity_t owner) : ComponentWithOwner(owner){}
+        };
+        // delete all the previous dots
+        if (auto allDots = GetAllComponentsOfType<DottedLineMarker>()){
+            for(const auto& dot : **allDots){
+                dot.GetOwner().Destroy();
+            }
+        }
+        
+        auto drawDottedLine = [this](const vector3& start, const vector3& end, decimalType step){
+            vector3 point = start;
+            auto dir = glm::normalize(start - end);
+            const auto linelen = glm::length2(end - start);
+            while(linelen > glm::length2(point - start)){ // use length2 for squared length
+                auto dot = CreatePrototype<GameObject>();
+                dot.GetTransform().SetWorldPosition(point);
+                dot.GetTransform().SetLocalScale({0.3,0.3,0.3});
+                dot.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),dottedLineMat);
+                dot.EmplaceComponent<DottedLineMarker>();
+                point -= dir * step;
+            }
+        };
+        
+        for(int i = 0; i < path.size()-1; i++){
+            drawDottedLine(path[i], path[i+1], 1.5);
+        }
+        targetBegin.GetTransform().SetWorldPosition(startPos);
+        targetEnd.GetTransform().SetWorldPosition(endPos);
+        targetBegin.GetTransform().SetLocalScale({2});
+        targetEnd.GetTransform().SetLocalScale(targetBegin.GetTransform().GetLocalScale());
+    }
+    
     Level(){
         InitPhysics();
         
+        dottedLineMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        dottedLineMat->SetAlbedoColor({0,1,0,1});
+        
         cameraRoot = CreatePrototype<GameObject>();
         cameraGimball = CreatePrototype<GameObject>();
+        
+        targetBegin = CreatePrototype<GameObject>();
+        targetEnd = CreatePrototype<GameObject>();
+        auto targetBeginMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        targetBeginMat->SetAlbedoColor({1,0,0,1});
+        auto targetEndMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        targetEndMat->SetAlbedoColor({0,0,1,1});
+        targetBegin.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("target.obj"),targetBeginMat);
+        targetEnd.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("target.obj"),targetEndMat);
 
         cameraEntity = CreatePrototype<GameObject>();
         auto& camera = cameraEntity.EmplaceComponent<CameraComponent>();
@@ -208,17 +259,6 @@ struct Level : public World{
     
     void PostTick(float d) final{
         deltaTime = d;
-		for (int i = 0; i < (int)path.size() - 1; i++){
-			dbgdraw.DrawArrow(path[i], path[i+1], 0xFF0000FF);
-		}
-        {
-            matrix4 transform(1);
-            dbgdraw.DrawSphere(glm::translate(transform, startPos), 0xFF0000FF, 3);
-        }
-        {
-            matrix4 transform(1);
-            dbgdraw.DrawSphere(glm::translate(transform, endPos), 0x00FF00FF, 3);
-        }
     }
 };
 
