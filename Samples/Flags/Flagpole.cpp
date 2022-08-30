@@ -1,7 +1,6 @@
 #include "Flagpole.hpp"
 #include <RavEngine/SceneLoader.hpp>
 #include <RavEngine/StaticMesh.hpp>
-#include <etl/vector.h>
 #include <RavEngine/AnimatorComponent.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
 
@@ -12,7 +11,7 @@ void Flagpole::Create(){
     GameObject::Create();
     // load meshes
     SceneLoader sl("flagpole.fbx");
-    etl::vector<Ref<MeshAsset>, 2> meshes;
+    FixedVector<Ref<MeshAsset>, 2> meshes;
     sl.LoadMeshes([](const PreloadedAsset& asset){
         return true;
     }, [&](Ref<MeshAsset> mesh, Ref<PBRMaterialInstance> inst, const PreloadedAsset & data){

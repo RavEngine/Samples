@@ -34,7 +34,7 @@ struct FPSSystem : public AutoCTTI {
 	dirlight.GetTransform().LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(45),0));
 	
 	cube = CreatePrototype<GameObject>();
-	auto& cubemesh = cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("cube.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+	auto& cubemesh = cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cube.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
 	
 	auto gui = CreatePrototype<Entity>();
 	auto& doc = gui.EmplaceComponent<GUIComponent>();

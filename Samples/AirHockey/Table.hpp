@@ -15,7 +15,7 @@ public:
         GameObject::Create();
         //create the table
         Ref<RavEngine::PBRMaterialInstance> matinst = RavEngine::New< RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
-        auto& tablemesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::GetDefault("HockeyTable.obj"),matinst);
+        auto& tablemesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyTable.obj"),matinst);
         
         //low-friction
         Ref<RavEngine::PhysicsMaterial> physmat = RavEngine::New<RavEngine::PhysicsMaterial>(0, 0, 1.5);

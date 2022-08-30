@@ -185,6 +185,7 @@ struct Level : public World{
         mesh = MeshAsset::Manager::Get("maze.fbx", opt);
         mazeEntity.EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
         auto& rigid = mazeEntity.EmplaceComponent<RigidBodyStaticComponent>();
+        rigid.debugEnabled = true;
         auto physmat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0.5);
         rigid.EmplaceCollider<MeshCollider>(mesh,physmat);
         nvopt.agent.radius = 0.0001;

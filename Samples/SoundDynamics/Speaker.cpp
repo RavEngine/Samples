@@ -21,5 +21,5 @@ void Speaker::Create(Ref<AudioAsset> a) {
 		speakerInstance->SetAlbedoTexture(texture);
 	}
 	audio.Play();
-    EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetDefault("speaker.obj"),speakerInstance);
+    EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("speaker.obj"),speakerInstance);
 }

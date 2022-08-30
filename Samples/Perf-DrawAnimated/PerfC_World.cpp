@@ -75,10 +75,10 @@ struct DemoObject : public RavEngine::GameObject{
 };
 
 PerfC_World::PerfC_World(){
-	meshes[0] = MeshAsset::Manager::GetDefault("cube.obj");
-	meshes[1] = MeshAsset::Manager::GetDefault("sphere.obj");
-	meshes[2] = MeshAsset::Manager::GetDefault("cone.obj");
-	meshes[3] = MeshAsset::Manager::GetDefault("cylinder.obj");
+	meshes[0] = MeshAsset::Manager::Get("cube.obj");
+	meshes[1] = MeshAsset::Manager::Get("sphere.obj");
+	meshes[2] = MeshAsset::Manager::Get("cone.obj");
+	meshes[3] = MeshAsset::Manager::Get("cylinder.obj");
 	
 	auto cam = CreatePrototype<Camera>();
 			
