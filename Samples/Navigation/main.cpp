@@ -99,12 +99,14 @@ struct Level : public World{
         
         auto drawDottedLine = [this](const vector3& start, const vector3& end, decimalType step){
             vector3 point = start;
+            auto scalefac = (step / 2) / 1.7f;
             auto dir = glm::normalize(start - end);
             const auto linelen = glm::length2(end - start);
             while(linelen > glm::length2(point - start)){ // use length2 for squared length
                 auto dot = CreatePrototype<GameObject>();
-                dot.GetTransform().SetWorldPosition(point);
-                dot.GetTransform().SetLocalScale({0.3,0.3,0.3});
+                auto dotpt = point;
+                dotpt.y += scalefac * 1.3;
+                dot.GetTransform().SetWorldPosition(dotpt).SetLocalScale({scalefac});
                 dot.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),dottedLineMat);
                 dot.EmplaceComponent<DottedLineMarker>();
                 point -= dir * step;
@@ -112,7 +114,7 @@ struct Level : public World{
         };
         
         for(int i = 0; i < path.size()-1; i++){
-            drawDottedLine(path[i], path[i+1], 1.5);
+            drawDottedLine(path[i], path[i+1], std::max(nvopt.agent.radius * 2,0.3f));
         }
         targetBegin.GetTransform().SetWorldPosition(startPos);
         targetEnd.GetTransform().SetWorldPosition(endPos);
@@ -144,7 +146,7 @@ struct Level : public World{
         cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,0,50));
         
         cameraRoot.GetTransform().AddChild(cameraGimball);
-        cameraGimball.GetTransform().AddChild(cameraEntity);
+        cameraGimball.GetTransform().AddChild(cameraEntity).LocalRotateDelta(vector3(deg_to_rad(-45),0,0));
         
         auto lightEntity = CreatePrototype<GameObject>();
         lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2f;
@@ -184,6 +186,7 @@ struct Level : public World{
         opt.keepInSystemRAM = true;
         mesh = MeshAsset::Manager::Get("maze.fbx", opt);
         mazeEntity.EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+        // used for raycasting clicks onto the maze
         auto& rigid = mazeEntity.EmplaceComponent<RigidBodyStaticComponent>();
         rigid.debugEnabled = true;
         auto physmat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0.5);
@@ -196,13 +199,6 @@ struct Level : public World{
         navMesh = ComponentHandle<NavMeshComponent>(mazeEntity);
         navMesh->debugEnabled = false;
 		RecalculateNav();
-        
-        // spawn the agent
-        auto ball = CreatePrototype<GameObject>();
-        ball.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())).GetMaterial()->SetAlbedoColor({1,0,0,1});
-        ballCollider = ball.EmplaceComponent<RigidBodyDynamicComponent>().EmplaceCollider<SphereCollider>(1,physmat);
-        ball.GetComponent<RigidBodyDynamicComponent>().debugEnabled = true;
-        ball.GetTransform().LocalTranslateDelta(vector3(1,10,1));
         
         // connect the UI
         auto cellUpdater = new RMLUpdater([&,gh,doc](Rml::Event& evt) mutable{
@@ -227,9 +223,7 @@ struct Level : public World{
             gh->EnqueueUIUpdate([=]{
                 doc->GetElementById("agentRadiusDisp")->SetInnerRML(field->GetValue());
             });
-            GetApp()->DispatchMainThread([value,this/*,ball,physmat*/]{
-               // ball.GetComponent<RigidBodyDynamicComponent>().DestroyCollider(ballCollider);
-                //ballCollider = ball.GetComponent<RigidBodyDynamicComponent>().EmplaceCollider<SphereCollider>(value,physmat);
+            GetApp()->DispatchMainThread([value,this]() mutable{
                 nvopt.agent.radius = value;
                 RecalculateNav();
             });
