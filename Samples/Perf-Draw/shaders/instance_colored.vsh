@@ -34,12 +34,12 @@ void main()
         vec4(0,0,0,1)
     );
     
-    mat4 fullrotmat = rotmatx * rotmaty;
+    mat4 fullrotmat = mul(rotmatx, rotmaty);
     
     mat4 transmat = mtxFromRows(
-        vec4(1,0,0,st * 10),
-        vec4(0,1,0,ct * 10),
-        vec4(0,0,1,st * 10),
+        vec4(1,0,0,st * 2),
+        vec4(0,1,0,ct * 2),
+        vec4(0,0,1,st * 2),
         vec4(0,0,0,1)
     );
     
@@ -50,9 +50,9 @@ void main()
         vec4(0,0,0,1)
     );
     
-    mat4 fullmat = transmat * fullrotmat * scalemat; //scalemat * fullrotmat * transmat;
+    mat4 fullmat = mul(transmat, mul(fullrotmat,scalemat));
         
-    a_position = (fullmat * vec4(a_position,1)).xyz;
+    a_position = mul(fullmat, vec4(a_position,1)).xyz;
         
 	vs_genmats();
 	vs_store();
