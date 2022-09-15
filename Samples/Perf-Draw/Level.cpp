@@ -81,7 +81,7 @@ PerfB_World::PerfB_World() {
 	auto& dirlight = control.EmplaceComponent<DirectionalLight>();
 	auto& ambientLight = control.EmplaceComponent<AmbientLight>();
 	ambientLight.Intensity = 0.3;
-	dirlight.SetCastsShadows(true);
+	dirlight.SetCastsShadows(false);
 	auto doc = gui.AddDocument("main.rml");
 	
 	struct SelectionEventListener : public Rml::EventListener{
