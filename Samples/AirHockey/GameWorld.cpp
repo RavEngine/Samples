@@ -41,9 +41,10 @@ void GameWorld::OnActivate(){
 	
 	auto lightmain = CreatePrototype<GameObject>();
 	auto& key = lightmain.EmplaceComponent<DirectionalLight>();
-	key.Intensity = 1;
-	key.color = {1,0.6,0.404,1};
+	key.Intensity = 0.8;
+	key.color = {1,1,1};
 	key.debugEnabled = true;
+    key.SetCastsShadows(true);
 	auto& fill = lightmain.EmplaceComponent<AmbientLight>();
 	fill.Intensity=0.4;
 	fill.color = {0,0,1,1};
