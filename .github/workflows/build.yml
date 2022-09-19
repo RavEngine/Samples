@@ -141,9 +141,9 @@ jobs:
           submodules: true
       - name: Configure
         run: |
-        mkdir -p build
-        cd build
-        cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
+          mkdir -p build
+          cd build
+          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
       - name: Compress Samples
