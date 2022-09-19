@@ -26,7 +26,7 @@ jobs:
             cd build/linux
             export CC=/usr/bin/clang-14
             export CXX=/usr/bin/clang++-14
-            cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ../.. 
+            cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ../.. 
       - name: Build
         run: cd build/linux && cmake --build . --config release --target install  
       - name: Upload Artifacts
@@ -67,7 +67,7 @@ jobs:
               mkdir -p build
               mkdir -p build/linuxarm
               cd build/linuxarm
-              CC=/usr/bin/aarch64-linux-gnu-gcc-10 CXX=/usr/bin/aarch64-linux-gnu-g++-10 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=aarch64 ../.. 
+              CC=/usr/bin/aarch64-linux-gnu-gcc-10 CXX=/usr/bin/aarch64-linux-gnu-g++-10 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=aarch64 -DRAVENGINE_BUILD_TESTS=OFF ../.. 
       - name: Build
         run: cd build/linuxarm && cmake --build . --config release --target install 
       - name: Upload Artifacts
@@ -115,7 +115,10 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release .. 
+        run: |
+          mkdir -p build
+          cd build
+          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF .. 
       - name: Build
         run: cd build; cmake --build . --config release --target install
       - name: Compress Samples
@@ -137,7 +140,10 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED ..
+        run: |
+        mkdir -p build
+        cd build
+        cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
       - name: Compress Samples
@@ -159,7 +165,10 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR64 ..
+        run: |
+          mkdir -p build
+          cd build
+          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR64 -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
       - name: Compress Samples
@@ -181,7 +190,10 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=TVOSCOMBINED ..
+        run: |
+            mkdir -p build
+            cd build
+            cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=TVOSCOMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
       - name: Compress Samples
@@ -203,7 +215,10 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir -p build; cd build; cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR_TVOS ..
+        run: |
+            mkdir -p build
+            cd build
+            cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR_TVOS -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
       - name: Compress Samples
@@ -225,7 +240,13 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir build; cd build; mkdir win; cd win; cmake -DCMAKE_BUILD_TYPE=Release ..\.. ; cmake ..\.. 
+        run: |
+          mkdir build
+          cd build
+          mkdir win 
+          cd win
+          cmake -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
+          cmake -Wno-dev ..\.. 
       - name: Build
         run: cd build; cd win; cmake --build . --config release --target install
       - name: Upload Artifacts
@@ -249,7 +270,13 @@ jobs:
         with:
           submodules: true
       - name: Configure
-        run: mkdir build; cd build; mkdir win; cd win; cmake -AARM64 -DCMAKE_BUILD_TYPE=Release ..\.. ; cmake ..\.. 
+        run: |
+            mkdir build
+            cd build
+            mkdir win
+            cd win
+            cmake -AARM64 -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..\..
+            cmake ..\.. 
       - name: Build
         run: cd build; cd win; cmake --build . --config release --target install
       - name: Upload Artifacts
@@ -281,8 +308,8 @@ jobs:
               cd build
               mkdir uwp
               cd uwp
-              cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. 
-              cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\..
+              cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF -Wno-dev ..\.. 
+              cmake -Wno-dev ..\..
       - name: Build & Publish
         run: |
               cd build\uwp 
@@ -316,7 +343,7 @@ jobs:
               cd build
               mkdir uwp
               cd uwp
-              cmake -AARM64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev ..\.. 
+              cmake -AARM64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
               cmake -Wno-dev ..\..;
       - name: Build & Publish
         run: |
