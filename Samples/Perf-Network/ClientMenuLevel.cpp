@@ -32,16 +32,18 @@ void ClientMenu::OnActivate()
 		void ProcessEvent(Rml::Event& event) final {
 			auto field = static_cast<Rml::ElementFormControlInput*>(doc->GetElementById("addressfield"));
 			auto value = field->GetValue();
-			world->ConnectToServer(value);
+            auto portfield = static_cast<Rml::ElementFormControlInput*>(doc->GetElementById("portfield"));
+            auto port = std::stoi(portfield->GetValue());
+			world->ConnectToServer(value,port);
 		}
 
 	};
 	doc->GetElementById("gobtn")->AddEventListener(Rml::EventId::Click, new ConnectEventListener(this,doc));
 }
 
-void ClientMenu::ConnectToServer(const std::string& addr) {
+void ClientMenu::ConnectToServer(const std::string& addr, uint16_t port) {
 	auto& cl = GetApp()->networkManager.client;
-	cl->Connect(addr,PORT);
+	cl->Connect(addr,port);
 		cl->OnConnected = [&](HSteamNetConnection) {
 			Debug::Log("Client successfully connected");
 			GetApp()->inputManager.reset();

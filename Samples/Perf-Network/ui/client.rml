@@ -8,6 +8,6 @@
         </style>
 	</head>
 	<body>
-		<p>Connect to server:<input value="127.0.0.1" id="addressfield"></input><button id="gobtn">Connect</button></p>
+		<p>Connect to server:<input value="127.0.0.1" id="addressfield"></input><input id="portfield" value="6970"></input><button id="gobtn">Connect</button></p>
 	</body>
 </rml>

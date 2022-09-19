@@ -9,6 +9,8 @@
 using namespace std;
 using namespace RavEngine;
 
+// server hosts on 6970
+static constexpr auto PORT = 6970;
 
 struct NetApp : public RavEngine::App {
 	NetApp() : App(APPNAME) {}
@@ -18,6 +20,8 @@ struct NetApp : public RavEngine::App {
 		networkManager.RegisterNetworkedEntity<NetEntity>();
 		networkManager.RegisterNetworkedEntity<ManagementRelay>();
 
+        auto id = CTTI<NetEntity>();
+        auto name = type_name<NetEntity>();
 		
 		//argc = 2;
 
