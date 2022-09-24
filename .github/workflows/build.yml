@@ -108,7 +108,7 @@ jobs:
         
   build-mac:
     name: Build Samples for macOS
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -133,7 +133,7 @@ jobs:
         
   build-ios:
     name: Build Samples for iOS (unsigned)
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -158,7 +158,7 @@ jobs:
             
   build-ios-simulator:
     name: Build Samples for iOS Simulator
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -183,7 +183,7 @@ jobs:
         
   build-tvos:
     name: Build Samples for tvOS (unsigned)
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -208,7 +208,7 @@ jobs:
    
   build-tvos-simulator:
     name: Build Samples for tvOS Simulator
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
