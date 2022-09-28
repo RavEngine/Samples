@@ -98,6 +98,7 @@ void Level::SetupClient()
 	// the server will automatically replicate changes from the other clients
     EmplaceTimedSystem<SyncNetTransforms>(std::chrono::milliseconds(100));
     EmplaceSystem<MoveEntities>();
+    EmplaceSystem<TweenEntities>();
 }
 
 void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin)

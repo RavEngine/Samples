@@ -39,12 +39,9 @@ struct NetEntity : public RavEngine::GameObject {
         auto world = GetWorld();
         auto fn = [nettransform,world](auto unpacker, auto b) mutable{
             nettransform->UpdateTransform(unpacker,b);
-//            world->DispatchAsync([nettransform,unpacker,b]() mutable{
-//                nettransform->UpdateTransform(unpacker,b);
-//            }, 0);
         };
         rpc.RegisterServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), fn);
-		rpc.RegisterClientRPC(RavEngine::to_underlying(RPCs::UpdateTransform), fn);
+		rpc.RegisterClientRPC(RavEngine::to_underlying(RPCs::UpdateTransform), fn, RavEngine::RPCComponent::Directionality::Bidirectional);
 
 		if (!matinst) {
 			matinst = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
