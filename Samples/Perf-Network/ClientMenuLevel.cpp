@@ -2,6 +2,8 @@
 #include <RavEngine/App.hpp>
 #include <RavEngine/GUI.hpp>
 #include <RavEngine/InputManager.hpp>
+#include <RavEngine/Dialogs.hpp>
+#include <RavEngine/Filesystem.hpp>
 #include "Level.hpp"
 
 using namespace RavEngine;
@@ -50,7 +52,7 @@ void ClientMenu::ConnectToServer(const std::string& addr, uint16_t port) {
 			GetApp()->AddReplaceWorld(this->shared_from_this(), RavEngine::New<Level>());
 		};
 		cl->OnLostConnection = [&](HSteamNetConnection) {
-			Debug::Log("Client disconnected");
+            Dialog::ShowBasic("Information", "Disconnected", Dialog::MessageBoxType::Info);
 			GetApp()->Quit();
 		};
 }

@@ -105,9 +105,9 @@ void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 	// create entities
 	constexpr auto num_entities =
 #ifdef _DEBUG
-		20
+		2
 #else
-		500
+		10
 #endif
 		;
     auto wptr = GetOwner().GetWorld();

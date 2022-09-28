@@ -44,5 +44,7 @@ void NetTransform::UpdateTransform(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
 	// now RPC all the clients except the sender of this message to update their copy of this object
 	// as well
 	auto& rpc = owner.GetComponent<RavEngine::RPCComponent>();
-	rpc.InvokeClientRPCToAllExcept(RavEngine::to_underlying(RPCs::UpdateTransform), origin, RavEngine::NetworkBase::Reliability::Unreliable, td.value(), qd.value());
+    if (GetApp()->networkManager.IsServer() && td && qd){
+        rpc.InvokeClientRPCToAllExcept(RavEngine::to_underlying(RPCs::UpdateTransform), origin, RavEngine::NetworkBase::Reliability::Unreliable, td.value(), qd.value());
+    }
 }

@@ -36,9 +36,12 @@ struct NetEntity : public RavEngine::GameObject {
 		auto& rpc = EmplaceComponent<RavEngine::RPCComponent>();
 		EmplaceComponent<NetTransform>();
         RavEngine::ComponentHandle<NetTransform> nettransform(this);
-        
-        auto fn = [nettransform](auto& a, auto b) mutable{
-            nettransform->UpdateTransform(a,b);
+        auto world = GetWorld();
+        auto fn = [nettransform,world](auto unpacker, auto b) mutable{
+            nettransform->UpdateTransform(unpacker,b);
+//            world->DispatchAsync([nettransform,unpacker,b]() mutable{
+//                nettransform->UpdateTransform(unpacker,b);
+//            }, 0);
         };
         rpc.RegisterServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), fn);
 		rpc.RegisterClientRPC(RavEngine::to_underlying(RPCs::UpdateTransform), fn);
