@@ -8,6 +8,7 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/Transform.hpp>
 #include <RavEngine/Filesystem.hpp>
+#include <RavEngine/AudioMIDI.hpp>
 
 using namespace RavEngine;
 using namespace std;

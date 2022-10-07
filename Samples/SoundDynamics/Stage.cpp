@@ -14,6 +14,8 @@ void Stage::Create() {
 	audioRoom.SetRoomDimensions(vector3(20, 10, 20));
 
 	GetTransform().AddChild(roomEntity);
+    
+    roomEntity.GetTransform().LocalTranslateDelta(vector3(0,audioRoom.GetRoomDimensions().y/2,0));
 
     Array<string_view, 6> faceOrder{
 		"wall_negx",
