@@ -78,11 +78,11 @@ function (add_sample sample_dir)
 
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "${APPNAME}")
 
-	file(GLOB objects "${sample_dir}/objects/*.fbx" "${sample_dir}/objects/*.dae" "${sample_dir}/objects/*.ozz" "${sample_dir}/objects/*.obj", "${sample_dir}/objects/*.ply")
-	file(GLOB textures "${sample_dir}/textures/*.jpg", "${sample_dir}/textures/*.png" "${sample_dir}/textures/*.svg")
+	file(GLOB objects "${sample_dir}/objects/*.fbx" "${sample_dir}/objects/*.dae" "${sample_dir}/objects/*.ozz" "${sample_dir}/objects/*.obj" "${sample_dir}/objects/*.ply")
+	file(GLOB textures "${sample_dir}/textures/*.jpg" "${sample_dir}/textures/*.png" "${sample_dir}/textures/*.svg")
 	file(GLOB shaders "${sample_dir}/shaders/*.cmake")
 	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png" "${sample_dir}/ui/*.json" "${sample_dir}/ui/*.ids")
-	file(GLOB sounds "${sample_dir}/sounds/*.mp3", "${sample_dir}/sounds/*.wav", "${sample_dir}/sounds/*.ogg", "${sample_dir}/sounds/*.midi")
+	file(GLOB sounds "${sample_dir}/sounds/*.mp3" "${sample_dir}/sounds/*.wav" "${sample_dir}/sounds/*.ogg" "${sample_dir}/sounds/*.midi")
 
 	pack_resources(TARGET "${APPNAME}"
 		OUTPUT_FILE DATA_PACK
@@ -101,6 +101,8 @@ function (add_sample sample_dir)
 		XCODE_ATTRIBUTE_CURRENTYEAR "${CURRENTYEAR}"
 		VS_GLOBAL_OutputType AppContainerExe
 	)
+
+	rve_enable_IPO(${APPNAME})
 
 
 	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
