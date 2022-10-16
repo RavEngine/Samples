@@ -144,14 +144,37 @@ Level::Level(){
     {
         int music_id = 0;
 		GetApp()->GetResources().IterateDirectory("sounds", [&](const string& track) {
+            auto createElement = [&music_id,doc,musicsel](const std::string& name){
+                auto opt = doc->CreateElement("option");
+                opt->SetAttribute("value", StrFormat("{}",music_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
+                opt->SetInnerRML(name);
+                musicsel->AppendChild(std::move(opt));
+            };
+            
             auto path = Filesystem::Path(track);
             if (path.extension() == ".mp3") {
                 auto leaf_name = path.filename();
                 tracks.push_back(RavEngine::New<AudioAsset>(leaf_name.string()));
-                auto opt = doc->CreateElement("option");
-                opt->SetAttribute("value", StrFormat("{}",music_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
-                opt->SetInnerRML(leaf_name.string());
-                musicsel->AppendChild(std::move(opt));
+                createElement(leaf_name.string());
+            }
+            else if (path.extension() == ".mid"){
+                auto leaf_name = path.filename();
+                AudioMIDIPlayer player;
+                auto instrument1 = std::make_unique<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/Harp.sfz");
+                auto instrument2 = std::make_unique<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/Harp.sfz");
+                player.SetInstrumentForTrack(0, instrument1);
+                player.SetInstrumentForTrack(1, instrument2);
+                player.beatsPerMinute = 60;
+                
+                auto midibytes = GetApp()->GetResources().FileContentsAt<std::string>(path.c_str());
+                std::istringstream stream(midibytes);
+                
+                MidiFile file;
+                file.read(stream);
+                
+                AudioMIDIRenderer r;
+                r.Render(file, player);
+                createElement(leaf_name.string());
             }
         });
     }
