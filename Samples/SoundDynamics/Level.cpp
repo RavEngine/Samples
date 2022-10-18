@@ -166,7 +166,7 @@ Level::Level(){
                 player.SetInstrumentForTrack(1, instrument2);
                 player.beatsPerMinute = 60;
                 
-                auto midibytes = GetApp()->GetResources().FileContentsAt<std::string>(path.c_str());
+                auto midibytes = GetApp()->GetResources().FileContentsAt<std::string>(path.string().c_str());
                 std::istringstream stream(midibytes);
                 
                 MidiFile file;
