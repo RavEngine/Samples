@@ -39,6 +39,8 @@ endif()
 # and it can get confusing when using Open Recent without this
 project("RavEngine_Samples_${TARGET_NAME}")
 
+# ensure that cmake doesn't forget what architecture we are compiling
+set(CMAKE_SYSTEM_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR} CACHE INTERNAL "")
 set(RAVENGINE_BUILD_TESTS ON CACHE INTERNAL "")
 add_subdirectory("RavEngine")
 
@@ -122,10 +124,10 @@ function (add_sample sample_dir)
 		)
     elseif(LINUX)
         if(CMAKE_BUILD_TYPE STREQUAL Release)
-        	if (NOT DEFINED TARGET_ARCH)
-        		set(TARGET_ARCH ${CMAKE_HOST_SYSTEM_PROCESSOR} CACHE INTERNAL "")
+        	if (NOT DEFINED CMAKE_SYSTEM_PROCESSOR)
+        		set(CMAKE_SYSTEM_PROCESSOR ${CMAKE_HOST_SYSTEM_PROCESSOR} CACHE INTERNAL "")
         	endif()
-        	if(${TARGET_ARCH} STREQUAL ${CMAKE_HOST_SYSTEM_PROCESSOR})
+        	if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL ${CMAKE_HOST_SYSTEM_PROCESSOR})
         		set(IS_CROSSCOMP OFF CACHE INTERNAL "")
         	else()
 				set(IS_CROSSCOMP ON CACHE INTERNAL "")
@@ -139,7 +141,7 @@ function (add_sample sample_dir)
                     ICON \"${CMAKE_CURRENT_SOURCE_DIR}/Samples/logo.png\"
                     DIR_ICON \"${CMAKE_CURRENT_SOURCE_DIR}/Samples/logo.png\"
                     OUTPUT_NAME \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.AppImage\"
-                    OUTPUT_ARCH \"${TARGET_ARCH}\"
+                    OUTPUT_ARCH \"${CMAKE_SYSTEM_PROCESSOR}\"
                     CROSSCOMP ${IS_CROSSCOMP}
                     ASSETS \"${CMAKE_INSTALL_PREFIX}/$<CONFIGURATION>/${APPNAME}.rvedata\"
                 )
