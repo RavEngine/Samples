@@ -121,15 +121,18 @@ jobs:
           cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF .. 
       - name: Build
         run: cd build; cmake --build . --config release --target install
-      - name: Compress Samples
-        run: cd build/release; zip -r -9 Samples_Mac.zip *.app
+      - name: Create DMG
+        run: |
+          rm -r build/release/bin
+          cd build
+          hdiutil create -srcfolder release RavEngine_Samples_macOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_macOS
-          path: build/release/Samples_Mac.zip
+          path: RavEngine_Samples_macOS.dmg
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/release/Samples_Mac.zip https://transfer.sh/RavEngine_Samples_macOS.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        run: URL=`curl --upload-file build/RavEngine_Samples_macOS.dmg https://transfer.sh/RavEngine_Samples_macOS.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
         
   build-ios:
     name: Build Samples for iOS (unsigned)
@@ -146,15 +149,18 @@ jobs:
           cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
-      - name: Compress Samples
-        run: cd build/release; zip -r -9 Samples_iOS.zip *.app
+      - name: Create DMG
+        run: |
+          rm -r build/release/bin
+          cd build
+          hdiutil create -srcfolder release RavEngine_Samples_iOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_iOS
-          path: build/release/Samples_iOS.zip
+          path: build/RavEngine_Samples_iOS.dmg
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/release/Samples_iOS.zip https://transfer.sh/RavEngine_Samples_iOS.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        run: URL=`curl --upload-file build/RavEngine_Samples_iOS.dmg https://transfer.sh/RavEngine_Samples_iOS.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
             
   build-ios-simulator:
     name: Build Samples for iOS Simulator
@@ -171,15 +177,18 @@ jobs:
           cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR64 -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
-      - name: Compress Samples
-        run: cd build/release; zip -r -9 Samples_iOS_Sim.zip *.app
+      - name: Create DMG
+        run: |
+          rm -r build/release/bin
+          cd build
+          hdiutil create -srcfolder release RavEngine_Samples_iOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_iOS_Simulator
-          path: build/release/Samples_iOS_Sim.zip
+          path: build/RavEngine_Samples_iOS_Sim.dmg
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/release/Samples_iOS_Sim.zip https://transfer.sh/RavEngine_Samples_iOS_Sim.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        run: URL=`curl --upload-file build/RavEngine_Samples_iOS_Sim.dmg https://transfer.sh/RavEngine_Samples_iOS_Sim.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
         
   build-tvos:
     name: Build Samples for tvOS (unsigned)
@@ -196,15 +205,18 @@ jobs:
             cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=TVOSCOMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
-      - name: Compress Samples
-        run: cd build/release; zip -r -9 Samples_tvOS.zip *.app
+      - name: Create DMG
+        run: |
+          rm -r build/release/bin
+          cd build
+          hdiutil create -srcfolder release RavEngine_Samples_tvOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_tvOS
-          path: build/release/Samples_tvOS.zip
+          path: build/RavEngine_Samples_tvOS.dmg
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/release/Samples_tvOS.zip https://transfer.sh/RavEngine_Samples_tvOS.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        run: URL=`curl --upload-file build/RavEngine_Samples_tvOS.dmg https://transfer.sh/RavEngine_Samples_tvOS.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
    
   build-tvos-simulator:
     name: Build Samples for tvOS Simulator
@@ -221,15 +233,18 @@ jobs:
             cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR_TVOS -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
-      - name: Compress Samples
-        run: cd build/release; zip -r -9 Samples_tvOS_Sim.zip *.app
+      - name: Create DMG
+        run: |
+          rm -r build/release/bin
+          cd build
+          hdiutil create -srcfolder release RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_tvOS_Simulator
-          path: build/release/Samples_tvOS_Sim.zip
+          path: build/RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/release/Samples_tvOS_Sim.zip https://transfer.sh/RavEngine_Samples_tvOS_Sim.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        run: URL=`curl --upload-file build/RavEngine_Samples_tvOS_Sim.dmg https://transfer.sh/RavEngine_Samples_tvOS_Sim.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
    
   build-windows:
     name: Build samples for Windows
