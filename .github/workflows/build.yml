@@ -130,7 +130,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: RavEngine_Samples_macOS
-          path: RavEngine_Samples_macOS.dmg
+          path: build/RavEngine_Samples_macOS.dmg
       - name: Upload to Transfer.sh
         run: URL=`curl --upload-file build/RavEngine_Samples_macOS.dmg https://transfer.sh/RavEngine_Samples_macOS.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
         
