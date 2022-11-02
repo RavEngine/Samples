@@ -14,8 +14,6 @@ public:
 	
 	GameWorld(const GameWorld& other);
 	
-	void OnActivate() override;
-
 	void PostTick(float) override;
 	
     
