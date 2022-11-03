@@ -62,7 +62,7 @@ struct DemoObject : public RavEngine::GameObject{
         else{
             auto& light = child.EmplaceComponent<PointLight>();
             inst->SetAlbedoColor({1,1,1,1});
-            light.Intensity = 5;
+            light.SetIntensity(5);
         }
 		auto& mesh = child.EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)],inst);
 				
@@ -84,11 +84,11 @@ PerfC_World::PerfC_World(){
 			
 	lightEntity = CreatePrototype<GameObject>();
 	auto& al = lightEntity.EmplaceComponent<AmbientLight>();
-	al.Intensity = 0.3;
+	al.SetIntensity(0.3);
 	
 	auto& dl = lightEntity.EmplaceComponent<DirectionalLight>();
-	dl.color = {0.7,1,1,1};
-	dl.Intensity = 0.5;
+	dl.SetColorRGBA({0.7,1,1,1});
+	dl.SetIntensity(0.5);
 	dl.SetCastsShadows(true);
 	
 	//load textures
@@ -207,7 +207,7 @@ void PerfC_World::PostTick(float scale){
 void PerfC_World::ToggleFullbright(){
 	fullbright = !fullbright;
 	const auto fn = [this](float f, auto& al){
-		al.Intensity = fullbright ? 1 : 0.5;
+		al.SetIntensity(fullbright ? 1 : 0.5);
 	};
 	Filter([&](float f, AmbientLight& al) {
 		fn(f, al);

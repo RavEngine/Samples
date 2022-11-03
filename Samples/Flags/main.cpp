@@ -45,7 +45,7 @@ struct Level : public World{
         cameraRoot.GetTransform().LocalTranslateDelta(vector3(0,5,0));
         
         auto lightEntity = CreatePrototype<GameObject>();
-        lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;
+        lightEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
         lightEntity.EmplaceComponent<DirectionalLight>().SetCastsShadows(true);
         lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         

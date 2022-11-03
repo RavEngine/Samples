@@ -39,13 +39,13 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers){
     
     auto lightmain = CreatePrototype<GameObject>();
     auto& key = lightmain.EmplaceComponent<DirectionalLight>();
-    key.Intensity = 0.8;
-    key.color = {1,1,1};
+    key.SetIntensity(0.8);
+    key.SetColorRGBA({1,1,1});
     key.debugEnabled = true;
     key.SetCastsShadows(true);
     auto& fill = lightmain.EmplaceComponent<AmbientLight>();
-    fill.Intensity=0.4;
-    fill.color = {0,0,1,1};
+    fill.SetIntensity(0.4);
+    fill.SetColorRGBA({0,0,1,1});
     lightmain.GetTransform().LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(45),0));
     auto& room = lightmain.EmplaceComponent<AudioRoom>();
     room.SetRoomDimensions(vector3(30,30,30));

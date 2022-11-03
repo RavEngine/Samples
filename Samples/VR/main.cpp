@@ -38,9 +38,9 @@ struct Level : public RavEngine::World{
 		auto light = CreatePrototype<GameObject>();
 		auto& dl = light.EmplaceComponent<DirectionalLight>();
 		dl.debugEnabled = false;
-        dl.Intensity = 0.8;
+        dl.SetIntensity(0.8);
 		dl.SetCastsShadows(true);
-		light.EmplaceComponent<AmbientLight>().Intensity = 0.2;
+		light.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
 		light.GetTransform().LocalRotateDelta(vector3(0, 0, deg_to_rad(45))).LocalTranslateDelta(vector3(0,2,0));
 
 	}

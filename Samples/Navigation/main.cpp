@@ -149,7 +149,7 @@ struct Level : public World{
         cameraGimball.GetTransform().AddChild(cameraEntity).LocalRotateDelta(vector3(deg_to_rad(-45),0,0));
         
         auto lightEntity = CreatePrototype<GameObject>();
-        lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2f;
+        lightEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2f);
         lightEntity.EmplaceComponent<DirectionalLight>().SetCastsShadows(true);
         lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         

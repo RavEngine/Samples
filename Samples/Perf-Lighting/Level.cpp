@@ -87,7 +87,7 @@ Level::Level() {
 	im->BindAnyAction(gh->GetData());
 
 	auto lights = CreatePrototype<GameObject>();
-	lights.EmplaceComponent<AmbientLight>().Intensity = 0.1;
+	lights.EmplaceComponent<AmbientLight>().SetIntensity(0.1);
 	lights.GetTransform().LocalRotateDelta(vector3(0,deg_to_rad(-30),deg_to_rad(45)));
 	
 

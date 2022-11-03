@@ -71,9 +71,9 @@ struct Level : public RavEngine::World{
 		auto light = CreatePrototype<GameObject>();
 		auto& dl = light.EmplaceComponent<DirectionalLight>();
 		dl.debugEnabled = false;
-        dl.Intensity = 0.8;
+        dl.SetIntensity(0.8);
 		dl.SetCastsShadows(true);
-		light.EmplaceComponent<AmbientLight>().Intensity = 0.2;
+		light.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
 		light.GetTransform().LocalRotateDelta(vector3(0, 0, deg_to_rad(45))).LocalTranslateDelta(vector3(0,2,0));
         
         /*
@@ -89,7 +89,7 @@ struct Level : public RavEngine::World{
 		auto& spotLight = spotLightEntity.EmplaceComponent<SpotLight>();
 		spotLight.debugEnabled = true;
 		spotLightEntity.GetTransform().LocalTranslateDelta(vector3(0,2,-2)).LocalRotateDelta(vector3(deg_to_rad(30),0,0));
-		spotLight.Intensity = 2;
+		spotLight.SetIntensity(2);
 		auto sfwd = spotLightEntity.GetTransform().WorldForward();
 
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();

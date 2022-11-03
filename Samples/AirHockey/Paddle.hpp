@@ -33,7 +33,7 @@ public:
 		
 		
 		auto& light = EmplaceComponent<RavEngine::PointLight>();
-		light.color = color;
-		light.Intensity = 2;
+		light.SetColorRGBA(color);
+		light.SetIntensity(2);
 	}
 };

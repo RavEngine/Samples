@@ -26,7 +26,7 @@ struct FPSSystem : public AutoCTTI {
 	auto camlights = CreatePrototype<GameObject>();
 	camlights.EmplaceComponent<CameraComponent>().SetActive(true);
 	camlights.EmplaceComponent<SingleEntityMarker>();
-	camlights.EmplaceComponent<AmbientLight>().Intensity = 0.2;
+	camlights.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
 	camlights.GetTransform().LocalTranslateDelta(vector3(0,0,5));
 	
 	auto dirlight = CreatePrototype<GameObject>();

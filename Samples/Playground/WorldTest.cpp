@@ -114,8 +114,8 @@ TestWorld::TestWorld(){
 	anonymous = CreatePrototype<GameObject>();
 	anonymous.EmplaceComponent<StaticMesh>(sharedMesh,material);
 	auto& spotlight = anonymous.EmplaceComponent<SpotLight>();
-	spotlight.Intensity = 4;
-	spotlight.coneAngle = 10;
+	spotlight.SetIntensity(4);
+	spotlight.SetConeAngle(10);
 	anonymous.GetTransform().LocalTranslateDelta(vector3(0, 1, 0));
 	
 	InitPhysics();
@@ -124,7 +124,7 @@ TestWorld::TestWorld(){
 	anonymousChild.EmplaceComponent<StaticMesh>(sharedMesh,material);
 	anonymous.GetTransform().AddChild(anonymousChild);
 	anonymousChild.GetTransform().LocalTranslateDelta(vector3(17,0,0));
-	anonymousChild.EmplaceComponent<PointLight>().Intensity = 4;
+	anonymousChild.EmplaceComponent<PointLight>().SetIntensity(4);
 	auto& rs = anonymousChild.EmplaceComponent<RigidBodyStaticComponent>();
 	rs.EmplaceCollider<BoxCollider>(vector3(1,1,1),make_shared<PhysicsMaterial>(0.5,0.5,0.5));
 	//auto audioAsset = std::make_shared<RavEngine::AudioAsset>("creative2-3.ogg",2);
@@ -159,10 +159,10 @@ TestWorld::TestWorld(){
 	dll.SetCastsShadows(true);
 	auto amt = deg_to_rad(45);
 	dl.GetTransform().LocalRotateDelta(vector3(amt,0,0)).LocalTranslateDelta(vector3(0,1,1));
-	dll.color = {1,0.5,0};
+	dll.SetColorRGBA({1,0.5,0});
 	
 	ambientLight1 = CreatePrototype<GameObject>();
 	auto& light = ambientLight1.EmplaceComponent<AmbientLight>();
-	light.Intensity = 1;
-	light.color = {0.1, 0.2, 0.4};
+	light.SetIntensity(1);
+	light.SetColorRGBA({0.1, 0.2, 0.4});
 }

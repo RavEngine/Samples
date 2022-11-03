@@ -80,7 +80,7 @@ PerfB_World::PerfB_World() {
 	auto& gui = control.EmplaceComponent<GUIComponent>();
 	auto& dirlight = control.EmplaceComponent<DirectionalLight>();
 	auto& ambientLight = control.EmplaceComponent<AmbientLight>();
-	ambientLight.Intensity = 0.3;
+	ambientLight.SetIntensity(0.3);
 	dirlight.SetCastsShadows(false);
 	auto doc = gui.AddDocument("main.rml");
 	

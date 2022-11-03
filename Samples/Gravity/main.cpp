@@ -26,13 +26,13 @@ struct HeavyThing : public GameObject{
         EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj",opt),matinst);
         if (mass < 1000){
             auto& light = EmplaceComponent<PointLight>();
-            light.Intensity = scaleOverride * 7;
-            light.color = colorOverride;
+            light.SetIntensity(scaleOverride * 7);
+            light.SetColorRGBA(colorOverride);
         }
         else{
             auto& light = EmplaceComponent<PointLight>();
-            light.Intensity = 5;
-            light.color = {1,1,1,1};
+            light.SetIntensity(5);
+            light.SetColorRGBA({1,1,1,1});
         }
     }
 };
@@ -104,7 +104,7 @@ struct Level : public World{
 	Level(){
         // lighting and cameras
         auto lightcam = CreatePrototype<GameObject>();
-        lightcam.EmplaceComponent<AmbientLight>().Intensity = 0.8;
+        lightcam.EmplaceComponent<AmbientLight>().SetIntensity(0.8);
         auto& cam = lightcam.EmplaceComponent<CameraComponent>();
         cam.SetActive(true);
         cam.farClip = 1000;

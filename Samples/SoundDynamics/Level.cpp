@@ -31,7 +31,7 @@ void Level::ToggleMouse(){
 Level::Level(){
 	// lights
 	auto lightEntity = CreatePrototype<GameObject>();
-	lightEntity.EmplaceComponent<AmbientLight>().Intensity = 0.2;
+	lightEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
 	lightEntity.EmplaceComponent<DirectionalLight>().SetCastsShadows(true);
 	lightEntity.GetTransform().LocalRotateDelta(vector3{deg_to_rad(35),deg_to_rad(-30),0});
 
@@ -173,7 +173,9 @@ Level::Level(){
                 file.read(stream);
                 
                 AudioMIDIRenderer r;
-                r.Render(file, player);
+                auto asset = r.Render("/Users/admin/Downloads/90s.mid", player);
+                tracks.push_back(asset);
+                //r.Render(file, player);
                 createElement(leaf_name.string());
             }
         });

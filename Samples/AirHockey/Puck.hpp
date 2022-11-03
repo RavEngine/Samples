@@ -57,8 +57,8 @@ public:
 		auto lightEntity = GetWorld()->CreatePrototype<RavEngine::GameObject>();
 				
 		auto& light = lightEntity.EmplaceComponent<RavEngine::PointLight>();
-		light.color = {0,0,1,1};
-		light.Intensity = 2;
+		light.SetColorRGBA({0,0,1,1});
+		light.SetIntensity(2);
 		
 		GetTransform().AddChild(RavEngine::ComponentHandle<RavEngine::Transform>(lightEntity));
 		
