@@ -17,17 +17,12 @@ struct CameraScript : public RavEngine::ScriptComponent {
 		// where is the player? we should accelerate towards this position
 		auto& targetTransform = target.GetTransform();
 		auto& thisTransform = GetTransform();
-		auto dirvec = (thisTransform.GetWorldPosition() - targetTransform.GetWorldPosition()) * static_cast<decimalType>(fpsScale*  -1.f);
-		
-		// if we are close, we should decelerate / accelerate smoothly
-		if (glm::length(dirvec) > 4){
-			dirvec = glm::normalize(dirvec) * 4.f;
-		}
-		thisTransform.WorldTranslateDelta(dirvec);
+        auto newPos = glm::mix(thisTransform.GetWorldPosition(), targetTransform.GetWorldPosition(), std::clamp<float>(0.3f * fpsScale,0,1));
+        thisTransform.SetWorldPosition(newPos);
 		
 		// which way is the player facing? we want to rotate to be behind them
 		auto facingRot = glm::quatLookAt(targetTransform.WorldForward(), GetTransform().WorldUp());
-		GetTransform().SetWorldRotation(Slerp(GetTransform().GetWorldRotation(), facingRot, 0.01 * fpsScale));
+		GetTransform().SetWorldRotation(Slerp(GetTransform().GetWorldRotation(), facingRot, std::clamp<float>(0.01 * fpsScale,0,1)));
 		
 		// which way is the player moving? we want to swivel to a point ahead of them so they can see more easily
 		
