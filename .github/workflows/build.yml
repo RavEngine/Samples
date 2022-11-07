@@ -123,9 +123,8 @@ jobs:
         run: cd build; cmake --build . --config release --target install
       - name: Create DMG
         run: |
-          rm -r build/release/bin
           cd build
-          hdiutil create -srcfolder release RavEngine_Samples_macOS.dmg
+          hdiutil create -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -151,9 +150,8 @@ jobs:
         run: cd build; cmake --build . --config release --target install
       - name: Create DMG
         run: |
-          rm -r build/release/bin
           cd build
-          hdiutil create -srcfolder release RavEngine_Samples_iOS.dmg
+          hdiutil create -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -179,9 +177,8 @@ jobs:
         run: cd build; cmake --build . --config release --target install
       - name: Create DMG
         run: |
-          rm -r build/release/bin
           cd build
-          hdiutil create -srcfolder release RavEngine_Samples_iOS_Sim.dmg
+          hdiutil create -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -207,9 +204,8 @@ jobs:
         run: cd build; cmake --build . --config release --target install
       - name: Create DMG
         run: |
-          rm -r build/release/bin
           cd build
-          hdiutil create -srcfolder release RavEngine_Samples_tvOS.dmg
+          hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -235,9 +231,8 @@ jobs:
         run: cd build; cmake --build . --config release --target install
       - name: Create DMG
         run: |
-          rm -r build/release/bin
           cd build
-          hdiutil create -srcfolder release RavEngine_Samples_tvOS_Sim.dmg
+          hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
