@@ -130,7 +130,7 @@ Level::Level(){
         void ProcessEvent(Rml::Event& evt) final {
             auto sources = world->GetAllComponentsOfType<AudioSourceComponent>();
             auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
-            for (auto& player : *sources.value()) {
+            for (auto& player : *sources) {
                 player.SetAudio(world->tracks[selbox->GetSelection()]);
                 player.Restart();
                 player.Play();  // if the song reaches the end, it will automatically stop, so we need to re-play.
@@ -160,20 +160,25 @@ Level::Level(){
             else if (path.extension() == ".mid"){
                 auto leaf_name = path.filename();
                 AudioMIDIPlayer player;
-                auto instrument1 = std::make_unique<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/Harp.sfz");
-                auto instrument2 = std::make_unique<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/Harp.sfz");
+                auto instrument1 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/Harp.sfz");
+                auto instrument2 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/Harp.sfz");
+                instrument1->enableFreewheeling();
+                instrument2->enableFreewheeling();
+                instrument1->setNumVoices(512);
+                instrument2->setNumVoices(512);
+                instrument1->setSamplesPerBlock(1024);
+                instrument2->setSamplesPerBlock(1024);
+                instrument1->setSampleQuality(sfz::Sfizz::ProcessMode::ProcessFreewheeling, 2);
+                instrument2->setSampleQuality(sfz::Sfizz::ProcessMode::ProcessFreewheeling, 2);
                 player.SetInstrumentForTrack(0, instrument1);
                 player.SetInstrumentForTrack(1, instrument2);
                 player.beatsPerMinute = 60;
                 
-                auto midibytes = GetApp()->GetResources().FileContentsAt<std::string>(path.string().c_str());
-                std::istringstream stream(midibytes);
-                
-                MidiFile file;
-                file.read(stream);
-                
+                auto midibytes = GetApp()->GetResources().FileContentsAt<std::vector<uint8_t>>(path.string().c_str());
+                fmidi_smf_u file{fmidi_smf_mem_read(midibytes.data(), midibytes.size())};
+               
                 AudioMIDIRenderer r;
-                auto asset = r.Render("/Users/admin/Downloads/90s.mid", player);
+                auto asset = r.Render(file, player);
                 tracks.push_back(asset);
                 //r.Render(file, player);
                 createElement(leaf_name.string());

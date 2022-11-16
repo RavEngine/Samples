@@ -92,7 +92,7 @@ struct Level : public World{
         };
         // delete all the previous dots
         if (auto allDots = GetAllComponentsOfType<DottedLineMarker>()){
-            for(const auto& dot : **allDots){
+            for(const auto& dot : *allDots){
                 dot.GetOwner().Destroy();
             }
         }

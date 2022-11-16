@@ -58,11 +58,11 @@ Level::Level() {
 			auto value = std::stoi(field->GetValue());
 
 			const auto objects = world->GetAllComponentsOfType<ObjectMarker>();
-			for (const auto& obj : *objects.value()) {
+			for (const auto& obj : *objects) {
 				obj.GetOwner().GetComponent<StaticMesh>().SetEnabled(false);
 			}
 			int i = 1;
-			for (const auto& obj : *objects.value()) {
+			for (const auto& obj : *objects) {
 				obj.GetOwner().GetComponent<StaticMesh>().SetEnabled(true);
 				if (i >= value) {
 					break;
