@@ -340,8 +340,8 @@ jobs:
               Compress-Archive -Path build\release\*.exe,build\release\*.rvedata -DestinationPath SamplesGDK64.zip
       - name: Upload to Transfer.sh
         run: $URL = Invoke-RestMethod -Uri https://transfer.sh/SamplesGDK64.zip -Method PUT -InFile SamplesGDK64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
-
-build-uwp:
+        
+  build-uwp:
     name: Build samples for UWP
     runs-on: windows-latest
     steps:
