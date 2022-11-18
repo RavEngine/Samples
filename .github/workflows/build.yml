@@ -317,7 +317,7 @@ jobs:
             cmd /c "curl.exe `"https://codeload.github.com/microsoft/GDK/zip/refs/tags/June_2022_Update_4`" -o gdk.zip"
             Expand-Archive -Path .\gdk.zip -DestinationPath gdk
             cd .\gdk\GDK-June_2022_Update_4
-            .\PGDK.exe /features OptionId.GamingRuntime OptionId.GamingRuntimeDependencies /quiet
+            .\PGDK.exe /features OptionId.GamingRuntime OptionId.GamingRuntimeDependencies
       - name: Configure
         run: |
               mkdir build
