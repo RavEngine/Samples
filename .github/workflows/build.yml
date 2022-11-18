@@ -341,4 +341,72 @@ jobs:
       - name: Upload to Transfer.sh
         run: $URL = Invoke-RestMethod -Uri https://transfer.sh/SamplesGDK64.zip -Method PUT -InFile SamplesGDK64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
 
-  
+build-uwp:
+    name: Build samples for UWP
+    runs-on: windows-latest
+    steps:
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.3
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Configure
+        run: |
+              mkdir build
+              cd build
+              mkdir uwp
+              cd uwp
+              cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF -Wno-dev ..\.. 
+              cmake -Wno-dev ..\..
+      - name: Build & Publish
+        run: |
+              cd build\uwp 
+              & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x64"
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_uwp64
+          path: build\uwp\AppPackages
+      - name: Prepare Transfer.sh upload
+        run: |
+              Move-Item -Path build\uwp\AppPackages\ -Destination .
+              Remove-Item -Path build -Recurse
+              Compress-Archive -Path AppPackages\ -DestinationPath SamplesUWP64.zip
+      - name: Upload to Transfer.sh
+        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_UWP64.zip -Method PUT -InFile SamplesUWP64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
+
+  build-uwp-arm:
+    name: Build samples for UWP ARM64
+    runs-on: windows-latest
+    steps:
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.3
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: Configure
+        run: | 
+              mkdir build
+              cd build
+              mkdir uwp
+              cd uwp
+              cmake -AARM64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
+              cmake -Wno-dev ..\..;
+      - name: Build & Publish
+        run: |
+              cd build\uwp 
+              & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="ARM64"
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RavEngine_Samples_uwp64
+          path: build\uwp\AppPackages
+      - name: Prepare Transfer.sh upload
+        run: |
+              Move-Item -Path build\uwp\AppPackages\ -Destination .
+              Remove-Item -Path build -Recurse
+              Compress-Archive -Path AppPackages\ -DestinationPath SamplesUWPARM64.zip
+      - name: Upload to Transfer.sh
+        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_UWPARM64.zip -Method PUT -InFile SamplesUWPARM64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
