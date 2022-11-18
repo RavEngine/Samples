@@ -322,7 +322,7 @@ jobs:
         run: |
               mkdir build
               cd build
-              cmake -AGaming.Desktop.x64 -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF -Wno-dev .. 
+              cmake -A"Gaming.Desktop.x64" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF -Wno-dev .. 
               cmake -Wno-dev ..
       - name: Build
         run: |
