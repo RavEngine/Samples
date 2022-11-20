@@ -1,5 +1,6 @@
 #include "Speaker.hpp"
 #include <RavEngine/StaticMesh.hpp>
+#include <RavEngine/AudioMIDI.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -12,6 +13,9 @@ void Speaker::Create(Ref<AudioAsset> a) {
 	auto sourceEntity = GetWorld()->CreatePrototype<GameObject>();
 	auto& audio = sourceEntity.EmplaceComponent<RavEngine::AudioSourceComponent>(a);
 
+    // MIDI source
+    sourceEntity.EmplaceComponent<AudioMIDISourceComponent>();
+    
 	GetTransform().AddChild(sourceEntity);
 	sourceEntity.GetTransform().LocalTranslateDelta(vector3(0, 3, 0));
 

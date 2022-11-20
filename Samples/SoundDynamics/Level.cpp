@@ -9,6 +9,7 @@
 #include <RavEngine/Transform.hpp>
 #include <RavEngine/Filesystem.hpp>
 #include <RavEngine/AudioMIDI.hpp>
+#include <RavEngine/AudioExporter.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -129,12 +130,41 @@ Level::Level(){
 
         void ProcessEvent(Rml::Event& evt) final {
             auto sources = world->GetAllComponentsOfType<AudioSourceComponent>();
+            auto midiSources = world->GetAllComponentsOfType<AudioMIDISourceComponent>();
+            
             auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
-            for (auto& player : *sources) {
-                player.SetAudio(world->tracks[selbox->GetSelection()]);
-                player.Restart();
-                player.Play();  // if the song reaches the end, it will automatically stop, so we need to re-play.
+            auto songName = selbox->GetOption(selbox->GetSelection())->GetInnerRML();
+            auto rasterAsset = world->tracks.contains(songName) ? world->tracks.at(songName) : nullptr;
+            auto midiAsset = world->midiplayers.contains(songName) ? world->midiplayers.at(songName) : nullptr;
+
+            if (rasterAsset){
+                for (auto& player : *sources) {
+                   
+                    player.SetAudio(rasterAsset);
+                    player.Restart();
+                    player.Play();  // if the song reaches the end, it will automatically stop, so we need to re-play.
+                }
+                
+                for(auto& midiplayer : *midiSources){
+                    if (midiplayer.midiPlayer){
+                        midiplayer.midiPlayer->Pause();
+                    }
+                }
             }
+            else if (midiAsset){
+                midiAsset->Reset();
+                for (auto& player : *sources) {
+                    player.Pause();
+                }
+                for(auto& midiplayer : *midiSources){
+                    midiplayer.midiPlayer = midiAsset;
+                    midiplayer.midiPlayer->Play();
+                }
+            }
+            else{
+                Debug::Fatal("No loaded song {}",songName);
+            }
+           
 		}
 	};
 	auto musicsel = doc->GetElementById("music");
@@ -154,14 +184,14 @@ Level::Level(){
             auto path = Filesystem::Path(track);
             if (path.extension() == ".mp3") {
                 auto leaf_name = path.filename();
-                tracks.push_back(RavEngine::New<AudioAsset>(leaf_name.string()));
+                tracks[leaf_name] = RavEngine::New<AudioAsset>(leaf_name.string());
                 createElement(leaf_name.string());
             }
             else if (path.extension() == ".mid"){
                 auto leaf_name = path.filename();
-                AudioMIDIPlayer player;
-                auto instrument1 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/Harp.sfz");
-                auto instrument2 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/Harp.sfz");
+                auto player = New<AudioMIDIPlayer>();
+                auto instrument1 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/UprightPiano.sfz");
+                auto instrument2 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/UprightPiano.sfz");
                 instrument1->enableFreewheeling();
                 instrument2->enableFreewheeling();
                 instrument1->setNumVoices(512);
@@ -170,16 +200,19 @@ Level::Level(){
                 instrument2->setSamplesPerBlock(1024);
                 instrument1->setSampleQuality(sfz::Sfizz::ProcessMode::ProcessFreewheeling, 2);
                 instrument2->setSampleQuality(sfz::Sfizz::ProcessMode::ProcessFreewheeling, 2);
-                player.SetInstrumentForTrack(0, instrument1);
-                player.SetInstrumentForTrack(1, instrument2);
-                player.beatsPerMinute = 60;
+                player->SetInstrumentForTrack(0, instrument1);
+                player->SetInstrumentForTrack(1, instrument2);
+                player->beatsPerMinute = 60;
                 
                 auto midibytes = GetApp()->GetResources().FileContentsAt<std::vector<uint8_t>>(path.string().c_str());
-                fmidi_smf_u file{fmidi_smf_mem_read(midibytes.data(), midibytes.size())};
+                Ref<fmidi_smf_t> file{fmidi_smf_mem_read(midibytes.data(), midibytes.size())};
+                
+                player->SetMidi(file);
+                player->Reset();
                
                 AudioMIDIRenderer r;
-                auto asset = r.Render(file, player);
-                tracks.push_back(asset);
+                midiplayers[leaf_name] = player;
+                
                 //r.Render(file, player);
                 createElement(leaf_name.string());
             }
@@ -189,12 +222,14 @@ Level::Level(){
 	// auto select first
 	auto firstopt = musicsel->QuerySelector("option");
 	firstopt->SetAttribute("selected", true);
+    
+    auto& firstSong = (*tracks.begin()).second;
 
 	// create speakers
-	auto speaker1 = CreatePrototype<Speaker>(tracks[0]);
+	auto speaker1 = CreatePrototype<Speaker>(firstSong);
 	speaker1.GetTransform().LocalTranslateDelta(vector3(5, 0, -2));
 
-	auto speaker2 = CreatePrototype<Speaker>(tracks[0]);
+	auto speaker2 = CreatePrototype<Speaker>(firstSong);
 	speaker2.GetTransform().LocalTranslateDelta(vector3(5, 0, 2));
 
 	// setup inputs
@@ -234,8 +269,6 @@ Level::Level(){
 	im->BindAnyAction(ui.GetData());
 
 	// initialize physics
-	InitPhysics();
-    
-    ExportTaskGraph(cout);
+	InitPhysics();    
 }
 
