@@ -192,14 +192,10 @@ Level::Level(){
                 auto player = New<AudioMIDIPlayer>();
                 auto instrument1 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/UprightPiano.sfz");
                 auto instrument2 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/UprightPiano.sfz");
-                instrument1->enableFreewheeling();
-                instrument2->enableFreewheeling();
                 instrument1->setNumVoices(512);
                 instrument2->setNumVoices(512);
-                instrument1->setSamplesPerBlock(1024);
-                instrument2->setSamplesPerBlock(1024);
-                instrument1->setSampleQuality(sfz::Sfizz::ProcessMode::ProcessFreewheeling, 2);
-                instrument2->setSampleQuality(sfz::Sfizz::ProcessMode::ProcessFreewheeling, 2);
+                instrument1->setVolume(6);
+                instrument2->setVolume(6);
                 player->SetInstrumentForTrack(0, instrument1);
                 player->SetInstrumentForTrack(1, instrument2);
                 player->beatsPerMinute = 60;
@@ -210,10 +206,8 @@ Level::Level(){
                 player->SetMidi(file);
                 player->Reset();
                
-                AudioMIDIRenderer r;
                 midiplayers[leaf_name] = player;
                 
-                //r.Render(file, player);
                 createElement(leaf_name.string());
             }
         });
