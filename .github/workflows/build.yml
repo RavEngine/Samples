@@ -81,7 +81,6 @@ jobs:
         run: URL=`curl --upload-file build/linuxarm/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linuxARM.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
   
   build-emscripten:
-    if: ${{ false }}  # disable for now, since emscripten is not possible without WebGPU
     name: Build samples for Emscripten-Linux
     runs-on: ubuntu-latest
     steps:

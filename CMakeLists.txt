@@ -52,6 +52,10 @@ if(CMAKE_SYSTEM_NAME MATCHES Emscripten)
 	add_definitions(-fexceptions)
 endif()
 
+if(TARGET_EMSCRIPTEN)
+	add_definitions(-sUSE_SDL=2)
+endif()
+
 string(TIMESTAMP CURRENTYEAR "%Y")
 
 function (add_sample sample_dir)
@@ -108,7 +112,29 @@ function (add_sample sample_dir)
 
 
 	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
-		set(EM_LINK "--embed-file ${DATA_PACK}" "-s MAX_WEBGL_VERSION=2" "-s MIN_WEBGL_VERSION=2" "-s FULL_ES3=1" "-s USE_WEBGPU" "-s GL_ASSERTIONS=1" "-s OFFSCREEN_FRAMEBUFFER=1" "-s OFFSCREENCANVAS_SUPPORT=1" "-s GL_DEBUG=1" "-fexceptions" "-s PROXY_TO_PTHREAD" "-s USE_PTHREADS" "-s LLD_REPORT_UNDEFINED" "-s NO_DISABLE_EXCEPTION_CATCHING" "-s NO_DISABLE_EXCEPTION_THROWING" "-s PTHREAD_POOL_SIZE=4" "-s ASSERTIONS=1" "-s ALLOW_MEMORY_GROWTH=1" "-s MAXIMUM_MEMORY=4GB")
+		set(EM_LINK "--embed-file ${DATA_PACK}"
+					"-s MAX_WEBGL_VERSION=2" 
+					"-s MIN_WEBGL_VERSION=2" 
+					"-s FULL_ES3=1" 
+					"-s USE_WEBGPU" 
+					"-s GL_ASSERTIONS=1" 
+					"-s OFFSCREEN_FRAMEBUFFER=1" 
+					"-s OFFSCREENCANVAS_SUPPORT=1" 
+					"-s GL_DEBUG=1" 
+					"-fexceptions" 
+					"-s PROXY_TO_PTHREAD" 
+					"-s USE_PTHREADS" 
+					"-s LLD_REPORT_UNDEFINED" 
+					"-s NO_DISABLE_EXCEPTION_CATCHING" 
+					"-s NO_DISABLE_EXCEPTION_THROWING" 
+					"-s PTHREAD_POOL_SIZE=4" 
+					"-s ASSERTIONS=1" 
+					"-s ALLOW_MEMORY_GROWTH=1" 
+					"-s MAXIMUM_MEMORY=4GB"
+					"-s USE_SDL=2"
+					"-s ERROR_ON_WASM_CHANGES_AFTER_LINK"
+					"-s WASM_BIGINT"
+				)
 	endif()
 
 	target_link_libraries("${APPNAME}" PUBLIC "RavEngine" ${atomic_lib} ${EM_LINK})
