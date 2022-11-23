@@ -93,7 +93,7 @@ jobs:
       - name: Setup Emscripten
         run: git clone https://github.com/emscripten-core/emsdk.git --depth=1 && cd emsdk && ./emsdk install latest && ./emsdk activate latest && source ./emsdk_env.sh
       - name: Configure
-        run: mkdir -p build && cd build; cmake -DCMAKE_TOOLCHAIN_FILE=../emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake .. 
+        run: mkdir -p build && cd build; cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=../emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake .. 
       - name: Build
         run: cd build; cmake --build . --config Release --target install
       - name: Upload Artifacts
@@ -104,6 +104,12 @@ jobs:
                 build/Release/*.js
                 build/Release/*.html
                 build/Release/*.wasm
+      - name: Prepare Transfer upload
+        run: cd build/Release ; zip -r -9 Samples.zip *.js *.html *.wasm
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/Release/Samples.zip https://transfer.sh/RavEngine_Samples_Web.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+  
+
         
   build-mac:
     name: Build Samples for macOS
