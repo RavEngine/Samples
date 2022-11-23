@@ -132,8 +132,8 @@ function (add_sample sample_dir)
 					"-s ALLOW_MEMORY_GROWTH=1" 
 					"-s MAXIMUM_MEMORY=4GB"
 					"-s USE_SDL=2"
-					"-s ERROR_ON_WASM_CHANGES_AFTER_LINK"
 					"-s WASM_BIGINT"
+					"-s TOTAL_MEMORY=150MB"
 				)
 	endif()
 
