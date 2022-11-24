@@ -49,6 +49,10 @@ Level::Level(){
 	im->AddAxisMap(InputNames::Sprint, SDL_SCANCODE_LSHIFT);
 	im->AddActionMap(InputNames::Jump, SDL_SCANCODE_SPACE);
 	im->AddActionMap(InputNames::Pound, SDL_SCANCODE_LCTRL);
+	
+	// AppleTV remote
+	im->AddAxisMap(InputNames::Sprint, SDL_SCANCODE_PAUSE);
+	im->AddActionMap(InputNames::Jump, SDL_SCANCODE_ESCAPE);
 
 	// controller
 	im->AddAxisMap(InputNames::MoveForward, ControllerAxis::SDL_CONTROLLER_AXIS_LEFTY, -1);
