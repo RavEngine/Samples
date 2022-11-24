@@ -148,7 +148,7 @@ function (add_sample sample_dir)
 			" 
 			COMPONENT Runtime
 		)
-    elseif(LINUX)
+    elseif(TARGET_LINUX AND NOT TARGET_EMSCRIPTEN)
         if(CMAKE_BUILD_TYPE STREQUAL Release)
         	if (NOT DEFINED CMAKE_SYSTEM_PROCESSOR)
         		set(CMAKE_SYSTEM_PROCESSOR ${CMAKE_HOST_SYSTEM_PROCESSOR} CACHE INTERNAL "")

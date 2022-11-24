@@ -108,8 +108,6 @@ jobs:
         run: cd build/Release ; zip -r -9 Samples.zip *.js *.html *.wasm
       - name: Upload to Transfer.sh
         run: URL=`curl --upload-file build/Release/Samples.zip https://transfer.sh/RavEngine_Samples_Web.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
-  
-
         
   build-mac:
     name: Build Samples for macOS
@@ -129,6 +127,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
+          rm -rf build
           hdiutil create -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -156,6 +155,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
+          rm -rf build
           hdiutil create -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -183,6 +183,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
+          rm -rf build
           hdiutil create -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -210,6 +211,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
+          rm -rf build
           hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -237,6 +239,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
+          rm -rf build
           hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
