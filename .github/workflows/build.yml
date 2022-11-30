@@ -128,6 +128,7 @@ jobs:
         run: |
           cd build
           rm -rf build
+          touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -156,6 +157,7 @@ jobs:
         run: |
           cd build
           rm -rf build
+          touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -184,6 +186,7 @@ jobs:
         run: |
           cd build
           rm -rf build
+          touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -212,6 +215,7 @@ jobs:
         run: |
           cd build
           rm -rf build
+          touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
@@ -240,6 +244,7 @@ jobs:
         run: |
           cd build
           rm -rf build
+          touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
