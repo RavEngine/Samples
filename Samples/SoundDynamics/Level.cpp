@@ -190,8 +190,8 @@ Level::Level(){
             else if (path.extension() == ".mid"){
                 auto leaf_name = path.filename();
                 auto player = New<AudioMIDIPlayer>();
-                auto instrument1 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/UprightPiano.sfz");
-                auto instrument2 = std::make_shared<InstrumentSynth>("/Users/admin/Downloads/VSCO-2-CE-1.1.0/UprightPiano.sfz");
+                auto instrument1 = std::make_shared<InstrumentSynth>("Harp.sfz");
+                auto instrument2 = std::make_shared<InstrumentSynth>("Harp.sfz");
                 instrument1->setNumVoices(512);
                 instrument2->setNumVoices(512);
                 instrument1->setVolume(6);

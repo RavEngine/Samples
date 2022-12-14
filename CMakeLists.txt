@@ -61,7 +61,7 @@ string(TIMESTAMP CURRENTYEAR "%Y")
 function (add_sample sample_dir)
 	# create the test executable
 	SET(APPNAME "RavEngine${sample_dir}")
-	SET(sample_dir "Samples/${sample_dir}")
+	SET(sample_dir "${CMAKE_CURRENT_LIST_DIR}/Samples/${sample_dir}")
 
 	# create the helper header file
 	make_directory("${APPNAME}")
@@ -89,6 +89,7 @@ function (add_sample sample_dir)
 	file(GLOB shaders "${sample_dir}/shaders/*.cmake")
 	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png" "${sample_dir}/ui/*.json" "${sample_dir}/ui/*.ids")
 	file(GLOB sounds "${sample_dir}/sounds/*.mp3" "${sample_dir}/sounds/*.wav" "${sample_dir}/sounds/*.ogg" "${sample_dir}/sounds/*.mid")
+	file(GLOB_RECURSE streaming "${sample_dir}/streaming/*.ogg" "${sample_dir}/streaming/*.sfz")
 
 	pack_resources(TARGET "${APPNAME}"
 		OUTPUT_FILE DATA_PACK
@@ -97,6 +98,8 @@ function (add_sample sample_dir)
 		TEXTURES ${textures}
 		UIS ${uis}
 		SOUNDS ${sounds}
+		STREAMING_ASSETS ${streaming}
+		STREAMING_INPUT_ROOT "${sample_dir}/streaming/"
 	)
 
 	set_target_properties("${APPNAME}" 
