@@ -25,9 +25,6 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers){
     cameraActor.GetTransform().SetWorldRotation(vector3(deg_to_rad(-90),0,0));
     cameraBoom.GetTransform().AddChild(cameraActor).LocalTranslateDelta(vector3(0,3,0)).LocalRotateDelta(vector3(deg_to_rad(-90),deg_to_rad(90),0));
         
-    //create the puck
-    puck.GetTransform().LocalTranslateDelta(vector3(0,3,0));
-    
     InitPhysics();
     
     //intro animation
@@ -118,9 +115,9 @@ void GameWorld::PostTick(float f)
 }
 
 void GameWorld::Reset(){
-	puck.GetTransform().SetWorldPosition(vector3(0,2,0));
-	p1.GetTransform().SetWorldPosition(vector3(2,2,3));
-	p2.GetTransform().SetWorldPosition(vector3(-2,2,-3));
+	puck.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(0,2,0),puck.GetTransform().GetWorldRotation());
+	p1.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(2,2,3),p1.GetTransform().GetWorldRotation());
+	p2.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(-2,2,-3), p2.GetTransform().GetWorldRotation());
 
 	//clear velocities
 	auto zerovel = [](Entity e){

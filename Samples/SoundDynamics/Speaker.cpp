@@ -1,6 +1,7 @@
 #include "Speaker.hpp"
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/AudioMIDI.hpp>
+#include <RavEngine/AudioGraphAsset.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -12,6 +13,16 @@ void Speaker::Create(Ref<AudioAsset> a) {
 	// audio source
 	auto sourceEntity = GetWorld()->CreatePrototype<GameObject>();
 	auto& audio = sourceEntity.EmplaceComponent<RavEngine::AudioSourceComponent>(a);
+	
+	// mono effect graph
+	auto effectGraph = New<AudioGraphAsset>(1);
+	auto effect = effectGraph->CreateNode<lab::GainNode>();
+	effect->gain()->setValue(0.1);
+	effectGraph->Connect(effectGraph->GetInputNode(), effect);
+	effectGraph->Connect(effect, effectGraph->GetOutputNode());
+
+	audio.SetGraph(effectGraph);
+
 
     // MIDI source
     sourceEntity.EmplaceComponent<AudioMIDISourceComponent>();

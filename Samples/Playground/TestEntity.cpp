@@ -53,7 +53,7 @@ void TestEntity::CommonInit(){
 	}
 	r.EmplaceCollider<CapsuleCollider>(1, 1, sharedMat);
 
-	GetTransform().SetWorldPosition(vector3(rand() % 10 - 5, rand() % 10 - 5, rand() % 10 - 5));
+	r.setDynamicsWorldPose(vector3(rand() % 10 - 5, rand() % 10 - 5, rand() % 10 - 5), GetTransform().GetWorldRotation());
 
 	script.objectcount++;
 }

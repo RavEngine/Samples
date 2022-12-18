@@ -131,7 +131,7 @@ struct Level : public World{
         
         for(int i = 0; i < stars.size(); i++){
             auto star = CreatePrototype<HeavyThing>(stars[i],stars[i]/50.0,colors[i]);
-            star.GetTransform().SetLocalPosition(vector3(0,0,startDist[i]));
+            star.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(0, 0, startDist[i]), star.GetTransform().GetWorldRotation());
             star.GetComponent<RigidBodyDynamicComponent>().SetLinearVelocity(vector3(startVel[i],0,0),true);
         }
        

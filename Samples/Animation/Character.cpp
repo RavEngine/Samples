@@ -88,7 +88,8 @@ struct CharacterScript : public ScriptComponent, public Queryable<CharacterScrip
 			}
 		}
 		if (GetTransform().GetWorldPosition().y < -10) {
-			GetTransform().SetWorldPosition(vector3(0, 5, 0));
+			rigidBody->setDynamicsWorldPose(vector3(0, 5, 0), GetTransform().GetLocalRotation());
+			//GetTransform().SetWorldPosition(vector3(0, 5, 0));
 		}
 	}
 
@@ -108,7 +109,8 @@ struct CharacterScript : public ScriptComponent, public Queryable<CharacterScrip
 			}
 			// face direction
 			auto rot = glm::quatLookAt(dir, GetTransform().WorldUp());
-			GetTransform().SetWorldRotation(Slerp(GetTransform().GetWorldRotation(), rot, 0.2));
+			rigidBody->setDynamicsWorldPose(GetTransform().GetWorldPosition(), Slerp(GetTransform().GetWorldRotation(), rot, 0.2));
+			//GetTransform().SetWorldRotation(Slerp(GetTransform().GetWorldRotation(), rot, 0.2));
 		}
 	}
 

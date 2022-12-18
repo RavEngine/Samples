@@ -28,8 +28,8 @@ struct RotationSystem : public RavEngine::AutoCTTI{
 struct RespawnSystem : public RavEngine::AutoCTTI{
 	inline void operator()(float fpsScale, RigidBodyDynamicComponent& rigid, Transform& transform) const{
 		if (transform.GetWorldPosition().y < -20){
-			transform.SetWorldPosition(GenSpawnpoint());
-				rigid.SetLinearVelocity(vector3(0,0,0), false);
+			rigid.setDynamicsWorldPose(GenSpawnpoint(), transform.GetWorldRotation());
+			rigid.SetLinearVelocity(vector3(0,0,0), false);
 		}
 	}
 };
@@ -68,8 +68,9 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 			// spawn rigid bodies
 			GetApp()->DispatchMainThread([&](){
                 auto rigid = ownWorld->CreatePrototype<RigidBody>(mat,mesh, physmat, RigidBody::BodyType::Sphere);
-                
-                rigid.GetTransform().LocalTranslateDelta(GenSpawnpoint()).SetLocalScale(vector3(0.5,0.5,0.5));
+				rigid.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(GenSpawnpoint(),quaternion(0,0,0,1));
+
+                rigid.GetTransform().SetLocalScale(vector3(0.5,0.5,0.5));
             });
             
 			count--;

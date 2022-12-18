@@ -35,7 +35,7 @@ Level::Level(){
     gui.AddDocument("ui.rml");
 
 	auto character = CreatePrototype<Character>();
-	character.GetTransform().LocalTranslateDelta(vector3(15,5,0)).LocalRotateDelta(vector3(0,deg_to_rad(90),0));
+	character.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(15, 5, 0), vector3(0, deg_to_rad(90), 0));
 	
 	auto camera = CreatePrototype<CameraEntity>(character);
 	camera.GetTransform().LocalTranslateDelta(vector3(0,0,0));
