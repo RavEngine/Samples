@@ -67,7 +67,7 @@ jobs:
               mkdir -p build
               mkdir -p build/linuxarm
               cd build/linuxarm
-              CC=/usr/bin/aarch64-linux-gnu-gcc-10 CXX=/usr/bin/aarch64-linux-gnu-g++-10 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DRAVENGINE_BUILD_TESTS=OFF ../.. 
+              CC=/usr/bin/aarch64-linux-gnu-gcc-12 CXX=/usr/bin/aarch64-linux-gnu-g++-12 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DRAVENGINE_BUILD_TESTS=OFF ../.. 
       - name: Build
         run: cd build/linuxarm && cmake --build . --config release --target install 
       - name: Upload Artifacts
@@ -129,7 +129,7 @@ jobs:
           cd build
           rm -rf build
           touch release/.Trash
-          hdiutil create -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
+          hdiutil create -size 700m -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -158,7 +158,7 @@ jobs:
           cd build
           rm -rf build
           touch release/.Trash
-          hdiutil create -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
+          hdiutil create  -size 700m -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -187,7 +187,7 @@ jobs:
           cd build
           rm -rf build
           touch release/.Trash
-          hdiutil create -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
+          hdiutil create -size 700m -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -216,7 +216,7 @@ jobs:
           cd build
           rm -rf build
           touch release/.Trash
-          hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
+          hdiutil create  -size 700m -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -245,7 +245,7 @@ jobs:
           cd build
           rm -rf build
           touch release/.Trash
-          hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
+          hdiutil create -size 700m -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
