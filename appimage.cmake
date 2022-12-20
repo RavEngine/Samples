@@ -46,7 +46,11 @@ cd \"$(dirname \"$0\")\";
     execute_process(COMMAND chmod +x "${APPDIR}/AppRun")
     
     # copy assets to appdir
-    file(COPY ${ARGS_ASSETS} DESTINATION "${APPDIR}")
+    foreach(ITEM ${ARGS_ASSETS})
+        if(EXISTS ${ITEM})
+            file(COPY ${ITEM} DESTINATION "${APPDIR}")
+        endif()
+    endforeach()
 
     # copy icon thumbnail
     file(COPY ${ARGS_DIR_ICON} DESTINATION "${APPDIR}")

@@ -211,9 +211,11 @@ add_sample("Shadows")
 
 # exlcude the SceneViewer from iOS, tvOS, UWP, and ARM linux 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
-	add_sample("SceneViewer")
+	if (NOT IS_CROSSCOMP)
+		add_sample("SceneViewer")
 
-	# SceneViewer needs some additional dependencies
-	add_subdirectory(lib/nativefiledialog-extended EXCLUDE_FROM_ALL)
-	target_link_libraries("RavEngineSceneViewer" PUBLIC nfd)
+		# SceneViewer needs some additional dependencies
+		add_subdirectory(lib/nativefiledialog-extended EXCLUDE_FROM_ALL)
+		target_link_libraries("RavEngineSceneViewer" PUBLIC nfd)
+	endif()
 endif()
