@@ -18,7 +18,7 @@ jobs:
               sudo add-apt-repository -y "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main"
               sudo apt-get update -y
               sudo apt remove build-essential -y
-              sudo apt-get install cmake clang-14 llvm-14 ninja-build libgl1-mesa-dev libgtk-3-dev libasound2-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libegl1-mesa-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev -y --no-install-recommends 
+              sudo apt-get install cmake clang-14 fuse libfuse2 llvm-14 ninja-build libgl1-mesa-dev libgtk-3-dev libasound2-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libegl1-mesa-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev -y --no-install-recommends 
       - name: Configure
         run: |
             mkdir -p build
@@ -59,7 +59,7 @@ jobs:
             sudo apt-get update 
         continue-on-error: true
       - name: Install Host Dependencies
-        run: sudo apt-get install cmake:amd64 ninja-build:amd64 libx11-dev:amd64 libgl1-mesa-dev gcc-11:amd64 g++-11:amd64 gcc-10-aarch64-linux-gnu:amd64 g++-10-aarch64-linux-gnu:amd64 -y --no-install-recommends
+        run: sudo apt-get install cmake:amd64 fuse:amd64 libfuse2:amd64 ninja-build:amd64 libx11-dev:amd64 libgl1-mesa-dev gcc-11:amd64 g++-11:amd64 gcc-10-aarch64-linux-gnu:amd64 g++-10-aarch64-linux-gnu:amd64 -y --no-install-recommends
       - name: Install Target Dependencies
         run: sudo apt-get install libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 libegl1-mesa-dev:arm64 libvulkan-dev:arm64 libx11-xcb-dev:arm64 libxcb-dri2-0-dev:arm64 libxcb-glx0-dev:arm64 libxcb-icccm4-dev:arm64 libxcb-keysyms1-dev:arm64 libxcb-randr0-dev:arm64 libxrandr-dev:arm64 libxxf86vm-dev:arm64 mesa-common-dev:arm64 libgtk-3-dev:arm64 -y --no-install-recommends
       - name: Configure
@@ -127,7 +127,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
-          rm -rf build
+          rm -rf build RavEngine host-tools
           touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
       - name: Upload Artifacts
@@ -156,7 +156,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
-          rm -rf build
+          rm -rf build RavEngine host-tools RavEngine host-tools
           touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
       - name: Upload Artifacts
@@ -185,7 +185,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
-          rm -rf build
+          rm -rf build RavEngine host-tools
           touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
       - name: Upload Artifacts
@@ -214,7 +214,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
-          rm -rf build
+          rm -rf build RavEngine host-tools
           touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
       - name: Upload Artifacts
@@ -243,7 +243,7 @@ jobs:
       - name: Create DMG
         run: |
           cd build
-          rm -rf build
+          rm -rf build RavEngine host-tools
           touch release/.Trash
           hdiutil create -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload Artifacts
