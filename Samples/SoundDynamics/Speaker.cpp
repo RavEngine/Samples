@@ -16,10 +16,7 @@ void Speaker::Create(Ref<AudioAsset> a) {
 	
 	// mono effect graph
 	auto effectGraph = New<AudioGraphAsset>(1);
-	auto effect = effectGraph->CreateNode<lab::GainNode>();
-	effect->gain()->setValue(0.1);
-	effectGraph->Connect(effectGraph->GetInputNode(), effect);
-	effectGraph->Connect(effect, effectGraph->GetOutputNode());
+	effectGraph->filters.emplace_back(New<AudioGainFilterLayer>(0.5));
 
 	audio.SetGraph(effectGraph);
 
