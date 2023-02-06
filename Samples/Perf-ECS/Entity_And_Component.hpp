@@ -1,6 +1,7 @@
 #pragma once
 #include <RavEngine/Entity.hpp>
 #include <RavEngine/Utilities.hpp>
+#include <RavEngine/App.hpp>
 #include <atomic>
 
 struct SineComponent: public RavEngine::AutoCTTI {
@@ -12,20 +13,23 @@ struct CosComponent: public RavEngine::AutoCTTI {
 };
 
 struct CalcSystem {
-	inline void operator()(float fpsScale, SineComponent& sinecomp, CosComponent& coscomp) const{
+	inline void operator()(SineComponent& sinecomp, CosComponent& coscomp) const{
+        auto fpsScale = RavEngine::GetApp()->GetCurrentFPSScale();
 		sinecomp.value = std::sin(sinecomp.value + fpsScale);
 		coscomp.value = std::cos(coscomp.value + fpsScale);
 	}
 };
 
 struct SingleSineSystem {
-	inline void operator()(float fpsScale, SineComponent& sinecomp) {
+	inline void operator()(SineComponent& sinecomp) {
+        auto fpsScale = RavEngine::GetApp()->GetCurrentFPSScale();
 		sinecomp.value = std::sin(sinecomp.value + fpsScale);
 	}
 };
 
 struct SingleCosSystem {
-	inline void operator()(float fpsScale, CosComponent& coscomp) {
+	inline void operator()(CosComponent& coscomp) {
+        auto fpsScale = RavEngine::GetApp()->GetCurrentFPSScale();
 		coscomp.value = std::cos(coscomp.value + fpsScale);
 	}
 };

@@ -39,11 +39,11 @@ struct HeavyThing : public GameObject{
 
 struct GravitySystem : public AutoCTTI{
     
-    inline void operator()(float fpsScale, RigidBodyDynamicComponent& body) const{
+    inline void operator()(RigidBodyDynamicComponent& body) const{
         auto world = body.GetOwner().GetWorld();
         auto myPos = body.GetOwner().GetTransform().GetWorldPosition();
         
-        world->Filter<>([&](float, const RigidBodyDynamicComponent& b) {
+        world->Filter([&](const RigidBodyDynamicComponent& b) {
             if (&b != &body) {
                 // add a force corresponding to the mass of that other body
                 auto otherPos = b.GetOwner().GetTransform().GetWorldPosition();

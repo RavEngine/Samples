@@ -2,6 +2,7 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/ScriptComponent.hpp>
+#include <RavEngine/App.hpp>
 
 struct Player : public RavEngine::ComponentWithOwner{
     
@@ -29,7 +30,8 @@ struct Player : public RavEngine::ComponentWithOwner{
 };
 
 struct PlayerSystem{
-    inline void operator()(float fpsScale, Player& player) const{
+    inline void operator()(Player& player) const{
+        auto fpsScale = RavEngine::GetApp()->GetCurrentFPSScale();
         player.Tick(fpsScale);
     }
 };

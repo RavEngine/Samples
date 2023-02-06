@@ -206,13 +206,13 @@ void PerfC_World::PostTick(float scale){
 
 void PerfC_World::ToggleFullbright(){
 	fullbright = !fullbright;
-	const auto fn = [this](float f, auto& al){
+	const auto fn = [this](auto& al){
 		al.SetIntensity(fullbright ? 1 : 0.5);
 	};
-	Filter([&](float f, AmbientLight& al) {
-		fn(f, al);
+	Filter([&](AmbientLight& al) {
+		fn(al);
 	});
-    Filter([&](float f, DirectionalLight& al) {
-		fn(f, al);
+    Filter([&](DirectionalLight& al) {
+		fn(al);
 	});
 }

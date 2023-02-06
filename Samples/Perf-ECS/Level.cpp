@@ -12,7 +12,7 @@ using namespace RavEngine;
 STATIC(PA_Entity::num_objects);
 
 struct MetricsSystem : public AutoCTTI {
-	inline void operator()(float fpsScale, GUIComponent& gui) const{
+	inline void operator()(GUIComponent& gui) const{
 		auto doc = gui.GetDocument("ui.rml");
 		auto elem = doc->GetElementById("diag");
 		gui.EnqueueUIUpdate([this,elem] {

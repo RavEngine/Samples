@@ -4,6 +4,7 @@
 #include <RavEngine/MeshAsset.hpp>
 #include <RavEngine/Texture.hpp>
 #include <RavEngine/GUI.hpp>
+#include <RavEngine/App.hpp>
 #include <array>
 #include "Systems.hpp"
 
@@ -59,9 +60,10 @@ protected:
 
 struct SpinSystem : public RavEngine::AutoCTTI {
     
-    inline void operator()(float fpsScale, const SpinComponent& c, RavEngine::Transform& tr) const{
+    inline void operator()(const SpinComponent& c, RavEngine::Transform& tr) const{
         //get the entity and spin it based on the component data
         if (!PerfC_World::paused){
+            auto fpsScale = RavEngine::GetApp()->GetCurrentFPSScale();
             tr.LocalRotateDelta((decimalType)fpsScale * c.spinamt);
         }
     }

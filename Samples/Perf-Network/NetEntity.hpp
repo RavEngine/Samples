@@ -7,7 +7,7 @@
 #include "NetTransform.hpp"
 
 struct MoveEntities : public RavEngine::AutoCTTI {
-	inline void operator()(float fpsScale, PathData& pathdata, RavEngine::NetworkIdentity& netid, RavEngine::Transform& transform) const{
+	inline void operator()(PathData& pathdata, RavEngine::NetworkIdentity& netid, RavEngine::Transform& transform) const{
 
 		// use the sine of global time
 		if (netid.IsOwner()) {

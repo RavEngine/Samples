@@ -17,7 +17,7 @@ void BotPlayer::Tick(float scale){
     float closestDist = 1000;
     
 
-    GetOwner().GetWorld()->Filter([&](float fps, const PuckComponent& puck, const Transform& transform) mutable {
+    GetOwner().GetWorld()->Filter([&](const PuckComponent& puck, const Transform& transform) mutable {
 		auto dist = glm::distance(transform.GetWorldPosition(), goalpos);
 		if (dist <= closestDist) {
 			closestDist = dist;

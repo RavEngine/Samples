@@ -15,7 +15,7 @@ static inline vector3 GenSpawnpoint(){
 
 struct RotationSystem : public RavEngine::AutoCTTI{
 	
-	inline void operator()(float fpsScale, const RotationComponent& rotation, Transform& transform) const{
+	inline void operator()(const RotationComponent& rotation, Transform& transform) const{
 		auto time = GetApp()->GetCurrentTime();
 		decimalType xrot = std::sin(time * rotation.xspeed) * rotation.maxDeg;
 		decimalType yrot = std::sin(time * rotation.yspeed) * rotation.maxDeg;
@@ -26,7 +26,7 @@ struct RotationSystem : public RavEngine::AutoCTTI{
 };
 
 struct RespawnSystem : public RavEngine::AutoCTTI{
-	inline void operator()(float fpsScale, RigidBodyDynamicComponent& rigid, Transform& transform) const{
+	inline void operator()(RigidBodyDynamicComponent& rigid, Transform& transform) const{
 		if (transform.GetWorldPosition().y < -20){
 			rigid.setDynamicsWorldPose(GenSpawnpoint(), transform.GetWorldRotation());
 			rigid.SetLinearVelocity(vector3(0,0,0), false);
@@ -63,7 +63,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
     int totalLostTicks = 0;
     static constexpr auto maxLostTicks = 100;
 	
-	inline void operator()(float fpsScale, SpawnerMarker&){
+	inline void operator()(SpawnerMarker&){
 		if (count > 0){
 			// spawn rigid bodies
 			GetApp()->DispatchMainThread([&](){

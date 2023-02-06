@@ -27,7 +27,7 @@ struct InstanceEntity : public RavEngine::GameObject {
 
 
 struct MetricsSystem : public AutoCTTI {
-	inline void operator()(float fpsScale, GUIComponent& gui) const{
+	inline void operator()(GUIComponent& gui) const{
 		auto doc = gui.GetDocument("main.rml");
 		auto elem = doc->GetElementById("diag");
 		gui.EnqueueUIUpdate([this,elem] {

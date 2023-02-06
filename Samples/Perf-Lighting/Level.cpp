@@ -17,7 +17,8 @@ struct SpinComponent : public AutoCTTI {
 
 struct SpinSystem : public RavEngine::AutoCTTI {
 
-	inline void operator()(float fpsScale, const SpinComponent& s, Transform& t) const {
+	inline void operator()(const SpinComponent& s, Transform& t) const {
+        auto fpsScale = GetApp()->GetCurrentFPSScale();
 		t.LocalRotateDelta(vector3(0,deg_to_rad(fpsScale * s.speed),0));
 	}
 };

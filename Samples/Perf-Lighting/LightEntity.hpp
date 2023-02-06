@@ -10,7 +10,7 @@ struct CirculateComponent : public RavEngine::AutoCTTI {
 };
 
 struct CirculateSystem : public RavEngine::AutoCTTI {
-	inline void operator()(float fpsScale, const CirculateComponent& cc, RavEngine::Transform& transform) const{
+	inline void operator()(const CirculateComponent& cc, RavEngine::Transform& transform) const{
 		auto time = RavEngine::GetApp()->GetCurrentTime();
 		transform.SetLocalPosition(vector3(std::cos(time * cc.speed) * cc.radius, std::sin(time * cc.speed) * 0.5 + 1, std::sin(time * cc.speed) * cc.radius));
 	}

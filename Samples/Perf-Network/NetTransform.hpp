@@ -4,6 +4,7 @@
 #include <RavEngine/RPCComponent.hpp>
 #include <RavEngine/Transform.hpp>
 #include <RavEngine/ComponentWithOwner.hpp>
+#include <RavEngine/App.hpp>
 
 enum class RPCs {
 	UpdateTransform,
@@ -30,8 +31,9 @@ struct PathData: public RavEngine::AutoCTTI {
 
 struct TweenEntities : public RavEngine::AutoCTTI {
 
-	inline void operator()(float fpsScale, InterpolationTransform& itr) const{
+	inline void operator()(InterpolationTransform& itr) const{
 		if (itr.ok) {
+            auto fpsScale = RavEngine::GetApp()->GetCurrentFPSScale();
 			itr.mtx.lock();
 			itr.translate.Step(fpsScale);
 			itr.rotate.Step(fpsScale);
@@ -41,7 +43,7 @@ struct TweenEntities : public RavEngine::AutoCTTI {
 };
 
 struct SyncNetTransforms : public RavEngine::AutoCTTI {
-	inline void operator()(float scale, NetTransform&, RavEngine::Transform& transform, RavEngine::RPCComponent& rpc) {
+	inline void operator()(NetTransform&, RavEngine::Transform& transform, RavEngine::RPCComponent& rpc) {
 		rpc.InvokeServerRPC(RavEngine::to_underlying(RPCs::UpdateTransform), RavEngine::NetworkBase::Reliability::Unreliable, Vec3toRaw(transform.GetWorldPosition()), QuatToRaw(transform.GetWorldRotation()));
 	}
 };

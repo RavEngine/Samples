@@ -8,7 +8,7 @@ struct FPSSystem : public RavEngine::AutoCTTI {
     const std::string document, element;
     FPSSystem(const decltype(document)& document, const decltype(element)& element) : document(document), element(element){}
     
-    inline void operator()(float, RavEngine::GUIComponent& gui) const {
+    inline void operator()(RavEngine::GUIComponent& gui) const {
         auto doc = gui.GetDocument(document);
         auto App = RavEngine::GetApp();
         gui.EnqueueUIUpdate([=]{

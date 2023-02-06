@@ -2,6 +2,7 @@
 #include <RavEngine/ScriptComponent.hpp>
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/CameraComponent.hpp>
+#include <RavEngine/App.hpp>
 
 struct Player : public RavEngine::ComponentWithOwner {
     
@@ -30,7 +31,8 @@ struct Player : public RavEngine::ComponentWithOwner {
 };
 
 struct PlayerSystem{
-    inline void operator()(float scale, Player& p) const{
+    inline void operator()(Player& p) const{
+        auto scale = RavEngine::GetApp()->GetCurrentFPSScale();
         p.Tick(scale);
     }
 };
