@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Install Dependencies
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Setup Repositories
@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Install Dependencies
@@ -114,7 +114,7 @@ jobs:
     runs-on: macos-12
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Configure
@@ -124,10 +124,13 @@ jobs:
           cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF .. 
       - name: Build
         run: cd build; cmake --build . --config release --target install
+      - name: Free space
+        run: |
+          cd build
+          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
       - name: Create DMG
         run: |
           cd build
-          rm -rf build RavEngine host-tools
           touch release/.Trash
           hdiutil create -size 700m -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
       - name: Upload Artifacts
@@ -143,7 +146,7 @@ jobs:
     runs-on: macos-12
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Configure
@@ -153,10 +156,13 @@ jobs:
           cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
+      - name: Free space
+        run: |
+          cd build
+          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
       - name: Create DMG
         run: |
           cd build
-          rm -rf build RavEngine host-tools RavEngine host-tools
           touch release/.Trash
           hdiutil create  -size 700m -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
       - name: Upload Artifacts
@@ -172,7 +178,7 @@ jobs:
     runs-on: macos-12
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Configure
@@ -182,10 +188,13 @@ jobs:
           cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR64 -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
+      - name: Free space
+        run: |
+          cd build
+          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
       - name: Create DMG
         run: |
           cd build
-          rm -rf build RavEngine host-tools
           touch release/.Trash
           hdiutil create -size 700m -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
       - name: Upload Artifacts
@@ -201,7 +210,7 @@ jobs:
     runs-on: macos-12
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Configure
@@ -211,10 +220,13 @@ jobs:
             cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=TVOSCOMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
+      - name: Free space
+        run: |
+          cd build
+          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
       - name: Create DMG
         run: |
           cd build
-          rm -rf build RavEngine host-tools
           touch release/.Trash
           hdiutil create  -size 700m -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
       - name: Upload Artifacts
@@ -230,7 +242,7 @@ jobs:
     runs-on: macos-12
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Configure
@@ -240,10 +252,13 @@ jobs:
             cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR_TVOS -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install
+      - name: Free space
+        run: |
+          cd build
+          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
       - name: Create DMG
         run: |
           cd build
-          rm -rf build RavEngine host-tools
           touch release/.Trash
           hdiutil create -size 700m -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload Artifacts
@@ -259,7 +274,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Configure
@@ -290,7 +305,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Configure
@@ -325,7 +340,7 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.0.3
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Install GDK
@@ -365,7 +380,7 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.0.3
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Configure
@@ -400,7 +415,7 @@ jobs:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.0.3
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: true
       - name: Configure
