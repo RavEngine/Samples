@@ -121,9 +121,9 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF .. 
+          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
-        run: cd build; cmake --build . --config release --target install
+        run: cd build; cmake --build . --config release --target install -- -quiet
       - name: Free space
         run: |
           cd build
@@ -155,7 +155,7 @@ jobs:
           cd build
           cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
-        run: cd build; cmake --build . --config release --target install
+        run: cd build; cmake --build . --config release --target install -- -quiet
       - name: Free space
         run: |
           cd build
@@ -187,7 +187,7 @@ jobs:
           cd build
           cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR64 -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
-        run: cd build; cmake --build . --config release --target install
+        run: cd build; cmake --build . --config release --target install -- -quiet
       - name: Free space
         run: |
           cd build
@@ -219,7 +219,7 @@ jobs:
             cd build
             cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=TVOSCOMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
-        run: cd build; cmake --build . --config release --target install
+        run: cd build; cmake --build . --config release --target install -- -quiet
       - name: Free space
         run: |
           cd build
@@ -251,7 +251,7 @@ jobs:
             cd build
             cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR_TVOS -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
-        run: cd build; cmake --build . --config release --target install
+        run: cd build; cmake --build . --config release --target install -- -quiet
       - name: Free space
         run: |
           cd build
