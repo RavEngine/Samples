@@ -132,7 +132,7 @@ jobs:
         run: |
           cd build
           touch release/.Trash
-          hdiutil create -size 700m -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
+          hdiutil create -size 2g -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -164,7 +164,7 @@ jobs:
         run: |
           cd build
           touch release/.Trash
-          hdiutil create  -size 700m -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
+          hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -196,7 +196,7 @@ jobs:
         run: |
           cd build
           touch release/.Trash
-          hdiutil create -size 700m -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
+          hdiutil create -size 2g -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -228,7 +228,7 @@ jobs:
         run: |
           cd build
           touch release/.Trash
-          hdiutil create  -size 700m -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
+          hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -260,7 +260,7 @@ jobs:
         run: |
           cd build
           touch release/.Trash
-          hdiutil create -size 700m -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
+          hdiutil create -size 2g -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
