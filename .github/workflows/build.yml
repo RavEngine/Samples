@@ -30,7 +30,7 @@ jobs:
       - name: Build
         run: cd build/linux && cmake --build . --config release --target install  
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name:  RavEngine_Samples_linux64
           path:  build/linux/Release/*.AppImage
@@ -71,7 +71,7 @@ jobs:
       - name: Build
         run: cd build/linuxarm && cmake --build . --config release --target install 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name:  RavEngine_Samples_linuxARM
           path:  build/linuxarm/Release/*.AppImage
@@ -97,7 +97,7 @@ jobs:
       - name: Build
         run: cd build; cmake --build . --config Release --target install
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_Web
           path: |
@@ -134,7 +134,7 @@ jobs:
           touch release/.Trash
           hdiutil create -size 2g -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_macOS
           path: build/RavEngine_Samples_macOS.dmg
@@ -166,7 +166,7 @@ jobs:
           touch release/.Trash
           hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_iOS
           path: build/RavEngine_Samples_iOS.dmg
@@ -198,7 +198,7 @@ jobs:
           touch release/.Trash
           hdiutil create -size 2g -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_iOS_Simulator
           path: build/RavEngine_Samples_iOS_Sim.dmg
@@ -230,7 +230,7 @@ jobs:
           touch release/.Trash
           hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_tvOS
           path: build/RavEngine_Samples_tvOS.dmg
@@ -262,7 +262,7 @@ jobs:
           touch release/.Trash
           hdiutil create -size 2g -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_tvOS_Simulator
           path: build/RavEngine_Samples_tvOS_Sim.dmg
@@ -288,7 +288,7 @@ jobs:
       - name: Build
         run: cd build; cd win; cmake --build . --config release --target install
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_win64
           path: |
@@ -319,7 +319,7 @@ jobs:
       - name: Build
         run: cd build; cd win; cmake --build . --config release --target install
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_winARM64
           path: |
@@ -360,7 +360,7 @@ jobs:
               cd build 
               cmake --build . --config release --target install
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_GDK64
           path: |
@@ -396,7 +396,7 @@ jobs:
               cd build\uwp 
               & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x64"
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_uwp64
           path: build\uwp\AppPackages
@@ -431,7 +431,7 @@ jobs:
               cd build\uwp 
               & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="ARM64"
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: RavEngine_Samples_uwp64
           path: build\uwp\AppPackages
