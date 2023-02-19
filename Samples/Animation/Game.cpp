@@ -2,6 +2,7 @@
 #include <RavEngine/App.hpp>
 #include "AppInfo.hpp"
 #include <RavEngine/Dialogs.hpp>
+#include <RavEngine/RenderEngine.hpp>
 
 class Game : public RavEngine::App{
 public:

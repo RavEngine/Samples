@@ -4,6 +4,7 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/App.hpp>
 #include <RavEngine/ComponentHandle.hpp>
+#include <RavEngine/RenderEngine.hpp>
 #include <chrono>
 
 using namespace std;

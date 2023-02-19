@@ -9,6 +9,7 @@
 #include <RavEngine/App.hpp>
 #include <RavEngine/WeakRef.hpp>
 #include <RavEngine/Dialogs.hpp>
+#include <RavEngine/RenderEngine.hpp>
 #include "TestEntity.hpp"
 #include "AppInfo.hpp"
 

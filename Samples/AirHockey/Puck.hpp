@@ -11,6 +11,8 @@
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/AudioSource.hpp>
 #include <RavEngine/ComponentWithOwner.hpp>
+#include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/PhysicsSolver.hpp>
 
 //marker for querying
 struct PuckComponent : public RavEngine::ComponentWithOwner{

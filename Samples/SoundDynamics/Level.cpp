@@ -10,6 +10,7 @@
 #include <RavEngine/Filesystem.hpp>
 #include <RavEngine/AudioMIDI.hpp>
 #include <RavEngine/AudioExporter.hpp>
+#include <RavEngine/VirtualFileSystem.hpp>
 
 using namespace RavEngine;
 using namespace std;

@@ -9,6 +9,8 @@
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/DebugDrawer.hpp>
+#include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/PhysicsSolver.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -64,7 +66,7 @@ struct Level : public World{
         auto camRay = cam.ScreenPointToRay(pixel);
         auto camPos = cameraEntity.GetTransform().GetWorldPosition();
         PhysicsSolver::RaycastHit out_hit;
-        bool hit = Solver.Raycast(camPos, camRay.second, 1000, out_hit);
+        bool hit = Solver->Raycast(camPos, camRay.second, 1000, out_hit);
         std::optional<PhysicsSolver::RaycastHit> hitobj;
         if (hit) {
             hitobj.emplace(std::move(out_hit));

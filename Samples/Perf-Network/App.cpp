@@ -5,6 +5,7 @@
 #include "NetEntity.hpp"
 #include "ClientMenuLevel.hpp"
 #include <RavEngine/Dialogs.hpp>
+#include <RavEngine/RenderEngine.hpp>
 
 using namespace std;
 using namespace RavEngine;

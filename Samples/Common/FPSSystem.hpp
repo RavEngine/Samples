@@ -3,6 +3,7 @@
 #include <RavEngine/CTTI.hpp>
 #include <RavEngine/Utilities.hpp>
 #include <RavEngine/GetApp.hpp>
+#include <RavEngine/RenderEngine.hpp>
 
 struct FPSSystem : public RavEngine::AutoCTTI {
     const std::string document, element;

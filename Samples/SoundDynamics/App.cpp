@@ -2,6 +2,7 @@
 #include "AppInfo.hpp"
 #include "Level.hpp"
 #include <RavEngine/Dialogs.hpp>
+#include <RavEngine/RenderEngine.hpp>
 
 using namespace RavEngine;
 

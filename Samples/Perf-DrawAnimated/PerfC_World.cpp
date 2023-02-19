@@ -9,6 +9,7 @@
 #include <fmt/format.h>
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/Utilities.hpp>
+#include <RavEngine/RenderEngine.hpp>
 #include <array>
 
 using namespace RavEngine;

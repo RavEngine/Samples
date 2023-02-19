@@ -8,6 +8,7 @@
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/InputManager.hpp>
+#include <RavEngine/RenderEngine.hpp>
 #include "AppInfo.hpp"
 
 using namespace RavEngine;

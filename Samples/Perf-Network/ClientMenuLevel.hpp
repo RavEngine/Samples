@@ -1,5 +1,6 @@
 #pragma once
 #include <RavEngine/World.hpp>
+#include <RavEngine/SharedObject.hpp>
 
 class ClientMenu : public RavEngine::World, public RavEngine::virtual_enable_shared_from_this<ClientMenu> {
 public:

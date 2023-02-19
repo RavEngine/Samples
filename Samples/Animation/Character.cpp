@@ -8,6 +8,7 @@
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
 #include <RavEngine/Constraint.hpp>
+#include <RavEngine/PhysicsSolver.hpp>
 
 using namespace RavEngine;
 using namespace std;

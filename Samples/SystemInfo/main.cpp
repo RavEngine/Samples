@@ -6,6 +6,7 @@
 #include <RavEngine/CameraComponent.hpp>
 #include <bgfx/platform.h>
 #include <RavEngine/Dialogs.hpp>
+#include <RavEngine/RenderEngine.hpp>
 
 using namespace RavEngine;
 using namespace std;

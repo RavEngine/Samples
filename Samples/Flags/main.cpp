@@ -8,6 +8,8 @@
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/Utilities.hpp>
+#include <RavEngine/RenderEngine.hpp>
+
 using namespace RavEngine;
 using namespace std;
 

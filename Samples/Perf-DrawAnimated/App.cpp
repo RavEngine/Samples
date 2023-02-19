@@ -2,6 +2,8 @@
 #include "RavEngine/App.hpp"
 #include "AppInfo.hpp"
 #include <RavEngine/Dialogs.hpp>
+#include <RavEngine/RenderEngine.hpp>
+
 using namespace RavEngine;
 class Performance_C : public RavEngine::App{
 public:

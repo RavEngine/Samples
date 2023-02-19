@@ -16,6 +16,7 @@
 #include "RavEngine/InputManager.hpp"
 #include "RavEngine/Light.hpp"
 #include <RavEngine/AudioRoom.hpp>
+#include <RavEngine/RenderEngine.hpp>
 #include <bgfx/bgfx.h>
 
 using namespace RavEngine;

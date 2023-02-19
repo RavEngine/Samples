@@ -10,6 +10,9 @@
 #include <RavEngine/PhysicsLinkSystem.hpp>
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/Dialogs.hpp>
+#include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/Skybox.hpp>
+
 using namespace RavEngine;
 using namespace std;
 

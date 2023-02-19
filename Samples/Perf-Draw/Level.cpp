@@ -6,6 +6,7 @@
 #include "Camera.hpp"
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/Utilities.hpp>
+#include <RavEngine/RenderEngine.hpp>
 #include "CustomMaterials.hpp"
 
 using namespace std;

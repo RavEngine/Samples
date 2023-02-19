@@ -2,6 +2,7 @@
 #include "Level.hpp"
 #include "AppInfo.hpp"
 #include <RavEngine/Dialogs.hpp>
+#include <RavEngine/RenderEngine.hpp>
 
 struct App : public RavEngine::App{
 	App() : RavEngine::App(APPNAME){}
