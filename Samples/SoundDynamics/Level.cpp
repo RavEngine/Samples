@@ -131,35 +131,15 @@ Level::Level(){
 
         void ProcessEvent(Rml::Event& evt) final {
             auto sources = world->GetAllComponentsOfType<AudioSourceComponent>();
-            auto midiSources = world->GetAllComponentsOfType<AudioMIDISourceComponent>();
             
             auto selbox = static_cast<Rml::ElementFormControlSelect*>(evt.GetTargetElement());
             auto songName = selbox->GetOption(selbox->GetSelection())->GetInnerRML();
-            auto rasterAsset = world->tracks.contains(songName) ? world->tracks.at(songName) : nullptr;
-            auto midiAsset = world->midiplayers.contains(songName) ? world->midiplayers.at(songName) : nullptr;
-
-            if (rasterAsset){
-                for (auto& player : *sources) {
-                   
-                    player.SetAudio(rasterAsset);
-                    player.Restart();
-                    player.Play();  // if the song reaches the end, it will automatically stop, so we need to re-play.
-                }
-                
-                for(auto& midiplayer : *midiSources){
-                    if (midiplayer.midiPlayer){
-                        midiplayer.midiPlayer->Pause();
-                    }
-                }
-            }
-            else if (midiAsset){
-                midiAsset->Reset();
-                for (auto& player : *sources) {
-                    player.Pause();
-                }
-                for(auto& midiplayer : *midiSources){
-                    midiplayer.midiPlayer = midiAsset;
-                    midiplayer.midiPlayer->Play();
+            auto player = world->tracks.contains(songName) ? world->tracks.at(songName) : nullptr;
+            if (player){
+                player->Restart();
+                player->Play();  // if the song reaches the end, it will automatically stop, so we need to re-play.
+                for(auto& source : *sources){
+                    source.SetPlayer(player);
                 }
             }
             else{
@@ -175,17 +155,25 @@ Level::Level(){
     {
         int music_id = 0;
 		GetApp()->GetResources().IterateDirectory("sounds", [&](const string& track) {
+           
+            
             auto createElement = [&music_id,doc,musicsel](const std::string& name){
                 auto opt = doc->CreateElement("option");
                 opt->SetAttribute("value", StrFormat("{}",music_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
                 opt->SetInnerRML(name);
                 musicsel->AppendChild(std::move(opt));
             };
+            // mono effect graph
+            auto effectGraph = New<AudioGraphAsset>(1);
+            effectGraph->filters.emplace_back(New<AudioGainFilterLayer>(0.5));
             
             auto path = Filesystem::Path(track);
             if (path.extension() == ".mp3") {
                 auto leaf_name = path.filename();
-                tracks[leaf_name] = RavEngine::New<AudioAsset>(leaf_name.string());
+                auto player = RavEngine::New<SampledAudioDataProvider>(RavEngine::New<AudioAsset>(leaf_name.string()));
+                tracks[leaf_name] = player;
+                player->SetGraph(effectGraph);
+                player->Play();
                 createElement(leaf_name.string());
             }
             else if (path.extension() == ".mid"){
@@ -204,10 +192,12 @@ Level::Level(){
                 auto midibytes = GetApp()->GetResources().FileContentsAt<std::vector<uint8_t>>(path.string().c_str());
                 Ref<fmidi_smf_t> file{fmidi_smf_mem_read(midibytes.data(), midibytes.size())};
                 
+                player->SetGraph(effectGraph);
                 player->SetMidi(file);
-                player->Reset();
+                player->Restart();
+                player->Play();
                
-                midiplayers[leaf_name] = player;
+                tracks[leaf_name] = player;
                 
                 createElement(leaf_name.string());
             }

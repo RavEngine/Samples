@@ -8,21 +8,12 @@ using namespace std;
 
 STATIC(Speaker::speakerInstance);
 
-void Speaker::Create(Ref<AudioAsset> a) {
+void Speaker::Create(Ref<AudioDataProvider> a) {
     GameObject::Create();
 	// audio source
 	auto sourceEntity = GetWorld()->CreatePrototype<GameObject>();
 	auto& audio = sourceEntity.EmplaceComponent<RavEngine::AudioSourceComponent>(a);
-	
-	// mono effect graph
-	auto effectGraph = New<AudioGraphAsset>(1);
-	effectGraph->filters.emplace_back(New<AudioGainFilterLayer>(0.5));
 
-	audio.SetGraph(effectGraph);
-
-
-    // MIDI source
-    sourceEntity.EmplaceComponent<AudioMIDISourceComponent>();
     
 	GetTransform().AddChild(sourceEntity);
 	sourceEntity.GetTransform().LocalTranslateDelta(vector3(0, 3, 0));
@@ -32,6 +23,5 @@ void Speaker::Create(Ref<AudioAsset> a) {
 		auto texture = Texture::Manager::Get("speaker.png");
 		speakerInstance->SetAlbedoTexture(texture);
 	}
-	audio.Play();
     EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("speaker.obj"),speakerInstance);
 }

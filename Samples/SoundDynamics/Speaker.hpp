@@ -5,7 +5,7 @@
 
 struct Speaker : public RavEngine::GameObject {
 
-	void Create(Ref<RavEngine::AudioAsset> a);
+	void Create(Ref<RavEngine::AudioDataProvider> a);
 
 	static Ref<RavEngine::PBRMaterialInstance> speakerInstance;
 
