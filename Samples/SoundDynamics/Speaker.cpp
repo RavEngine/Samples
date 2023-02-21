@@ -1,6 +1,6 @@
 #include "Speaker.hpp"
 #include <RavEngine/StaticMesh.hpp>
-#include <RavEngine/AudioMIDI.hpp>
+#include "AudioMIDI.hpp"
 #include <RavEngine/AudioGraphAsset.hpp>
 
 using namespace RavEngine;

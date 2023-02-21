@@ -78,7 +78,13 @@ function (add_sample sample_dir)
 		target_sources("${APPNAME}" PRIVATE "Samples/logo44.png" "Samples/logo150.png" "Samples/logo50.png" "Samples/logo620x300.png")
 	endif()
 	
-	target_include_directories("${APPNAME}" PUBLIC "${CMAKE_BINARY_DIR}/${APPNAME}" "${CMAKE_CURRENT_LIST_DIR}/Samples/Common")
+	target_include_directories("${APPNAME}" PUBLIC
+        "${CMAKE_BINARY_DIR}/${APPNAME}"
+        "${CMAKE_CURRENT_LIST_DIR}/Samples/Common"
+        "lib/sfizz/external/abseil-cpp/"
+        "lib/sfizz/external/simde/"
+        "lib/sfizz/external/filesystem/include/"
+    )
 	target_compile_features(${APPNAME} PRIVATE cxx_std_20)
 	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 
@@ -191,6 +197,19 @@ function (add_sample sample_dir)
 
 endfunction()
 
+# sfizz
+set(BUILD_TESTING OFF CACHE INTERNAL "")
+set(SFIZZ_JACK OFF CACHE INTERNAL "")
+set(SFIZZ_LV2 OFF CACHE INTERNAL "")
+set(SFIZZ_LV2_UI OFF CACHE INTERNAL "")
+set(SFIZZ_VST OFF CACHE INTERNAL "")
+set(SFIZZ_AU OFF CACHE INTERNAL "")
+set(SFIZZ_SHARED OFF CACHE INTERNAL "")
+set(ENABLE_LTO OFF CACHE INTERNAL "")
+set(SFIZZ_RENDER OFF CACHE INTERNAL "")
+set(SFIZZ_STATIC_DEPENDENCIES OFF CACHE INTERNAL "")
+add_subdirectory("lib/sfizz")
+
 add_sample("AirHockey")
 add_sample("Playground")
 add_sample("Animation")
@@ -208,6 +227,15 @@ add_sample("Gravity")
 add_sample("SystemInfo")
 add_sample("VR")
 add_sample("Shadows")
+
+target_link_libraries("RavEngineSoundDynamics" PUBLIC
+    "sfizz_static"
+    "sfizz_fmidi"
+)
+
+group_in("SamplesDeps/sfizz" "aiff;sfizz_pugixml;sfizz_spline;sfizz_tunings;sfizz_hiir_polyphase_iir2designer;sfizz_kissfft;sfizz_cephes;sfizz_cpuid;sfizz_filesystem_impl;sfizz_fmidi;\
+st_audiofile;st_audiofile_formats;st_info;sfizz_parser;sfizz_messaging;sfizz_import;sfizz_spin_mutex;sfizz_internal;sfizz_match_definitions;sfizz_static;\
+sfizz-generate-git-build-id;sfizz-git-build-id")
 
 # exlcude the SceneViewer from iOS, tvOS, UWP, and ARM linux 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
