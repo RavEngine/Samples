@@ -192,7 +192,7 @@ void AudioMIDIPlayer::RenderMonoBuffer1024OrLess(PlanarSampleBufferInlineView& o
 }
 
 void AudioMIDIPlayer::ProvideBufferData(PlanarSampleBufferInlineView& out_buffer, PlanarSampleBufferInlineView& effectScratchBuffer){
-    uint32_t blockSize = std::min<decltype(blockSize)>(1024,out_buffer.sizeOneChannel());
+    uint64_t blockSize = std::min<decltype(blockSize)>(1024,out_buffer.sizeOneChannel());
     // treat the buffer as though it were mono even if it has additional space
     uint64_t next = blockSize;
 	auto maxsamples = out_buffer.size() / out_buffer.GetNChannels() ;
