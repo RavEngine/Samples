@@ -210,6 +210,9 @@ set(SFIZZ_RENDER OFF CACHE INTERNAL "")
 set(SFIZZ_STATIC_DEPENDENCIES OFF CACHE INTERNAL "")
 add_subdirectory("lib/sfizz")
 
+add_subdirectory("lib/midifile" EXCLUDE_FROM_ALL)
+
+
 add_sample("AirHockey")
 add_sample("Playground")
 add_sample("Animation")
@@ -231,6 +234,7 @@ add_sample("Shadows")
 target_link_libraries("RavEngineSoundDynamics" PUBLIC
     "sfizz_static"
     "sfizz_fmidi"
+	"midifile"
 )
 
 group_in("SamplesDeps/sfizz" "aiff;sfizz_pugixml;sfizz_spline;sfizz_tunings;sfizz_hiir_polyphase_iir2designer;sfizz_kissfft;sfizz_cephes;sfizz_cpuid;sfizz_filesystem_impl;sfizz_fmidi;\
