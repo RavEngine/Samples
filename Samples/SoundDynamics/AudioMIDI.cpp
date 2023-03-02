@@ -170,21 +170,22 @@ void AudioMIDIPlayer::RenderMonoBuffer1024OrLess(PlanarSampleBufferInlineView& o
     unsigned sampleRate { AudioPlayer::GetSamplesPerSec() };
     auto sampleRateDouble = static_cast<double>(sampleRate);
     const double increment { 1.0 / sampleRateDouble };
-    mtx.lock();
-    // tick player for the size of the buffer
-    for (delay = 0; delay < out_buffer.sizeOneChannel() && !finishedCurrent; delay++)
-        fmidi_player_tick(midiPlayer.get(), increment);
-    
-    using vtype = std::remove_reference_t<decltype(out_buffer)>::value_type;
+    {
+        RAIILock lock(mtx); // auto unlocks when scope ends, or when force-interrupted
+        // tick player for the size of the buffer
+        for (delay = 0; delay < out_buffer.sizeOneChannel() && !finishedCurrent; delay++)
+            fmidi_player_tick(midiPlayer.get(), increment);
 
-    // this might be a bad idea...
-    vtype* buffers[]{effectScratchBuffer[0].data(), effectScratchBuffer[0].data() };  // initialize both channels to the same buffer
-    
-    // render all the instruments and then add into the out_buffer
-    for(auto& instrument : instrumentTrackMap){
-        instrument.instrument->Render(buffers, out_buffer.sizeOneChannel(), out_buffer, 1);
+        using vtype = std::remove_reference_t<decltype(out_buffer)>::value_type;
+
+        // this might be a bad idea...
+        vtype* buffers[]{ effectScratchBuffer[0].data(), effectScratchBuffer[0].data() };  // initialize both channels to the same buffer
+
+        // render all the instruments and then add into the out_buffer
+        for (auto& instrument : instrumentTrackMap) {
+            instrument.instrument->Render(buffers, out_buffer.sizeOneChannel(), out_buffer, 1);
+        }
     }
-    mtx.unlock();
     
     // apply any effect graphs
     // re-use tempbufferL
