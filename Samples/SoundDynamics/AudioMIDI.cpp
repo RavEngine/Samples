@@ -171,7 +171,6 @@ void AudioMIDIPlayer::RenderMonoBuffer1024OrLess(PlanarSampleBufferInlineView& o
     auto sampleRateDouble = static_cast<double>(sampleRate);
     const double increment { 1.0 / sampleRateDouble };
     {
-        RAIILock lock(mtx); // auto unlocks when scope ends, or when force-interrupted
         // tick player for the size of the buffer
         for (delay = 0; delay < out_buffer.sizeOneChannel() && !finishedCurrent; delay++)
             fmidi_player_tick(midiPlayer.get(), increment);
@@ -193,16 +192,20 @@ void AudioMIDIPlayer::RenderMonoBuffer1024OrLess(PlanarSampleBufferInlineView& o
 }
 
 void AudioMIDIPlayer::ProvideBufferData(PlanarSampleBufferInlineView& out_buffer, PlanarSampleBufferInlineView& effectScratchBuffer){
-    uint64_t blockSize = std::min<decltype(blockSize)>(1024,out_buffer.sizeOneChannel());
+    const auto bufferSize = AudioPlayer::GetBufferSize();
+    const auto maxsamples = out_buffer.sizeOneChannel();
+    RAIILock lock(mtx); // auto unlocks when scope ends
+    uint64_t blockSize = std::min<decltype(blockSize)>(bufferSize,maxsamples);
     // treat the buffer as though it were mono even if it has additional space
     uint64_t next = blockSize;
-	auto maxsamples = out_buffer.size() / out_buffer.GetNChannels() ;
-    for(uint64_t numFramesWritten { 0 };  numFramesWritten < maxsamples && !finishedCurrent; numFramesWritten += next){
+    for (uint64_t numFramesWritten{ 0 }; numFramesWritten < maxsamples && !finishedCurrent; ) {
         // slide the view
         PlanarSampleBufferInlineView out_buffer_subset(out_buffer[0].data() + numFramesWritten, next, next);
         PlanarSampleBufferInlineView scratch_buffer_subset(effectScratchBuffer[0].data() + numFramesWritten, next, next);
         RenderMonoBuffer1024OrLess(out_buffer_subset, scratch_buffer_subset);
-        next = std::min<size_t>(blockSize, out_buffer.sizeOneChannel() - numFramesWritten);
+        numFramesWritten += next;
+        const auto framesLeft = maxsamples - numFramesWritten;
+        next = std::min<size_t>(blockSize, framesLeft);
     }
 }
 

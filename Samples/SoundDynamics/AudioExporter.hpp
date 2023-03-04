@@ -3,7 +3,7 @@
 #include <RavEngine/Filesystem.hpp>
 
 namespace RavEngine {
-struct AudioAsset;
+class AudioAsset;
 
 struct AudioExporter{
     /**

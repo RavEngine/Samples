@@ -192,6 +192,10 @@ Level::Level(){
                 
                 auto midibytes = GetApp()->GetResources().FileContentsAt<std::vector<uint8_t>>(path.string().c_str());
                 Ref<fmidi_smf_t> file{fmidi_smf_mem_read(midibytes.data(), midibytes.size())};
+				
+				/*AudioMIDIRenderer render;
+				auto asset = render.Render(file,*player.get());
+				AudioExporter::ExportWavOneShot(asset, "C:/Users/Ra*/vbug/Downloads/output.wav");
                 
                 player->SetGraph(effectGraph);
                 player->SetMidi(file);
