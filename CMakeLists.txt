@@ -239,7 +239,26 @@ target_link_libraries("RavEngineSoundDynamics" PUBLIC
 
 group_in("SamplesDeps/sfizz" "aiff;sfizz_pugixml;sfizz_spline;sfizz_tunings;sfizz_hiir_polyphase_iir2designer;sfizz_kissfft;sfizz_cephes;sfizz_cpuid;sfizz_filesystem_impl;sfizz_fmidi;\
 st_audiofile;st_audiofile_formats;st_info;sfizz_parser;sfizz_messaging;sfizz_import;sfizz_spin_mutex;sfizz_internal;sfizz_match_definitions;sfizz_static;\
-sfizz-generate-git-build-id;sfizz-git-build-id")
+sfizz-generate-git-build-id;sfizz-git-build-id;Abseil")
+
+group_in("SamplesDeps/Abseil" "absl_base;absl_raw_hash_set;absl_stacktrace;absl_symbolize;absl_failure_signal_handler;absl_demangle_internal;absl_leak_check;\
+absl_leak_check_disable;absl_flags_program_name;absl_flags_internal;absl_hash;absl_int128;absl_status;absl_statusor;absl_strings;absl_cord;absl_synchronization;\
+absl_time;absl_bad_optional_access;absl_bad_variant_access")
+
+group_in("SamplesDeps/Abseil/internal" "absl_log_severity;absl_raw_logging_internal;absl_spinlock_wait;absl_malloc_internal;absl_throw_delegate;absl_scoped_set_env;\
+absl_strerror;absl_hashtablez_sampler;absl_examine_stack;absl_debugging_internal;absl_flags_config;absl_flags_marshalling;absl_flags_commandlineflag_internal;\
+absl_flags_commandlineflag;absl_flags_private_handle_accessor;absl_flags_reflection;absl_flags;absl_flags_usage_internal;absl_flags_usage;absl_flags_parse;\
+absl_city;absl_low_level_hash;absl_exponential_biased;absl_periodic_sampler;absl_random_distributions;absl_random_seed_gen_exception;absl_random_seed_sequences;\
+absl_random_internal_seed_material;absl_random_internal_pool_urbg;absl_random_internal_platform;absl_random_internal_randen;absl_random_internal_randen_slow;\
+absl_random_internal_randen_hwaes;absl_random_internal_randen_hwaes_impl;absl_random_internal_distribution_test_util;absl_strings_internal;absl_str_format_internal;\
+absl_cord_internal;absl_cordz_functions;absl_cordz_handle;absl_cordz_info;absl_cordz_sample_token;absl_graphcycles_internal;absl_civil_time;absl_time_zone;absl_bad_any_cast_impl")
+
+if(CMAKE_SYSTEM_NAME MATCHES "WindowsStore")
+	foreach(TGT "sfizz_fmidi" "aiff" "sfizz_internal")
+		target_compile_definitions(${TGT} PUBLIC "_CRT_SECURE_NO_WARNINGS" "BUILD_DLL" "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" "_CRT_NONSTDC_NO_DEPRECATE")
+		target_compile_options(${TGT} PUBLIC  "/wd4146" "/wd4703")
+	endforeach()
+endif()
 
 # exlcude the SceneViewer from iOS, tvOS, UWP, and ARM linux 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
