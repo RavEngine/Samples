@@ -294,7 +294,7 @@ jobs:
           path: |
                 build\win\release\RavEngine*.exe 
                 build\win\release\RavEngine*.rvedata
-                build\win\release\RavEngine*Streaming\
+                build\win\release\RavEngine*Streaming\*
       - name: Prepare Transfer.sh upload
         run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata -DestinationPath SamplesWin64.zip
       - name: Upload to Transfer.sh
@@ -325,7 +325,7 @@ jobs:
           path: |
                 build\win\release\RavEngine*.exe 
                 build\win\release\RavEngine*.rvedata
-                build\win\release\RavEngine*Streaming\
+                build\win\release\RavEngine*Streaming\*
       - name: Prepare Transfer.sh upload
         run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata -DestinationPath SamplesWinARM64.zip
       - name: Upload to Transfer.sh
@@ -413,7 +413,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1.0.3
+        uses: microsoft/setup-msbuild@v1.1
       - name: Checkout code
         uses: actions/checkout@v3
         with:
