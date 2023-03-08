@@ -104,9 +104,9 @@ jobs:
                 build/Release/*.js
                 build/Release/*.html
                 build/Release/*.wasm
-                build/release/*Streaming/*
+                build/release/*Streaming/
       - name: Prepare Transfer upload
-        run: cd build/Release ; zip -r -9 Samples.zip *.js *.html *.wasm
+        run: cd build/Release ; zip -r -9 Samples.zip *.js *.html *.wasm *Streaming/
       - name: Upload to Transfer.sh
         run: URL=`curl --upload-file build/Release/Samples.zip https://transfer.sh/RavEngine_Samples_Web.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
         
@@ -297,7 +297,7 @@ jobs:
                 build\win\release\RavEngine*.rvedata
                 build\win\release\RavEngine*Streaming\*
       - name: Prepare Transfer.sh upload
-        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\* -DestinationPath SamplesWin64.zip
+        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\ -DestinationPath SamplesWin64.zip
       - name: Upload to Transfer.sh
         run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_Win64.zip -Method PUT -InFile SamplesWin64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
 
@@ -328,7 +328,7 @@ jobs:
                 build\win\release\RavEngine*.rvedata
                 build\win\release\RavEngine*Streaming\*
       - name: Prepare Transfer.sh upload
-        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\* -DestinationPath SamplesWinARM64.zip
+        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\ -DestinationPath SamplesWinARM64.zip
       - name: Upload to Transfer.sh
         run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_WinARM64.zip -Method PUT -InFile SamplesWinARM64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
 
