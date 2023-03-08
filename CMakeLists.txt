@@ -121,7 +121,13 @@ function (add_sample sample_dir)
 
 
 	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
-		set(EM_LINK "--embed-file ${DATA_PACK}"
+		if (EXISTS "${sample_dir}/streaming/")
+			set(EM_PRELOAD "--preload-file '${sample_dir}/streaming/@${APPNAME}_Streaming'")
+		endif()
+		get_filename_component(packname "${DATA_PACK}" NAME)
+
+		set(EM_LINK "--preload-file ${DATA_PACK}@${packname}"
+					${EM_PRELOAD}
 					"-s MAX_WEBGL_VERSION=2" 
 					"-s MIN_WEBGL_VERSION=2" 
 					"-s FULL_ES3=1" 

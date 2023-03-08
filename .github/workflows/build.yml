@@ -104,9 +104,9 @@ jobs:
                 build/Release/*.js
                 build/Release/*.html
                 build/Release/*.wasm
-                build/release/*Streaming/
+                build/release/*.data
       - name: Prepare Transfer upload
-        run: cd build/Release ; zip -r -9 Samples.zip *.js *.html *.wasm *Streaming/
+        run: cd build/Release ; zip -r -9 Samples.zip *.js *.html *.wasm *.data
       - name: Upload to Transfer.sh
         run: URL=`curl --upload-file build/Release/Samples.zip https://transfer.sh/RavEngine_Samples_Web.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
         
