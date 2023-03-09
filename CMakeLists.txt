@@ -122,7 +122,7 @@ function (add_sample sample_dir)
 
 	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
 		if (EXISTS "${sample_dir}/streaming/")
-			set(EM_PRELOAD "--preload-file '${sample_dir}/streaming/@${APPNAME}_Streaming'")
+			set(EM_PRELOAD "--preload-file \"${sample_dir}/streaming/@${APPNAME}_Streaming/\"")
 		endif()
 		get_filename_component(packname "${DATA_PACK}" NAME)
 

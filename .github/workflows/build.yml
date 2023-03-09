@@ -104,7 +104,7 @@ jobs:
                 build/Release/*.js
                 build/Release/*.html
                 build/Release/*.wasm
-                build/release/*.data
+                build/Release/*.data
       - name: Prepare Transfer upload
         run: cd build/Release ; zip -r -9 Samples.zip *.js *.html *.wasm *.data
       - name: Upload to Transfer.sh
