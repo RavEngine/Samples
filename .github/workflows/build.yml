@@ -112,7 +112,7 @@ jobs:
         
   build-mac:
     name: Build Samples for macOS
-    runs-on: macos-12
+    runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -142,9 +142,13 @@ jobs:
       - name: Upload to Transfer.sh
         run: URL=`curl --upload-file build/RavEngine_Samples_macOS.dmg https://transfer.sh/RavEngine_Samples_macOS.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
         
-  build-ios:
-    name: Build Samples for iOS (unsigned)
-    runs-on: macos-12
+  build-apple-mobile:
+    name: Build Samples for Apple Mobile (unsigned)
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [OS64COMBINED, SIMULATOR64, TVOSCOMBINED, SIMULATOR_TVOS]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -154,125 +158,34 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=OS64COMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
+          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=${{ matrix.platform }} -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install -- -quiet
       - name: Free space
         run: |
           cd build
-          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
+          rm -rf build RavEngine host-tools *.build/
       - name: Create DMG
         run: |
           cd build
           touch release/.Trash
-          hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_iOS RavEngine_Samples_iOS.dmg
+          hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_${{ matrix.platform }} RavEngine_Samples_${{ matrix.platform }}.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: RavEngine_Samples_iOS
-          path: build/RavEngine_Samples_iOS.dmg
+          name: RavEngine_Samples_${{ matrix.platform }}
+          path: build/RavEngine_Samples_${{ matrix.platform }}.dmg
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/RavEngine_Samples_iOS.dmg https://transfer.sh/RavEngine_Samples_iOS.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
-            
-  build-ios-simulator:
-    name: Build Samples for iOS Simulator
-    runs-on: macos-12
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Configure
-        run: |
-          mkdir -p build
-          cd build
-          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR64 -DRAVENGINE_BUILD_TESTS=OFF ..
-      - name: Build
-        run: cd build; cmake --build . --config release --target install -- -quiet
-      - name: Free space
-        run: |
-          cd build
-          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
-      - name: Create DMG
-        run: |
-          cd build
-          touch release/.Trash
-          hdiutil create -size 2g -srcfolder release -volname RavEngine_Samples_iOS_Sim RavEngine_Samples_iOS_Sim.dmg
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: RavEngine_Samples_iOS_Simulator
-          path: build/RavEngine_Samples_iOS_Sim.dmg
-      - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/RavEngine_Samples_iOS_Sim.dmg https://transfer.sh/RavEngine_Samples_iOS_Sim.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
-        
-  build-tvos:
-    name: Build Samples for tvOS (unsigned)
-    runs-on: macos-12
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Configure
-        run: |
-            mkdir -p build
-            cd build
-            cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=TVOSCOMBINED -DRAVENGINE_BUILD_TESTS=OFF ..
-      - name: Build
-        run: cd build; cmake --build . --config release --target install -- -quiet
-      - name: Free space
-        run: |
-          cd build
-          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
-      - name: Create DMG
-        run: |
-          cd build
-          touch release/.Trash
-          hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_tvOS RavEngine_Samples_tvOS.dmg
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: RavEngine_Samples_tvOS
-          path: build/RavEngine_Samples_tvOS.dmg
-      - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/RavEngine_Samples_tvOS.dmg https://transfer.sh/RavEngine_Samples_tvOS.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
-   
-  build-tvos-simulator:
-    name: Build Samples for tvOS Simulator
-    runs-on: macos-12
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Configure
-        run: |
-            mkdir -p build
-            cd build
-            cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=SIMULATOR_TVOS -DRAVENGINE_BUILD_TESTS=OFF ..
-      - name: Build
-        run: cd build; cmake --build . --config release --target install -- -quiet
-      - name: Free space
-        run: |
-          cd build
-          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
-      - name: Create DMG
-        run: |
-          cd build
-          touch release/.Trash
-          hdiutil create -size 2g -srcfolder release -volname RavEngine_Samples_tvOS_Sim RavEngine_Samples_tvOS_Sim.dmg
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: RavEngine_Samples_tvOS_Simulator
-          path: build/RavEngine_Samples_tvOS_Sim.dmg
-      - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/RavEngine_Samples_tvOS_Sim.dmg https://transfer.sh/RavEngine_Samples_tvOS_Sim.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        run: URL=`curl --upload-file build/RavEngine_Samples_${{ matrix.platform }}.dmg https://transfer.sh/RavEngine_Samples_${{ matrix.platform }}.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
    
   build-windows:
     name: Build samples for Windows
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix: 
+        arch: [x64, ARM64]
+        sdk: [Windows]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -287,131 +200,28 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
           cmake -Wno-dev ..\.. 
       - name: Build
-        run: cd build; cd win; cmake --build . --config release --target install
+        run: cd build; cd win; cmake -A${{ matrix.arch }} -DCMAKE_SYSTEM_NAME=${{ matrix.sdk }} -DCMAKE_SYSTEM_VERSION="10.0" --build . --config release --target install
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: RavEngine_Samples_win64
+          name: RavEngine_Samples_Win${{ matrix.arch }}
           path: |
                 build\win\release\RavEngine*.exe 
                 build\win\release\RavEngine*.rvedata
                 build\win\release\RavEngine*Streaming\*
       - name: Prepare Transfer.sh upload
-        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\ -DestinationPath SamplesWin64.zip
+        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\ -DestinationPath Samples${{ matrix.arch }}.zip
       - name: Upload to Transfer.sh
-        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_Win64.zip -Method PUT -InFile SamplesWin64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
-
-  build-windows-arm:
-    name: Build samples for Windows ARM64
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Configure
-        run: |
-            mkdir build
-            cd build
-            mkdir win
-            cd win
-            cmake -AARM64 -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..\..
-            cmake ..\.. 
-      - name: Build
-        run: cd build; cd win; cmake --build . --config release --target install
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: RavEngine_Samples_winARM64
-          path: |
-                build\win\release\RavEngine*.exe 
-                build\win\release\RavEngine*.rvedata
-                build\win\release\RavEngine*Streaming\*
-      - name: Prepare Transfer.sh upload
-        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\ -DestinationPath SamplesWinARM64.zip
-      - name: Upload to Transfer.sh
-        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_WinARM64.zip -Method PUT -InFile SamplesWinARM64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
-
-
-  build-gdk-desktop:
-    if: ${{ false }}
-    name: Build samples for GDK-Desktop
-    runs-on: windows-latest
-    steps:
-      - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Install GDK
-        run: |
-            cmd /c "curl.exe `"https://codeload.github.com/microsoft/GDK/zip/refs/tags/June_2022_Update_4`" -o gdk.zip"
-            Expand-Archive -Path .\gdk.zip -DestinationPath gdk
-            cd .\gdk\GDK-June_2022_Update_4
-            .\PGDK.exe /features OptionId.GamingRuntime OptionId.GamingRuntimeDependencies
-      - name: Configure
-        run: |
-              mkdir build
-              cd build
-              cmake -A"Gaming.Desktop.x64" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF -Wno-dev .. 
-              cmake -Wno-dev ..
-      - name: Build
-        run: |
-              cd build 
-              cmake --build . --config release --target install
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: RavEngine_Samples_GDK64
-          path: |
-                build\release\RavEngine*.exe 
-                build\release\RavEngine*.rvedata
-                build\release\RavEngine*Streaming\*
-      - name: Prepare Transfer.sh upload
-        run: |
-              Compress-Archive -Path build\release\*.exe,build\release\*.rvedata,build\release\*Streaming\* -DestinationPath SamplesGDK64.zip
-      - name: Upload to Transfer.sh
-        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/SamplesGDK64.zip -Method PUT -InFile SamplesGDK64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
-        
-  build-uwp:
+        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_Win${{ matrix.arch }}.zip -Method PUT -InFile Samples${{ matrix.arch }}.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
+      
+  build-uwp-arm:
     name: Build samples for UWP
     runs-on: windows-latest
-    steps:
-      - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Configure
-        run: |
-              mkdir build
-              cd build
-              mkdir uwp
-              cd uwp
-              cmake -Ax64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF -Wno-dev ..\.. 
-              cmake -Wno-dev ..\..
-      - name: Build & Publish
-        run: |
-              cd build\uwp 
-              & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="x64"
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: RavEngine_Samples_uwp64
-          path: build\uwp\AppPackages
-      - name: Prepare Transfer.sh upload
-        run: |
-              Move-Item -Path build\uwp\AppPackages\ -Destination .
-              Remove-Item -Path build -Recurse
-              Compress-Archive -Path AppPackages\ -DestinationPath SamplesUWP64.zip
-      - name: Upload to Transfer.sh
-        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_UWP64.zip -Method PUT -InFile SamplesUWP64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
-
-  build-uwp-arm:
-    name: Build samples for UWP ARM64
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix: 
+        arch: [x64, ARM64]
+        sdk: [WindowsStore]
     steps:
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.1
@@ -425,7 +235,7 @@ jobs:
               cd build
               mkdir uwp
               cd uwp
-              cmake -AARM64 -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
+              cmake -A${{ matrix.arch }} -DCMAKE_SYSTEM_NAME=${{ matrix.sdk }} -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -Wno-dev -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
               cmake -Wno-dev ..\..;
       - name: Build & Publish
         run: |
@@ -434,12 +244,12 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: RavEngine_Samples_uwp64
+          name: RavEngine_Samples_${{ matrix.sdk }}_${{ matrix.arch }}
           path: build\uwp\AppPackages
       - name: Prepare Transfer.sh upload
         run: |
               Move-Item -Path build\uwp\AppPackages\ -Destination .
               Remove-Item -Path build -Recurse
-              Compress-Archive -Path AppPackages\ -DestinationPath SamplesUWPARM64.zip
+              Compress-Archive -Path AppPackages\ -DestinationPath Samples${{ matrix.sdk }}_${{ matrix.arch }}.zip
       - name: Upload to Transfer.sh
-        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_UWPARM64.zip -Method PUT -InFile SamplesUWPARM64.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
+        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_${{ matrix.sdk }}_${{ matrix.arch }}.zip -Method PUT -InFile Samples${{ matrix.sdk }}_${{ matrix.arch }}.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
