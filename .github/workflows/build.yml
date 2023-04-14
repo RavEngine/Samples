@@ -214,7 +214,7 @@ jobs:
       - name: Upload to Transfer.sh
         run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_Win${{ matrix.arch }}.zip -Method PUT -InFile Samples${{ matrix.arch }}.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
       
-  build-uwp-arm:
+  build-uwp:
     name: Build samples for UWP
     runs-on: windows-latest
     strategy:
@@ -240,7 +240,7 @@ jobs:
       - name: Build & Publish
         run: |
               cd build\uwp 
-              & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="ARM64"
+              & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="${{ matrix.arch }}"
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
