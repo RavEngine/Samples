@@ -197,10 +197,10 @@ jobs:
           cd build
           mkdir win 
           cd win
-          cmake -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
+          cmake -A${{ matrix.arch }} -DCMAKE_SYSTEM_NAME=${{ matrix.sdk }} -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
           cmake -Wno-dev ..\.. 
       - name: Build
-        run: cd build; cd win; cmake -A${{ matrix.arch }} -DCMAKE_SYSTEM_NAME=${{ matrix.sdk }} -DCMAKE_SYSTEM_VERSION="10.0" --build . --config release --target install
+        run: cd build; cd win; cmake --build . --config release --target install
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
