@@ -77,14 +77,14 @@ struct Level : public RavEngine::World{
 		light.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
 		light.GetTransform().LocalRotateDelta(vector3(0, 0, deg_to_rad(45))).LocalTranslateDelta(vector3(0,2,0));
         
-        /*
+        
         auto pointLight = CreatePrototype<GameObject>();
         auto& pLight = pointLight.EmplaceComponent<PointLight>();
         pLight.debugEnabled = true;
-        pLight.color = ColorRGBA{1,0,0,1};
-        pLight.Intensity = 2;
+        pLight.SetColorRGBA({1,0,0,1});
+        pLight.SetIntensity(2);
         pointLight.GetTransform().LocalTranslateDelta(vector3(-2,1,-0.5));
-         */
+         
 
 		auto spotLightEntity = CreatePrototype<GameObject>();
 		auto& spotLight = spotLightEntity.EmplaceComponent<SpotLight>();

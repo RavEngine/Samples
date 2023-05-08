@@ -51,7 +51,7 @@ void TestEntity::CommonInit(){
 	if (!sharedMat) {
 		sharedMat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0.5);
 	}
-	r.EmplaceCollider<CapsuleCollider>(1, 1, sharedMat);
+	r.EmplaceCollider<CapsuleCollider>(1.f, 1.f, sharedMat);
 
 	r.setDynamicsWorldPose(vector3(rand() % 10 - 5, rand() % 10 - 5, rand() % 10 - 5), GetTransform().GetWorldRotation());
 
