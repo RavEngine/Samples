@@ -4,9 +4,9 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/SystemInfo.hpp>
 #include <RavEngine/CameraComponent.hpp>
-#include <bgfx/platform.h>
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/GUI.hpp>
 
 using namespace RavEngine;
 using namespace std;

@@ -76,8 +76,8 @@ Level::Level(){
 		"Uniform"
 	};
 
-	wallTextures[0] = TextureManager::defaultTexture;
-	wallTextures[23] = TextureManager::defaultTexture;
+	wallTextures[0] = Texture::Manager::defaultTexture;
+	wallTextures[23] = Texture::Manager::defaultTexture;
 	GetApp()->GetResources().IterateDirectory("textures", [&](const string& file) {
 		auto name = Filesystem::Path(file).filename();
 		auto tex = Texture::Manager::Get(name.string());
