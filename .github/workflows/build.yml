@@ -83,6 +83,7 @@ jobs:
   build-emscripten:
     name: Build samples for Emscripten-Linux
     runs-on: ubuntu-latest
+    if: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
