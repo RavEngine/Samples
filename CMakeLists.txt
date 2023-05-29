@@ -17,7 +17,6 @@ endif()
 
 if(MSVC)
   add_definitions(/MP)			# parallelize each target
-  add_definitions(-maxcpucount)	# build multiple targets in parallel
 endif()
 
 #Enable iPad as well as iPhone (Universal)
