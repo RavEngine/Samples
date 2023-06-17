@@ -1,6 +1,16 @@
-$input v_normal, v_texcoord0, v_worldpos
+layout(location = 0) in vec3 inNormal;
+layout(location = 1) in vec2 inUV;
 
-#include "ravengine_shader.glsl"
+layout(location = 0) out vec4 outcolor;
+layout(location = 1) out vec4 outnormal;
+
+layout(binding = 0) uniform sampler2D diffuseSampler; 
+
+layout(push_constant) uniform UniformBufferObject{
+    mat4 viewProj;
+	vec4 colorTint;
+    float time;
+} ubo;
 
 //  Function from Iñigo Quiles
 //  https://www.shadertoy.com/view/MsS3Wc
@@ -75,19 +85,15 @@ vec3 calcAlt(vec2 uv){
 
 void main()
 {
-    vec2 uv = 1 - v_texcoord0;  // model UVs are upside-down
+    vec2 uv = 1 - inUV;  // model UVs are upside-down
 
     // "rounded square wave" blending function
-    float factor = (atan(sin(3*u_time[0])/0.1))/3+0.5;
+    float factor = (atan(sin(3*ubo.time)/0.1))/3+0.5;
     
     vec3 resCol = mix(calcMain(uv),calcAlt(uv),factor);
   
-    PBR material = make_mat();
-    material.color = resCol;
-    material.normal = v_normal;
-    material.position = v_worldpos;
-    
-    fs_store(material);
+    outcolor = vec4(resCol,1);
+    outnormal = vec4(inNormal, 1);
 }
 
 

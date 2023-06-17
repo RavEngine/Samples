@@ -1,4 +1,5 @@
 #include <RavEngine/World.hpp>
+#include <RavEngine/MeshAsset.hpp>
 
 struct PerfB_World : public RavEngine::World {
 	PerfB_World();	

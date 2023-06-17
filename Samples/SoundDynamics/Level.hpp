@@ -1,4 +1,5 @@
 #include <RavEngine/World.hpp>
+#include <RavEngine/Filesystem.hpp>
 
 namespace RavEngine {
 	struct AudioAsset;

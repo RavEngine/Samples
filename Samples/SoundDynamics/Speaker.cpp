@@ -2,6 +2,7 @@
 #include <RavEngine/StaticMesh.hpp>
 #include "AudioMIDI.hpp"
 #include <RavEngine/AudioGraphAsset.hpp>
+#include <RavEngine/Texture.hpp>
 
 using namespace RavEngine;
 using namespace std;

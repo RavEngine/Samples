@@ -10,6 +10,7 @@
 #include <RavEngine/Filesystem.hpp>
 #include <RavEngine/AudioGraphAsset.hpp>
 #include <RavEngine/VirtualFileSystem.hpp>
+#include <RavEngine/Texture.hpp>
 #include "AudioMIDI.hpp"
 #include "AudioExporter.hpp"
 

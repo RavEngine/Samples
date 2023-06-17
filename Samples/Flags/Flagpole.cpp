@@ -3,6 +3,7 @@
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/AnimatorComponent.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
+#include <RavEngine/Texture.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -53,7 +54,7 @@ void Flagpole::Create(){
     
     // load the special flag, which uses a different shader
     {
-        auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>("flag_special"));
+        auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>("flag", "flag_special"));
         flags.push_back({"My Room",mat});
     }
     
