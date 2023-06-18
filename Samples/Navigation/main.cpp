@@ -261,7 +261,6 @@ struct Level : public World{
 };
 
 struct NavApp : public App{
-    NavApp() : App(APPNAME) {}
     void OnStartup(int argc, char** argv) final {        
         auto world = RavEngine::New<Level>();
         AddWorld(world);

@@ -115,7 +115,6 @@ struct Level : public RavEngine::World{
 
 // level boilerplate
 struct ShadowApp : public RavEngine::App {
-	ShadowApp() : App(APPNAME) {}
 	void OnStartup(int argc, char** argv) final{
 		AddWorld(RavEngine::New<Level>());
 		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());

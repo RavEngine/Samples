@@ -6,9 +6,6 @@
 
 using namespace RavEngine;
 class Performance_C : public RavEngine::App{
-public:
-	Performance_C() : App(APPNAME){}
-private:
     void OnStartup(int argc, char** argv) override{
         //setup video settings
         RenderEngine::VideoSettings.vsync = false;

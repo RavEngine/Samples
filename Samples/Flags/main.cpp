@@ -130,7 +130,6 @@ struct Level : public World{
 };
 
 struct FlagsApp : public App{
-    FlagsApp() : App(APPNAME) {}
     void OnStartup(int argc, char** argv) final {
         AddWorld(RavEngine::New<Level>());
 

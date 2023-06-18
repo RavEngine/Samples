@@ -7,7 +7,6 @@
 using namespace RavEngine;
 
 struct SoundDynamics : public RavEngine::App {
-	SoundDynamics() : App(APPNAME) {}
 	void OnStartup(int argc, char** argv) final {
 		auto world = RavEngine::New<Level>();
 		AddWorld(world);

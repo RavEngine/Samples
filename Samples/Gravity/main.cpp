@@ -167,7 +167,6 @@ struct Level : public World{
 };
 
 struct GravityApp : public App{
-    GravityApp() : App(APPNAME){}
     void OnStartup(int argc, char** argv) final{
         AddWorld(RavEngine::New<Level>());
         SetWindowTitle(StrFormat("RavEngine {} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());

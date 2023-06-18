@@ -14,7 +14,6 @@ using namespace RavEngine;
 static constexpr auto PORT = 6970;
 
 struct NetApp : public RavEngine::App {
-	NetApp() : App(APPNAME) {}
 	void OnStartup(int argc, char** argv) final {
 
 		// must register all networked entities

@@ -5,7 +5,6 @@
 #include <RavEngine/Dialogs.hpp>
 
 struct App : public RavEngine::App{
-	App() : RavEngine::App(APPNAME){}
     void OnStartup(int argc, char** argv) final{
         RavEngine::RenderEngine::VideoSettings.vsync = true;
             RavEngine::RenderEngine::VideoSettings.width = 800;

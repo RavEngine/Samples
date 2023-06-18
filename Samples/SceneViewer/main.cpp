@@ -140,8 +140,6 @@ struct SceneViewerLevel : public RavEngine::World {
 
 
 struct SceneViewerApp : public RavEngine::App {
-	SceneViewerApp() : RavEngine::App(APPNAME) {}
-
 	bool LoadNewScene() {
 		
 		NFD::UniquePathU8 path;

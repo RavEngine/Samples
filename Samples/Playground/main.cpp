@@ -14,9 +14,6 @@
 #include "AppInfo.hpp"
 
 class TestApp : public RavEngine::App{
-public:
-	TestApp() : App(APPNAME){}
-private:
 	void OnStartup(int argc, char** argv) override{
 		
 		//setup video settings

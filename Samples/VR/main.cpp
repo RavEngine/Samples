@@ -49,7 +49,7 @@ struct Level : public RavEngine::World{
 
 // level boilerplate
 struct ShadowApp : public RavEngine::App {
-	ShadowApp() : App(APPNAME){
+	ShadowApp() {
 		wantsXR = true;
 	}
 	void OnStartup(int argc, char** argv) final{
