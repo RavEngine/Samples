@@ -65,7 +65,7 @@ jobs:
       - name: Install Host Dependencies
         run: sudo apt-get install cmake:amd64 fuse:amd64 libfuse2:amd64 ninja-build:amd64 libx11-dev:amd64 libgl1-mesa-dev gcc-12:amd64 g++-12:amd64 gcc-12-aarch64-linux-gnu:amd64 g++-12-aarch64-linux-gnu:amd64 -y --no-install-recommends
       - name: Install Target Dependencies
-        run: sudo apt-get install libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 libegl1-mesa-dev:arm64 libvulkan-dev:arm64 libx11-xcb-dev:arm64 libxcb-dri2-0-dev:arm64 libxcb-glx0-dev:arm64 libxcb-icccm4-dev:arm64 libxcb-keysyms1-dev:arm64 libxcb-randr0-dev:arm64 libxrandr-dev:arm64 libxxf86vm-dev:arm64 mesa-common-dev:arm64 -y --no-install-recommends
+        run: sudo apt-get install libgl1-mesa-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 libegl1-mesa-dev:arm64 libx11-xcb-dev:arm64 libxcb-dri2-0-dev:arm64 libxcb-glx0-dev:arm64 libxcb-icccm4-dev:arm64 libxcb-keysyms1-dev:arm64 libxcb-randr0-dev:arm64 libxrandr-dev:arm64 libxxf86vm-dev:arm64 mesa-common-dev:arm64 -y --no-install-recommends
       - name: Configure
         run: | 
               mkdir -p build
