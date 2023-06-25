@@ -357,7 +357,7 @@ namespace pugi
 	#endif
 
 	// A light-weight handle for manipulating attributes in DOM tree
-	class PUGIXML_CLASS xml_attribute
+	class PUGIXML_CLASS xml_attribute2
 	{
 		friend class xml_attribute_iterator_2;
 		friend class xml_node;
@@ -365,14 +365,14 @@ namespace pugi
 	private:
 		xml_attribute_struct* _attr;
 
-		typedef void (*unspecified_bool_type)(xml_attribute***);
+		typedef void (*unspecified_bool_type)(xml_attribute2***);
 
 	public:
 		// Default constructor. Constructs an empty attribute.
-		xml_attribute();
+		xml_attribute2();
 
 		// Constructs attribute from internal pointer
-		explicit xml_attribute(xml_attribute_struct* attr);
+		explicit xml_attribute2(xml_attribute_struct* attr);
 
 		// Safe bool conversion operator
 		operator unspecified_bool_type() const;
@@ -381,12 +381,12 @@ namespace pugi
 		bool operator!() const;
 
 		// Comparison operators (compares wrapped attribute pointers)
-		bool operator==(const xml_attribute& r) const;
-		bool operator!=(const xml_attribute& r) const;
-		bool operator<(const xml_attribute& r) const;
-		bool operator>(const xml_attribute& r) const;
-		bool operator<=(const xml_attribute& r) const;
-		bool operator>=(const xml_attribute& r) const;
+		bool operator==(const xml_attribute2& r) const;
+		bool operator!=(const xml_attribute2& r) const;
+		bool operator<(const xml_attribute2& r) const;
+		bool operator>(const xml_attribute2& r) const;
+		bool operator<=(const xml_attribute2& r) const;
+		bool operator>=(const xml_attribute2& r) const;
 
 		// Check if attribute is empty
 		bool empty() const;
@@ -433,23 +433,23 @@ namespace pugi
 	#endif
 
 		// Set attribute value (equivalent to set_value without error checking)
-		xml_attribute& operator=(const char_t* rhs);
-		xml_attribute& operator=(int rhs);
-		xml_attribute& operator=(unsigned int rhs);
-		xml_attribute& operator=(long rhs);
-		xml_attribute& operator=(unsigned long rhs);
-		xml_attribute& operator=(double rhs);
-		xml_attribute& operator=(float rhs);
-		xml_attribute& operator=(bool rhs);
+		xml_attribute2& operator=(const char_t* rhs);
+		xml_attribute2& operator=(int rhs);
+		xml_attribute2& operator=(unsigned int rhs);
+		xml_attribute2& operator=(long rhs);
+		xml_attribute2& operator=(unsigned long rhs);
+		xml_attribute2& operator=(double rhs);
+		xml_attribute2& operator=(float rhs);
+		xml_attribute2& operator=(bool rhs);
 
 	#ifdef PUGIXML_HAS_LONG_LONG
-		xml_attribute& operator=(long long rhs);
-		xml_attribute& operator=(unsigned long long rhs);
+		xml_attribute2& operator=(long long rhs);
+		xml_attribute2& operator=(unsigned long long rhs);
 	#endif
 
 		// Get next/previous attribute in the attribute list of the parent node
-		xml_attribute next_attribute() const;
-		xml_attribute previous_attribute() const;
+		xml_attribute2 next_attribute() const;
+		xml_attribute2 previous_attribute() const;
 
 		// Get hash value (unique for handles to the same object)
 		size_t hash_value() const;
@@ -460,8 +460,8 @@ namespace pugi
 
 #ifdef __BORLANDC__
 	// Borland C++ workaround
-	bool PUGIXML_FUNCTION operator&&(const xml_attribute& lhs, bool rhs);
-	bool PUGIXML_FUNCTION operator||(const xml_attribute& lhs, bool rhs);
+	bool PUGIXML_FUNCTION operator&&(const xml_attribute2& lhs, bool rhs);
+	bool PUGIXML_FUNCTION operator||(const xml_attribute2& lhs, bool rhs);
 #endif
 
 	// A light-weight handle for manipulating nodes in DOM tree
@@ -511,8 +511,8 @@ namespace pugi
 		const char_t* value() const;
 
 		// Get attribute list
-		xml_attribute first_attribute() const;
-		xml_attribute last_attribute() const;
+		xml_attribute2 first_attribute() const;
+		xml_attribute2 last_attribute() const;
 
 		// Get children list
 		xml_node first_child() const;
@@ -533,12 +533,12 @@ namespace pugi
 
 		// Get child, attribute or next/previous sibling with the specified name
 		xml_node child_2(const char_t* name) const;
-		xml_attribute attribute_2(const char_t* name) const;
+		xml_attribute2 attribute_2(const char_t* name) const;
 		xml_node next_sibling_2(const char_t* name) const;
 		xml_node previous_sibling(const char_t* name) const;
 
 		// Get attribute, starting the search from a hint (and updating hint so that searching for a sequence of attributes is fast)
-		xml_attribute attribute(const char_t* name, xml_attribute& hint) const;
+		xml_attribute2 attribute(const char_t* name, xml_attribute2& hint) const;
 
 		// Get child value of current node; that is, value of the first child node of type PCDATA/CDATA
 		const char_t* child_value_2() const;
@@ -551,16 +551,16 @@ namespace pugi
 		bool set_value(const char_t* rhs);
 
 		// Add attribute with specified name. Returns added attribute, or empty attribute on errors.
-		xml_attribute append_attribute(const char_t* name);
-		xml_attribute prepend_attribute(const char_t* name);
-		xml_attribute insert_attribute_after(const char_t* name, const xml_attribute& attr);
-		xml_attribute insert_attribute_before(const char_t* name, const xml_attribute& attr);
+		xml_attribute2 append_attribute(const char_t* name);
+		xml_attribute2 prepend_attribute(const char_t* name);
+		xml_attribute2 insert_attribute_after(const char_t* name, const xml_attribute2& attr);
+		xml_attribute2 insert_attribute_before(const char_t* name, const xml_attribute2& attr);
 
 		// Add a copy of the specified attribute. Returns added attribute, or empty attribute on errors.
-		xml_attribute append_copy(const xml_attribute& proto);
-		xml_attribute prepend_copy(const xml_attribute& proto);
-		xml_attribute insert_copy_after(const xml_attribute& proto, const xml_attribute& attr);
-		xml_attribute insert_copy_before(const xml_attribute& proto, const xml_attribute& attr);
+		xml_attribute2 append_copy(const xml_attribute2& proto);
+		xml_attribute2 prepend_copy(const xml_attribute2& proto);
+		xml_attribute2 insert_copy_after(const xml_attribute2& proto, const xml_attribute2& attr);
+		xml_attribute2 insert_copy_before(const xml_attribute2& proto, const xml_attribute2& attr);
 
 		// Add child node with specified type. Returns added node, or empty node on errors.
 		xml_node append_child(xml_node_type type = node_element);
@@ -587,7 +587,7 @@ namespace pugi
 		xml_node insert_move_before(const xml_node& moved, const xml_node& node);
 
 		// Remove specified attribute
-		bool remove_attribute(const xml_attribute& a);
+		bool remove_attribute(const xml_attribute2& a);
 		bool remove_attribute(const char_t* name);
 
 		// Remove all attributes
@@ -606,15 +606,15 @@ namespace pugi
 		xml_parse_result append_buffer(const void* contents, size_t size, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
 
 		// Find attribute using predicate. Returns first attribute for which predicate returned true.
-		template <typename Predicate> xml_attribute find_attribute(Predicate pred) const
+		template <typename Predicate> xml_attribute2 find_attribute(Predicate pred) const
 		{
-			if (!_root) return xml_attribute();
+			if (!_root) return xml_attribute2();
 
-			for (xml_attribute attrib = first_attribute(); attrib; attrib = attrib.next_attribute())
+			for (xml_attribute2 attrib = first_attribute(); attrib; attrib = attrib.next_attribute())
 				if (pred(attrib))
 					return attrib;
 
-			return xml_attribute();
+			return xml_attribute2();
 		}
 
 		// Find child node using predicate. Returns first child for which predicate returned true.
@@ -864,7 +864,7 @@ namespace pugi
 		friend class xml_node;
 
 	private:
-		mutable xml_attribute _wrap;
+		mutable xml_attribute2 _wrap;
 		xml_node _parent;
 
 		xml_attribute_iterator_2(xml_attribute_struct* ref, xml_node_struct2* parent);
@@ -872,9 +872,9 @@ namespace pugi
 	public:
 		// Iterator traits
 		typedef ptrdiff_t difference_type;
-		typedef xml_attribute value_type;
-		typedef xml_attribute* pointer;
-		typedef xml_attribute& reference;
+		typedef xml_attribute2 value_type;
+		typedef xml_attribute2* pointer;
+		typedef xml_attribute2& reference;
 
 	#ifndef PUGIXML_NO_STL
 		typedef std::bidirectional_iterator_tag iterator_category;
@@ -884,14 +884,14 @@ namespace pugi
 		xml_attribute_iterator_2();
 
 		// Construct an iterator which points to the specified attribute
-		xml_attribute_iterator_2(const xml_attribute& attr, const xml_node& parent);
+		xml_attribute_iterator_2(const xml_attribute2& attr, const xml_node& parent);
 
 		// Iterator operators
 		bool operator==(const xml_attribute_iterator_2& rhs) const;
 		bool operator!=(const xml_attribute_iterator_2& rhs) const;
 
-		xml_attribute& operator*() const;
-		xml_attribute* operator->() const;
+		xml_attribute2& operator*() const;
+		xml_attribute2* operator->() const;
 
 		const xml_attribute_iterator_2& operator++();
 		xml_attribute_iterator_2 operator++(int);
@@ -1312,7 +1312,7 @@ namespace pugi
 	{
 	private:
 		xml_node _node;
-		xml_attribute _attribute;
+		xml_attribute2 _attribute;
 
 		typedef void (*unspecified_bool_type)(xpath_node***);
 
@@ -1322,11 +1322,11 @@ namespace pugi
 
 		// Construct XPath node from XML node/attribute
 		xpath_node(const xml_node& node);
-		xpath_node(const xml_attribute& attribute_2, const xml_node& parent);
+		xpath_node(const xml_attribute2& attribute_2, const xml_node& parent);
 
 		// Get node/attribute, if any
 		xml_node node() const;
-		xml_attribute attribute_2() const;
+		xml_attribute2 attribute_2() const;
 
 		// Get parent of contained node/attribute
 		xml_node parent() const;

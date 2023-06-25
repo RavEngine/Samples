@@ -214,7 +214,7 @@ set(SFIZZ_SHARED OFF CACHE INTERNAL "")
 set(ENABLE_LTO OFF CACHE INTERNAL "")
 set(SFIZZ_RENDER OFF CACHE INTERNAL "")
 set(SFIZZ_STATIC_DEPENDENCIES OFF CACHE INTERNAL "")
-add_subdirectory("lib/sfizz")
+add_subdirectory("lib/sfizz" EXCLUDE_FROM_ALL)
 
 add_subdirectory("lib/midifile" EXCLUDE_FROM_ALL)
 
@@ -229,7 +229,6 @@ add_sample("Perf_RigidBodies")
 add_sample("Perf_Network")
 add_sample("Perf_Lighting")
 add_sample("GUI")
-add_sample("SoundDynamics")
 add_sample("Flags")
 add_sample("Navigation")
 add_sample("Gravity")
@@ -237,11 +236,6 @@ add_sample("SystemInfo")
 add_sample("VR")
 add_sample("Shadows")
 
-target_link_libraries("RavEngineSoundDynamics" PUBLIC
-    "sfizz_static"
-    "sfizz_fmidi"
-	"midifile"
-)
 
 group_in("SamplesDeps/sfizz" "aiff;sfizz_pugixml;sfizz_spline;sfizz_tunings;sfizz_hiir_polyphase_iir2designer;sfizz_kissfft;sfizz_cephes;sfizz_cpuid;sfizz_filesystem_impl;sfizz_fmidi;\
 st_audiofile;st_audiofile_formats;st_info;sfizz_parser;sfizz_messaging;sfizz_import;sfizz_spin_mutex;sfizz_internal;sfizz_match_definitions;sfizz_static;\
@@ -260,10 +254,13 @@ absl_random_internal_randen_hwaes;absl_random_internal_randen_hwaes_impl;absl_ra
 absl_cord_internal;absl_cordz_functions;absl_cordz_handle;absl_cordz_info;absl_cordz_sample_token;absl_graphcycles_internal;absl_civil_time;absl_time_zone;absl_bad_any_cast_impl")
 
 if(CMAKE_SYSTEM_NAME MATCHES "WindowsStore")
-	foreach(TGT "sfizz_fmidi" "aiff" "sfizz_internal")
-		target_compile_definitions(${TGT} PUBLIC "_CRT_SECURE_NO_WARNINGS" "BUILD_DLL" "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" "_CRT_NONSTDC_NO_DEPRECATE")
-		target_compile_options(${TGT} PUBLIC  "/wd4146" "/wd4703")
-	endforeach()
+else()
+	add_sample("SoundDynamics")
+	target_link_libraries("RavEngineSoundDynamics" PUBLIC
+		"sfizz_static"
+		"sfizz_fmidi"
+		"midifile"
+	)
 endif()
 
 # exlcude the SceneViewer from iOS, tvOS, UWP, and ARM linux 

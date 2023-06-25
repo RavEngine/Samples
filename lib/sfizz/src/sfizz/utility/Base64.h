@@ -12,6 +12,8 @@
 #include <vector>
 #include <absl/strings/string_view.h>
 
+#define and &&
+
 namespace sfz
 {
 

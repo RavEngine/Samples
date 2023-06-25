@@ -5134,271 +5134,271 @@ namespace pugi
 		return true;
 	}
 #if !_UWP
-	PUGI__FN xml_attribute::xml_attribute(): _attr(0)
+	PUGI__FN xml_attribute2::xml_attribute2(): _attr(0)
 	{
 	}
 
-	PUGI__FN xml_attribute::xml_attribute(xml_attribute_struct* attr): _attr(attr)
+	PUGI__FN xml_attribute2::xml_attribute2(xml_attribute_struct* attr): _attr(attr)
 	{
 	}
 #endif
-	PUGI__FN static void unspecified_bool_xml_attribute(xml_attribute***)
+	PUGI__FN static void unspecified_bool_xml_attribute(xml_attribute2***)
 	{
 	}
 #if !_UWP
-	PUGI__FN xml_attribute::operator xml_attribute::unspecified_bool_type() const
+	PUGI__FN xml_attribute2::operator xml_attribute2::unspecified_bool_type() const
 	{
 		return _attr ? unspecified_bool_xml_attribute : 0;
 	}
 #endif
 
-	PUGI__FN bool xml_attribute::operator!() const
+	PUGI__FN bool xml_attribute2::operator!() const
 	{
 		return !_attr;
 	}
 
-	PUGI__FN bool xml_attribute::operator==(const xml_attribute& r) const
+	PUGI__FN bool xml_attribute2::operator==(const xml_attribute2& r) const
 	{
 		return (_attr == r._attr);
 	}
 
-	PUGI__FN bool xml_attribute::operator!=(const xml_attribute& r) const
+	PUGI__FN bool xml_attribute2::operator!=(const xml_attribute2& r) const
 	{
 		return (_attr != r._attr);
 	}
 
-	PUGI__FN bool xml_attribute::operator<(const xml_attribute& r) const
+	PUGI__FN bool xml_attribute2::operator<(const xml_attribute2& r) const
 	{
 		return (_attr < r._attr);
 	}
 
-	PUGI__FN bool xml_attribute::operator>(const xml_attribute& r) const
+	PUGI__FN bool xml_attribute2::operator>(const xml_attribute2& r) const
 	{
 		return (_attr > r._attr);
 	}
 
-	PUGI__FN bool xml_attribute::operator<=(const xml_attribute& r) const
+	PUGI__FN bool xml_attribute2::operator<=(const xml_attribute2& r) const
 	{
 		return (_attr <= r._attr);
 	}
 
-	PUGI__FN bool xml_attribute::operator>=(const xml_attribute& r) const
+	PUGI__FN bool xml_attribute2::operator>=(const xml_attribute2& r) const
 	{
 		return (_attr >= r._attr);
 	}
 
-	PUGI__FN xml_attribute xml_attribute::next_attribute() const
+	PUGI__FN xml_attribute2 xml_attribute2::next_attribute() const
 	{
-		return _attr ? xml_attribute(_attr->next_attribute) : xml_attribute();
+		return _attr ? xml_attribute2(_attr->next_attribute) : xml_attribute2();
 	}
 
-	PUGI__FN xml_attribute xml_attribute::previous_attribute() const
+	PUGI__FN xml_attribute2 xml_attribute2::previous_attribute() const
 	{
-		return _attr && _attr->prev_attribute_c->next_attribute ? xml_attribute(_attr->prev_attribute_c) : xml_attribute();
+		return _attr && _attr->prev_attribute_c->next_attribute ? xml_attribute2(_attr->prev_attribute_c) : xml_attribute2();
 	}
 #if !_UWP
-	PUGI__FN const char_t* xml_attribute::as_string(const char_t* def) const
+	PUGI__FN const char_t* xml_attribute2::as_string(const char_t* def) const
 	{
 		return (_attr && _attr->value) ? _attr->value + 0 : def;
 	}
 
-	PUGI__FN int xml_attribute::as_int(int def) const
+	PUGI__FN int xml_attribute2::as_int(int def) const
 	{
 		return (_attr && _attr->value) ? impl::get_value_int(_attr->value) : def;
 	}
 
-	PUGI__FN unsigned int xml_attribute::as_uint(unsigned int def) const
+	PUGI__FN unsigned int xml_attribute2::as_uint(unsigned int def) const
 	{
 		return (_attr && _attr->value) ? impl::get_value_uint(_attr->value) : def;
 	}
 
-	PUGI__FN double xml_attribute::as_double(double def) const
+	PUGI__FN double xml_attribute2::as_double(double def) const
 	{
 		return (_attr && _attr->value) ? impl::get_value_double(_attr->value) : def;
 	}
 #endif
 
-	PUGI__FN float xml_attribute::as_float_2(float def) const
+	PUGI__FN float xml_attribute2::as_float_2(float def) const
 	{
 		return (_attr && _attr->value) ? impl::get_value_float(_attr->value) : def;
 	}
 
-	PUGI__FN bool xml_attribute::as_bool_2(bool def) const
+	PUGI__FN bool xml_attribute2::as_bool_2(bool def) const
 	{
 		return (_attr && _attr->value) ? impl::get_value_bool(_attr->value) : def;
 	}
 
 #ifdef PUGIXML_HAS_LONG_LONG
-	PUGI__FN long long xml_attribute::as_llong(long long def) const
+	PUGI__FN long long xml_attribute2::as_llong(long long def) const
 	{
 		return (_attr && _attr->value) ? impl::get_value_llong(_attr->value) : def;
 	}
 
-	PUGI__FN unsigned long long xml_attribute::as_ullong(unsigned long long def) const
+	PUGI__FN unsigned long long xml_attribute2::as_ullong(unsigned long long def) const
 	{
 		return (_attr && _attr->value) ? impl::get_value_ullong(_attr->value) : def;
 	}
 #endif
 #if !_UWP
-	PUGI__FN bool xml_attribute::empty() const
+	PUGI__FN bool xml_attribute2::empty() const
 	{
 		return !_attr;
 	}
 
 
-	PUGI__FN const char_t* xml_attribute::name() const
+	PUGI__FN const char_t* xml_attribute2::name() const
 	{
 		return (_attr && _attr->name) ? _attr->name + 0 : PUGIXML_TEXT("");
 	}
 
-	PUGI__FN const char_t* xml_attribute::value() const
+	PUGI__FN const char_t* xml_attribute2::value() const
 	{
 		return (_attr && _attr->value) ? _attr->value + 0 : PUGIXML_TEXT("");
 	}
 #endif
-	PUGI__FN size_t xml_attribute::hash_value() const
+	PUGI__FN size_t xml_attribute2::hash_value() const
 	{
 		return static_cast<size_t>(reinterpret_cast<uintptr_t>(_attr) / sizeof(xml_attribute_struct));
 	}
 
-	PUGI__FN xml_attribute_struct* xml_attribute::internal_object() const
+	PUGI__FN xml_attribute_struct* xml_attribute2::internal_object() const
 	{
 		return _attr;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute::operator=(const char_t* rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(const char_t* rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute::operator=(int rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(int rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute::operator=(unsigned int rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(unsigned int rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute::operator=(long rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(long rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute::operator=(unsigned long rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(unsigned long rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute::operator=(double rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(double rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute::operator=(float rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(float rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute::operator=(bool rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(bool rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 
 #ifdef PUGIXML_HAS_LONG_LONG
-	PUGI__FN xml_attribute& xml_attribute::operator=(long long rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(long long rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute::operator=(unsigned long long rhs)
+	PUGI__FN xml_attribute2& xml_attribute2::operator=(unsigned long long rhs)
 	{
 		set_value(rhs);
 		return *this;
 	}
 #endif
 
-	PUGI__FN bool xml_attribute::set_name(const char_t* rhs)
+	PUGI__FN bool xml_attribute2::set_name(const char_t* rhs)
 	{
 		if (!_attr) return false;
 
 		return impl::strcpy_insitu(_attr->name, _attr->header, impl::xml_memory_page_name_allocated_mask, rhs, impl::strlength(rhs));
 	}
 
-	PUGI__FN bool xml_attribute::set_value(const char_t* rhs)
+	PUGI__FN bool xml_attribute2::set_value(const char_t* rhs)
 	{
 		if (!_attr) return false;
 
 		return impl::strcpy_insitu(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, impl::strlength(rhs));
 	}
 
-	PUGI__FN bool xml_attribute::set_value(int rhs)
+	PUGI__FN bool xml_attribute2::set_value(int rhs)
 	{
 		if (!_attr) return false;
 
 		return impl::set_value_integer<unsigned int>(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, rhs < 0);
 	}
 
-	PUGI__FN bool xml_attribute::set_value(unsigned int rhs)
+	PUGI__FN bool xml_attribute2::set_value(unsigned int rhs)
 	{
 		if (!_attr) return false;
 
 		return impl::set_value_integer<unsigned int>(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, false);
 	}
 
-	PUGI__FN bool xml_attribute::set_value(long rhs)
+	PUGI__FN bool xml_attribute2::set_value(long rhs)
 	{
 		if (!_attr) return false;
 
 		return impl::set_value_integer<unsigned long>(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, rhs < 0);
 	}
 
-	PUGI__FN bool xml_attribute::set_value(unsigned long rhs)
+	PUGI__FN bool xml_attribute2::set_value(unsigned long rhs)
 	{
 		if (!_attr) return false;
 
 		return impl::set_value_integer<unsigned long>(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, false);
 	}
 
-	PUGI__FN bool xml_attribute::set_value(double rhs)
+	PUGI__FN bool xml_attribute2::set_value(double rhs)
 	{
 		if (!_attr) return false;
 
 		return impl::set_value_convert(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, default_double_precision);
 	}
 
-	PUGI__FN bool xml_attribute::set_value(double rhs, int precision)
+	PUGI__FN bool xml_attribute2::set_value(double rhs, int precision)
 	{
 		if (!_attr) return false;
 
 		return impl::set_value_convert(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, precision);
 	}
 
-	PUGI__FN bool xml_attribute::set_value(float rhs)
+	PUGI__FN bool xml_attribute2::set_value(float rhs)
 	{
 		if (!_attr) return false;
 
 		return impl::set_value_convert(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, default_float_precision);
 	}
 
-	PUGI__FN bool xml_attribute::set_value(float rhs, int precision)
+	PUGI__FN bool xml_attribute2::set_value(float rhs, int precision)
 	{
 		if (!_attr) return false;
 
 		return impl::set_value_convert(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, precision);
 	}
 
-	PUGI__FN bool xml_attribute::set_value(bool rhs)
+	PUGI__FN bool xml_attribute2::set_value(bool rhs)
 	{
 		if (!_attr) return false;
 
@@ -5406,14 +5406,14 @@ namespace pugi
 	}
 
 #ifdef PUGIXML_HAS_LONG_LONG
-	PUGI__FN bool xml_attribute::set_value(long long rhs)
+	PUGI__FN bool xml_attribute2::set_value(long long rhs)
 	{
 		if (!_attr) return false;
 
 		return impl::set_value_integer<unsigned long long>(_attr->value, _attr->header, impl::xml_memory_page_value_allocated_mask, rhs, rhs < 0);
 	}
 
-	PUGI__FN bool xml_attribute::set_value(unsigned long long rhs)
+	PUGI__FN bool xml_attribute2::set_value(unsigned long long rhs)
 	{
 		if (!_attr) return false;
 
@@ -5422,12 +5422,12 @@ namespace pugi
 #endif
 
 #ifdef __BORLANDC__
-	PUGI__FN bool operator&&(const xml_attribute& lhs, bool rhs)
+	PUGI__FN bool operator&&(const xml_attribute2& lhs, bool rhs)
 	{
 		return (bool)lhs && rhs;
 	}
 
-	PUGI__FN bool operator||(const xml_attribute& lhs, bool rhs)
+	PUGI__FN bool operator||(const xml_attribute2& lhs, bool rhs)
 	{
 		return (bool)lhs || rhs;
 	}
@@ -5550,15 +5550,15 @@ namespace pugi
 		return xml_node();
 	}
 
-	PUGI__FN xml_attribute xml_node::attribute_2(const char_t* name_) const
+	PUGI__FN xml_attribute2 xml_node::attribute_2(const char_t* name_) const
 	{
-		if (!_root) return xml_attribute();
+		if (!_root) return xml_attribute2();
 
 		for (xml_attribute_struct* i = _root->first_attribute; i; i = i->next_attribute)
 			if (i->name && impl::strequal(name_, i->name))
-				return xml_attribute(i);
+				return xml_attribute2(i);
 
-		return xml_attribute();
+		return xml_attribute2();
 	}
 
 	PUGI__FN xml_node xml_node::next_sibling_2(const char_t* name_) const
@@ -5586,14 +5586,14 @@ namespace pugi
 		return xml_node();
 	}
 
-	PUGI__FN xml_attribute xml_node::attribute(const char_t* name_, xml_attribute& hint_) const
+	PUGI__FN xml_attribute2 xml_node::attribute(const char_t* name_, xml_attribute2& hint_) const
 	{
 		xml_attribute_struct* hint = hint_._attr;
 
 		// if hint is not an attribute of node, behavior is not defined
 		assert(!hint || (_root && impl::is_attribute_of(hint, _root)));
 
-		if (!_root) return xml_attribute();
+		if (!_root) return xml_attribute2();
 
 		// optimistically search from hint up until the end
 		for (xml_attribute_struct* i = hint; i; i = i->next_attribute)
@@ -5602,7 +5602,7 @@ namespace pugi
 				// update hint to maximize efficiency of searching for consecutive attributes
 				hint_._attr = i->next_attribute;
 
-				return xml_attribute(i);
+				return xml_attribute2(i);
 			}
 
 		// wrap around and search from the first attribute until the hint
@@ -5613,10 +5613,10 @@ namespace pugi
 				// update hint to maximize efficiency of searching for consecutive attributes
 				hint_._attr = j->next_attribute;
 
-				return xml_attribute(j);
+				return xml_attribute2(j);
 			}
 
-		return xml_attribute();
+		return xml_attribute2();
 	}
 
 	PUGI__FN xml_node xml_node::previous_sibling() const
@@ -5662,14 +5662,14 @@ namespace pugi
 		return child_2(name_).child_value_2();
 	}
 
-	PUGI__FN xml_attribute xml_node::first_attribute() const
+	PUGI__FN xml_attribute2 xml_node::first_attribute() const
 	{
-		return _root ? xml_attribute(_root->first_attribute) : xml_attribute();
+		return _root ? xml_attribute2(_root->first_attribute) : xml_attribute2();
 	}
 
-	PUGI__FN xml_attribute xml_node::last_attribute() const
+	PUGI__FN xml_attribute2 xml_node::last_attribute() const
 	{
-		return _root && _root->first_attribute ? xml_attribute(_root->first_attribute->prev_attribute_c) : xml_attribute();
+		return _root && _root->first_attribute ? xml_attribute2(_root->first_attribute->prev_attribute_c) : xml_attribute2();
 	}
 #if !_UWP
 
@@ -5702,15 +5702,15 @@ namespace pugi
 		return impl::strcpy_insitu(_root->value, _root->header, impl::xml_memory_page_value_allocated_mask, rhs, impl::strlength(rhs));
 	}
 
-	PUGI__FN xml_attribute xml_node::append_attribute(const char_t* name_)
+	PUGI__FN xml_attribute2 xml_node::append_attribute(const char_t* name_)
 	{
-		if (!impl::allow_insert_attribute(type_2())) return xml_attribute();
+		if (!impl::allow_insert_attribute(type_2())) return xml_attribute2();
 
 		impl::xml_allocator& alloc = impl::get_allocator(_root);
-		if (!alloc.reserve()) return xml_attribute();
+		if (!alloc.reserve()) return xml_attribute2();
 
-		xml_attribute a(impl::allocate_attribute(alloc));
-		if (!a) return xml_attribute();
+		xml_attribute2 a(impl::allocate_attribute(alloc));
+		if (!a) return xml_attribute2();
 
 		impl::append_attribute(a._attr, _root);
 
@@ -5719,15 +5719,15 @@ namespace pugi
 		return a;
 	}
 
-	PUGI__FN xml_attribute xml_node::prepend_attribute(const char_t* name_)
+	PUGI__FN xml_attribute2 xml_node::prepend_attribute(const char_t* name_)
 	{
-		if (!impl::allow_insert_attribute(type_2())) return xml_attribute();
+		if (!impl::allow_insert_attribute(type_2())) return xml_attribute2();
 
 		impl::xml_allocator& alloc = impl::get_allocator(_root);
-		if (!alloc.reserve()) return xml_attribute();
+		if (!alloc.reserve()) return xml_attribute2();
 
-		xml_attribute a(impl::allocate_attribute(alloc));
-		if (!a) return xml_attribute();
+		xml_attribute2 a(impl::allocate_attribute(alloc));
+		if (!a) return xml_attribute2();
 
 		impl::prepend_attribute(a._attr, _root);
 
@@ -5736,16 +5736,16 @@ namespace pugi
 		return a;
 	}
 
-	PUGI__FN xml_attribute xml_node::insert_attribute_after(const char_t* name_, const xml_attribute& attr)
+	PUGI__FN xml_attribute2 xml_node::insert_attribute_after(const char_t* name_, const xml_attribute2& attr)
 	{
-		if (!impl::allow_insert_attribute(type_2())) return xml_attribute();
-		if (!attr || !impl::is_attribute_of(attr._attr, _root)) return xml_attribute();
+		if (!impl::allow_insert_attribute(type_2())) return xml_attribute2();
+		if (!attr || !impl::is_attribute_of(attr._attr, _root)) return xml_attribute2();
 
 		impl::xml_allocator& alloc = impl::get_allocator(_root);
-		if (!alloc.reserve()) return xml_attribute();
+		if (!alloc.reserve()) return xml_attribute2();
 
-		xml_attribute a(impl::allocate_attribute(alloc));
-		if (!a) return xml_attribute();
+		xml_attribute2 a(impl::allocate_attribute(alloc));
+		if (!a) return xml_attribute2();
 
 		impl::insert_attribute_after(a._attr, attr._attr, _root);
 
@@ -5754,16 +5754,16 @@ namespace pugi
 		return a;
 	}
 
-	PUGI__FN xml_attribute xml_node::insert_attribute_before(const char_t* name_, const xml_attribute& attr)
+	PUGI__FN xml_attribute2 xml_node::insert_attribute_before(const char_t* name_, const xml_attribute2& attr)
 	{
-		if (!impl::allow_insert_attribute(type_2())) return xml_attribute();
-		if (!attr || !impl::is_attribute_of(attr._attr, _root)) return xml_attribute();
+		if (!impl::allow_insert_attribute(type_2())) return xml_attribute2();
+		if (!attr || !impl::is_attribute_of(attr._attr, _root)) return xml_attribute2();
 
 		impl::xml_allocator& alloc = impl::get_allocator(_root);
-		if (!alloc.reserve()) return xml_attribute();
+		if (!alloc.reserve()) return xml_attribute2();
 
-		xml_attribute a(impl::allocate_attribute(alloc));
-		if (!a) return xml_attribute();
+		xml_attribute2 a(impl::allocate_attribute(alloc));
+		if (!a) return xml_attribute2();
 
 		impl::insert_attribute_before(a._attr, attr._attr, _root);
 
@@ -5772,16 +5772,16 @@ namespace pugi
 		return a;
 	}
 
-	PUGI__FN xml_attribute xml_node::append_copy(const xml_attribute& proto)
+	PUGI__FN xml_attribute2 xml_node::append_copy(const xml_attribute2& proto)
 	{
-		if (!proto) return xml_attribute();
-		if (!impl::allow_insert_attribute(type_2())) return xml_attribute();
+		if (!proto) return xml_attribute2();
+		if (!impl::allow_insert_attribute(type_2())) return xml_attribute2();
 
 		impl::xml_allocator& alloc = impl::get_allocator(_root);
-		if (!alloc.reserve()) return xml_attribute();
+		if (!alloc.reserve()) return xml_attribute2();
 
-		xml_attribute a(impl::allocate_attribute(alloc));
-		if (!a) return xml_attribute();
+		xml_attribute2 a(impl::allocate_attribute(alloc));
+		if (!a) return xml_attribute2();
 
 		impl::append_attribute(a._attr, _root);
 		impl::node_copy_attribute(a._attr, proto._attr);
@@ -5789,16 +5789,16 @@ namespace pugi
 		return a;
 	}
 
-	PUGI__FN xml_attribute xml_node::prepend_copy(const xml_attribute& proto)
+	PUGI__FN xml_attribute2 xml_node::prepend_copy(const xml_attribute2& proto)
 	{
-		if (!proto) return xml_attribute();
-		if (!impl::allow_insert_attribute(type_2())) return xml_attribute();
+		if (!proto) return xml_attribute2();
+		if (!impl::allow_insert_attribute(type_2())) return xml_attribute2();
 
 		impl::xml_allocator& alloc = impl::get_allocator(_root);
-		if (!alloc.reserve()) return xml_attribute();
+		if (!alloc.reserve()) return xml_attribute2();
 
-		xml_attribute a(impl::allocate_attribute(alloc));
-		if (!a) return xml_attribute();
+		xml_attribute2 a(impl::allocate_attribute(alloc));
+		if (!a) return xml_attribute2();
 
 		impl::prepend_attribute(a._attr, _root);
 		impl::node_copy_attribute(a._attr, proto._attr);
@@ -5806,17 +5806,17 @@ namespace pugi
 		return a;
 	}
 
-	PUGI__FN xml_attribute xml_node::insert_copy_after(const xml_attribute& proto, const xml_attribute& attr)
+	PUGI__FN xml_attribute2 xml_node::insert_copy_after(const xml_attribute2& proto, const xml_attribute2& attr)
 	{
-		if (!proto) return xml_attribute();
-		if (!impl::allow_insert_attribute(type_2())) return xml_attribute();
-		if (!attr || !impl::is_attribute_of(attr._attr, _root)) return xml_attribute();
+		if (!proto) return xml_attribute2();
+		if (!impl::allow_insert_attribute(type_2())) return xml_attribute2();
+		if (!attr || !impl::is_attribute_of(attr._attr, _root)) return xml_attribute2();
 
 		impl::xml_allocator& alloc = impl::get_allocator(_root);
-		if (!alloc.reserve()) return xml_attribute();
+		if (!alloc.reserve()) return xml_attribute2();
 
-		xml_attribute a(impl::allocate_attribute(alloc));
-		if (!a) return xml_attribute();
+		xml_attribute2 a(impl::allocate_attribute(alloc));
+		if (!a) return xml_attribute2();
 
 		impl::insert_attribute_after(a._attr, attr._attr, _root);
 		impl::node_copy_attribute(a._attr, proto._attr);
@@ -5824,17 +5824,17 @@ namespace pugi
 		return a;
 	}
 
-	PUGI__FN xml_attribute xml_node::insert_copy_before(const xml_attribute& proto, const xml_attribute& attr)
+	PUGI__FN xml_attribute2 xml_node::insert_copy_before(const xml_attribute2& proto, const xml_attribute2& attr)
 	{
-		if (!proto) return xml_attribute();
-		if (!impl::allow_insert_attribute(type_2())) return xml_attribute();
-		if (!attr || !impl::is_attribute_of(attr._attr, _root)) return xml_attribute();
+		if (!proto) return xml_attribute2();
+		if (!impl::allow_insert_attribute(type_2())) return xml_attribute2();
+		if (!attr || !impl::is_attribute_of(attr._attr, _root)) return xml_attribute2();
 
 		impl::xml_allocator& alloc = impl::get_allocator(_root);
-		if (!alloc.reserve()) return xml_attribute();
+		if (!alloc.reserve()) return xml_attribute2();
 
-		xml_attribute a(impl::allocate_attribute(alloc));
-		if (!a) return xml_attribute();
+		xml_attribute2 a(impl::allocate_attribute(alloc));
+		if (!a) return xml_attribute2();
 
 		impl::insert_attribute_before(a._attr, attr._attr, _root);
 		impl::node_copy_attribute(a._attr, proto._attr);
@@ -6091,7 +6091,7 @@ namespace pugi
 		return remove_attribute(attribute_2(name_));
 	}
 
-	PUGI__FN bool xml_node::remove_attribute(const xml_attribute& a)
+	PUGI__FN bool xml_node::remove_attribute(const xml_attribute2& a)
 	{
 		if (!_root || !a._attr) return false;
 		if (!impl::is_attribute_of(a._attr, _root)) return false;
@@ -6776,7 +6776,7 @@ namespace pugi
 	{
 	}
 
-	PUGI__FN xml_attribute_iterator_2::xml_attribute_iterator_2(const xml_attribute& attr, const xml_node& parent): _wrap(attr), _parent(parent)
+	PUGI__FN xml_attribute_iterator_2::xml_attribute_iterator_2(const xml_attribute2& attr, const xml_node& parent): _wrap(attr), _parent(parent)
 	{
 	}
 
@@ -6794,16 +6794,16 @@ namespace pugi
 		return _wrap._attr != rhs._wrap._attr || _parent._root != rhs._parent._root;
 	}
 
-	PUGI__FN xml_attribute& xml_attribute_iterator_2::operator*() const
+	PUGI__FN xml_attribute2& xml_attribute_iterator_2::operator*() const
 	{
 		assert(_wrap._attr);
 		return _wrap;
 	}
 
-	PUGI__FN xml_attribute* xml_attribute_iterator_2::operator->() const
+	PUGI__FN xml_attribute2* xml_attribute_iterator_2::operator->() const
 	{
 		assert(_wrap._attr);
-		return const_cast<xml_attribute*>(&_wrap); // BCC5 workaround
+		return const_cast<xml_attribute2*>(&_wrap); // BCC5 workaround
 	}
 
 	PUGI__FN const xml_attribute_iterator_2& xml_attribute_iterator_2::operator++()
@@ -8171,7 +8171,7 @@ PUGI__NS_BEGIN
 				if (lhs.parent() == rhs.parent())
 				{
 					// determine sibling order
-					for (xml_attribute a = lhs.attribute_2(); a; a = a.next_attribute())
+					for (xml_attribute2 a = lhs.attribute_2(); a; a = a.next_attribute())
 						if (a == rhs.attribute_2())
 							return true;
 
@@ -8494,7 +8494,7 @@ PUGI__NS_BEGIN
 			prefix_length = pos ? static_cast<size_t>(pos - name) : 0;
 		}
 
-		bool operator()(xml_attribute a) const
+		bool operator()(xml_attribute2 a) const
 		{
 			const char_t* name = a.name();
 
@@ -8512,7 +8512,7 @@ PUGI__NS_BEGIN
 
 		while (p)
 		{
-			xml_attribute a = p.find_attribute(pred);
+			xml_attribute2 a = p.find_attribute(pred);
 
 			if (a) return a.value();
 
@@ -8522,7 +8522,7 @@ PUGI__NS_BEGIN
 		return PUGIXML_TEXT("");
 	}
 
-	PUGI__FN const char_t* namespace_uri(xml_attribute attr, xml_node parent)
+	PUGI__FN const char_t* namespace_uri(xml_attribute2 attr, xml_node parent)
 	{
 		namespace_uri_predicate pred = attr.name();
 
@@ -8533,7 +8533,7 @@ PUGI__NS_BEGIN
 
 		while (p)
 		{
-			xml_attribute a = p.find_attribute(pred);
+			xml_attribute2 a = p.find_attribute(pred);
 
 			if (a) return a.value();
 
@@ -9858,7 +9858,7 @@ PUGI__NS_BEGIN
 			case nodetest_name:
 				if (strequal(name, _data.nodetest) && is_xpath_attribute(name))
 				{
-					ns.push_back(xpath_node(xml_attribute(a), xml_node(parent)), alloc);
+					ns.push_back(xpath_node(xml_attribute2(a), xml_node(parent)), alloc);
 					return true;
 				}
 				break;
@@ -9867,7 +9867,7 @@ PUGI__NS_BEGIN
 			case nodetest_all:
 				if (is_xpath_attribute(name))
 				{
-					ns.push_back(xpath_node(xml_attribute(a), xml_node(parent)), alloc);
+					ns.push_back(xpath_node(xml_attribute2(a), xml_node(parent)), alloc);
 					return true;
 				}
 				break;
@@ -9875,7 +9875,7 @@ PUGI__NS_BEGIN
 			case nodetest_all_in_namespace:
 				if (starts_with(name, _data.nodetest) && is_xpath_attribute(name))
 				{
-					ns.push_back(xpath_node(xml_attribute(a), xml_node(parent)), alloc);
+					ns.push_back(xpath_node(xml_attribute2(a), xml_node(parent)), alloc);
 					return true;
 				}
 				break;
@@ -10414,7 +10414,7 @@ PUGI__NS_BEGIN
 
 				for (xml_node n = c.n.node(); n; n = n.parent())
 				{
-					xml_attribute a = n.attribute_2(PUGIXML_TEXT("xml:lang"));
+					xml_attribute2 a = n.attribute_2(PUGIXML_TEXT("xml:lang"));
 
 					if (a)
 					{
@@ -10438,7 +10438,7 @@ PUGI__NS_BEGIN
 			{
 				const char_t* value = (_right->_type == ast_string_constant) ? _right->_data.string : _right->_data.variable->get_string();
 
-				xml_attribute attr = c.n.node().attribute_2(_left->_data.nodetest);
+				xml_attribute2 attr = c.n.node().attribute_2(_left->_data.nodetest);
 
 				return attr && strequal(attr.value(), value) && is_xpath_attribute(attr.name());
 			}
@@ -12202,7 +12202,7 @@ namespace pugi
 	{
 	}
 
-	PUGI__FN xpath_node::xpath_node(const xml_attribute& attribute_, const xml_node& parent_): _node(attribute_ ? parent_ : xml_node()), _attribute(attribute_)
+	PUGI__FN xpath_node::xpath_node(const xml_attribute2& attribute_, const xml_node& parent_): _node(attribute_ ? parent_ : xml_node()), _attribute(attribute_)
 	{
 	}
 
@@ -12211,7 +12211,7 @@ namespace pugi
 		return _attribute ? xml_node() : _node;
 	}
 
-	PUGI__FN xml_attribute xpath_node::attribute_2() const
+	PUGI__FN xml_attribute2 xpath_node::attribute_2() const
 	{
 		return _attribute;
 	}
