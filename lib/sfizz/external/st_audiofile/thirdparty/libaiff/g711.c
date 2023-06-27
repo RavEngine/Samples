@@ -251,7 +251,7 @@ g711_write_lpcm(AIFF_Ref w, void *inptr, size_t ilen, int readOnlyBuf)
 {
         uint8_t  *outb;
         int16_t  *inb;
-        uint8_t (*f)(int16_t);
+        uint8_t (*f)(int16_t) = NULL;
         int       i, n;
         
         if (2 != w->segmentSize)

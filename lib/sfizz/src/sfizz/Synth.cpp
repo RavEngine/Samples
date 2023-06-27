@@ -42,6 +42,11 @@
 #include <random>
 #include <utility>
 
+namespace pugi {
+    using xml_node = xml_node2;
+    using xml_document = xml_document2;
+}
+
 namespace sfz {
 
 // unless set to permissive, the loader rejects sfz files with errors

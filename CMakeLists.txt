@@ -253,14 +253,17 @@ absl_random_internal_seed_material;absl_random_internal_pool_urbg;absl_random_in
 absl_random_internal_randen_hwaes;absl_random_internal_randen_hwaes_impl;absl_random_internal_distribution_test_util;absl_strings_internal;absl_str_format_internal;\
 absl_cord_internal;absl_cordz_functions;absl_cordz_handle;absl_cordz_info;absl_cordz_sample_token;absl_graphcycles_internal;absl_civil_time;absl_time_zone;absl_bad_any_cast_impl")
 
-if(CMAKE_SYSTEM_NAME MATCHES "WindowsStore")
-else()
-	add_sample("SoundDynamics")
-	target_link_libraries("RavEngineSoundDynamics" PUBLIC
-		"sfizz_static"
-		"sfizz_fmidi"
-		"midifile"
-	)
+add_sample("SoundDynamics")
+target_link_libraries("RavEngineSoundDynamics" PUBLIC
+	"sfizz_static"
+	"sfizz_fmidi"
+	"midifile"
+)
+if(UWP)
+	# WINNT version is messed up when compiling for UWP, fixes here
+	foreach(tgt "sfizz_static" "sfizz_fmidi" "aiff" "sfizz_internal" )
+		target_compile_definitions(${tgt} PUBLIC "_CRT_SECURE_NO_WARNINGS" "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" "_CRT_NONSTDC_NO_DEPRECATE" )
+	endforeach()
 endif()
 
 # exlcude the SceneViewer from iOS, tvOS, UWP, and ARM linux 
