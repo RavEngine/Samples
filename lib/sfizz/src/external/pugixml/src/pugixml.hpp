@@ -396,7 +396,7 @@ namespace pugi
 		const char_t* value() const;
 
 		// Get attribute value, or the default value if attribute is empty
-		const char_t* as_string(const char_t* def = PUGIXML_TEXT("")) const;
+		const char_t* as_string2(const char_t* def = PUGIXML_TEXT("")) const;
 
 		// Get attribute value as a number, or the default value if conversion did not succeed or attribute is empty
 		int as_int(int def = 0) const;
@@ -515,7 +515,7 @@ namespace pugi
 		xml_attribute2 last_attribute() const;
 
 		// Get children list
-		xml_node first_child() const;
+		xml_node first_child2() const;
 		xml_node last_child() const;
 
 		// Get next/previous sibling in the children list of the parent node
@@ -622,7 +622,7 @@ namespace pugi
 		{
 			if (!_root) return xml_node();
 
-			for (xml_node node = first_child(); node; node = node.next_sibling_2())
+			for (xml_node node = first_child2(); node; node = node.next_sibling_2())
 				if (pred(node))
 					return node;
 
@@ -634,13 +634,13 @@ namespace pugi
 		{
 			if (!_root) return xml_node();
 
-			xml_node cur = first_child();
+			xml_node cur = first_child2();
 
 			while (cur._root && cur._root != _root)
 			{
 				if (pred(cur)) return cur;
 
-				if (cur.first_child()) cur = cur.first_child();
+				if (cur.first_child2()) cur = cur.first_child2();
 				else if (cur.next_sibling_2()) cur = cur.next_sibling_2();
 				else
 				{
@@ -756,7 +756,7 @@ namespace pugi
 		const char_t* get() const;
 
 		// Get text, or the default value if object is empty
-		const char_t* as_string(const char_t* def = PUGIXML_TEXT("")) const;
+		const char_t* as_string2(const char_t* def = PUGIXML_TEXT("")) const;
 
 		// Get text as a number, or the default value if conversion did not succeed or object is empty
 		int as_int(int def = 0) const;
@@ -1048,10 +1048,10 @@ namespace pugi
 	#endif
 
 		// Removes all nodes, leaving the empty document
-		void reset();
+		void reset2();
 
 		// Removes all nodes, then copies the entire contents of the specified document
-		void reset(const xml_document& proto);
+		void reset2(const xml_document& proto);
 
 	#ifndef PUGIXML_NO_STL
 		// Load document from stream.
