@@ -41,7 +41,6 @@ project("RavEngine_Samples_${TARGET_NAME}")
 
 # ensure that cmake doesn't forget what architecture we are compiling
 set(CMAKE_SYSTEM_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR} CACHE INTERNAL "")
-set(RAVENGINE_BUILD_TESTS ON CACHE INTERNAL "")
 add_subdirectory("RavEngine")
 
 file(GLOB COMMON_FILES "Samples/Common/*.hpp" "Samples/Common/*.cpp")
