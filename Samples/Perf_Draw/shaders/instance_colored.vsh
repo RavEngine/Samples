@@ -1,6 +1,5 @@
 layout(push_constant) uniform UniformBufferObject{
     mat4 viewProj;
-	vec4 colorTint;
     float time;
 } ubo;
 
@@ -29,10 +28,10 @@ float rand(vec2 co){
 }
 
 void main()
-{
+{    
     // give every instance a randomish rotation speed
-    float theta = ubo.time.x * M_PI/4 * rand(vec2(gl_InstanceID % 10, gl_InstanceID % 3));
-    float scaleInput = ubo.time.x * M_PI/4 * rand(vec2(gl_InstanceID % 3, gl_InstanceID % 7));
+    float theta = ubo.time * M_PI / 4 * rand(vec2(inEntityID % 10, inEntityID % 3));
+    float scaleInput = ubo.time * M_PI / 4 * rand(vec2(inEntityID % 3, inEntityID % 7));
     
     float ct = cos(theta);
     float st = sin(theta);
@@ -71,9 +70,15 @@ void main()
         vec4(0,0,0,1)
     );
     
-    mat4 fullmat = transmat * (fullrotmat * scalemat);
-        
-    gl_Position = fullmat * vec4(inPosition,1);
+    mat4 fullmat = transpose(transmat); // * (fullrotmat * scalemat);
+    
+    vec4 transformed = fullmat * vec4(inPosition, 1);
+    
+    mat4 worldTransform = model[inEntityID];
+    
+    transformed = worldTransform * vec4(transformed.xyz, 1);
+    
+    gl_Position = ubo.viewProj * vec4(transformed.xyz, 1);
         
 	outNormal = inNormal;
     v_position = gl_Position.xyz;

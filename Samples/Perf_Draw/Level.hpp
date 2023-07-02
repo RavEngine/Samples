@@ -45,4 +45,6 @@ struct PerfB_World : public RavEngine::World {
 	}
 private:
 	Ref<RavEngine::MeshAsset> currentMesh, cube, cone, cylinder, sphere;
+	Ref<struct InstanceColorMatInstance> matinst;
+	void PreTick(float fpsscale) override;
 };
