@@ -1,7 +1,6 @@
 
 layout(push_constant) uniform UniformBufferObject{
     mat4 viewProj;
-	vec4 colorTint;
     float time;
 } ubo;
 

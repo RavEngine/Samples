@@ -8,13 +8,12 @@ layout(binding = 0) uniform sampler2D diffuseSampler;
 
 layout(push_constant) uniform UniformBufferObject{
     mat4 viewProj;
-	vec4 colorTint;
     float time;
 } ubo;
 
 void main()
 {
-    outcolor = texture(diffuseSampler, inUV) * ubo.colorTint;
+    outcolor = texture(diffuseSampler, inUV);
     outnormal = vec4(inNormal,1);
 }
 
