@@ -1,18 +1,20 @@
-$input v_normal, v_texcoord0, v_worldpos
+layout(location = 0) in vec3 inNormal;
+layout(location = 1) in vec2 inUV;
 
-#include "ravengine_shader.glsl"
+layout(location = 0) out vec4 outcolor;
+layout(location = 1) out vec4 outnormal;
 
-SAMPLER2D(s_albedoTex,0);
-uniform vec4 albedoColor;
+layout(binding = 0) uniform sampler2D diffuseSampler; 
+
+layout(push_constant) uniform UniformBufferObject{
+    mat4 viewProj;
+    float time;
+} ubo;
 
 void main()
 {
-    PBR material = make_mat();
-    material.color = texture2D(s_albedoTex, v_texcoord0) * albedoColor;
-    material.normal = v_normal;
-    material.position = v_worldpos;
-    
-    fs_store(material);
+    outcolor = texture(diffuseSampler, inUV);
+    outnormal = vec4(inNormal,1);
 }
 
 

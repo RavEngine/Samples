@@ -1,4 +1,5 @@
 #include <RavEngine/World.hpp>
+#include <RavEngine/MeshAsset.hpp>
 
 struct PerfB_World : public RavEngine::World {
 	PerfB_World();	
@@ -44,4 +45,6 @@ struct PerfB_World : public RavEngine::World {
 	}
 private:
 	Ref<RavEngine::MeshAsset> currentMesh, cube, cone, cylinder, sphere;
+	Ref<struct InstanceColorMatInstance> matinst;
+	void PreTick(float fpsscale) override;
 };

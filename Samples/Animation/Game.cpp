@@ -6,7 +6,6 @@
 
 class Game : public RavEngine::App{
 public:
-    Game() : RavEngine::App(APPNAME){}
     void OnStartup(int argc, char** argv) final{
         AddWorld(RavEngine::New<Level>());
             

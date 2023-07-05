@@ -17,7 +17,6 @@
 #include "RavEngine/Light.hpp"
 #include <RavEngine/AudioRoom.hpp>
 #include <RavEngine/RenderEngine.hpp>
-#include <bgfx/bgfx.h>
 
 using namespace RavEngine;
 using namespace std;
@@ -42,12 +41,6 @@ void TestWorld::PostTick(float fpsScale){
     auto rotation = quaternion(vector3(0, 0, 0.01 * fpsScale));
     anonymous.GetTransform().LocalRotateDelta(rotation);
     scale = fpsScale;
-    
-    RenderEngine::DebugPrint(1, 0x4f, "TPS: {}", round(GetApp()->CurrentTPS()));
-    RenderEngine::DebugPrint(2, 0x4f, "TPS Scale: {}", fpsScale);
-    RenderEngine::DebugPrint(3, 0x4f, "FPS: {}", round(GetApp()->GetRenderEngine().GetCurrentFPS()));
-    RenderEngine::DebugPrint(4, 0x4f, "Frame Time: {} ms", GetApp()->GetRenderEngine().GetLastFrameTime());
-    RenderEngine::DebugPrint(5, 0x4f, "Physics Bodies: {}", TestEntityController::objectcount);
 	
 	dl.GetTransform().LocalRotateDelta(vector3(0,0,deg_to_rad(1*fpsScale)));
 }

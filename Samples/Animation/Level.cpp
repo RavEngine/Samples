@@ -99,5 +99,4 @@ Level::Level(){
 
 void Level::PostTick(float)
 {
-	GetApp()->GetRenderEngine().DebugPrint(0,0x4F,"{}", GetApp()->GetRenderEngine().GetCurrentBackendName());
 }

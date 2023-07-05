@@ -4,6 +4,7 @@
 #include <RavEngine/PhysicsLinkSystem.hpp>
 #include <FPSSystem.hpp>
 #include <RavEngine/CameraComponent.hpp>
+#include <RavEngine/Texture.hpp>
 
 using namespace std;
 using namespace RavEngine;

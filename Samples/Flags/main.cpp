@@ -13,6 +13,37 @@
 using namespace RavEngine;
 using namespace std;
 
+struct GrassMatUniforms {
+    float time = 0;
+};
+
+struct GrassMat : public RavEngine::Material {
+    GrassMat() : Material("grass", RavEngine::MaterialConfig{
+        .vertConfig = RavEngine::defaultVertexConfig,
+            .colorBlendConfig = RavEngine::defaultColorBlendConfig,
+            .bindings = {
+                {
+                    .binding = 2,
+                    .type = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::Type::StorageBuffer,
+                    .stageFlags = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::StageFlags::Vertex
+                }
+        },
+            .pushConstantSize = sizeof(GrassMatUniforms)
+    }) {}
+};
+
+struct GrassMatInst : public RavEngine::MaterialInstance {
+    GrassMatInst(Ref<GrassMat> f) : MaterialInstance(f) {}
+    void SetTime(float time) {
+        pushConstantData.time = time;
+    }
+    virtual const RGL::untyped_span GetPushConstantData() const override {
+        return pushConstantData;
+    }
+private:
+    GrassMatUniforms pushConstantData;
+};
+
 struct Level : public World{
     
     float deltaTime = 0;
@@ -23,6 +54,9 @@ struct Level : public World{
     GameObject cameraRoot = CreatePrototype<GameObject>();
     GameObject cameraGimball = CreatePrototype<GameObject>();
     GameObject cameraEntity;
+
+    Flagpole flagpole;
+    Ref<GrassMatInst> grassMatInst;
     
     void CameraLR(float amt){
         cameraRoot.GetTransform().LocalRotateDelta(vector3(0,amt * deltaTime * cameraSpeed,0));
@@ -34,6 +68,12 @@ struct Level : public World{
 
     void CameraZoom(float amt) {
         cameraEntity.GetTransform().LocalTranslateDelta(vector3(0, 0, amt * deltaTime * cameraZoomSpeed));
+    }
+
+    void PreTick(float fpsScale) override {
+        auto time = GetApp()->GetCurrentTime();
+        std::static_pointer_cast<FlagMatInst>(flagpole.GetCurrentMaterial())->SetTime(time);
+        grassMatInst->SetTime(time);
     }
     
     Level(){
@@ -60,11 +100,11 @@ struct Level : public World{
 			constexpr int nblades = 4096;
 			constexpr float scale = 0.3;
 			auto grassmesh = MeshAsset::Manager::Get("grass.obj");
-			auto grassMeshInstance = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>("grass"));
+			grassMatInst = RavEngine::New<GrassMatInst>(Material::Manager::Get<GrassMat>());
 			
 			for (int i = 0; i < nblades; i++) {
 				auto grassEntity = CreatePrototype<GameObject>();
-				auto& mesh = grassEntity.EmplaceComponent<StaticMesh>(grassmesh,grassMeshInstance);
+				auto& mesh = grassEntity.EmplaceComponent<StaticMesh>(grassmesh,grassMatInst);
 
 				auto& transform = grassEntity.GetTransform();
 
@@ -100,7 +140,7 @@ struct Level : public World{
         ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),groundMat);
         ground.GetTransform().LocalScaleDelta(vector3(10));
         
-        auto flagpole = CreatePrototype<Flagpole>();
+        flagpole = CreatePrototype<Flagpole>();
         
         auto picker = doc->GetElementById("picker");
         
@@ -130,7 +170,6 @@ struct Level : public World{
 };
 
 struct FlagsApp : public App{
-    FlagsApp() : App(APPNAME) {}
     void OnStartup(int argc, char** argv) final {
         AddWorld(RavEngine::New<Level>());
 

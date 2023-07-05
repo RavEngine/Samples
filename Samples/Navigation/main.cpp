@@ -63,7 +63,8 @@ struct Level : public World{
 
     std::optional<PhysicsSolver::RaycastHit> RaycastFromPixel(const vector2& pixel) {
         auto cam = cameraEntity.GetComponent<CameraComponent>();
-        auto camRay = cam.ScreenPointToRay(pixel);
+        auto& res = GetApp()->GetRenderEngine().GetBufferSize();
+        auto camRay = cam.ScreenPointToRay(pixel,res.width,res.height);
         auto camPos = cameraEntity.GetTransform().GetWorldPosition();
         PhysicsSolver::RaycastHit out_hit;
         bool hit = Solver->Raycast(camPos, camRay.second, 1000, out_hit);
@@ -260,7 +261,6 @@ struct Level : public World{
 };
 
 struct NavApp : public App{
-    NavApp() : App(APPNAME) {}
     void OnStartup(int argc, char** argv) final {        
         auto world = RavEngine::New<Level>();
         AddWorld(world);

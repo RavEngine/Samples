@@ -5,6 +5,9 @@
 #include <RavEngine/App.hpp>
 #include <RavEngine/ComponentHandle.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/Debug.hpp>
+#include <RavEngine/GameObject.hpp>
+#include <RavEngine/CameraComponent.hpp>
 #include <chrono>
 
 using namespace std;
@@ -84,9 +87,10 @@ PerfA_World::PerfA_World() {
 	}
 
 	// spawn Control entity
-	auto control = CreatePrototype<Entity>();
+	auto control = CreatePrototype<GameObject>();
 	auto gui = control.EmplaceComponent<GUIComponent>();
 	auto doc = gui.AddDocument("ui.rml");
+    control.EmplaceComponent<CameraComponent>().SetActive(true);
 
 	// connect the dropdown
 	struct SelectionEventListener : public Rml::EventListener {

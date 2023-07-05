@@ -4,9 +4,9 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/SystemInfo.hpp>
 #include <RavEngine/CameraComponent.hpp>
-#include <bgfx/platform.h>
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/GUI.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -96,9 +96,7 @@ Graphics<br/>
     }
 };
 
-struct SystemApp : public App{
-    SystemApp() : App(APPNAME){}
-    
+struct SystemApp : public App{   
     void OnStartup(int argc, char **argv) final{
         //SetMinTickTime(std::chrono::duration<double, std::milli>(33));  // limit to 30fps
         AddWorld(RavEngine::New<Level>());

@@ -4,12 +4,14 @@
 #include <RavEngine/App.hpp>
 #include "GameWorld.hpp"
 #include <RavEngine/Debug.hpp>
+#include <RavEngine/CameraComponent.hpp>
 
 using namespace RavEngine;
 using namespace std;
 
 MainMenu::MainMenu(){
-	mainMenu = CreatePrototype<RavEngine::Entity>();
+	mainMenu = CreatePrototype<RavEngine::GameObject>();
+	mainMenu.EmplaceComponent<CameraComponent>().SetActive(true);
 	
 	auto& menu = mainMenu.EmplaceComponent<GUIComponent>();
 	auto doc = menu.AddDocument("mainmenu.rml");

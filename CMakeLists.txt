@@ -16,7 +16,7 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 endif()
 
 if(MSVC)
-  add_definitions(/MP)
+  add_definitions(/MP)			# parallelize each target
 endif()
 
 #Enable iPad as well as iPhone (Universal)
@@ -41,7 +41,6 @@ project("RavEngine_Samples_${TARGET_NAME}")
 
 # ensure that cmake doesn't forget what architecture we are compiling
 set(CMAKE_SYSTEM_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR} CACHE INTERNAL "")
-set(RAVENGINE_BUILD_TESTS ON CACHE INTERNAL "")
 add_subdirectory("RavEngine")
 
 file(GLOB COMMON_FILES "Samples/Common/*.hpp" "Samples/Common/*.cpp")
@@ -92,7 +91,7 @@ function (add_sample sample_dir)
 
 	file(GLOB objects "${sample_dir}/objects/*.fbx" "${sample_dir}/objects/*.dae" "${sample_dir}/objects/*.ozz" "${sample_dir}/objects/*.obj" "${sample_dir}/objects/*.ply")
 	file(GLOB textures "${sample_dir}/textures/*.jpg" "${sample_dir}/textures/*.png" "${sample_dir}/textures/*.svg")
-	file(GLOB shaders "${sample_dir}/shaders/*.cmake")
+	file(GLOB shaders "${sample_dir}/shaders/*.vsh" "${sample_dir}/shaders/*.csh" "${sample_dir}/shaders/*.fsh")
 	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png" "${sample_dir}/ui/*.json" "${sample_dir}/ui/*.ids")
 	file(GLOB sounds "${sample_dir}/sounds/*.mp3" "${sample_dir}/sounds/*.wav" "${sample_dir}/sounds/*.ogg" "${sample_dir}/sounds/*.mid")
 	file(GLOB_RECURSE streaming "${sample_dir}/streaming/*.ogg" "${sample_dir}/streaming/*.sfz")
@@ -214,7 +213,7 @@ set(SFIZZ_SHARED OFF CACHE INTERNAL "")
 set(ENABLE_LTO OFF CACHE INTERNAL "")
 set(SFIZZ_RENDER OFF CACHE INTERNAL "")
 set(SFIZZ_STATIC_DEPENDENCIES OFF CACHE INTERNAL "")
-add_subdirectory("lib/sfizz")
+add_subdirectory("lib/sfizz" EXCLUDE_FROM_ALL)
 
 add_subdirectory("lib/midifile" EXCLUDE_FROM_ALL)
 
@@ -222,14 +221,13 @@ add_subdirectory("lib/midifile" EXCLUDE_FROM_ALL)
 add_sample("AirHockey")
 add_sample("Playground")
 add_sample("Animation")
-add_sample("Perf-ECS")
-add_sample("Perf-Draw")
-add_sample("Perf-DrawAnimated")
-add_sample("Perf-RigidBodies")
-add_sample("Perf-Network")
-add_sample("Perf-Lighting")
+add_sample("Perf_ECS")
+add_sample("Perf_Draw")
+add_sample("Perf_DrawAnimated")
+add_sample("Perf_RigidBodies")
+add_sample("Perf_Network")
+add_sample("Perf_Lighting")
 add_sample("GUI")
-add_sample("SoundDynamics")
 add_sample("Flags")
 add_sample("Navigation")
 add_sample("Gravity")
@@ -237,11 +235,6 @@ add_sample("SystemInfo")
 add_sample("VR")
 add_sample("Shadows")
 
-target_link_libraries("RavEngineSoundDynamics" PUBLIC
-    "sfizz_static"
-    "sfizz_fmidi"
-	"midifile"
-)
 
 group_in("SamplesDeps/sfizz" "aiff;sfizz_pugixml;sfizz_spline;sfizz_tunings;sfizz_hiir_polyphase_iir2designer;sfizz_kissfft;sfizz_cephes;sfizz_cpuid;sfizz_filesystem_impl;sfizz_fmidi;\
 st_audiofile;st_audiofile_formats;st_info;sfizz_parser;sfizz_messaging;sfizz_import;sfizz_spin_mutex;sfizz_internal;sfizz_match_definitions;sfizz_static;\
@@ -259,10 +252,16 @@ absl_random_internal_seed_material;absl_random_internal_pool_urbg;absl_random_in
 absl_random_internal_randen_hwaes;absl_random_internal_randen_hwaes_impl;absl_random_internal_distribution_test_util;absl_strings_internal;absl_str_format_internal;\
 absl_cord_internal;absl_cordz_functions;absl_cordz_handle;absl_cordz_info;absl_cordz_sample_token;absl_graphcycles_internal;absl_civil_time;absl_time_zone;absl_bad_any_cast_impl")
 
-if(CMAKE_SYSTEM_NAME MATCHES "WindowsStore")
-	foreach(TGT "sfizz_fmidi" "aiff" "sfizz_internal")
-		target_compile_definitions(${TGT} PUBLIC "_CRT_SECURE_NO_WARNINGS" "BUILD_DLL" "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" "_CRT_NONSTDC_NO_DEPRECATE")
-		target_compile_options(${TGT} PUBLIC  "/wd4146" "/wd4703")
+add_sample("SoundDynamics")
+target_link_libraries("RavEngineSoundDynamics" PUBLIC
+	"sfizz_static"
+	"sfizz_fmidi"
+	"midifile"
+)
+if(UWP)
+	# WINNT version is messed up when compiling for UWP, fixes here
+	foreach(tgt "sfizz_static" "sfizz_fmidi" "aiff" "sfizz_internal" )
+		target_compile_definitions(${tgt} PUBLIC "_CRT_SECURE_NO_WARNINGS" "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" "_CRT_NONSTDC_NO_DEPRECATE" )
 	endforeach()
 endif()
 

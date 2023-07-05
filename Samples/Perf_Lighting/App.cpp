@@ -7,8 +7,6 @@
 using namespace std;
 
 struct LightingApp : public RavEngine::App {
-	LightingApp() : App(APPNAME) {}
-
 	void OnStartup(int argc, char** argv) final{
 
 		App::GetRenderEngine().VideoSettings.vsync = false;

@@ -8,7 +8,6 @@ using namespace std;
 
 struct Performance_B : public RavEngine::App {
 public:
-	Performance_B() : App(APPNAME) {}
     void OnFatal(const char* msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);
     }

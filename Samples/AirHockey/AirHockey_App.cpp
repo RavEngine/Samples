@@ -10,9 +10,6 @@
 using namespace RavEngine;
 
 class AirHockey : public RavEngine::App {
-public:
-	AirHockey() : App(APPNAME){}
-private:
     void OnStartup(int argc, char** argv) final{
         //setup video settings
         RenderEngine::VideoSettings.vsync = true;

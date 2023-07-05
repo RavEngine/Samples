@@ -45,7 +45,7 @@ struct MetricsSystem : public AutoCTTI {
 PerfB_World::PerfB_World() {
 
 	Debug::Log("Loading Assets");
-	auto matinst = RavEngine::New<InstanceColorMatInstance>(Material::Manager::Get<InstanceColorMat>());
+	matinst = RavEngine::New<InstanceColorMatInstance>(Material::Manager::Get<InstanceColorMat>());
 	currentMesh = RavEngine::New<MeshAsset>();
 	cube = RavEngine::MeshAsset::Manager::Get("cube.obj");
 	cone = RavEngine::MeshAsset::Manager::Get("cone.obj");
@@ -130,4 +130,10 @@ PerfB_World::PerfB_World() {
     // load systems
     EmplaceSystem<PlayerSystem>();
     EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
+}
+
+void PerfB_World::PreTick(float fpsscale)
+{
+	auto time = GetApp()->GetCurrentTime();
+	matinst->SetTime(time);
 }

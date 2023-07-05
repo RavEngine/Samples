@@ -12,6 +12,10 @@
 #include <vector>
 #include <absl/strings/string_view.h>
 
+#if _WIN32
+#define and &&
+#endif
+
 namespace sfz
 {
 

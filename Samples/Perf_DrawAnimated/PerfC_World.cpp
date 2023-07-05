@@ -28,29 +28,8 @@ static std::uniform_int_distribution<> texturerng(0,PerfC_World::num_textures - 
 static std::uniform_real_distribution<> spinrng(deg_to_rad(-1), deg_to_rad(1));
 static std::uniform_real_distribution<> colorrng(0.5,1);
 
-
-struct DemoMaterialInstance : public RavEngine::PBRMaterialInstance{
-
-	DemoMaterialInstance(Ref<PBRMaterial> m) : PBRMaterialInstance(m){}
-	
-	void DrawHook() override {
-		if (!albedo) {
-			albedo = TextureManager::defaultTexture;
-		}
-
-		if (PerfC_World::TexturesEnabled){
-			albedo->Bind(0, mat->albedoTxUniform);
-		}
-		else{
-			TextureManager::defaultTexture->Bind(0, mat->albedoTxUniform);
-		}
-		
-		mat->albedoColorUniform.SetValues(&color, 1);
-	}
-};
-
 struct DemoObject : public RavEngine::GameObject{
-	void Create(Ref<DemoMaterialInstance> inst,bool isLight = false){
+	void Create(Ref<PBRMaterialInstance> inst,bool isLight = false){
         GameObject::Create();
         
 		auto child = GetWorld()->CreatePrototype<GameObject>();
@@ -94,25 +73,25 @@ PerfC_World::PerfC_World(){
 	
 	//load textures
 	
-    Array<Ref<DemoMaterialInstance>,PerfC_World::num_textures> materialInstances;
+    Array<Ref<PBRMaterialInstance>,PerfC_World::num_textures> materialInstances;
 	
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
 		textures[i] = Texture::Manager::Get(StrFormat("tx{}.png",i+1));
-		materialInstances[i] = RavEngine::New<DemoMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+		materialInstances[i] = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		materialInstances[i]->SetAlbedoTexture(textures[i]);
     }
 	
 	Debug::Log("Loading {} objects", num_objects);
 	//spawn the polygons
 	for(int i = 0; i < num_objects; i++){
-		Ref<DemoMaterialInstance> inst = materialInstances[texturerng(gen)];
+		Ref<PBRMaterialInstance> inst = materialInstances[texturerng(gen)];
         CreatePrototype<DemoObject>(inst);
 	}
 	
 	//spawn the lights
 	for(int i = 0; i < 10; i++){
-		Ref<DemoMaterialInstance> inst = materialInstances[texturerng(gen)];
+		Ref<PBRMaterialInstance> inst = materialInstances[texturerng(gen)];
         CreatePrototype<DemoObject>(inst,true);
 	}
 			
