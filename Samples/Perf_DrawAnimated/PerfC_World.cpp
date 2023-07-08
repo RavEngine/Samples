@@ -73,8 +73,6 @@ PerfC_World::PerfC_World(){
 	
 	//load textures
 	
-    Array<Ref<PBRMaterialInstance>,PerfC_World::num_textures> materialInstances;
-	
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
 		textures[i] = Texture::Manager::Get(StrFormat("tx{}.png",i+1));
@@ -182,6 +180,20 @@ void PerfC_World::PostTick(float scale){
 	hud->EnqueueUIUpdate([this] {
 		fpslabel->SetInnerRML(StrFormat("TPS: {}, FPS: {} ({} ms)", (int)GetApp()->CurrentTPS(),(int)GetApp()->GetRenderEngine().GetCurrentFPS(), (int)GetApp()->GetRenderEngine().GetLastFrameTime()));
 	});
+}
+
+void PerfC_World::ToggleTextures()
+{
+	TexturesEnabled = !TexturesEnabled;
+	for (int i = 0; i < materialInstances.size(); i++) {
+		if (TexturesEnabled) {
+			materialInstances[i]->SetAlbedoTexture(textures[i]);
+		}
+		else {
+			materialInstances[i]->SetAlbedoTexture(Texture::Manager::defaultTexture);
+		}
+	}
+	
 }
 
 void PerfC_World::ToggleFullbright(){

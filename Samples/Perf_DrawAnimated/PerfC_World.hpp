@@ -41,9 +41,7 @@ public:
 	/**
 	 Enable or disable texture display
 	 */
-	void ToggleTextures(){
-		TexturesEnabled = !TexturesEnabled;
-	}
+	void ToggleTextures();
 	
 	/**
 	 Enable or disable fullbright lighting
@@ -54,6 +52,7 @@ protected:
 
 	Rml::Element* fpslabel = nullptr;
 	RavEngine::ComponentHandle<RavEngine::GUIComponent> hud;
+	RavEngine::Array<Ref<RavEngine::PBRMaterialInstance>, PerfC_World::num_textures> materialInstances;
     
 	void PostTick(float) override;
 };

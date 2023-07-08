@@ -70,9 +70,10 @@ void main()
         vec4(0,0,0,1)
     );
     
-    mat4 fullmat = transpose(transmat); // * (fullrotmat * scalemat);
-    
-    vec4 transformed = fullmat * vec4(inPosition, 1);
+    vec4 transformed = vec4(inPosition, 1);
+    transformed = scalemat * transformed;
+    transformed = fullrotmat * transformed;
+    transformed = transpose(transmat) * transformed;
     
     mat4 worldTransform = model[inEntityID];
     
