@@ -12,8 +12,8 @@ struct InstanceColorMat : public RavEngine::Material {
 			.bindings = {
 				{
 					.binding = 2,
-					.type = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::Type::StorageBuffer,
-					.stageFlags = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::StageFlags::Vertex
+					.type = RGL::BindingType::StorageBuffer,
+					.stageFlags = RGL::BindingVisibility::Vertex
 				}
             },
 			.pushConstantSize = sizeof(MatInstUniforms)

@@ -12,20 +12,20 @@ struct FlagMat : public RavEngine::Material{
         .vertConfig = RavEngine::defaultVertexConfig,
         .colorBlendConfig = RavEngine::defaultColorBlendConfig,
         .bindings = {
-             {
+            {
                 .binding = 0,
-                .type = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::Type::CombinedImageSampler,
-                .stageFlags = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::StageFlags::Fragment,
+                .type = RGL::BindingType::Sampler,
+                .stageFlags = RGL::BindingVisibility::Fragment,
             },
              {
                 .binding = 1,
-                .type = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::Type::SampledImage,
-                .stageFlags = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::StageFlags::Fragment,
+                .type = RGL::BindingType::SampledImage,
+                .stageFlags = RGL::BindingVisibility::Fragment,
             },
             {
                 .binding = 2,
-                .type = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::Type::StorageBuffer,
-                .stageFlags = RGL::PipelineLayoutDescriptor::LayoutBindingDesc::StageFlags::Vertex
+                .type = RGL::BindingType::StorageBuffer,
+                .stageFlags = RGL::BindingVisibility::Vertex
             }
         },
         .pushConstantSize = sizeof(FlagMatUniforms)
