@@ -95,8 +95,13 @@ struct Level : public World{
         };
         // delete all the previous dots
         if (auto allDots = GetAllComponentsOfType<DottedLineMarker>()){
+            std::vector<Entity> dots;
             for(const auto& dot : *allDots){
-                dot.GetOwner().Destroy();
+                dots.push_back(dot.GetOwner());
+                //dot.GetOwner().Destroy();
+            }
+            for (auto entity : dots) {
+                entity.Destroy();
             }
         }
         
