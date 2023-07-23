@@ -37,7 +37,7 @@ struct Level : public World{
     Ref<MeshAsset> mesh;
     NavMeshComponent::Options nvopt;
     ComponentHandle<NavMeshComponent> navMesh;
-    PhysicsBodyComponent::ColliderHandle<SphereCollider> ballCollider;
+    PhysicsBodyComponent::ColliderHandle ballCollider;
     
     Ref<PBRMaterialInstance> dottedLineMat, targetBeginMat, targetEndMat;
     GameObject targetBegin, targetEnd;

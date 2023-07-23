@@ -12,7 +12,7 @@ void Flagpole::Create(){
     GameObject::Create();
     // load meshes
     SceneLoader sl("flagpole.fbx");
-    FixedVector<Ref<MeshAsset>, 2> meshes;
+    Vector<Ref<MeshAsset>> meshes;
     sl.LoadMeshes([](const PreloadedAsset& asset){
         return true;
     }, [&](Ref<MeshAsset> mesh, Ref<PBRMaterialInstance> inst, const PreloadedAsset & data){
