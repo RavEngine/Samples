@@ -25,6 +25,9 @@ struct InputNames{
 		* Pound = "Pound";
 };
 
+constexpr static RavEngine::CacheBase::unique_key_t lvl_wall_key = 1;
+constexpr static RavEngine::CacheBase::unique_key_t lvl_floors_key = 2;
+
 Level::Level(){
 	
 	auto lights = CreatePrototype<GameObject>();
@@ -78,7 +81,7 @@ Level::Level(){
     opt.keepInSystemRAM = true;
 	{
 		auto floorplane = CreatePrototype<RavEngine::GameObject>();
-		Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("level.fbx", "ground", opt);
+		Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level.fbx", lvl_floors_key, "ground", opt);
 		material->SetAlbedoColor({ 174.f / 255,210.f / 255,234.f / 255,1 });
         floorplane.EmplaceComponent<StaticMesh>(sharedMesh,material);
 		auto& r = floorplane.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
@@ -87,7 +90,7 @@ Level::Level(){
 
 	// load the walls
 	auto walls = CreatePrototype<GameObject>();
-	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("level.fbx", "walls", opt);
+	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level.fbx", lvl_wall_key, "walls", opt);
     walls.EmplaceComponent<StaticMesh>(sharedMesh,material);
 	auto& s = walls.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls
     s.EmplaceCollider<MeshCollider>(sharedMesh, physmat);

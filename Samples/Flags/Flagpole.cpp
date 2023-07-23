@@ -52,9 +52,11 @@ void Flagpole::Create(){
         flags.push_back({n.name,mat});
     }
     
+    constexpr static RavEngine::CacheBase::unique_key_t flag_special_key = 1;
+
     // load the special flag, which uses a different shader
     {
-        auto mat = RavEngine::New<FlagMatInst>(Material::Manager::Get<FlagMat>( "flag_special"));
+        auto mat = RavEngine::New<FlagMatInst>(Material::Manager::GetWithKey<FlagMat>(flag_special_key, "flag_special"));
         flags.push_back({"My Room",mat});
     }
     

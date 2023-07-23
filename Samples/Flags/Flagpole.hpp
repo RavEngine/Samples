@@ -40,7 +40,7 @@ struct FlagMatInst : public RavEngine::MaterialInstance{
         pushConstantData.time = time;
     }
     void SetAlbedoTexture(Ref<RavEngine::Texture> texture) {
-        textureBindings[0] = texture;
+        textureBindings[1] = texture;
     }
 
     virtual const RGL::untyped_span GetPushConstantData() const override {
