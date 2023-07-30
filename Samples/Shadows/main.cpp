@@ -45,8 +45,8 @@ struct Level : public RavEngine::World{
 
 		// load casting triangle
 		tri = CreatePrototype<decltype(tri)>();
-		auto trimat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-		trimat->doubleSided = true;
+		constexpr static uint32_t trikey = 1;
+		auto trimat = New<PBRMaterialInstance>(Material::Manager::GetWithKey<PBRMaterial>(trikey,PBRMaterialOptions{.cullMode = RGL::CullMode::None}));
 		trimat->SetAlbedoColor({ 1,0,0,1 });
 		tri.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("triangle.obj"),trimat);
 		tri.GetTransform().LocalTranslateDelta(vector3(-1.5, 0.8, 0))

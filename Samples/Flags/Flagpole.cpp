@@ -48,7 +48,6 @@ void Flagpole::Create(){
         auto mat = RavEngine::New<FlagMatInst>(Material::Manager::Get<FlagMat>());
         Ref<Texture> tx = RavEngine::New<Texture>(n.filename,1024,1024);
         mat->SetAlbedoTexture(tx);
-        mat->doubleSided = true;
         flags.push_back({n.name,mat});
     }
     

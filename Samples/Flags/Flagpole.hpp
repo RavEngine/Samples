@@ -28,7 +28,8 @@ struct FlagMat : public RavEngine::Material{
                 .stageFlags = RGL::BindingVisibility::Vertex
             }
         },
-        .pushConstantSize = sizeof(FlagMatUniforms)
+        .pushConstantSize = sizeof(FlagMatUniforms),
+        .cullMode = RGL::CullMode::None
         }) {}
 };
 
