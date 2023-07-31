@@ -88,8 +88,9 @@ struct Level : public RavEngine::World{
 
 		auto spotLightEntity = CreatePrototype<GameObject>();
 		auto& spotLight = spotLightEntity.EmplaceComponent<SpotLight>();
+		spotLight.SetCastsShadows(true);
 		spotLight.debugEnabled = true;
-		spotLightEntity.GetTransform().LocalTranslateDelta(vector3(0,2,-2)).LocalRotateDelta(vector3(deg_to_rad(30),0,0));
+		spotLightEntity.GetTransform().LocalTranslateDelta(vector3(0,2,2)).LocalRotateDelta(vector3(deg_to_rad(30),0,0));
 		spotLight.SetIntensity(2);
 		auto sfwd = spotLightEntity.GetTransform().WorldForward();
 
