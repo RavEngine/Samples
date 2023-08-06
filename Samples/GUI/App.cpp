@@ -7,8 +7,6 @@
 struct App : public RavEngine::App{
     void OnStartup(int argc, char** argv) final{
         RavEngine::RenderEngine::VideoSettings.vsync = true;
-            RavEngine::RenderEngine::VideoSettings.width = 800;
-            RavEngine::RenderEngine::VideoSettings.height = 480;
                 
             AddWorld(RavEngine::New<::World>());
             

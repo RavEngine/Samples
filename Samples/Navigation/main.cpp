@@ -11,6 +11,7 @@
 #include <RavEngine/DebugDrawer.hpp>
 #include <RavEngine/RenderEngine.hpp>
 #include <RavEngine/PhysicsSolver.hpp>
+#include <RavEngine/Window.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -63,7 +64,7 @@ struct Level : public World{
 
     std::optional<PhysicsSolver::RaycastHit> RaycastFromPixel(const vector2& pixel) {
         auto cam = cameraEntity.GetComponent<CameraComponent>();
-        auto& res = GetApp()->GetRenderEngine().GetBufferSize();
+        auto& res = GetApp()->GetMainWindow()->bufferdims;
         auto camRay = cam.ScreenPointToRay(pixel,res.width,res.height);
         auto camPos = cameraEntity.GetTransform().GetWorldPosition();
         PhysicsSolver::RaycastHit out_hit;
@@ -76,14 +77,16 @@ struct Level : public World{
     }
 
     void SelectStart() {
-        if (auto pos = RaycastFromPixel(InputManager::GetMousePosPixels())) {
+        auto& win = GetApp()->GetMainWindow();
+        if (auto pos = RaycastFromPixel(InputManager::GetMousePosPixels(win->GetDPIScale()))) {
             startPos = pos.value().hitPosition;
             RecalculateNav();
         }
     }
 
     void SelectEnd() {
-        if (auto pos = RaycastFromPixel(InputManager::GetMousePosPixels())) {
+        auto& win = GetApp()->GetMainWindow();
+        if (auto pos = RaycastFromPixel(InputManager::GetMousePosPixels(win->GetDPIScale()))) {
             endPos = pos.value().hitPosition;
             RecalculateNav();
         }

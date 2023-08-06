@@ -13,8 +13,6 @@ class AirHockey : public RavEngine::App {
     void OnStartup(int argc, char** argv) final{
         //setup video settings
         RenderEngine::VideoSettings.vsync = true;
-        RenderEngine::VideoSettings.width = 800;
-        RenderEngine::VideoSettings.height = 480;
 
         SetMinTickTime(std::chrono::duration<double,std::milli>(1.0/120 * 1000));
         

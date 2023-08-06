@@ -18,8 +18,6 @@ class TestApp : public RavEngine::App{
 		
 		//setup video settings
 		RavEngine::RenderEngine::VideoSettings.vsync = false;
-		RavEngine::RenderEngine::VideoSettings.width = 800;
-		RavEngine::RenderEngine::VideoSettings.height = 480;
 		
 		//create a world
 		AddWorld(RavEngine::New<TestWorld>());
