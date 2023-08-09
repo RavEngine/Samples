@@ -64,10 +64,16 @@ struct Level : public RavEngine::World{
             .SetLocalScale(0.5); 
 
 		// create lights and camera
-		camera.EmplaceComponent<CameraComponent>().SetActive(true);
+		auto mainCam = camera.EmplaceComponent<CameraComponent>();
+		mainCam.SetActive(true);
+		mainCam.viewportOverride = {
+			.sizeFactor = {0.5, 0.5}
+		};
 		camera.GetTransform().LocalTranslateDelta(vector3(0, 0, 5));
 		cameraRoot.GetTransform().AddChild(cameraBoom);
 		cameraBoom.GetTransform().AddChild(camera);
+
+
 
 		auto light = CreatePrototype<GameObject>();
 		auto& dl = light.EmplaceComponent<DirectionalLight>();
