@@ -64,7 +64,7 @@ struct Level : public RavEngine::World{
             .SetLocalScale(0.5); 
 
 		// create lights and camera
-		auto mainCam = camera.EmplaceComponent<CameraComponent>();
+		auto& mainCam = camera.EmplaceComponent<CameraComponent>();
 		mainCam.SetActive(true);
 		mainCam.viewportOverride = {
 			.sizeFactor = {0.5, 0.5}
@@ -73,6 +73,51 @@ struct Level : public RavEngine::World{
 		cameraRoot.GetTransform().AddChild(cameraBoom);
 		cameraBoom.GetTransform().AddChild(camera);
 
+		// other cameras
+		struct CamConfig {
+			vector3 position;
+			vector3 rotation;
+			RavEngine::ViewportOverride viewport;
+		};
+
+		CamConfig cameras[]{ 
+			{
+				.position = {0,1,0},
+				.rotation = {},
+				.viewport = {
+					.originFactor = {0.5,0},
+					.sizeFactor = {0.5,0.5},
+				}
+			},
+			{
+				.position = {1,1,0},
+				.rotation = {},
+				.viewport = {
+					.originFactor = {0,0.5},
+					.sizeFactor = {0.5,0.5},
+				}
+			},
+			{
+				.position = {-1,1,0},
+				.rotation = {},
+				.viewport = {
+					.originFactor = {0.5,0.5},
+					.sizeFactor = {0.5,0.5},
+				}
+			}
+		};
+
+		for (const auto& cam : cameras) {
+			auto camEntity = CreatePrototype<GameObject>();
+			auto& camera = camEntity.EmplaceComponent<CameraComponent>();
+			camera.SetEnabled(true);
+			camera.SetActive(true);
+			auto& camtransform = camEntity.GetTransform();
+
+			camtransform.SetLocalPosition(cam.position);
+			camtransform.SetLocalRotation(cam.rotation);
+			camera.viewportOverride = cam.viewport;
+		}
 
 
 		auto light = CreatePrototype<GameObject>();
