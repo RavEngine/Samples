@@ -82,7 +82,7 @@ struct Level : public RavEngine::World{
 
 		CamConfig cameras[]{ 
 			{
-				.position = {0,1,0},
+				.position = {0,1,5},
 				.rotation = {},
 				.viewport = {
 					.originFactor = {0.5,0},
@@ -90,7 +90,7 @@ struct Level : public RavEngine::World{
 				}
 			},
 			{
-				.position = {1,1,0},
+				.position = {1,1,6},
 				.rotation = {},
 				.viewport = {
 					.originFactor = {0,0.5},
@@ -98,7 +98,7 @@ struct Level : public RavEngine::World{
 				}
 			},
 			{
-				.position = {-1,1,0},
+				.position = {-1,1,7},
 				.rotation = {},
 				.viewport = {
 					.originFactor = {0.5,0.5},
