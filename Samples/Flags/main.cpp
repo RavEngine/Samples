@@ -23,7 +23,7 @@ struct GrassMat : public RavEngine::Material {
             .colorBlendConfig = RavEngine::defaultColorBlendConfig,
             .bindings = {
                 {
-                    .binding = 2,
+                    .binding = 10,
                     .type = RGL::BindingType::StorageBuffer,
                     .stageFlags = RGL::BindingVisibility::Vertex
                 }

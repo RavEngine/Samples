@@ -23,7 +23,7 @@ struct FlagMat : public RavEngine::Material{
                 .stageFlags = RGL::BindingVisibility::Fragment,
             },
             {
-                .binding = 2,
+                .binding = 10,
                 .type = RGL::BindingType::StorageBuffer,
                 .stageFlags = RGL::BindingVisibility::Vertex
             }
