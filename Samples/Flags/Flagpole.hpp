@@ -2,6 +2,7 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/BuiltinMaterials.hpp>
 #include <RavEngine/Texture.hpp>
+#include <ravengine_shader_defs.h>
 
 struct FlagMatUniforms {
     float time = 0;
@@ -23,7 +24,7 @@ struct FlagMat : public RavEngine::Material{
                 .stageFlags = RGL::BindingVisibility::Fragment,
             },
             {
-                .binding = 10,
+                .binding = ENTITY_INPUT_LOCATION,
                 .type = RGL::BindingType::StorageBuffer,
                 .stageFlags = RGL::BindingVisibility::Vertex
             }

@@ -9,6 +9,7 @@
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/Utilities.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <ravengine_shader_defs.h>
 
 using namespace RavEngine;
 using namespace std;
@@ -23,7 +24,7 @@ struct GrassMat : public RavEngine::Material {
             .colorBlendConfig = RavEngine::defaultColorBlendConfig,
             .bindings = {
                 {
-                    .binding = 10,
+                    .binding = ENTITY_INPUT_LOCATION,
                     .type = RGL::BindingType::StorageBuffer,
                     .stageFlags = RGL::BindingVisibility::Vertex
                 }

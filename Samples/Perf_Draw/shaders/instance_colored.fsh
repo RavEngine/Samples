@@ -1,9 +1,10 @@
+#include "ravengine_fsh.h"
+
 layout(location = 0) in vec3 inNormal;
 layout(location = 1) in vec2 inUV;
 layout(location = 2) in vec3 v_position;
 
-layout(location = 0) out vec4 outcolor;
-layout(location = 1) out vec4 outnormal;
+FS_OUTPUTS()
 
 
 layout(push_constant) uniform UniformBufferObject{

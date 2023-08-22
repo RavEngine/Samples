@@ -1,5 +1,6 @@
 #pragma once
 #include <RavEngine/BuiltinMaterials.hpp>
+#include <ravengine_shader_defs.h>
 
 struct MatInstUniforms {
 	float time = 0;
@@ -11,7 +12,7 @@ struct InstanceColorMat : public RavEngine::Material {
 			.colorBlendConfig = RavEngine::defaultColorBlendConfig,
 			.bindings = {
 				{
-					.binding = 10,
+					.binding = ENTITY_INPUT_LOCATION,
 					.type = RGL::BindingType::StorageBuffer,
 					.stageFlags = RGL::BindingVisibility::Vertex
 				}
