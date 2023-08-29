@@ -116,7 +116,7 @@ Level::Level(){
 	auto& ambientLight = lightEntity.EmplaceComponent<AmbientLight>();
 	auto& dirLight = lightEntity.EmplaceComponent<DirectionalLight>();
 	lightEntity.EmplaceComponent<SpawnerMarker>();
-	dirLight.SetIntensity(1.0);
+	dirLight.SetIntensity(4);
 	dirLight.SetCastsShadows(true);
 	ambientLight.SetIntensity(0.2);
 	lightEntity.GetTransform().SetLocalRotation(vector3(0,deg_to_rad(45),deg_to_rad(45)));

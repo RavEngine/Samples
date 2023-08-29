@@ -8,8 +8,7 @@ layout(push_constant) uniform UniformBufferObject{
 
 VS_INPUTS()
 
-layout(location = 0) out
-vec3 outNormal;
+layout(location = 0) out vec3 outNormal;
 layout(location = 1) out vec2 outUV;
 layout(location = 2) out vec3 v_position;
 
@@ -74,5 +73,5 @@ void main()
     gl_Position = ubo.viewProj * vec4(transformed.xyz, 1);
         
 	outNormal = inNormal;
-    v_position = gl_Position.xyz;
+    v_position = transformed.xyz;
 }

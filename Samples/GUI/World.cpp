@@ -30,7 +30,7 @@ struct FPSSystem : public AutoCTTI {
 	camlights.GetTransform().LocalTranslateDelta(vector3(0,0,5));
 	
 	auto dirlight = CreatePrototype<GameObject>();
-	dirlight.EmplaceComponent<DirectionalLight>();
+	dirlight.EmplaceComponent<DirectionalLight>().SetIntensity(4);
 	dirlight.GetTransform().LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(45),0));
 	
 	cube = CreatePrototype<GameObject>();

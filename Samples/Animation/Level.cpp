@@ -34,7 +34,7 @@ Level::Level(){
 	lights.EmplaceComponent<AmbientLight>().SetIntensity(0.2f);
 	auto& dl = lights.EmplaceComponent<DirectionalLight>();
 	dl.SetCastsShadows(true);
-	dl.SetIntensity(5);
+	dl.SetIntensity(4);
     lights.GetTransform().LocalTranslateDelta(vector3(0,0.5,6)).LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(45),0));
     auto& gui = lights.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");

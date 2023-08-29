@@ -64,7 +64,7 @@ struct Level : public World{
 
     std::optional<PhysicsSolver::RaycastHit> RaycastFromPixel(const vector2& pixel) {
         auto cam = cameraEntity.GetComponent<CameraComponent>();
-        auto& res = GetApp()->GetMainWindow()->bufferdims;
+        auto res = GetApp()->GetMainWindow()->GetSizeInPixels();
         auto camRay = cam.ScreenPointToRay(pixel,res.width,res.height);
         auto camPos = cameraEntity.GetTransform().GetWorldPosition();
         PhysicsSolver::RaycastHit out_hit;
@@ -161,7 +161,9 @@ struct Level : public World{
         
         auto lightEntity = CreatePrototype<GameObject>();
         lightEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2f);
-        lightEntity.EmplaceComponent<DirectionalLight>().SetCastsShadows(true);
+        auto& dirLight = lightEntity.EmplaceComponent<DirectionalLight>();
+        dirLight.SetCastsShadows(true);
+        dirLight.SetIntensity(4);
         lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
         auto guiEntity = CreatePrototype<GameObject>();

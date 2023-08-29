@@ -25,7 +25,7 @@ struct LightEntity : public RavEngine::GameObject {
         EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("sphere.obj",opt),mat);
 		auto& cc = EmplaceComponent<CirculateComponent>();
 		auto& light = EmplaceComponent<RavEngine::PointLight>();
-		light.SetIntensity(cc.radius * 1.3);
+		light.SetIntensity(cc.radius * 2);
 		light.SetColorRGBA({RavEngine::Random::get(0.f,1.f),RavEngine::Random::get(0.f,1.f),RavEngine::Random::get(0.f,1.f),1});
 		mat->SetAlbedoColor(light.GetColorRGBA());
 	}

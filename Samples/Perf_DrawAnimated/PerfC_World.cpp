@@ -42,7 +42,7 @@ struct DemoObject : public RavEngine::GameObject{
         else{
             auto& light = child.EmplaceComponent<PointLight>();
             inst->SetAlbedoColor({1,1,1,1});
-            light.SetIntensity(5);
+            light.SetIntensity(20);
         }
 		auto& mesh = child.EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)],inst);
 				
@@ -68,7 +68,7 @@ PerfC_World::PerfC_World(){
 	
 	auto& dl = lightEntity.EmplaceComponent<DirectionalLight>();
 	dl.SetColorRGBA({0.7,1,1,1});
-	dl.SetIntensity(0.5);
+	dl.SetIntensity(2);
 	dl.SetCastsShadows(true);
 	
 	//load textures

@@ -21,6 +21,7 @@ Level::Level() : World("level") {
 	auto lightEntity = CreatePrototype<GameObject>();
 	auto& ambientLight = lightEntity.EmplaceComponent<AmbientLight>();
 	auto& dirLight = lightEntity.EmplaceComponent<DirectionalLight>();
+    dirLight.SetIntensity(4);
 	ambientLight.SetIntensity(0.2);
 	lightEntity.GetTransform().SetLocalRotation(vector3(0, deg_to_rad(45.0), deg_to_rad(45.0)));
 

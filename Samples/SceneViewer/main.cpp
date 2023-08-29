@@ -32,7 +32,9 @@ struct SceneViewerLevel : public RavEngine::World {
 		// default lights
 		auto defaultLights = CreatePrototype<GameObject>();
 		defaultLights.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
-		defaultLights.EmplaceComponent<DirectionalLight>().SetCastsShadows(true);
+        auto& dl = defaultLights.EmplaceComponent<DirectionalLight>();
+        dl.SetIntensity(4);
+        dl.SetCastsShadows(true);
 		defaultLights.GetTransform().LocalRotateDelta(vector3(0, 0, deg_to_rad(45)));
 	}
 
