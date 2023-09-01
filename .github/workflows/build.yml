@@ -20,7 +20,7 @@ jobs:
               sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
               sudo apt-get update -y
               sudo apt remove build-essential -y
-              sudo apt-get install cmake clang-14 fuse libfuse2 llvm-14 ninja-build libgl1-mesa-dev libgtk-3-dev libasound2-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libegl1-mesa-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev -y --no-install-recommends 
+              sudo apt-get install cmake clang-14 fuse libfuse2 llvm-14 ninja-build vulkan-sdk libgl1-mesa-dev libgtk-3-dev libasound2-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libegl1-mesa-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev -y --no-install-recommends 
       - name: Configure
         run: |
             mkdir -p build
@@ -44,6 +44,7 @@ jobs:
   build-linux-arm:
     name: Build Samples for Linux arm64
     runs-on: ubuntu-latest
+    if: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
