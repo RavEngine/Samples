@@ -4,6 +4,8 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/Filesystem.hpp>
+#include <RavEngine/GameObject.hpp>
+#include <RavEngine/CameraComponent.hpp>
 #include "Level.hpp"
 
 using namespace RavEngine;
@@ -12,8 +14,9 @@ using namespace std;
 void ClientMenu::OnActivate()
 {
 	// load the menu for joining a server
-	auto guientity = CreatePrototype<Entity>();
+	auto guientity = CreatePrototype<GameObject>();
 	auto& guic = guientity.EmplaceComponent<RavEngine::GUIComponent>();
+    guientity.EmplaceComponent<CameraComponent>().SetActive(true);
 	auto doc = guic.AddDocument("client.rml");
 
 	// input manager to make GUI interactive

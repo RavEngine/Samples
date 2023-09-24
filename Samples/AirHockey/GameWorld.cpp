@@ -36,7 +36,7 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers){
     
     auto lightmain = CreatePrototype<GameObject>();
     auto& key = lightmain.EmplaceComponent<DirectionalLight>();
-    key.SetIntensity(0.8);
+    key.SetIntensity(3);
     key.SetColorRGBA({1,1,1});
     key.debugEnabled = true;
     key.SetCastsShadows(true);
