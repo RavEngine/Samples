@@ -42,12 +42,12 @@ public:
     void Create(){
         GameObject::Create();
         RavEngine::MeshAssetOptions opt;
-        opt.scale = 0.03;
+        opt.scale = 0.35;
         if(material == nullptr){
             material = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
             material->SetAlbedoColor({0.2,0.2,0.2,1});
         }
-        auto& puckmesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPuck.obj",opt),material);
+        auto& puckmesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPuck.fbx",opt),material);
       
         auto& dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
         dyn.EmplaceCollider<RavEngine::SphereCollider>(0.3,RavEngine::New<RavEngine::PhysicsMaterial>(0,0,1),vector3(0,0.3,0));

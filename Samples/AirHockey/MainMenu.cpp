@@ -72,12 +72,10 @@ void MainMenu::LoadGame(int numplayers){
 	gui.GetDocument("mainmenu.rml")->Hide();
 	gui.GetDocument("loading.rml")->Show();
 	
-	std::thread worker([=]{
-		auto g = RavEngine::New<GameWorld>(numplayers);
+	
+	auto g = RavEngine::New<GameWorld>(numplayers);
 
-		GetApp()->DispatchMainThread([=]{
-			GetApp()->AddReplaceWorld(shared_from_this(), g);
-		});
+	GetApp()->DispatchMainThread([=] {
+		GetApp()->AddReplaceWorld(shared_from_this(), g);
 	});
-	worker.detach();
 }
