@@ -102,8 +102,8 @@ Level::Level() {
 	ground.EmplaceComponent<StaticMesh>(mesh,mat);
 
 	// load the stanford dragon
-    opt.scale = 2;
-	auto hmesh = MeshAsset::Manager::Get("dragon_vrip.ply", opt);
+    opt.scale = 0.05;
+	auto hmesh = MeshAsset::Manager::Get("dragon_stanford.fbx", opt);
 	auto hmat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	
 	for (int i = 0; i < 150; i++) {
