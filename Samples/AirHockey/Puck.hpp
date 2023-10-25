@@ -50,7 +50,7 @@ public:
         auto& puckmesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPuck.fbx",opt),material);
       
         auto& dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
-        dyn.EmplaceCollider<RavEngine::SphereCollider>(0.3,RavEngine::New<RavEngine::PhysicsMaterial>(0,0,1),vector3(0,0.3,0));
+        dyn.EmplaceCollider<RavEngine::SphereCollider>(0.3f,RavEngine::New<RavEngine::PhysicsMaterial>(0.f,0.f,1.f),vector3(0.f,0.3f,0.f));
 		
 		//prevent puck from falling over
 		dyn.SetAxisLock(RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_X | RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_Z);

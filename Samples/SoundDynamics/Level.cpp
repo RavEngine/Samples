@@ -167,7 +167,7 @@ Level::Level(){
             };
             // mono effect graph
             auto effectGraph = New<AudioGraphAsset>(1);
-            effectGraph->filters.emplace_back(New<AudioGainFilterLayer>(0.5));
+            effectGraph->filters.emplace_back(New<AudioGainFilterLayer>(0.5f));
             
             auto path = Filesystem::Path(track);
             if (path.extension() == ".mp3") {

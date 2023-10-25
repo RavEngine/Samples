@@ -24,7 +24,7 @@ void Player::Create() {
 	auto& body = EmplaceComponent<RigidBodyStaticComponent>();
 
 	auto physicsMaterial = RavEngine::New<PhysicsMaterial>(0,0,0);
-	body.EmplaceCollider<SphereCollider>(1,physicsMaterial);
+	body.EmplaceCollider<SphereCollider>(1.f,physicsMaterial);
 
     ComponentHandle<Transform> ctr(cameraEntity);
 	GetTransform().AddChild(ctr);

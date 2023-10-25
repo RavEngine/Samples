@@ -200,7 +200,7 @@ void Character::Create() {
 	// load the collider and physics settings
     auto& r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
     rigidBody = ComponentHandle<RigidBodyDynamicComponent>(this);
-	r.EmplaceCollider<CapsuleCollider>(0.6, 1.3, RavEngine::New<PhysicsMaterial>(0.0, 0.5, 0.0),vector3(0,1.7,0),vector3(0,0,deg_to_rad(90)));
+	r.EmplaceCollider<CapsuleCollider>(0.6f, 1.3f, RavEngine::New<PhysicsMaterial>(0.0f, 0.5f, 0.0f),vector3(0,1.7,0),vector3(0,0,deg_to_rad(90)));
 	r.SetAxisLock(RigidBodyDynamicComponent::AxisLock::Angular_X | RigidBodyDynamicComponent::AxisLock::Angular_Z);
 	r.SetWantsContactData(true);
 

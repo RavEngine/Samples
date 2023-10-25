@@ -38,7 +38,7 @@ struct RigidBody : public RavEngine::GameObject{
 		
 		switch(type){
 			case BodyType::Sphere:
-				rd.EmplaceCollider<RavEngine::SphereCollider>(1,physmat);
+				rd.EmplaceCollider<RavEngine::SphereCollider>(1.f,physmat);
 				break;
 			case BodyType::Cube:
                 rd.EmplaceCollider<RavEngine::BoxCollider>(vector3(1,1,1),physmat);

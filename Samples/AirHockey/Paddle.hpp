@@ -22,7 +22,7 @@ public:
 		//PhysX doesn't have a cylinder primitive, so we use a sphere offset upwards and lock the axes
 		auto& dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
         
-        dyn.EmplaceCollider<RavEngine::SphereCollider>(0.5,RavEngine::New<RavEngine::PhysicsMaterial>(0.3,0.3,0.1),vector3(0,0.4,0));
+        dyn.EmplaceCollider<RavEngine::SphereCollider>(0.5f,RavEngine::New<RavEngine::PhysicsMaterial>(0.3f,0.3f,0.1f),vector3(0,0.4,0));
 		
 		dyn.SetMass(2);
 		dyn.SetAxisLock(
