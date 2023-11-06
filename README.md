@@ -29,6 +29,8 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - Creating orbits using PhysX forces
 1. Navigation
    - Raycasting and pathfinding across 3D terrain
+1. Occlusion
+   - Test case for dynamic occlusion culling
 
 ## How to try the samples without building
 1. Sign in to GitHub in your browser. This is required for accessing the downloads.

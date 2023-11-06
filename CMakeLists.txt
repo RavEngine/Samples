@@ -234,7 +234,7 @@ add_sample("Gravity")
 add_sample("SystemInfo")
 add_sample("VR")
 add_sample("Shadows")
-
+add_sample("Occlusion")
 
 group_in("SamplesDeps/sfizz" "aiff;sfizz_pugixml;sfizz_spline;sfizz_tunings;sfizz_hiir_polyphase_iir2designer;sfizz_kissfft;sfizz_cephes;sfizz_cpuid;sfizz_filesystem_impl;sfizz_fmidi;\
 st_audiofile;st_audiofile_formats;st_info;sfizz_parser;sfizz_messaging;sfizz_import;sfizz_spin_mutex;sfizz_internal;sfizz_match_definitions;sfizz_static;\
