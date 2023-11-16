@@ -5,6 +5,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
 set(CMAKE_XCODE_ATTRIBUTE_EXCLUDED_ARCHS[sdk=iphonesimulator*] "arm64" CACHE INTERNAL "")
 set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED "NO")    # disable codesign requirement
+set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym" CACHE INTERNAL "")	# don't embed symbols in the binaries themselves
 
 # linux detection
 if(UNIX AND NOT APPLE)
@@ -252,6 +253,8 @@ absl_city;absl_low_level_hash;absl_exponential_biased;absl_periodic_sampler;absl
 absl_random_internal_seed_material;absl_random_internal_pool_urbg;absl_random_internal_platform;absl_random_internal_randen;absl_random_internal_randen_slow;\
 absl_random_internal_randen_hwaes;absl_random_internal_randen_hwaes_impl;absl_random_internal_distribution_test_util;absl_strings_internal;absl_str_format_internal;\
 absl_cord_internal;absl_cordz_functions;absl_cordz_handle;absl_cordz_info;absl_cordz_sample_token;absl_graphcycles_internal;absl_civil_time;absl_time_zone;absl_bad_any_cast_impl")
+
+group_in("SamplesDeps", "midifile;nfd")
 
 add_sample("SoundDynamics")
 target_link_libraries("RavEngineSoundDynamics" PUBLIC
