@@ -5,35 +5,28 @@
 using namespace RavEngine;
 using namespace std;
 
-struct CameraScript : public RavEngine::ScriptComponent {
-	Character target;
-	vector3 forwardVector = vector3(0,0,0);
-	vector3 rightVector = vector3(0,0,0);
-	decimalType speedIncrement = 0;
-	
-	CameraScript(entity_t owner, const decltype(target)& t) : target(t), ScriptComponent(owner){}
-	
-	void Tick(float fpsScale) final{
-		// where is the player? we should accelerate towards this position
-		auto& targetTransform = target.GetTransform();
-		auto& thisTransform = GetTransform();
-        auto newPos = glm::mix(thisTransform.GetWorldPosition(), targetTransform.GetWorldPosition(), std::clamp<float>(0.3f * fpsScale,0,1));
-        thisTransform.SetWorldPosition(newPos);
+
+void CameraScript::Tick(float fpsScale) {
+	// where is the player? we should accelerate towards this position
+	auto& targetTransform = target.GetTransform();
+	auto& thisTransform = GetOwner().GetTransform();
+    auto newPos = glm::mix(thisTransform.GetWorldPosition(), targetTransform.GetWorldPosition(), std::clamp<float>(0.3f * fpsScale,0,1));
+    thisTransform.SetWorldPosition(newPos);
 		
-		// which way is the player facing? we want to rotate to be behind them
-		auto facingRot = glm::quatLookAt(targetTransform.WorldForward(), GetTransform().WorldUp());
-		GetTransform().SetWorldRotation(Slerp(GetTransform().GetWorldRotation(), facingRot, std::clamp<float>(0.01 * fpsScale,0,1)));
+	// which way is the player facing? we want to rotate to be behind them
+	auto facingRot = glm::quatLookAt(targetTransform.WorldForward(), thisTransform.WorldUp());
+	thisTransform.SetWorldRotation(Slerp(thisTransform.GetWorldRotation(), facingRot, std::clamp<float>(0.01 * fpsScale,0,1)));
 		
-		// which way is the player moving? we want to swivel to a point ahead of them so they can see more easily
+	// which way is the player moving? we want to swivel to a point ahead of them so they can see more easily
 		
-		// lastly, move the player by combining the input vectors
-		auto combined = glm::normalize(forwardVector + rightVector);
-		forwardVector = rightVector = vector3(0,0,0);
-		if ((!std::isnan(combined.x) && !std::isnan(combined.y) && !std::isnan(combined.z)) && (glm::length(combined) > 0.3)){
-			target.Move(combined,speedIncrement);
-		}
+	// lastly, move the player by combining the input vectors
+	auto combined = glm::normalize(forwardVector + rightVector);
+	forwardVector = rightVector = vector3(0,0,0);
+	if ((!std::isnan(combined.x) && !std::isnan(combined.y) && !std::isnan(combined.z)) && (glm::length(combined) > 0.3)){
+		target.Move(combined,speedIncrement);
 	}
-};
+}
+
 
 void CameraEntity::Create(Character cm){
     GameObject::Create();
@@ -70,4 +63,10 @@ void CameraEntity::MoveRight(float amt){
 void CameraEntity::SpeedIncrement(float s)
 {
 	cameraScript->speedIncrement = s;
+}
+
+void CameraScriptRunner::operator()(CameraScript& script)
+{
+	const auto fpsScale = GetApp()->GetCurrentFPSScale();
+	script.Tick(fpsScale);
 }

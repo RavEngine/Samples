@@ -24,149 +24,139 @@ enum CharAnims {
 	PoundEnd
 };
 
-struct CharacterScript : public ScriptComponent, public Queryable<CharacterScript,ScriptComponent> {
-    using Queryable<CharacterScript,ScriptComponent>::GetQueryTypes;
-    
-	ComponentHandle<AnimatorComponent> animator;
-    ComponentHandle<RigidBodyDynamicComponent> rigidBody;
-	bool controlsEnabled = true;
-	constexpr static decimalType sprintSpeed = 2.5, walkSpeed = 2;
 
-	int16_t groundCounter = 0;
+	
+bool CharacterScript::OnGround() const {
+	return groundCounter > 0;	
+}
 
-	CharacterScript(entity_t owner, decltype(animator) a, decltype(rigidBody) r) : animator(a), rigidBody(r), ScriptComponent(owner) {}
-
-	inline bool OnGround() const {
-		return groundCounter > 0;	
-	}
-
-	void Tick(float fpsScale) final {
-		switch (animator->GetCurrentState()) {
-			case CharAnims::PoundBegin:
-			case CharAnims::InPound:
-			case CharAnims::PoundEnd:
-				// hit the ground? go to poundEnd
-				if (OnGround() && animator->GetCurrentState() != PoundEnd) {
-					animator->Goto(PoundEnd);
-				}
-				break;
-			default: {
-				auto velocity = rigidBody->GetLinearVelocity();
-				auto movementVel = velocity;
-				movementVel.y = 0;
-
-				auto xzspeed = glm::length(movementVel);
-
-				if (OnGround()) {
-					if (xzspeed > 0.4 && xzspeed < 2.2) {
-						animator->Goto(CharAnims::Walk);
-					}
-					else if (xzspeed >= 2.2) {
-						animator->Goto(CharAnims::Run);
-					}
-					// not jumping?
-					else if (velocity.y < 0.3) {
-						animator->Goto(CharAnims::Idle);
-					}
-				}
-				else {
-					// falling and not in pound animation?
-					if (velocity.y < -0.05) {
-						switch (animator->GetCurrentState()) {
-						case CharAnims::PoundBegin:
-						case CharAnims::PoundEnd:
-						case CharAnims::InPound:
-							break;
-						default:
-							animator->Goto(CharAnims::Fall);
-						}
-					}
-				}
-				// jumping?
-				if (velocity.y > 5) {
-					animator->Goto(CharAnims::Jump);
-				}
+void CharacterScript::Tick(float fpsScale) {
+	switch (animator->GetCurrentState()) {
+		case CharAnims::PoundBegin:
+		case CharAnims::InPound:
+		case CharAnims::PoundEnd:
+			// hit the ground? go to poundEnd
+			if (OnGround() && animator->GetCurrentState() != PoundEnd) {
+				animator->Goto(PoundEnd);
 			}
-		}
-		if (GetTransform().GetWorldPosition().y < -10) {
-			rigidBody->setDynamicsWorldPose(vector3(0, 5, 0), GetTransform().GetLocalRotation());
-			//GetTransform().SetWorldPosition(vector3(0, 5, 0));
-		}
-	}
+			break;
+		default: {
+			auto velocity = rigidBody->GetLinearVelocity();
+			auto movementVel = velocity;
+			movementVel.y = 0;
 
-	inline void Move(const vector3& dir, decimalType speedMultiplier) {
-		if (controlsEnabled) {
-			// apply movement only if touching the ground
+			auto xzspeed = glm::length(movementVel);
+
 			if (OnGround()) {
-				// move in direction
-				auto vec = dir * walkSpeed + dir * (speedMultiplier * sprintSpeed);
-				vec.y = rigidBody->GetLinearVelocity().y;
-				rigidBody->SetLinearVelocity(vec, false);
-				rigidBody->SetAngularVelocity(vector3(0, 0, 0), false);
+				if (xzspeed > 0.4 && xzspeed < 2.2) {
+					animator->Goto(CharAnims::Walk);
+				}
+				else if (xzspeed >= 2.2) {
+					animator->Goto(CharAnims::Run);
+				}
+				// not jumping?
+				else if (velocity.y < 0.3) {
+					animator->Goto(CharAnims::Idle);
+				}
 			}
 			else {
-				// in the air, you can slightly nudge your character in a direction
-				rigidBody->AddForce(dir * 5.f);
-			}
-			// face direction
-			auto rot = glm::quatLookAt(dir, GetTransform().WorldUp());
-			rigidBody->setDynamicsWorldPose(GetTransform().GetWorldPosition(), Slerp(GetTransform().GetWorldRotation(), rot, 0.2));
-			//GetTransform().SetWorldRotation(Slerp(GetTransform().GetWorldRotation(), rot, 0.2));
-		}
-	}
-
-	inline void Jump() {
-		if (controlsEnabled) {
-			if (OnGround()) {
-				auto vel = rigidBody->GetLinearVelocity();
-				vel.y = 10;
-				rigidBody->SetLinearVelocity(vel, false);
-			}
-		}
-	}
-
-	inline void Pound() {
-		// we can pound if we are jumping or falling
-		switch (animator->GetCurrentState()) {
-			case CharAnims::Fall:
-			case CharAnims::Jump:
-				animator->Goto(CharAnims::PoundBegin);
-				rigidBody->ClearAllForces();
-				rigidBody->SetLinearVelocity(vector3(0,0,0), false);
-				break;
-			default:
-				break;
-		}
-	}
-
-	void OnColliderEnter(PhysicsBodyComponent& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
-	{
-		if (other.filterGroup & FilterLayers::L0) {	// we use filter layer 0 to mark ground
-			auto worldpos = GetTransform().GetWorldPosition();
-			// is this contact point underneath the character?
-			for (int i = 0; i < numContactPoints; i++) {
-				auto diff = worldpos.y - contactPoints[i].position.y;
-				if (diff > -0.3) {
-					groundCounter++;
-					break;
+				// falling and not in pound animation?
+				if (velocity.y < -0.05) {
+					switch (animator->GetCurrentState()) {
+					case CharAnims::PoundBegin:
+					case CharAnims::PoundEnd:
+					case CharAnims::InPound:
+						break;
+					default:
+						animator->Goto(CharAnims::Fall);
+					}
 				}
 			}
-
+			// jumping?
+			if (velocity.y > 5) {
+				animator->Goto(CharAnims::Jump);
+			}
 		}
 	}
+	if (GetOwner().GetTransform().GetWorldPosition().y < -10) {
+		rigidBody->setDynamicsWorldPose(vector3(0, 5, 0), GetOwner().GetTransform().GetLocalRotation());
+		//GetTransform().SetWorldPosition(vector3(0, 5, 0));
+	}
+}
 
-	void OnColliderExit(PhysicsBodyComponent& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
-	{
-		if (other.filterGroup & FilterLayers::L0) {
-			groundCounter--;
+void CharacterScript::Move(const vector3& dir, decimalType speedMultiplier) {
+	if (controlsEnabled) {
+		// apply movement only if touching the ground
+		if (OnGround()) {
+			// move in direction
+			auto vec = dir * walkSpeed + dir * (speedMultiplier * sprintSpeed);
+			vec.y = rigidBody->GetLinearVelocity().y;
+			rigidBody->SetLinearVelocity(vec, false);
+			rigidBody->SetAngularVelocity(vector3(0, 0, 0), false);
+		}
+		else {
+			// in the air, you can slightly nudge your character in a direction
+			rigidBody->AddForce(dir * 5.f);
+		}
+		// face direction
+		auto& thisTransform = GetOwner().GetTransform();
+		auto rot = glm::quatLookAt(dir, thisTransform.WorldUp());
+		rigidBody->setDynamicsWorldPose(thisTransform.GetWorldPosition(), Slerp(thisTransform.GetWorldRotation(), rot, 0.2));
+		//GetTransform().SetWorldRotation(Slerp(GetTransform().GetWorldRotation(), rot, 0.2));
+	}
+}
+
+void CharacterScript::Jump() {
+	if (controlsEnabled) {
+		if (OnGround()) {
+			auto vel = rigidBody->GetLinearVelocity();
+			vel.y = 10;
+			rigidBody->SetLinearVelocity(vel, false);
 		}
 	}
+}
 
-	inline void StartPounding() {
-		rigidBody->SetGravityEnabled(true);
-		rigidBody->SetLinearVelocity(vector3(0,-5,0),false);
+void CharacterScript::Pound() {
+	// we can pound if we are jumping or falling
+	switch (animator->GetCurrentState()) {
+		case CharAnims::Fall:
+		case CharAnims::Jump:
+			animator->Goto(CharAnims::PoundBegin);
+			rigidBody->ClearAllForces();
+			rigidBody->SetLinearVelocity(vector3(0,0,0), false);
+			break;
+		default:
+			break;
 	}
-};
+}
+
+void CharacterScript::OnColliderEnter(PhysicsBodyComponent& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
+{
+	if (other.filterGroup & FilterLayers::L0) {	// we use filter layer 0 to mark ground
+		auto worldpos = GetOwner().GetTransform().GetWorldPosition();
+		// is this contact point underneath the character?
+		for (int i = 0; i < numContactPoints; i++) {
+			auto diff = worldpos.y - contactPoints[i].position.y;
+			if (diff > -0.3) {
+				groundCounter++;
+				break;
+			}
+		}
+
+	}
+}
+
+void CharacterScript::OnColliderExit(PhysicsBodyComponent& other, const ContactPairPoint* contactPoints, size_t numContactPoints)
+{
+	if (other.filterGroup & FilterLayers::L0) {
+		groundCounter--;
+	}
+}
+
+void CharacterScript::StartPounding() {
+	rigidBody->SetGravityEnabled(true);
+	rigidBody->SetLinearVelocity(vector3(0,-5,0),false);
+}
 
 
 void Character::Create() {
@@ -189,9 +179,22 @@ void Character::Create() {
 	auto material = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	material->SetAlbedoColor({1,0.4,0.2,1});
 
+	auto childChildForTesting = GetWorld()->CreatePrototype<GameObject>();
+	{
+		auto testMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+		testMat->SetAlbedoColor({0,1,0,1});
+		auto mesh = MeshAsset::Manager::Get("cube.obj");
+		childChildForTesting.EmplaceComponent<StaticMesh>(mesh,testMat);
+
+		EmplaceComponent<StaticMesh>(mesh,testMat);	// also putting a mesh on the base object for testing transforms
+	}
+
 	auto childEntity = GetWorld()->CreatePrototype<GameObject>();										// I made the animation facing the wrong way
 	GetTransform().AddChild(childEntity);								// so I need a child entity to rotate it back
 	childEntity.GetTransform().LocalRotateDelta(vector3(0, deg_to_rad(180), 0));	// if your animations are the correct orientation you don't need this
+
+	childEntity.GetTransform().AddChild(childChildForTesting);
+	childChildForTesting.GetTransform().SetLocalPosition(vector3(0,5,0));
 
 	// load the mesh and material onto the character
 	auto& cubemesh = childEntity.EmplaceComponent<SkinnedMeshComponent>(skeleton, mesh);
@@ -340,4 +343,10 @@ void Character::Jump()
 }
 void Character::Pound() {
 	script->Pound();
+}
+
+void CharacterScriptRunner::operator()(CharacterScript& script) 
+{
+	const auto fpsScale = GetApp()->GetCurrentFPSScale();
+	script.Tick(fpsScale);
 }

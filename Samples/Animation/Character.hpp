@@ -2,12 +2,38 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/DebugDrawer.hpp>
 #include <RavEngine/AnimatorComponent.hpp>
+#include <RavEngine/PhysicsBodyComponent.hpp>
 
-namespace RavEngine{
-    struct RigidBodyDynamicComponent;
-}
+struct CharacterScript : public RavEngine::ComponentWithOwner {
 
-struct CharacterScript;
+    RavEngine::ComponentHandle<RavEngine::AnimatorComponent> animator;
+    RavEngine::ComponentHandle<RavEngine::RigidBodyDynamicComponent> rigidBody;
+    bool controlsEnabled = true;
+    constexpr static decimalType sprintSpeed = 2.5, walkSpeed = 2;
+
+    int16_t groundCounter = 0;
+
+    CharacterScript(entity_t owner, decltype(animator) a, decltype(rigidBody) r) : animator(a), rigidBody(r), ComponentWithOwner(owner) {}
+
+    bool OnGround() const;
+
+    void Tick(float fpsScale);
+
+    void Move(const vector3& dir, decimalType speedMultiplier);
+
+    void Jump();
+
+    void Pound();
+
+    void OnColliderEnter(RavEngine::PhysicsBodyComponent& other, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints);
+
+    void OnColliderExit(RavEngine::PhysicsBodyComponent& other, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints);
+
+    void StartPounding();
+
+};
+
+
 struct Character : public RavEngine::GameObject {
 	void Create();
 	void Move(const vector3&, decimalType speedMultiplier = 0);
@@ -29,4 +55,8 @@ struct Character : public RavEngine::GameObject {
 private:
     RavEngine::ComponentHandle<RavEngine::RigidBodyDynamicComponent> rigidBody;
     RavEngine::ComponentHandle<CharacterScript> script;
+};
+
+struct CharacterScriptRunner : public RavEngine::AutoCTTI {
+    void operator()(CharacterScript&);
 };

@@ -12,6 +12,8 @@
 #include <FPSSystem.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/PhysicsSolver.hpp>
+#include <RavEngine/AnimatorSystem.hpp>
+#include <RavEngine/PhysicsLinkSystem.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -44,6 +46,12 @@ Level::Level(){
 	
 	auto camera = CreatePrototype<CameraEntity>(character);
 	camera.GetTransform().LocalTranslateDelta(vector3(0,0,0));
+
+	EmplaceSystem<CharacterScriptRunner>();
+	EmplaceSystem<CameraScriptRunner>();
+	CreateDependency<CharacterScriptRunner, CameraScriptRunner>();	// character script runs after camera script
+	CreateDependency<AnimatorSystem, CharacterScriptRunner>();		// Animator system runs after the character script
+	CreateDependency<PhysicsLinkSystemWrite, CharacterScriptRunner>();	// physics writer runs afer 
 	
 	auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 	// keyboard
