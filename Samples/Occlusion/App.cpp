@@ -49,7 +49,7 @@ struct Level : public RavEngine::World {
 			{0,5,0}
 		};
 		auto ballMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-		ballMat->SetAlbedoColor(ColorRGBA(1,0,0,1));
+        ballMat->SetAlbedoColor(ColorRGBA{1,0,0,1});
 		for (const auto& position : positions) {
 			auto object = CreatePrototype<GameObject>();
 			object.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"), ballMat);

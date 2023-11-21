@@ -15,6 +15,10 @@
 #include <RavEngine/AnimatorSystem.hpp>
 #include <RavEngine/PhysicsLinkSystem.hpp>
 
+#define NOCONTROLS 0
+
+static Character character; // evil global for testing purposes
+
 using namespace RavEngine;
 using namespace std;
 
@@ -41,7 +45,7 @@ Level::Level(){
     auto& gui = lights.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 
-	auto character = CreatePrototype<Character>();
+    character = CreatePrototype<Character>();
 	character.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(15, 5, 0), vector3(0, deg_to_rad(90), 0));
 	
 	auto camera = CreatePrototype<CameraEntity>(character);
@@ -53,6 +57,7 @@ Level::Level(){
 	CreateDependency<AnimatorSystem, CharacterScriptRunner>();		// Animator system runs after the character script
 	CreateDependency<PhysicsLinkSystemWrite, CharacterScriptRunner>();	// physics writer runs afer 
 	
+#if !NOCONTROLS
 	auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 	// keyboard
 	im->AddAxisMap(InputNames::MoveForward,SDL_SCANCODE_W);
@@ -81,6 +86,8 @@ Level::Level(){
 	im->BindAxis(InputNames::Sprint, camera, &CameraEntity::SpeedIncrement, CID::ANY);
 	im->BindAction(InputNames::Jump, character, &Character::Jump, ActionState::Pressed, CID::ANY);
 	im->BindAction(InputNames::Pound, character, &Character::Pound, ActionState::Pressed, CID::ANY);
+#else
+#endif
 
 	// load the game level
 	Ref<PBRMaterialInstance> material = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
@@ -111,4 +118,7 @@ Level::Level(){
 
 void Level::PostTick(float)
 {
+#if NOCONTROLS
+    character.Jump();  // spam jump
+#endif
 }
