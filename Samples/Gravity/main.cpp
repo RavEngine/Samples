@@ -26,7 +26,7 @@ struct HeavyThing : public GameObject{
         opt.scale = scaleOverride;
         auto matinst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         matinst->SetAlbedoColor(colorOverride);
-        EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetWithKey("sphere.obj", scaleOverride * 100, opt),matinst);
+        EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetWithKey("sphere.obj", scaleOverride * 100, opt), LitMeshMaterialInstance(matinst));
         if (mass < 1000){
             auto& light = EmplaceComponent<PointLight>();
             light.SetIntensity(scaleOverride * 7);

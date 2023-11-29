@@ -17,7 +17,7 @@ public:
         
         Ref<RavEngine::PBRMaterialInstance> material = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
         material->SetAlbedoColor(color);
-        auto& mesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPaddle.fbx",opt),material);
+        auto& mesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPaddle.fbx",opt), RavEngine::LitMeshMaterialInstance(material));
 		
 		//PhysX doesn't have a cylinder primitive, so we use a sphere offset upwards and lock the axes
 		auto& dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);

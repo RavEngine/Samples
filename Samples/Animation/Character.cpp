@@ -184,9 +184,9 @@ void Character::Create() {
 		auto testMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		testMat->SetAlbedoColor({0,1,0,1});
 		auto mesh = MeshAsset::Manager::Get("cube.obj");
-		childChildForTesting.EmplaceComponent<StaticMesh>(mesh,testMat);
+		childChildForTesting.EmplaceComponent<StaticMesh>(mesh,LitMeshMaterialInstance(testMat));
 
-		EmplaceComponent<StaticMesh>(mesh,testMat);	// also putting a mesh on the base object for testing transforms
+		EmplaceComponent<StaticMesh>(mesh, LitMeshMaterialInstance(testMat));	// also putting a mesh on the base object for testing transforms
 	}
 
 	auto childEntity = GetWorld()->CreatePrototype<GameObject>();										// I made the animation facing the wrong way
@@ -198,7 +198,7 @@ void Character::Create() {
 
 	// load the mesh and material onto the character
 	auto& cubemesh = childEntity.EmplaceComponent<SkinnedMeshComponent>(skeleton, mesh);
-	cubemesh.SetMaterial(material);
+	cubemesh.SetMaterial(LitMeshMaterialInstance(material));
 
 	// load the collider and physics settings
     auto& r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
@@ -215,7 +215,7 @@ void Character::Create() {
 	auto handEntity = GetWorld()->CreatePrototype<GameObject>();
     MeshAssetOptions opt;
     opt.scale = 0.4f;
-	handEntity.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt),RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+	handEntity.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt), LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 	
 	childEntity.EmplaceComponent<ConstraintTarget>();
 	// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n

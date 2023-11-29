@@ -17,13 +17,13 @@ struct Level : public RavEngine::World{
 	Level() {
 		// load ground plane
 		auto ground = CreatePrototype<GameObject>();
-		ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+		ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), LitMeshMaterialInstance(New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 		ground.GetTransform().LocalScaleDelta(vector3(5,1,5));
   
         cube = CreatePrototype<decltype(cube)>();
         auto cubeMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         cubeMat->SetAlbedoColor({0,0,1,1});
-        cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cube.obj"),cubeMat);
+        cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cube.obj"), LitMeshMaterialInstance(cubeMat));
         cube.GetTransform()
             .LocalTranslateDelta(vector3(1,0.7,0))
             .LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(90),0))

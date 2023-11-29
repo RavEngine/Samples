@@ -48,7 +48,6 @@ struct Level : public World{
     vector3 startPos{ 20,0,20 }, endPos{ -20,0,-20 };
     
     void CameraLR(float amt){
-        cameraRoot.GetTransform().CalculateWorldMatrix();
         cameraRoot.GetTransform().LocalRotateDelta(vector3(0,amt * deltaTime * cameraSpeed,0));
     }
     
@@ -118,7 +117,7 @@ struct Level : public World{
                 auto dotpt = point;
                 dotpt.y += scalefac * 1.3;
                 dot.GetTransform().SetWorldPosition(dotpt).SetLocalScale({scalefac});
-                dot.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"),dottedLineMat);
+                dot.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"), LitMeshMaterialInstance(dottedLineMat));
                 dot.EmplaceComponent<DottedLineMarker>();
                 point -= dir * step;
             }
@@ -148,8 +147,8 @@ struct Level : public World{
         targetBeginMat->SetAlbedoColor({1,0,0,1});
         auto targetEndMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         targetEndMat->SetAlbedoColor({0,0,1,1});
-        targetBegin.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("target.obj"),targetBeginMat);
-        targetEnd.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("target.obj"),targetEndMat);
+        targetBegin.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("target.obj"), LitMeshMaterialInstance(targetBeginMat));
+        targetEnd.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("target.obj"), LitMeshMaterialInstance(targetEndMat));
 
         cameraEntity = CreatePrototype<GameObject>();
         auto& camera = cameraEntity.EmplaceComponent<CameraComponent>();
@@ -199,7 +198,7 @@ struct Level : public World{
         MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
         mesh = MeshAsset::Manager::Get("maze.fbx", opt);
-        mazeEntity.EmplaceComponent<StaticMesh>(mesh,RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+        mazeEntity.EmplaceComponent<StaticMesh>(mesh, LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
         // used for raycasting clicks onto the maze
         auto& rigid = mazeEntity.EmplaceComponent<RigidBodyStaticComponent>();
         rigid.debugEnabled = true;

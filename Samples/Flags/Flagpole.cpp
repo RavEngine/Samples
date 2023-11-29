@@ -19,8 +19,8 @@ void Flagpole::Create(){
         meshes.push_back(mesh);
     });
     auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-    EmplaceComponent<StaticMesh>(meshes[0],mat);
-    EmplaceComponent<StaticMesh>(meshes[1],mat);
+    EmplaceComponent<StaticMesh>(meshes[0], LitMeshMaterialInstance(mat));
+    EmplaceComponent<StaticMesh>(meshes[1], LitMeshMaterialInstance(mat));
     
     // load animation
     auto skeleton = RavEngine::New<SkeletonAsset>("flag.fbx");
@@ -74,10 +74,13 @@ void Flagpole::Create(){
 }
 
 void Flagpole::SwitchToFlag(uint16_t idx){
-    GetTransform().GetChildren()[0].GetOwner().GetComponent<SkinnedMeshComponent>().SetMaterial(flags[idx].matInst);
+    GetTransform().GetChildren()[0].GetOwner().GetComponent<SkinnedMeshComponent>().SetMaterial(LitMeshMaterialInstance(flags[idx].matInst));
 }
 
 Ref<RavEngine::MaterialInstance> Flagpole::GetCurrentMaterial()
 {
-    return GetTransform().GetChildren()[0].GetOwner().GetComponent<SkinnedMeshComponent>().GetMaterial();
+    auto mat = GetTransform().GetChildren()[0].GetOwner().GetComponent<SkinnedMeshComponent>().GetMaterial();
+    Ref<RavEngine::MaterialInstance> v;
+    std::visit([&v](const auto& val) { v = val.material; }, mat);
+    return v;
 }

@@ -40,7 +40,7 @@ struct Level : public RavEngine::World {
 	Level() {
 		// load ground plane
 		auto ground = CreatePrototype<GameObject>();
-		ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+		ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), LitMeshMaterialInstance(New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 		ground.GetTransform().LocalScaleDelta(vector3(5, 1, 5)).LocalRotateDelta(vector3(0, 0, deg_to_rad(-90))).SetWorldPosition(vector3(10, 0, 0));
 
 		// load occludees
@@ -52,7 +52,7 @@ struct Level : public RavEngine::World {
         ballMat->SetAlbedoColor(ColorRGBA{1,0,0,1});
 		for (const auto& position : positions) {
 			auto object = CreatePrototype<GameObject>();
-			object.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"), ballMat);
+			object.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"), LitMeshMaterialInstance(ballMat));
 			object.GetTransform().SetWorldPosition(position);
 		}
 

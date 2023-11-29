@@ -47,7 +47,7 @@ public:
             material = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
             material->SetAlbedoColor({0.2,0.2,0.2,1});
         }
-        auto& puckmesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPuck.fbx",opt),material);
+        auto& puckmesh = EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("HockeyPuck.fbx",opt), RavEngine::LitMeshMaterialInstance(material));
       
         auto& dyn = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>(FilterLayers::L0,FilterLayers::L0 | FilterLayers::L1);
         dyn.EmplaceCollider<RavEngine::SphereCollider>(0.3f,RavEngine::New<RavEngine::PhysicsMaterial>(0.f,0.f,1.f),vector3(0.f,0.3f,0.f));

@@ -30,7 +30,7 @@ struct ObjectMarker : public ComponentWithOwner {
 struct StaticMeshEntity : public GameObject {
 	void Create(Ref<MeshAsset> mesh, Ref<PBRMaterialInstance> mat) {
         GameObject::Create();
-		EmplaceComponent<StaticMesh>(mesh, mat).SetEnabled(false);
+		EmplaceComponent<StaticMesh>(mesh, LitMeshMaterialInstance(mat)).SetEnabled(false);
 		EmplaceComponent<SpinComponent>();
 		EmplaceComponent<ObjectMarker>();
 		constexpr float dist = 1.0;
@@ -99,7 +99,7 @@ Level::Level() {
 	auto mesh = MeshAsset::Manager::Get("quad.obj",opt);
 	auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	mat->SetAlbedoColor({0.2,0.2,0.2,1.0});
-	ground.EmplaceComponent<StaticMesh>(mesh,mat);
+	ground.EmplaceComponent<StaticMesh>(mesh, LitMeshMaterialInstance(mat));
 
 	// load the stanford dragon
     opt.scale = 0.05;

@@ -44,7 +44,7 @@ struct Level : public RavEngine::World {
 			auto floorMesh = MeshAsset::Manager::Get("quad.obj");
 			auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 			floorMat->SetAlbedoColor({ 0.5,0.5,0.5,1 });
-			floor.EmplaceComponent<StaticMesh>(floorMesh, floorMat);
+			floor.EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
 		}
 	
 		camRoot = CreatePrototype<decltype(camRoot)>();
@@ -56,7 +56,7 @@ struct Level : public RavEngine::World {
 			auto cylinderMesh = MeshAsset::Manager::Get("cylinder.obj");
 			auto cylinderMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 			cylinderMat->SetAlbedoColor({ 1, 0, 0, 1 });
-			camParentedObject.EmplaceComponent<StaticMesh>(cylinderMesh, cylinderMat);
+			camParentedObject.EmplaceComponent<StaticMesh>(cylinderMesh, LitMeshMaterialInstance(cylinderMat));
 		}
 
 		camHeadUD.GetTransform().AddChild(camParentedObject);
@@ -81,14 +81,14 @@ struct Level : public RavEngine::World {
 			auto cubeMesh = MeshAsset::Manager::Get("cube.obj");
 			auto cubeMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 			cubeMat->SetAlbedoColor({ 0, 1, 0, 1 });
-			chainRoot.EmplaceComponent<StaticMesh>(cubeMesh, cubeMat);
+			chainRoot.EmplaceComponent<StaticMesh>(cubeMesh, LitMeshMaterialInstance(cubeMat));
 			chainRoot.GetTransform().SetWorldPosition(vector3(0, 1, 0));
 
 			auto prevParent = chainRoot;
 
 			for (int i = 0; i < 3; i++) {
 				auto chainObj = CreatePrototype<GameObject>();
-				chainObj.EmplaceComponent<StaticMesh>(cubeMesh, cubeMat);
+				chainObj.EmplaceComponent<StaticMesh>(cubeMesh, LitMeshMaterialInstance(cubeMat));
 				prevParent.GetTransform().AddChild(chainObj);
 				chainObj.GetTransform().SetLocalPosition(vector3(0,2,0));
 				prevParent = chainObj;

@@ -107,7 +107,7 @@ struct Level : public World{
 			
 			for (int i = 0; i < nblades; i++) {
 				auto grassEntity = CreatePrototype<GameObject>();
-				auto& mesh = grassEntity.EmplaceComponent<StaticMesh>(grassmesh,grassMatInst);
+				auto& mesh = grassEntity.EmplaceComponent<StaticMesh>(grassmesh, LitMeshMaterialInstance(grassMatInst));
 
 				auto& transform = grassEntity.GetTransform();
 
@@ -140,7 +140,7 @@ struct Level : public World{
         auto ground = CreatePrototype<GameObject>();
         auto groundMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         groundMat->SetAlbedoColor({ 92/255.f, 60/255.f, 29/255.f,1});
-        ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"),groundMat);
+        ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), LitMeshMaterialInstance(groundMat));
         ground.GetTransform().LocalScaleDelta(vector3(10));
         
         flagpole = CreatePrototype<Flagpole>();

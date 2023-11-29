@@ -35,7 +35,7 @@ void Stage::Create() {
 	}, [&](Ref<MeshAsset> rm, Ref<PBRMaterialInstance>, const PreloadedAsset& pr) {
 		auto pos = std::distance(faceOrder.begin(),std::find(faceOrder.begin(), faceOrder.end(), pr.name));
 		auto inst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-		EmplaceComponent<StaticMesh>(rm, inst);
+		EmplaceComponent<StaticMesh>(rm, LitMeshMaterialInstance(inst));
 		this->wallMaterials[pos] = inst;
 	});
 	GetTransform().LocalTranslateDelta(vector3(0,audioRoom.GetRoomDimensions().y / 2,0));

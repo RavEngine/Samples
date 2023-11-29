@@ -22,7 +22,7 @@ struct LightEntity : public RavEngine::GameObject {
 		auto mat = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
         RavEngine::MeshAssetOptions opt;
         opt.scale = 0.03;
-        EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("sphere.obj",opt),mat);
+        EmplaceComponent<RavEngine::StaticMesh>(RavEngine::MeshAsset::Manager::Get("sphere.obj",opt), RavEngine::LitMeshMaterialInstance(mat));
 		auto& cc = EmplaceComponent<CirculateComponent>();
 		auto& light = EmplaceComponent<RavEngine::PointLight>();
 		light.SetIntensity(cc.radius * 2);

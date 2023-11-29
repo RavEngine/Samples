@@ -24,5 +24,5 @@ void Speaker::Create(Ref<AudioDataProvider> a) {
 		auto texture = Texture::Manager::Get("speaker.png");
 		speakerInstance->SetAlbedoTexture(texture);
 	}
-    EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("speaker.obj"),speakerInstance);
+    EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("speaker.obj"), LitMeshMaterialInstance(speakerInstance));
 }

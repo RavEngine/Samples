@@ -15,7 +15,7 @@ struct Ground : public RavEngine::GameObject{
         RavEngine::MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
 		auto mesh = RavEngine::MeshAsset::Manager::Get("ground.obj",opt);	//need to retain the mesh data in system memory 
-		EmplaceComponent<RavEngine::StaticMesh>(mesh,mat);
+		EmplaceComponent<RavEngine::StaticMesh>(mesh, RavEngine::LitMeshMaterialInstance(mat));
 		EmplaceComponent<RotationComponent>();
 		auto& rs = EmplaceComponent<RavEngine::RigidBodyStaticComponent>();
         rs.EmplaceCollider<RavEngine::MeshCollider>(mesh,RavEngine::New<RavEngine::PhysicsMaterial>(0.3,0.3,0.1));
@@ -33,7 +33,7 @@ struct RigidBody : public RavEngine::GameObject{
 	
 	void Create(Ref<RavEngine::PBRMaterialInstance> mat, Ref<RavEngine::MeshAsset> mesh, Ref<RavEngine::PhysicsMaterial> physmat, BodyType type){
         GameObject::Create();
-		EmplaceComponent<RavEngine::StaticMesh>(mesh,mat);
+		EmplaceComponent<RavEngine::StaticMesh>(mesh, RavEngine::LitMeshMaterialInstance(mat));
 		auto& rd = EmplaceComponent<RavEngine::RigidBodyDynamicComponent>();
 		
 		switch(type){
