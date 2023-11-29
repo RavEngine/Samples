@@ -22,13 +22,6 @@ struct GrassMat : public RavEngine::Material {
     GrassMat() : Material("grass", RavEngine::MaterialConfig{
         .vertConfig = RavEngine::defaultVertexConfig,
             .colorBlendConfig = RavEngine::defaultColorBlendConfig,
-            .bindings = {
-                {
-                    .binding = ENTITY_INPUT_LOCATION,
-                    .type = RGL::BindingType::StorageBuffer,
-                    .stageFlags = RGL::BindingVisibility::Vertex
-                }
-        },
             .pushConstantSize = sizeof(GrassMatUniforms)
     }) {}
 };

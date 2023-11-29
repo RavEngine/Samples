@@ -23,11 +23,6 @@ struct FlagMat : public RavEngine::Material{
                 .type = RGL::BindingType::SampledImage,
                 .stageFlags = RGL::BindingVisibility::Fragment,
             },
-            {
-                .binding = ENTITY_INPUT_LOCATION,
-                .type = RGL::BindingType::StorageBuffer,
-                .stageFlags = RGL::BindingVisibility::Vertex
-            }
         },
         .pushConstantSize = sizeof(FlagMatUniforms),
         .cullMode = RGL::CullMode::None

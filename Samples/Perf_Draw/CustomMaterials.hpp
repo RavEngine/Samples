@@ -10,15 +10,7 @@ struct InstanceColorMat : public RavEngine::Material {
 	InstanceColorMat() : Material("instance_colored", RavEngine::MaterialConfig{
 			.vertConfig = RavEngine::defaultVertexConfig,
 			.colorBlendConfig = RavEngine::defaultColorBlendConfig,
-			.bindings = {
-				{
-					.binding = ENTITY_INPUT_LOCATION,
-					.type = RGL::BindingType::StorageBuffer,
-					.stageFlags = RGL::BindingVisibility::Vertex
-				}
-            },
 			.pushConstantSize = sizeof(MatInstUniforms)
-		
 		}) {}
 };
 

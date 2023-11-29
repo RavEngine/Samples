@@ -116,49 +116,13 @@ jobs:
       - name: Upload to Transfer.sh
         run: URL=`curl --upload-file build/Release/Samples.zip https://transfer.sh/RavEngine_Samples_Web.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
         
-  build-mac:
-    name: Build Samples for macOS
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with: 
-            python-version: '3.10' 
-      - name: Configure
-        run: |
-          mkdir -p build
-          cd build
-          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..
-      - name: Build
-        run: cd build; cmake --build . --config release --target install -- -quiet
-      - name: Free space
-        run: |
-          cd build
-          rm -rf build RavEngine host-tools RavEngine_Samples_macOS.build
-      - name: Create DMG
-        run: |
-          cd build
-          touch release/.Trash
-          hdiutil create -size 2g -srcfolder release -volname RavEngine_Samples_macOS RavEngine_Samples_macOS.dmg
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: RavEngine_Samples_macOS
-          path: build/RavEngine_Samples_macOS.dmg
-      - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/RavEngine_Samples_macOS.dmg https://transfer.sh/RavEngine_Samples_macOS.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
-        
-  build-apple-mobile:
-    name: Build Samples for Apple Mobile (unsigned)
+  build-apple:
+    name: Build Samples for Apple Platforms (unsigned)
     runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
-        platform: [OS64COMBINED, SIMULATOR64, TVOSCOMBINED, SIMULATOR_TVOS]
+        platform: [iOS, tvOS, '']
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -172,25 +136,25 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DENABLE_VISIBILITY=ON -DCMAKE_TOOLCHAIN_FILE=../RavEngine/deps/ios/ios.toolchain.cmake -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.0 -DPLATFORM=${{ matrix.platform }} -DRAVENGINE_BUILD_TESTS=OFF ..
+          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=${{ matrix.platform }} -DRAVENGINE_BUILD_TESTS=OFF ..
       - name: Build
         run: cd build; cmake --build . --config release --target install -- -quiet
       - name: Free space
         run: |
           cd build
-          rm -rf build RavEngine host-tools *.build/
+          rm -rf build RavEngine host-tools *.build/ release/protoc release/rglc
       - name: Create DMG
         run: |
           cd build
           touch release/.Trash
-          hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_${{ matrix.platform }} RavEngine_Samples_${{ matrix.platform }}.dmg
+          hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_Apple_${{ matrix.platform }} RavEngine_Samples_Apple_${{ matrix.platform }}.dmg
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: RavEngine_Samples_${{ matrix.platform }}
-          path: build/RavEngine_Samples_${{ matrix.platform }}.dmg
+          name: RavEngine_Samples_Apple_${{ matrix.platform }}
+          path: build/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg
       - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/RavEngine_Samples_${{ matrix.platform }}.dmg https://transfer.sh/RavEngine_Samples_${{ matrix.platform }}.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        run: URL=`curl --upload-file build/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg https://transfer.sh/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
    
   build-windows:
     name: Build samples for Windows
