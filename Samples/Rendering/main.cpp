@@ -82,9 +82,16 @@ struct Level : public RavEngine::World {
         
         helmetObj.EmplaceComponent<StaticMesh>(helmetMesh, LitMeshMaterialInstance(helmetMat));
         
-        helmetObj.GetTransform().LocalTranslateDelta(vector3(0,5,0)).LocalScaleDelta(vector3(2.0f));
+        auto objectDistance = 5;
         
+        helmetObj.GetTransform().LocalTranslateDelta({-objectDistance,5,0}).LocalScaleDelta(vector3(2.0f));
         
+        // the unlit material
+        auto star = CreatePrototype<GameObject>();
+        auto starMesh = MeshAsset::Manager::Get("sphere.obj");
+        auto starMat = New<UnlitMaterialInstance>(Material::Manager::Get<UnlitMaterial>("star"));
+        star.EmplaceComponent<StaticMesh>(starMesh, UnlitMeshMaterialInstance(starMat));
+        star.GetTransform().LocalTranslateDelta({objectDistance,5,0});
     }
 
     
