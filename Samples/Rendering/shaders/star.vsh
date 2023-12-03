@@ -2,6 +2,7 @@
 
 layout(push_constant, std430) uniform UniformBufferObject{
     mat4 viewProj;
+    float time;
 } ubo;
 
 VS_INPUTS()

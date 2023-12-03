@@ -4,6 +4,11 @@ layout(location = 0) in vec2 inUV;
 
 layout(location = 0) out vec4 outColor;
 
+layout(push_constant, std430) uniform UniformBufferObject{
+    mat4 viewProj;
+    float time;
+} ubo;
+
 // adapted from "Warped perlin noise animated" by Sergio_2357 https://www.shadertoy.com/view/cdd3RX
 uint hash(uint s) {
     s ^= 2747636419u;
@@ -110,7 +115,7 @@ vec4 colFromGreyscale(float f) {
 
 void main() {
     
-    float timeSinceStart = 0;// ubo.timeSinceStart;
+    float timeSinceStart = ubo.time;
     
     vec2 uv = inUV;
     

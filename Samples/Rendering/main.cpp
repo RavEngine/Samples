@@ -34,6 +34,27 @@ struct Level : public RavEngine::World {
 
     constexpr static vector3 cameraResetPos = vector3(0,5,10);
 
+    struct StarMatPushConstants{
+        float applicationTime = 0;
+    };
+    
+    struct StarMat : public RavEngine::Material{
+        StarMat() : Material("star", RavEngine::MaterialConfig{
+            .vertConfig = RavEngine::defaultVertexConfig,
+            .colorBlendConfig = RavEngine::defaultUnlitColorBlendConfig,
+            .pushConstantSize = sizeof(StarMatPushConstants),
+        }){}
+    };
+    
+    struct StarMatMaterialInstance : public RavEngine::MaterialInstance{
+        StarMatMaterialInstance(Ref<StarMat> m) : MaterialInstance(m) { };
+        StarMatPushConstants pushConstantData;
+        virtual const RGL::untyped_span GetPushConstantData() const override {
+            return pushConstantData;
+        }
+    };
+    
+    Ref<StarMatMaterialInstance> starMaterialInstance;
     
     Level() {
 
@@ -89,8 +110,8 @@ struct Level : public RavEngine::World {
         // the unlit material
         auto star = CreatePrototype<GameObject>();
         auto starMesh = MeshAsset::Manager::Get("sphere.obj");
-        auto starMat = New<UnlitMaterialInstance>(Material::Manager::Get<UnlitMaterial>("star"));
-        star.EmplaceComponent<StaticMesh>(starMesh, UnlitMeshMaterialInstance(starMat));
+        starMaterialInstance = New<StarMatMaterialInstance>(Material::Manager::Get<StarMat>());
+        star.EmplaceComponent<StaticMesh>(starMesh, UnlitMeshMaterialInstance(starMaterialInstance));
         star.GetTransform().LocalTranslateDelta({objectDistance,5,0});
     }
 
@@ -169,6 +190,7 @@ struct Level : public RavEngine::World {
 
     void PreTick(float scale) final {
         fsScale = scale;
+        starMaterialInstance->pushConstantData.applicationTime = GetApp()->GetCurrentTime();
     }
 
     void PostTick(float tickrateScale) final {
