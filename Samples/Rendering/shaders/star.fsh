@@ -124,6 +124,8 @@ void main() {
     uv += vec2(35.0, 35.0);
     float col = warpedPerlinNoise(uv + timeSinceStart * 0.1);
     vec3 color = colFromGreyscale(col).xyz;
+
+    float colorMult = 2.0f;
     
-    outColor = vec4(color, 1.0);
+    outColor = vec4(color * colorMult, 1.0);
 }
