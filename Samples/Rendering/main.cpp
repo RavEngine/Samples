@@ -8,6 +8,8 @@
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/AudioRoom.hpp>
 #include <RavEngine/Texture.hpp>
+#include <RavEngine/BuiltinPostProcess.hpp>
+#include <RavEngine/RenderEngine.hpp>
 #include "AppInfo.hpp"
 #include <numbers>
 
@@ -113,6 +115,12 @@ struct Level : public RavEngine::World {
         starMaterialInstance = New<StarMatMaterialInstance>(Material::Manager::Get<StarMat>());
         star.EmplaceComponent<StaticMesh>(starMesh, UnlitMeshMaterialInstance(starMaterialInstance));
         star.GetTransform().LocalTranslateDelta({objectDistance,5,0});
+        
+        // post procesing
+        auto bloomEffect = New<BloomEffect>();
+        auto bloomEffectInstance = New<BloomEffectInstance>(bloomEffect);
+        
+        GetApp()->GetRenderEngine().globalEffects.effects.push_back(bloomEffectInstance);
     }
 
     
