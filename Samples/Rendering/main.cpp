@@ -117,9 +117,13 @@ struct Level : public RavEngine::World {
         star.GetTransform().LocalTranslateDelta({objectDistance,5,0});
         
         // post procesing
+        auto& globalEffects = GetApp()->GetRenderEngine().globalEffects.effects;
+
+        auto fxaaEffectInstance = New<FXAAEffect>();
         auto bloomEffectInstance = New<BloomEffect>();
-        
-        GetApp()->GetRenderEngine().globalEffects.effects.push_back(bloomEffectInstance);
+
+        globalEffects.push_back(fxaaEffectInstance);
+        globalEffects.push_back(bloomEffectInstance);
     }
 
     
