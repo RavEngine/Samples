@@ -98,7 +98,6 @@ Graphics<br/>
 
 struct SystemApp : public App{   
     void OnStartup(int argc, char **argv) final{
-        //SetMinTickTime(std::chrono::duration<double, std::milli>(33));  // limit to 30fps
         AddWorld(RavEngine::New<Level>());
         
         SetWindowTitle(StrFormat("{} | {}", APPNAME, App::GetRenderEngine().GetCurrentBackendName()).c_str());

@@ -12,9 +12,6 @@ class Performance_C : public RavEngine::App{
         
         GetRenderEngine().SyncVideoSettings();
         
-        //unlock the tickrate
-        //SetMinTickTime(std::chrono::duration<double, std::milli>(0));
-        
         AddWorld(RavEngine::New<PerfC_World>());
         
         SetWindowTitle(StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());

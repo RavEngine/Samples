@@ -11,10 +11,7 @@ struct Performance_A : public RavEngine::App {
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
     }
 private:
-    void OnStartup(int argc, char** argv) final{
-        //unlock tickrate
-            SetMinTickTime(std::chrono::duration<double, std::milli>(0));
-            
+    void OnStartup(int argc, char** argv) final{            
             GetRenderEngine().VideoSettings.vsync = false;
             GetRenderEngine().SyncVideoSettings();
 

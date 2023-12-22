@@ -13,8 +13,6 @@ class AirHockey : public RavEngine::App {
     void OnStartup(int argc, char** argv) final{
         //setup video settings
         RenderEngine::VideoSettings.vsync = true;
-
-        SetMinTickTime(std::chrono::duration<double,std::milli>(1.0/120 * 1000));
         
         AddWorld(RavEngine::New<MainMenu>());
     }

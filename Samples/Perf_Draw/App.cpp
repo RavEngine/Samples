@@ -13,8 +13,6 @@ public:
     }
 private:
     void OnStartup(int argc, char** argv) final{
-        //unlock tickrate
-        //SetMinTickTime(std::chrono::duration<double, std::milli>(0));
 
         // load world
         AddWorld(RavEngine::New<PerfB_World>());
