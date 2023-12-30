@@ -262,6 +262,11 @@ struct Level : public World{
         doc->GetElementById("showNav")->AddEventListener(Rml::EventId::Change, new RMLUpdater([this](Rml::Event& evt) mutable {
             navMesh->debugEnabled = evt.GetParameter("value", false);
         }));
+
+#ifdef NDEBUG
+        // can't render debug meshes in release
+        [[discard]] doc->RemoveChild(doc->GetElementById("showNav")->GetParentNode());
+#endif
         
     }
     
