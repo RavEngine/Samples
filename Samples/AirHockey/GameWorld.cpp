@@ -5,7 +5,6 @@
 #include <RavEngine/Tween.hpp>
 #include <RavEngine/Light.hpp>
 #include <RavEngine/InputManager.hpp>
-#include <fmt/format.h>
 #include "MainMenu.hpp"
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/AudioRoom.hpp>
@@ -127,7 +126,7 @@ void GameWorld::Reset(){
 	zerovel(p1);
 	zerovel(p2);
 	zerovel(puck);
-	Scoreboard->SetInnerRML(StrFormat("Score: {} - {}", p1score, p2score).c_str());
+	Scoreboard->SetInnerRML(std::format("Score: {} - {}", p1score, p2score).c_str());
 	
 	if (p1score >= numToWin){
 		Scoreboard->SetInnerRML("Player 1 Wins!");

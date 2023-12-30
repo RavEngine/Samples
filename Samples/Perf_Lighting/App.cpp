@@ -14,9 +14,9 @@ struct LightingApp : public RavEngine::App {
 
 		AddWorld(RavEngine::New<Level>());
 
-		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+		SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
-    void OnFatal(const char* msg) final{
+    void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);
     }
 };

@@ -46,7 +46,7 @@ void Level::ServerUpdateGUI()
 		auto textNode = doc->CreateElement("p");
 		auto button = doc->CreateElement("button");
 		button->SetInnerRML("Kick");
-		textNode->SetInnerRML(StrFormat("id = {}",con));
+		textNode->SetInnerRML(std::format("id = {}",con));
 
 		struct KickEventListener : public Rml::EventListener {
 			HSteamNetConnection con;

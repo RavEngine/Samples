@@ -84,13 +84,13 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
             }
             if(totalLostTicks < maxLostTicks){
                 guic.EnqueueUIUpdate([=]{
-                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls (dropped {})", total - count,total,totalLostTicks));
+                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(std::format("{}/{} balls (dropped {})", total - count,total,totalLostTicks));
                 });
             }
             else{
                 auto spawned = total - count;
                 guic.EnqueueUIUpdate([=]{
-                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(StrFormat("{}/{} balls (sustained &lt; 20fps, stopping)", spawned,total));
+                    gh->GetDocument("ui.rml")->GetElementById("readout")->SetInnerRML(std::format("{}/{} balls (sustained &lt; 20fps, stopping)", spawned,total));
                 });
                 ownWorld->DispatchAsync([](){
                     Debug::Log("Ran dispatched fun");

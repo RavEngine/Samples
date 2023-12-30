@@ -18,7 +18,7 @@ using namespace std;
 
 struct RenderingApp : public RavEngine::App {
     void OnStartup(int argc, char** argv) final;
-    void OnFatal(const char* msg) final {
+    void OnFatal(const std::string_view msg) final {
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
     }
 };

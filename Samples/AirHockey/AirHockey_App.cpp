@@ -17,7 +17,7 @@ class AirHockey : public RavEngine::App {
         AddWorld(RavEngine::New<MainMenu>());
     }
     
-    void OnFatal(const char* msg) final{
+    void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
     }
 };

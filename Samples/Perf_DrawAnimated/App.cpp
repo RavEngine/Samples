@@ -14,9 +14,9 @@ class Performance_C : public RavEngine::App{
         
         AddWorld(RavEngine::New<PerfC_World>());
         
-        SetWindowTitle(StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+        SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
-    void OnFatal(const char* msg) final{
+    void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
     }
 };

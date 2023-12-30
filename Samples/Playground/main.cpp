@@ -22,9 +22,9 @@ class TestApp : public RavEngine::App{
 		//create a world
 		AddWorld(RavEngine::New<TestWorld>());
 		
-		SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+		SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
-    void OnFatal(const char* msg) final{
+    void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);
     }
 };

@@ -146,7 +146,7 @@ struct SceneViewerApp : public RavEngine::App {
 		
 		NFD::UniquePathU8 path;
 		if (NFD::OpenDialog(path, nullptr, 0) == NFD_OKAY) {
-			SetWindowTitle(StrFormat("{} - RavEngine SceneViewer | {} ",Filesystem::Path(path.get()).filename().string(), GetRenderEngine().GetCurrentBackendName()).c_str());
+			SetWindowTitle(std::format("{} - RavEngine SceneViewer | {} ",Filesystem::Path(path.get()).filename().string(), GetRenderEngine().GetCurrentBackendName()).c_str());
 			static_pointer_cast<SceneViewerLevel>(GetCurrentRenderWorld())->AddData(path.get());
 			return true;
 		}
@@ -171,7 +171,7 @@ struct SceneViewerApp : public RavEngine::App {
 		return 0;
 	}
 
-	void OnFatal(const char* msg) final {
+	void OnFatal(const std::string_view msg) final {
 		RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);
 	}
 };

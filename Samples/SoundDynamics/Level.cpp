@@ -101,7 +101,7 @@ Level::Level(){
 			if (j == 0) {
 				opt->SetAttribute("selected", true);
 			}
-            //opt->SetAttribute("value", StrFormat("{}",j));    //uncomment if selection box stops working in future RmlUi
+            //opt->SetAttribute("value", std::format("{}",j));    //uncomment if selection box stops working in future RmlUi
 			opt->SetInnerRML(names[j]);
 			sel->AppendChild(std::move(opt));
 		}
@@ -161,7 +161,7 @@ Level::Level(){
             
             auto createElement = [&music_id,doc,musicsel](const std::string& name){
                 auto opt = doc->CreateElement("option");
-                opt->SetAttribute("value", StrFormat("{}",music_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
+                opt->SetAttribute("value", std::format("{}",music_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
                 opt->SetInnerRML(name);
                 musicsel->AppendChild(std::move(opt));
             };

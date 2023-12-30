@@ -7,7 +7,7 @@
 using namespace std;
 using namespace RavEngine;
 struct Performance_A : public RavEngine::App {
-    void OnFatal(const char* msg) final{
+    void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
     }
 private:
@@ -18,7 +18,7 @@ private:
             // load world
             AddWorld(RavEngine::New<PerfA_World>());
 
-            SetWindowTitle(RavEngine::StrFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+            SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
 };
 

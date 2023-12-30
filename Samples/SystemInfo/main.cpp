@@ -66,7 +66,7 @@ struct Level : public World{
             std::ostringstream oss;
             std::copy(begin(featuresStr), end(featuresStr), std::ostream_iterator<decltype(featuresStr)::value_type>(oss, ", "));
 
-            view->SetInnerRML(StrFormat(
+            view->SetInnerRML(std::format(
 R"(
 Platform<br/>
 {} {} v{}.{}.{}.{}<br/><br/>
@@ -100,9 +100,9 @@ struct SystemApp : public App{
     void OnStartup(int argc, char **argv) final{
         AddWorld(RavEngine::New<Level>());
         
-        SetWindowTitle(StrFormat("{} | {}", APPNAME, App::GetRenderEngine().GetCurrentBackendName()).c_str());
+        SetWindowTitle(std::format("{} | {}", APPNAME, App::GetRenderEngine().GetCurrentBackendName()).c_str());
     }
-    void OnFatal(const char* msg) final{
+    void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
     }
 };
