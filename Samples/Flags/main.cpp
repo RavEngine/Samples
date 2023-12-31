@@ -143,7 +143,7 @@ struct Level : public World{
         uint8_t flag_id = 0;
         for(const auto& f : flagpole.flags){
             auto opt = doc->CreateElement("option");
-            opt->SetAttribute("value", std::format("{}",flag_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
+            opt->SetAttribute("value", VFormat("{}",flag_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
             opt->SetInnerRML(f.name);
             picker->AppendChild(std::move(opt));
         }
@@ -169,7 +169,7 @@ struct FlagsApp : public App{
     void OnStartup(int argc, char** argv) final {
         AddWorld(RavEngine::New<Level>());
 
-        SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+        SetWindowTitle(VFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
     void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);

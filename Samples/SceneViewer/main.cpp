@@ -146,7 +146,7 @@ struct SceneViewerApp : public RavEngine::App {
 		
 		NFD::UniquePathU8 path;
 		if (NFD::OpenDialog(path, nullptr, 0) == NFD_OKAY) {
-			SetWindowTitle(std::format("{} - RavEngine SceneViewer | {} ",Filesystem::Path(path.get()).filename().string(), GetRenderEngine().GetCurrentBackendName()).c_str());
+			SetWindowTitle(VFormat("{} - RavEngine SceneViewer | {} ",Filesystem::Path(path.get()).filename().string(), GetRenderEngine().GetCurrentBackendName()).c_str());
 			static_pointer_cast<SceneViewerLevel>(GetCurrentRenderWorld())->AddData(path.get());
 			return true;
 		}

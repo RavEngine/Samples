@@ -16,7 +16,7 @@ struct SingleEntityMarker : public Queryable<SingleEntityMarker>{};
 struct FPSSystem : public AutoCTTI {
 	void operator()(const SingleEntityMarker& s) const{
 		GetApp()->DispatchMainThread([](){
-			GetApp()->SetWindowTitle(std::format("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", GetApp()->GetRenderEngine().GetCurrentBackendName(), (int)GetApp()->CurrentTPS(), (int)GetApp()->GetRenderEngine().GetCurrentFPS(), (int)GetApp()->GetRenderEngine().GetLastFrameTime()).c_str());
+			GetApp()->SetWindowTitle(VFormat("RavEngine GUIKitchenSink | {} - {} TPS, {} FPS ({} ms)", GetApp()->GetRenderEngine().GetCurrentBackendName(), (int)GetApp()->CurrentTPS(), (int)GetApp()->GetRenderEngine().GetCurrentFPS(), (int)GetApp()->GetRenderEngine().GetLastFrameTime()).c_str());
 		});
 	}
 };

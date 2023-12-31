@@ -71,7 +71,7 @@ Level::Level() {
 				i++;
 			}
             world->GetComponent<GUIComponent>().EnqueueUIUpdate([=] {
-                document->GetElementById("readout")->SetInnerRML(std::format("Number of objects: {}", value));
+                document->GetElementById("readout")->SetInnerRML(Format("Number of objects: {}", value));
             });
 		}
 	};

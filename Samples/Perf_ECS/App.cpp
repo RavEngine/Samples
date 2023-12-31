@@ -18,7 +18,7 @@ private:
             // load world
             AddWorld(RavEngine::New<PerfA_World>());
 
-            SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+            SetWindowTitle(VFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
 };
 

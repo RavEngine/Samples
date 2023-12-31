@@ -169,7 +169,7 @@ struct Level : public RavEngine::World{
 struct ShadowApp : public RavEngine::App {
 	void OnStartup(int argc, char** argv) final{
 		AddWorld(RavEngine::New<Level>());
-		SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+		SetWindowTitle(VFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
 	void OnFatal(const std::string_view msg) final {
 		RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);

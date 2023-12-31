@@ -280,7 +280,7 @@ struct NavApp : public App{
         auto world = RavEngine::New<Level>();
         AddWorld(world);
 
-        SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+        SetWindowTitle(VFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
     
     void OnFatal(const std::string_view msg) final{

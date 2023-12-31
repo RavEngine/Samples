@@ -3,6 +3,7 @@
 #include "AppInfo.hpp"
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/Format.hpp>
 
 using namespace std;
 
@@ -17,7 +18,7 @@ private:
         // load world
         AddWorld(RavEngine::New<PerfB_World>());
 
-        SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+        SetWindowTitle(RavEngine::VFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
 };
 

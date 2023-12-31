@@ -10,6 +10,7 @@
 #include <RavEngine/WeakRef.hpp>
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/Format.hpp>
 #include "TestEntity.hpp"
 #include "AppInfo.hpp"
 
@@ -22,7 +23,7 @@ class TestApp : public RavEngine::App{
 		//create a world
 		AddWorld(RavEngine::New<TestWorld>());
 		
-		SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+		SetWindowTitle(RavEngine::VFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
     void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);

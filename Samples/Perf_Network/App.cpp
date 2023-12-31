@@ -55,7 +55,7 @@ struct NetApp : public RavEngine::App {
 			Debug::Log("Started client on {}", PORT);
 		}
 
-		SetWindowTitle(std::format("{} {} | {}", APPNAME, networkManager.IsServer()? "Server" : "Client", GetRenderEngine().GetCurrentBackendName()).c_str());
+		SetWindowTitle(VFormat("{} {} | {}", APPNAME, networkManager.IsServer()? "Server" : "Client", GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
     void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);

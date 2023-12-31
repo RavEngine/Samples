@@ -3,6 +3,7 @@
 #include "AppInfo.hpp"
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/Format.hpp>
 
 struct App : public RavEngine::App{
 	void OnStartup(int argc, char** argv) override{
@@ -10,7 +11,7 @@ struct App : public RavEngine::App{
         App::GetRenderEngine().VideoSettings.vsync = false;
         App::GetRenderEngine().SyncVideoSettings();
 		
-		SetWindowTitle(std::format("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
+		SetWindowTitle(RavEngine::VFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
 	}
     void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);

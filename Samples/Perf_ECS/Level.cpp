@@ -20,7 +20,7 @@ struct MetricsSystem : public AutoCTTI {
 		auto doc = gui.GetDocument("ui.rml");
 		auto elem = doc->GetElementById("diag");
 		gui.EnqueueUIUpdate([this,elem] {
-			elem->SetInnerRML(std::format(R"(<p>
+			elem->SetInnerRML(VFormat(R"(<p>
 FPS: {}({} ms) <br />
 TPS : {} ({} ops/s) <br />
 Entities : {} <br />
