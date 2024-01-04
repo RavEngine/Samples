@@ -21,12 +21,10 @@ struct MetricsSystem : public AutoCTTI {
 		auto elem = doc->GetElementById("diag");
 		gui.EnqueueUIUpdate([this,elem] {
 			elem->SetInnerRML(VFormat(R"(<p>
-FPS: {}({} ms) <br />
 TPS : {} ({} ops/s) <br />
 Entities : {} <br />
 </p> 
 )",
-			(int)GetApp()->GetRenderEngine().GetCurrentFPS(), (int)GetApp()->GetRenderEngine().GetLastFrameTime(),
 			FormatWithSep<int>(GetApp()->CurrentTPS()), FormatWithSep((int)GetApp()->CurrentTPS() * PA_Entity::num_objects * 2),
 			FormatWithSep(PA_Entity::num_objects)
 			));

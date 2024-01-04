@@ -177,7 +177,7 @@ PerfC_World::PerfC_World(){
 
 void PerfC_World::PostTick(float scale){
 	hud->EnqueueUIUpdate([this] {
-		fpslabel->SetInnerRML(VFormat("TPS: {}, FPS: {} ({} ms)", (int)GetApp()->CurrentTPS(),(int)GetApp()->GetRenderEngine().GetCurrentFPS(), (int)GetApp()->GetRenderEngine().GetLastFrameTime()));
+		fpslabel->SetInnerRML(VFormat("TPS: {}", (int)GetApp()->CurrentTPS()));
 	});
 }
 

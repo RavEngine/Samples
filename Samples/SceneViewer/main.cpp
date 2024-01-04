@@ -58,6 +58,7 @@ struct SceneViewerLevel : public RavEngine::World {
 			}
 			catch (exception& e) {
 				// continue silently...
+				Debug::Log("Cannot load {} - {}", data.name, e.what());
 			}
 		});
 	}
