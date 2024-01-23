@@ -16,7 +16,7 @@ static constexpr uint32_t num_entities =
 #ifdef _DEBUG
 5000;
 #else
-200000;
+500000;
 #endif
 
 struct InstanceEntity : public RavEngine::GameObject {
