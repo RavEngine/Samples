@@ -36,7 +36,12 @@ jobs:
         with:
           name:  RavEngine_Samples_linux64
           path:  build/linux/Release/*.AppImage
-      
+      - name: Prepare Transfer upload
+        run: cd build/linux/Release ; zip -r -9 Samples.zip *.AppImage
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/linux/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linux.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g" 
+        continue-on-error: true
+
   build-linux-arm:
     name: Build Samples for Linux arm64
     runs-on: ubuntu-latest
@@ -76,7 +81,12 @@ jobs:
         with:
           name:  RavEngine_Samples_linuxARM
           path:  build/linuxarm/Release/*.AppImage
-
+      - name: Prepare Transfer upload
+        run: cd build/linuxarm/Release ; zip -r -9 Samples.zip *.AppImage
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/linuxarm/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linuxARM.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        continue-on-error: true
+  
   build-emscripten:
     name: Build samples for Emscripten-Linux
     runs-on: ubuntu-latest
@@ -103,7 +113,12 @@ jobs:
                 build/Release/*.html
                 build/Release/*.wasm
                 build/Release/*.data
- 
+      - name: Prepare Transfer upload
+        run: cd build/Release ; zip -r -9 Samples.zip *.js *.html *.wasm *.data
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/Release/Samples.zip https://transfer.sh/RavEngine_Samples_Web.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        continue-on-error: true
+        
   build-apple:
     name: Build Samples for Apple Platforms (unsigned)
     runs-on: macos-latest
@@ -141,7 +156,10 @@ jobs:
         with:
           name: RavEngine_Samples_Apple_${{ matrix.platform }}
           path: build/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg
- 
+      - name: Upload to Transfer.sh
+        run: URL=`curl --upload-file build/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg https://transfer.sh/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
+        continue-on-error: true
+   
   build-windows:
     name: Build samples for Windows
     runs-on: windows-latest
@@ -173,6 +191,12 @@ jobs:
                 build\win\release\RavEngine*.exe 
                 build\win\release\RavEngine*.rvedata
                 build\win\release\RavEngine*Streaming\*
+      - name: Prepare Transfer.sh upload
+        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\ -DestinationPath Samples${{ matrix.arch }}.zip
+      - name: Upload to Transfer.sh
+        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_Win${{ matrix.arch }}.zip -Method PUT -InFile Samples${{ matrix.arch }}.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
+        continue-on-error: true
+      
   build-uwp:
     name: Build samples for UWP
     runs-on: windows-latest
@@ -205,3 +229,11 @@ jobs:
         with:
           name: RavEngine_Samples_${{ matrix.sdk }}_${{ matrix.arch }}
           path: build\uwp\AppPackages
+      - name: Prepare Transfer.sh upload
+        run: |
+              Move-Item -Path build\uwp\AppPackages\ -Destination .
+              Remove-Item -Path build -Recurse
+              Compress-Archive -Path AppPackages\ -DestinationPath Samples${{ matrix.sdk }}_${{ matrix.arch }}.zip
+      - name: Upload to Transfer.sh
+        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_${{ matrix.sdk }}_${{ matrix.arch }}.zip -Method PUT -InFile Samples${{ matrix.sdk }}_${{ matrix.arch }}.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
+        continue-on-error: true
