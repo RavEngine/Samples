@@ -135,6 +135,7 @@ struct Level : public RavEngine::World{
         pLight.SetColorRGBA({1,0,0,1});
         pLight.SetIntensity(2);
         pointLight.GetTransform().LocalTranslateDelta(vector3(-2,1,-0.5));
+		pLight.SetCastsShadows(true);
          
 
 		auto spotLightEntity = CreatePrototype<GameObject>();
