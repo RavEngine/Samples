@@ -239,13 +239,6 @@ group_in("SamplesDeps", "midifile;nfd")
 
 add_sample("SoundDynamics")
 
-if(UWP)
-	# WINNT version is messed up when compiling for UWP, fixes here
-	foreach(tgt "aiff" )
-		target_compile_definitions(${tgt} PUBLIC "_CRT_SECURE_NO_WARNINGS" "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" "_CRT_NONSTDC_NO_DEPRECATE" )
-	endforeach()
-endif()
-
 # exlcude the SceneViewer from iOS, tvOS, UWP, and ARM linux 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
 	if (NOT IS_CROSSCOMP)
