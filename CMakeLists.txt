@@ -81,9 +81,6 @@ function (add_sample sample_dir)
 	target_include_directories("${APPNAME}" PUBLIC
         "${CMAKE_BINARY_DIR}/${APPNAME}"
         "${CMAKE_CURRENT_LIST_DIR}/Samples/Common"
-        "lib/sfizz/external/abseil-cpp/"
-        "lib/sfizz/external/simde/"
-        "lib/sfizz/external/filesystem/include/"
     )
 	target_compile_features(${APPNAME} PRIVATE cxx_std_20)
 	set_source_files_properties("${CMAKE_CURRENT_LIST_DIR}/Samples/logo.png" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
@@ -205,21 +202,6 @@ function (add_sample sample_dir)
 
 endfunction()
 
-# sfizz
-set(BUILD_TESTING OFF CACHE INTERNAL "")
-set(SFIZZ_JACK OFF CACHE INTERNAL "")
-set(SFIZZ_LV2 OFF CACHE INTERNAL "")
-set(SFIZZ_LV2_UI OFF CACHE INTERNAL "")
-set(SFIZZ_VST OFF CACHE INTERNAL "")
-set(SFIZZ_AU OFF CACHE INTERNAL "")
-set(SFIZZ_SHARED OFF CACHE INTERNAL "")
-set(ENABLE_LTO OFF CACHE INTERNAL "")
-set(SFIZZ_RENDER OFF CACHE INTERNAL "")
-set(SFIZZ_STATIC_DEPENDENCIES OFF CACHE INTERNAL "")
-add_subdirectory("lib/sfizz" EXCLUDE_FROM_ALL)
-
-add_subdirectory("lib/midifile" EXCLUDE_FROM_ALL)
-
 
 add_sample("AirHockey")
 add_sample("Playground")
@@ -241,10 +223,6 @@ add_sample("Occlusion")
 add_sample("Transforms")
 add_sample("Rendering")
 
-group_in("SamplesDeps/sfizz" "aiff;sfizz_pugixml;sfizz_spline;sfizz_tunings;sfizz_hiir_polyphase_iir2designer;sfizz_kissfft;sfizz_cephes;sfizz_cpuid;sfizz_filesystem_impl;sfizz_fmidi;\
-st_audiofile;st_audiofile_formats;st_info;sfizz_parser;sfizz_messaging;sfizz_import;sfizz_spin_mutex;sfizz_internal;sfizz_match_definitions;sfizz_static;\
-sfizz-generate-git-build-id;sfizz-git-build-id;Abseil")
-
 group_in("SamplesDeps/Abseil" "absl_base;absl_raw_hash_set;absl_stacktrace;absl_symbolize;absl_failure_signal_handler;absl_demangle_internal;absl_leak_check;\
 absl_leak_check_disable;absl_flags_program_name;absl_flags_internal;absl_hash;absl_int128;absl_status;absl_statusor;absl_strings;absl_cord;absl_synchronization;\
 absl_time;absl_bad_optional_access;absl_bad_variant_access")
@@ -260,14 +238,10 @@ absl_cord_internal;absl_cordz_functions;absl_cordz_handle;absl_cordz_info;absl_c
 group_in("SamplesDeps", "midifile;nfd")
 
 add_sample("SoundDynamics")
-target_link_libraries("RavEngineSoundDynamics" PUBLIC
-	"sfizz_static"
-	"sfizz_fmidi"
-	"midifile"
-)
+
 if(UWP)
 	# WINNT version is messed up when compiling for UWP, fixes here
-	foreach(tgt "sfizz_static" "sfizz_fmidi" "aiff" "sfizz_internal" )
+	foreach(tgt "aiff" )
 		target_compile_definitions(${tgt} PUBLIC "_CRT_SECURE_NO_WARNINGS" "_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS" "_CRT_NONSTDC_NO_DEPRECATE" )
 	endforeach()
 endif()

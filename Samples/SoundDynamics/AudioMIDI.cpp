@@ -1,3 +1,4 @@
+#if 0
 #include "AudioMIDI.hpp"
 #include <sfizz.hpp>
 #include <RavEngine/Common3D.hpp>
@@ -244,3 +245,4 @@ InstrumentSynth::InstrumentSynth(const Filesystem::Path& pathOnDisk, bool notStr
     uint32_t blockSize = std::min<decltype(blockSize)>(1024,AudioPlayer::GetBufferSize());
     synthesizer.setSamplesPerBlock(blockSize);
 }
+#endif

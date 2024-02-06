@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 #include <sfizz.hpp>
 #include <MidiFile.h>
@@ -116,3 +117,4 @@ struct AudioMIDIRenderer{
 };
 
 }
+#endif

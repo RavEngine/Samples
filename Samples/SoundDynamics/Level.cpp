@@ -179,6 +179,7 @@ Level::Level(){
                 createElement(leaf_name.string());
             }
             else if (path.extension() == ".mid"){
+#if 0
                 auto leaf_name = path.filename();
                 auto player = New<AudioMIDIPlayer>();
                 auto instrument1 = std::make_shared<InstrumentSynth>("Harp.sfz");
@@ -206,6 +207,7 @@ Level::Level(){
                 tracks[leaf_name] = player;
                 
                 createElement(leaf_name.string());
+#endif
             }
         });
     }

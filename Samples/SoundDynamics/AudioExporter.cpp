@@ -1,3 +1,4 @@
+#if 0
 #include "AudioExporter.hpp"
 #include <RavEngine/AudioPlayer.hpp>
 #include <RavEngine/AudioSource.hpp>
@@ -29,3 +30,4 @@ void AudioExporter::ExportWavOneShot(Ref<AudioAsset> asset, const Filesystem::Pa
     
     drwav_uninit(&outputFile);
 }
+#endif
