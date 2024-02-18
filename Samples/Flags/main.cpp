@@ -10,6 +10,7 @@
 #include <RavEngine/Utilities.hpp>
 #include <RavEngine/RenderEngine.hpp>
 #include <ravengine_shader_defs.h>
+#include <RavEngine/StartApp.hpp>
 
 using namespace RavEngine;
 using namespace std;

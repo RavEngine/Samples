@@ -7,6 +7,7 @@
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/RenderEngine.hpp>
 #include <RavEngine/GUI.hpp>
+#include <RavEngine/StartApp.hpp>
 
 using namespace RavEngine;
 using namespace std;

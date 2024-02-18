@@ -12,6 +12,7 @@
 #include <RavEngine/RenderEngine.hpp>
 #include "AppInfo.hpp"
 #include <numbers>
+#include <RavEngine/StartApp.hpp>
 
 using namespace RavEngine;
 using namespace std;

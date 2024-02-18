@@ -3,6 +3,7 @@
 #include "Level.hpp"
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/StartApp.hpp>
 
 using namespace RavEngine;
 

@@ -4,6 +4,7 @@
 #include "AppInfo.hpp"
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/Format.hpp>
+#include <RavEngine/StartApp.hpp>
 
 struct App : public RavEngine::App{
     void OnStartup(int argc, char** argv) final{

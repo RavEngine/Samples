@@ -10,6 +10,7 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/RenderEngine.hpp>
 #include "AppInfo.hpp"
+#include <RavEngine/StartApp.hpp>
 
 using namespace RavEngine;
 using namespace std;

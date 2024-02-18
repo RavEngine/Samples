@@ -13,6 +13,7 @@
 #include <RavEngine/Format.hpp>
 #include "TestEntity.hpp"
 #include "AppInfo.hpp"
+#include <RavEngine/StartApp.hpp>
 
 class TestApp : public RavEngine::App{
 	void OnStartup(int argc, char** argv) override{

@@ -4,6 +4,7 @@
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/RenderEngine.hpp>
 #include <RavEngine/Format.hpp>
+#include <RavEngine/StartApp.hpp>
 
 class Game : public RavEngine::App{
 public:

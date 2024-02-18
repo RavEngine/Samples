@@ -12,6 +12,7 @@
 #include <RavEngine/RenderEngine.hpp>
 #include <RavEngine/PhysicsSolver.hpp>
 #include <RavEngine/Window.hpp>
+#include <RavEngine/StartApp.hpp>
 
 using namespace RavEngine;
 using namespace std;
