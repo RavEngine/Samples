@@ -48,6 +48,7 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
 4. Navigate your terminal into the `config` directory, and execute the build script for your system.
    - macOS: `./build-mac.sh`
    - Windows: `build-win.bat`
+      - Note: Due to a known bug in the Windows configure process, you will need to execute this script twice to build successfully. 
    - Linux: `./build-linux.sh`
    - iOS (device): `./init-ios.sh`   (project gen only, open Xcode for code signing)
    - tvOS (device): `./init-tvos.sh` (project gen only, open Xcode for code signing)
