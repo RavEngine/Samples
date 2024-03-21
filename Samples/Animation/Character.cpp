@@ -13,6 +13,9 @@
 using namespace RavEngine;
 using namespace std;
 
+// show green cubes to diagnose transform hierarchy issues
+#define TRANSFORM_DEBUG 0
+
 enum CharAnims {
 	Idle,
 	Walk,
@@ -179,6 +182,7 @@ void Character::Create() {
 	auto material = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	material->SetAlbedoColor({1,0.4,0.2,1});
 
+#if TRANSFORM_DEBUG
 	auto childChildForTesting = GetWorld()->CreatePrototype<GameObject>();
 	{
 		auto testMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
@@ -188,13 +192,16 @@ void Character::Create() {
 
 		EmplaceComponent<StaticMesh>(mesh, LitMeshMaterialInstance(testMat));	// also putting a mesh on the base object for testing transforms
 	}
+#endif
 
 	auto childEntity = GetWorld()->CreatePrototype<GameObject>();										// I made the animation facing the wrong way
 	GetTransform().AddChild(childEntity);								// so I need a child entity to rotate it back
 	childEntity.GetTransform().LocalRotateDelta(vector3(0, deg_to_rad(180), 0));	// if your animations are the correct orientation you don't need this
 
-	childEntity.GetTransform().AddChild(childChildForTesting);
+#if TRANSFORM_DEBUG
+    childEntity.GetTransform().AddChild(childChildForTesting);
 	childChildForTesting.GetTransform().SetLocalPosition(vector3(0,5,0));
+#endif
 
 	// load the mesh and material onto the character
 	auto& cubemesh = childEntity.EmplaceComponent<SkinnedMeshComponent>(skeleton, mesh);
