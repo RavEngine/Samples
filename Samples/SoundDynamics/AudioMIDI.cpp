@@ -3,7 +3,7 @@
 #include <sfizz.hpp>
 #include <RavEngine/Common3D.hpp>
 #include <RavEngine/AudioPlayer.hpp>
-#include <RavEngine/AudioRoom.hpp>
+#include <RavEngine/AudioSpace.hpp>
 #include <sfizz/MathHelpers.h>
 #include <sfizz/SfzHelpers.h>
 #include <sfizz/SIMDHelpers.h>

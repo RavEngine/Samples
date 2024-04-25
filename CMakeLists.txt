@@ -237,7 +237,7 @@ absl_cord_internal;absl_cordz_functions;absl_cordz_handle;absl_cordz_info;absl_c
 
 group_in("SamplesDeps", "midifile;nfd")
 
-add_sample("SoundDynamics")
+#add_sample("SoundDynamics")
 
 # exlcude the SceneViewer from iOS, tvOS, UWP, and ARM linux 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")

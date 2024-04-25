@@ -6,7 +6,7 @@
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/Debug.hpp>
-#include <RavEngine/AudioRoom.hpp>
+#include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/Texture.hpp>
 #include <RavEngine/BuiltinPostProcess.hpp>
 #include <RavEngine/RenderEngine.hpp>

@@ -4,7 +4,7 @@
 #include <RavEngine/App.hpp>
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/GUI.hpp>
-#include <RavEngine/AudioRoom.hpp>
+#include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/Transform.hpp>
 #include <RavEngine/Filesystem.hpp>

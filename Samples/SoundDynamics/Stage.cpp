@@ -1,5 +1,5 @@
 #include "Speaker.hpp"
-#include <RavEngine/AudioRoom.hpp>
+#include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/SceneLoader.hpp>
 

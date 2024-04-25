@@ -7,8 +7,9 @@
 #include <RavEngine/InputManager.hpp>
 #include "MainMenu.hpp"
 #include <RavEngine/Debug.hpp>
-#include <RavEngine/AudioRoom.hpp>
+#include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/Ref.hpp>
+#include <RavEngine/AudioMeshAsset.hpp>
 #include <memory>
 
 Ref<PBRMaterialInstance> Puck::material;
@@ -26,6 +27,14 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers){
     cameraBoom.GetTransform().AddChild(cameraActor).LocalTranslateDelta(vector3(0,3,0)).LocalRotateDelta(vector3(deg_to_rad(-90),deg_to_rad(90),0));
         
     InitPhysics();
+    
+    // music
+    auto musicPlayer = CreatePrototype<GameObject>();
+    auto musicAsset = New<AudioAsset>("Vibing Over Venus.mp3", 2);
+    auto musicDataProvider = New<SampledAudioDataProvider>(musicAsset, 2);
+    auto& musicComponent = musicPlayer.EmplaceComponent<AmbientAudioSourceComponent>(musicDataProvider);
+    musicComponent.GetPlayer()->SetLoop(true);
+    musicComponent.GetPlayer()->Play();
     
     //intro animation
     t = Tween<decimalType,decimalType>([=](decimalType d, decimalType p) mutable{
@@ -182,6 +191,7 @@ void GameWorld::GameOver(){
 	im->BindAnyAction(gh->GetData());
 	
 	GetApp()->inputManager = im;
+
 }
 
 GameWorld::GameWorld(const GameWorld& other) : GameWorld(other.numplayers){}

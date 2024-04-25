@@ -15,7 +15,7 @@
 #include "RavEngine/BuiltinMaterials.hpp"
 #include "RavEngine/InputManager.hpp"
 #include "RavEngine/Light.hpp"
-#include <RavEngine/AudioRoom.hpp>
+#include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/RenderEngine.hpp>
 
 using namespace RavEngine;
@@ -132,10 +132,9 @@ TestWorld::TestWorld(){
 	auto& s = floorplane.EmplaceComponent<RigidBodyStaticComponent>();
 	s.EmplaceCollider<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5));
 	
-	auto& room = floorplane.EmplaceComponent<AudioRoom>();
-	RoomMaterial testMat({1,2,3,4,5,6,7,8});
-	room.SetRoomDimensions(vector3(5,30,5));
-	room.WallMaterials()[0] = RoomMat::kMarble;
+	auto& room = floorplane.EmplaceComponent<SimpleAudioSpace>();
+	room.SetRadius(30);
+	//room.WallMaterials()[0] = RoomMat::kMarble;
 //	room->WallMaterials()[1] = RoomMat::kMarble;
 //	room->WallMaterials()[2] = RoomMat::kMarble;
 //	room->WallMaterials()[3] = RoomMat::kMarble;
