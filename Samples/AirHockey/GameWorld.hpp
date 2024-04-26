@@ -8,7 +8,7 @@
 
 using namespace RavEngine;
 
-class GameWorld : public RavEngine::World, public RavEngine::virtual_enable_shared_from_this<GameWorld> {
+class GameWorld : public RavEngine::World {
 public:
 	GameWorld(int numplayers);
 	

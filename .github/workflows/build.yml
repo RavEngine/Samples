@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       - name: Install Dependencies
@@ -32,7 +32,7 @@ jobs:
       - name: Build
         run: cd build/linux && cmake --build . --config release --target install  
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name:  RavEngine_Samples_linux64
           path:  build/linux/Release/*.AppImage
@@ -48,7 +48,7 @@ jobs:
     if: false
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       - name: Setup Repositories
@@ -77,7 +77,7 @@ jobs:
       - name: Build
         run: cd build/linuxarm && cmake --build . --config release --target install 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name:  RavEngine_Samples_linuxARM
           path:  build/linuxarm/Release/*.AppImage
@@ -93,7 +93,7 @@ jobs:
     if: false
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       - name: Install Dependencies
@@ -105,7 +105,7 @@ jobs:
       - name: Build
         run: cd build; cmake --build . --config Release --target install
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: RavEngine_Samples_Web
           path: |
@@ -128,7 +128,7 @@ jobs:
         platform: [iOS, tvOS, '']
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       - name: Setup Python
@@ -139,7 +139,7 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=${{ matrix.platform }} -DRAVENGINE_BUILD_TESTS=OFF ..
+          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=${{ matrix.platform }} -DRAVENGINE_BUILD_TESTS=OFF -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED="NO" ..
       - name: Build
         run: cd build; cmake --build . --config release --target install -- -quiet
       - name: Free space
@@ -152,7 +152,7 @@ jobs:
           touch release/.Trash
           hdiutil create  -size 2g -srcfolder release -volname RavEngine_Samples_Apple_${{ matrix.platform }} RavEngine_Samples_Apple_${{ matrix.platform }}.dmg
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: RavEngine_Samples_Apple_${{ matrix.platform }}
           path: build/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg
@@ -170,7 +170,7 @@ jobs:
         sdk: [Windows]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       - name: Configure
@@ -184,7 +184,7 @@ jobs:
       - name: Build
         run: cd build; cd win; cmake --build . --config release --target install
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: RavEngine_Samples_Win${{ matrix.arch }}
           path: |
@@ -207,9 +207,9 @@ jobs:
         sdk: [WindowsStore]
     steps:
       - name: Add MSBuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v2
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       - name: Configure
@@ -225,7 +225,7 @@ jobs:
               cd build\uwp 
               & "MSbuild.exe" "RavEngine_Samples_WindowsStore.sln" /p:Configuration=Release /p:AppxBundle=Always /p:AppxBundlePlatforms="${{ matrix.arch }}"
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: RavEngine_Samples_${{ matrix.sdk }}_${{ matrix.arch }}
           path: build\uwp\AppPackages
