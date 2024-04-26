@@ -235,7 +235,6 @@ absl_random_internal_seed_material;absl_random_internal_pool_urbg;absl_random_in
 absl_random_internal_randen_hwaes;absl_random_internal_randen_hwaes_impl;absl_random_internal_distribution_test_util;absl_strings_internal;absl_str_format_internal;\
 absl_cord_internal;absl_cordz_functions;absl_cordz_handle;absl_cordz_info;absl_cordz_sample_token;absl_graphcycles_internal;absl_civil_time;absl_time_zone;absl_bad_any_cast_impl")
 
-group_in("SamplesDeps", "midifile;nfd")
 
 #add_sample("SoundDynamics")
 
@@ -243,9 +242,5 @@ group_in("SamplesDeps", "midifile;nfd")
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
 	if (NOT IS_CROSSCOMP)
 		add_sample("SceneViewer")
-
-		# SceneViewer needs some additional dependencies
-		add_subdirectory(lib/nativefiledialog-extended EXCLUDE_FROM_ALL)
-		target_link_libraries("RavEngineSceneViewer" PUBLIC nfd)
 	endif()
 endif()

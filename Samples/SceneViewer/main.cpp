@@ -1,6 +1,5 @@
 #include <RavEngine/App.hpp>
 #include <RavEngine/World.hpp>
-#include <nfd.hpp>
 #include <RavEngine/Filesystem.hpp>
 #include <RavEngine/SceneLoader.hpp>
 #include <RavEngine/GameObject.hpp>
@@ -11,6 +10,8 @@
 #include <RavEngine/RenderEngine.hpp>
 #include "AppInfo.hpp"
 #include <RavEngine/StartApp.hpp>
+#include <RavEngine/Window.hpp>
+#include <SDL_dialog.h>
 
 using namespace RavEngine;
 using namespace std;
@@ -144,32 +145,49 @@ struct SceneViewerLevel : public RavEngine::World {
 
 
 struct SceneViewerApp : public RavEngine::App {
-	bool LoadNewScene() {
-		
-		NFD::UniquePathU8 path;
-		if (NFD::OpenDialog(path, nullptr, 0) == NFD_OKAY) {
-			SetWindowTitle(VFormat("{} - RavEngine SceneViewer | {} ",Filesystem::Path(path.get()).filename().string(), GetRenderEngine().GetCurrentBackendName()).c_str());
-			static_pointer_cast<SceneViewerLevel>(GetCurrentRenderWorld())->AddData(path.get());
-			return true;
-		}
-		else {
-			return false;
-		}
+
+	// these must be here because SDL_ShowOpenFileDialog runs on a separate thread internally
+	constexpr static SDL_DialogFileFilter filters[] = { {"Any file", "*"}};
+	const static inline std::string startLocation = Filesystem::CurrentWorkingDirectory().string();
+
+	void LoadNewScene() {
+
+		SDL_ShowOpenFileDialog([](void* userdata, const char* const* filelist, int filter) {
+
+			if (filter == -1) {
+				Debug::Fatal(SDL_GetError());
+			}
+
+			auto app = static_cast<SceneViewerApp*>(userdata);
+			if (filelist && *filelist) {
+				Filesystem::Path chosenFile(*filelist);
+				app->OpenFile(chosenFile);
+			}
+			else {
+				app->Quit();
+			}
+
+
+		}, this, GetMainWindow()->window, filters, startLocation.c_str(), 0);
+
+	}
+
+	void OpenFile(const Filesystem::Path& filePath) {
+		DispatchMainThread([filePath, this] {
+			SetWindowTitle(VFormat("{} - RavEngine SceneViewer | {} ", filePath.filename().string(), GetRenderEngine().GetCurrentBackendName()).c_str());
+			static_pointer_cast<SceneViewerLevel>(GetCurrentRenderWorld())->AddData(filePath);
+		});
 	}
 
 	void OnStartup(int, char**) final {
-		NFD::Init();
 		auto scene = New<SceneViewerLevel>();
 		scene->SetupInputs();
 		AddWorld(scene);
-		if (!LoadNewScene()) {
-			Quit();
-		}
+
+		LoadNewScene();
 	}
 
 	int OnShutdown() final {
-		NFD::Quit();
-
 		return 0;
 	}
 
