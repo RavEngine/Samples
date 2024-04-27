@@ -120,7 +120,7 @@ jobs:
         continue-on-error: true
         
   build-apple:
-    name: Build Samples for Apple Platforms (unsigned)
+    name: Build Samples for Apple arm64 Platforms (unsigned)
     runs-on: macos-latest
     strategy:
       fail-fast: false
@@ -139,7 +139,7 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=${{ matrix.platform }} -DRAVENGINE_BUILD_TESTS=OFF -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED="NO" ..
+          cmake -G "Xcode" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=${{ matrix.platform }} -DRAVENGINE_BUILD_TESTS=OFF -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED="NO" -DCMAKE_OSX_ARCHITECTURES="arm64" ..
       - name: Build
         run: cd build; cmake --build . --config release --target install -- -quiet
       - name: Free space
