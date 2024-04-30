@@ -154,11 +154,11 @@ struct SceneViewerApp : public RavEngine::App {
 
 		SDL_ShowOpenFileDialog([](void* userdata, const char* const* filelist, int filter) {
 
-			if (filter == -1) {
-				Debug::Fatal(SDL_GetError());
-			}
-
 			auto app = static_cast<SceneViewerApp*>(userdata);
+			if (filelist == nullptr) {
+				Debug::Fatal("An error occured: {}",SDL_GetError());
+				app->Quit();
+			}
 			if (filelist && *filelist) {
 				Filesystem::Path chosenFile(*filelist);
 				app->OpenFile(chosenFile);
