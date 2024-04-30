@@ -222,10 +222,4 @@ add_sample("Occlusion")
 add_sample("Transforms")
 add_sample("Rendering")
 #add_sample("SoundDynamics")
-
-# exlcude the SceneViewer from iOS, tvOS, UWP, and ARM linux 
-if("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Linux" OR "${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
-	if (NOT IS_CROSSCOMP)
-		add_sample("SceneViewer")
-	endif()
-endif()
+add_sample("SceneViewer")
