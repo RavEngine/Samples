@@ -1,0 +1,17 @@
+<rml>
+    <head>
+        <link type="text/rcss" href="default.rcss"></link>
+        <style>
+            *{
+                font-size: 15dp;
+            }
+        </style>
+    </head>
+    <body>
+		[WASD] - Move camera<br />
+        [Esc] - Toggle mouse <br/>
+        [Return] - Reset Camera <br/>
+        [R] - Create Rat<br/>
+		[H] - What <br/>
+	</body>
+</rml>

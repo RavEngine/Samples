@@ -33,6 +33,8 @@ This repository contains sample programs to demonstrate how to use the [RavEngin
    - Test case for dynamic occlusion culling
 1. Rendering
    - Demonstrate the various features of the render engine 
+1. Rats
+   - Crazy? I was crazy once...
 
 ## How to try the samples without building
 1. Sign in to GitHub in your browser. This is required for accessing the downloads.
