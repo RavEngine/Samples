@@ -65,6 +65,13 @@ MainMenu::MainMenu(){
 	GetApp()->inputManager = im;
 	
 	menu.Debug();
+
+	// this can take a bit to load, so start loading it in the background 
+	std::thread loaderThread([this] {
+		musicAsset = New<AudioAsset>("Vibing Over Venus.mp3", 2);
+		musicSemaphore.release();
+	});
+	loaderThread.detach();
 }
 
 void MainMenu::LoadGame(int numplayers){
@@ -72,8 +79,10 @@ void MainMenu::LoadGame(int numplayers){
 	gui.GetDocument("mainmenu.rml")->Hide();
 	gui.GetDocument("loading.rml")->Show();
 	
-	
-	auto g = RavEngine::New<GameWorld>(numplayers);
+	// make sure the music is loaded
+	musicSemaphore.acquire();
+	Debug::Assert(musicAsset.get() != nullptr, "Semaphore is not correct!");
+	auto g = RavEngine::New<GameWorld>(numplayers,musicAsset);
 
 	GetApp()->DispatchMainThread([=] {
 		GetApp()->AddReplaceWorld(shared_from_this(), g);

@@ -9,7 +9,6 @@
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/Ref.hpp>
-#include <RavEngine/AudioMeshAsset.hpp>
 #include <memory>
 
 Ref<PBRMaterialInstance> Puck::material;
@@ -17,7 +16,7 @@ using namespace std;
 
 Tween<decimalType,decimalType> t;
 
-GameWorld::GameWorld(int numplayers) : numplayers(numplayers){
+GameWorld::GameWorld(int numplayers, Ref<RavEngine::AudioAsset> musicAsset) : numplayers(numplayers), musicAsset(musicAsset){
     auto cameraActor = CreatePrototype<GameObject>();
     cameraActor.EmplaceComponent<CameraComponent>().SetActive(true);
     cameraActor.EmplaceComponent<AudioListener>();
@@ -30,7 +29,6 @@ GameWorld::GameWorld(int numplayers) : numplayers(numplayers){
     
     // music
     auto musicPlayer = CreatePrototype<GameObject>();
-    auto musicAsset = New<AudioAsset>("Vibing Over Venus.mp3", 2);
     auto musicDataProvider = New<SampledAudioDataProvider>(musicAsset, 2);
     auto& musicComponent = musicPlayer.EmplaceComponent<AmbientAudioSourceComponent>(musicDataProvider);
     musicComponent.GetPlayer()->SetLoop(true);
@@ -170,7 +168,7 @@ void GameWorld::GameOver(){
 			if (!isLoading){
 				isLoading = true;
 				GetApp()->DispatchMainThread([=]{
-					auto world = RavEngine::New<GameWorld>(gm.lock()->numplayers);
+					auto world = RavEngine::New<GameWorld>(gm.lock()->numplayers,gm.lock()->musicAsset);
 					GetApp()->AddReplaceWorld(gm.lock(),world);
 				});
 			}
@@ -194,4 +192,4 @@ void GameWorld::GameOver(){
 
 }
 
-GameWorld::GameWorld(const GameWorld& other) : GameWorld(other.numplayers){}
+GameWorld::GameWorld(const GameWorld& other) : GameWorld(other.numplayers, other.musicAsset){}
