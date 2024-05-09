@@ -8,10 +8,6 @@
     <body>
         <main>
           <p id="diag"></p>
-          <p id="materials">
-            Select Wall Materials
-            <br />
-          </p>
           <p>
             Select Music
             <br />

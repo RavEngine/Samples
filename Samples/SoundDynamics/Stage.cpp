@@ -10,12 +10,12 @@ void Stage::Create() {
     GameObject::Create();
     roomEntity = GetWorld()->CreatePrototype<GameObject>();
 
-	auto& audioRoom = roomEntity.EmplaceComponent<AudioRoom>();
-	audioRoom.SetRoomDimensions(vector3(20, 10, 20));
+	auto& audioRoom = roomEntity.EmplaceComponent<GeometryAudioSpace>();
+	audioRoom.SetAudioSourceRadius(50);
+	audioRoom.SetMeshRadius(50);
 
 	GetTransform().AddChild(roomEntity);
     
-    roomEntity.GetTransform().LocalTranslateDelta(vector3(0,audioRoom.GetRoomDimensions().y/2,0));
 
     Array<string_view, 6> faceOrder{
 		"wall_negx",
@@ -38,6 +38,5 @@ void Stage::Create() {
 		EmplaceComponent<StaticMesh>(rm, LitMeshMaterialInstance(inst));
 		this->wallMaterials[pos] = inst;
 	});
-	GetTransform().LocalTranslateDelta(vector3(0,audioRoom.GetRoomDimensions().y / 2,0));
 
 }
