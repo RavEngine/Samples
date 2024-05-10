@@ -94,6 +94,7 @@ struct Pipe : public RavEngine::GameObject {
 		auto& body = EmplaceComponent<RigidBodyStaticComponent>();
 		auto physMat = RavEngine::New<PhysicsMaterial>();
 		body.EmplaceCollider<CapsuleCollider>(1.0f, 1.0f, physMat, vector3{0,1.5,0}, vector3(0, 0, deg_to_rad(90.f)));
+
 		body.debugEnabled = true;
 	}
 };
@@ -110,9 +111,14 @@ struct Floor : public RavEngine::GameObject {
 		floorMat->SetAlbedoColor({0.5,0.5,0.5,1});
 		EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
 
-		auto& body = EmplaceComponent<RigidBodyStaticComponent>();
+		auto childObject = GetWorld()->CreatePrototype<GameObject>();
+		GetTransform().AddChild(childObject);
+
+		auto& body = childObject.EmplaceComponent<RigidBodyStaticComponent>();
 		auto physMat = RavEngine::New<PhysicsMaterial>(0.5f, 0.5f, 0.5f);
-		body.EmplaceCollider<BoxCollider>(vector3(floorSize,0.1,floorSize), physMat);
+		body.EmplaceCollider<BoxCollider>(vector3(floorSize, 0.5, floorSize), physMat);
+		childObject.GetTransform().LocalTranslateDelta({0,-0.5,0});
+
 		body.debugEnabled = true;
 	}
 };
@@ -253,9 +259,7 @@ struct RatsWorld : public RavEngine::World {
         };
         rat.GetComponent<RigidBodyDynamicComponent>().AddReceiver(callbackptr);
 
-		auto pos = camHeadUD.GetTransform().GetWorldPosition();
-
-		PlaySound({ swooshSound ,pos,1 });
+		PlaySound({ swooshSound ,{0,5,0},1 });
 		lastRatTime = now;
 	}
 
@@ -353,11 +357,9 @@ struct RatsWorld : public RavEngine::World {
 		GetApp()->inputManager = im;
 	}
 
-	void PreTick(float scale) final {
-		fsScale = scale;
-	}
+	void PreTick(float tickrateScale) final {
+		fsScale = tickrateScale;
 
-	void PostTick(float tickrateScale) final {
 		camRoot.GetTransform().LocalTranslateDelta(velvec);
 		velvec *= 0.9;
 		soundsThisTick = 0;
