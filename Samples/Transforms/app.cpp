@@ -38,7 +38,7 @@ struct Level : public RavEngine::World {
 	Level() {
 
 		constexpr static float floorSize = 20;
-		auto floor = CreatePrototype<GameObject>();
+		auto floor = Instantiate<GameObject>();
 		floor.GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
 
 		{
@@ -48,11 +48,11 @@ struct Level : public RavEngine::World {
 			floor.EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
 		}
 	
-		camRoot = CreatePrototype<decltype(camRoot)>();
-		camHeadUD = CreatePrototype<decltype(camHeadUD)>();
+		camRoot = Instantiate<decltype(camRoot)>();
+		camHeadUD = Instantiate<decltype(camHeadUD)>();
 		camRoot.GetTransform().AddChild(camHeadUD);
         
-		auto camParentedObject = CreatePrototype<GameObject>();
+		auto camParentedObject = Instantiate<GameObject>();
 		{
 			auto cylinderMesh = MeshAsset::Manager::Get("cylinder.obj");
 			auto cylinderMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
@@ -68,7 +68,7 @@ struct Level : public RavEngine::World {
 		auto& cam = camHeadUD.EmplaceComponent<CameraComponent>();
 		cam.SetActive(true);
 
-		auto lightsEntity = CreatePrototype<GameObject>();
+		auto lightsEntity = Instantiate<GameObject>();
 		auto& light = lightsEntity.EmplaceComponent<DirectionalLight>();	
 		light.SetIntensity(4);
 		light.SetCastsShadows(true);
@@ -77,7 +77,7 @@ struct Level : public RavEngine::World {
 
 		lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 
-		chainRoot = CreatePrototype<GameObject>();
+		chainRoot = Instantiate<GameObject>();
 		{
 			auto cubeMesh = MeshAsset::Manager::Get("cube.obj");
 			auto cubeMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
@@ -88,7 +88,7 @@ struct Level : public RavEngine::World {
 			auto prevParent = chainRoot;
 
 			for (int i = 0; i < 3; i++) {
-				auto chainObj = CreatePrototype<GameObject>();
+				auto chainObj = Instantiate<GameObject>();
 				chainObj.EmplaceComponent<StaticMesh>(cubeMesh, LitMeshMaterialInstance(cubeMat));
 				prevParent.GetTransform().AddChild(chainObj);
 				chainObj.GetTransform().SetLocalPosition(vector3(0,2,0));

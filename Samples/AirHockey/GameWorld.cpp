@@ -17,7 +17,7 @@ using namespace std;
 Tween<decimalType,decimalType> t;
 
 GameWorld::GameWorld(int numplayers, Ref<RavEngine::AudioAsset> musicAsset) : numplayers(numplayers), musicAsset(musicAsset){
-    auto cameraActor = CreatePrototype<GameObject>();
+    auto cameraActor = Instantiate<GameObject>();
     cameraActor.EmplaceComponent<CameraComponent>().SetActive(true);
     cameraActor.EmplaceComponent<AudioListener>();
     cameraBoom.GetTransform().SetWorldPosition(vector3(0,0,0));
@@ -28,7 +28,7 @@ GameWorld::GameWorld(int numplayers, Ref<RavEngine::AudioAsset> musicAsset) : nu
     InitPhysics();
     
     // music
-    auto musicPlayer = CreatePrototype<GameObject>();
+    auto musicPlayer = Instantiate<GameObject>();
     auto musicDataProvider = New<SampledAudioDataProvider>(musicAsset, 2);
     auto& musicComponent = musicPlayer.EmplaceComponent<AmbientAudioSourceComponent>(musicDataProvider);
     musicComponent.GetPlayer()->SetLoop(true);
@@ -41,7 +41,7 @@ GameWorld::GameWorld(int numplayers, Ref<RavEngine::AudioAsset> musicAsset) : nu
     },90,15);
     t.AddKeyframe(3, TweenCurves::QuinticInOutCurve,0,4);
     
-    auto lightmain = CreatePrototype<GameObject>();
+    auto lightmain = Instantiate<GameObject>();
     auto& key = lightmain.EmplaceComponent<DirectionalLight>();
     key.SetIntensity(3);
     key.SetColorRGBA({1,1,1});
@@ -65,10 +65,10 @@ GameWorld::GameWorld(int numplayers, Ref<RavEngine::AudioAsset> musicAsset) : nu
     is->AddAxisMap("P2MoveLR", SDL_SCANCODE_RIGHT,-1);
     is->AddAxisMap("P2MoveLR", SDL_SCANCODE_LEFT);
     
-    p1 = CreatePrototype<Paddle>(ColorRGBA{1,0,0,1});
+    p1 = Instantiate<Paddle>(ColorRGBA{1,0,0,1});
     auto& p1s = p1.EmplaceComponent<Player>();
     
-    p2 = CreatePrototype<Paddle>(ColorRGBA{0,1,0,1});
+    p2 = Instantiate<Paddle>(ColorRGBA{0,1,0,1});
     auto& p2s = p2.EmplaceComponent<Player>();
     ComponentHandle<Player> p2h(p2), p1h(p1);
     switch(numplayers){
@@ -94,7 +94,7 @@ GameWorld::GameWorld(int numplayers, Ref<RavEngine::AudioAsset> musicAsset) : nu
         is->BindAxis("P1MoveLR", p1h, &Player::MoveLeftRight, CID::ANY);
     }
     
-    auto gamegui = CreatePrototype<Entity>();
+    auto gamegui = Instantiate<Entity>();
     auto& context = gamegui.EmplaceComponent<GUIComponent>();
     auto doc = context.AddDocument("demo.rml");
     Scoreboard = doc->GetElementById("scoreboard");
@@ -146,7 +146,7 @@ void GameWorld::Reset(){
 
 void GameWorld::GameOver(){
 	
-	Entity gameOverMenu = CreatePrototype<Entity>();
+	Entity gameOverMenu = Instantiate<Entity>();
 	auto& ctx = gameOverMenu.EmplaceComponent<GUIComponent>();
 	auto doc = ctx.AddDocument("gameover.rml");
 	

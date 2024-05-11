@@ -23,20 +23,20 @@ struct FPSSystem : public AutoCTTI {
 
 ::World::World(){
 	//camera and cube
-	auto camlights = CreatePrototype<GameObject>();
+	auto camlights = Instantiate<GameObject>();
 	camlights.EmplaceComponent<CameraComponent>().SetActive(true);
 	camlights.EmplaceComponent<SingleEntityMarker>();
 	camlights.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
 	camlights.GetTransform().LocalTranslateDelta(vector3(0,0,5));
 	
-	auto dirlight = CreatePrototype<GameObject>();
+	auto dirlight = Instantiate<GameObject>();
 	dirlight.EmplaceComponent<DirectionalLight>().SetIntensity(4);
 	dirlight.GetTransform().LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(45),0));
 	
-	cube = CreatePrototype<GameObject>();
+	cube = Instantiate<GameObject>();
 	auto& cubemesh = cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cube.obj"), LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 	
-	auto gui = CreatePrototype<Entity>();
+	auto gui = Instantiate<Entity>();
 	auto& doc = gui.EmplaceComponent<GUIComponent>();
 	doc.AddDocument("sink.rml");
 	

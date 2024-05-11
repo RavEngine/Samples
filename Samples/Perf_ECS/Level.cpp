@@ -81,11 +81,11 @@ PerfA_World::PerfA_World() {
 
 	// spawn demo entities
 	for (int i = 0; i < num_objects; i++) {
-        CreatePrototype<PA_Entity>();
+        Instantiate<PA_Entity>();
 	}
 
 	// spawn Control entity
-	auto control = CreatePrototype<GameObject>();
+	auto control = Instantiate<GameObject>();
 	auto gui = control.EmplaceComponent<GUIComponent>();
 	auto doc = gui.AddDocument("ui.rml");
     control.EmplaceComponent<CameraComponent>().SetActive(true);

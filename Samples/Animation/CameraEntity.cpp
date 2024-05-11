@@ -31,11 +31,11 @@ void CameraScript::Tick(float fpsScale) {
 void CameraEntity::Create(Character cm){
     GameObject::Create();
 	// tip node with the camera, used for height-adjust and x-axis swivel
-	cameraEntity = GetWorld()->CreatePrototype<GameObject>();
+	cameraEntity = GetWorld()->Instantiate<GameObject>();
 	cameraEntity.EmplaceComponent<CameraComponent>().SetActive(true);
 	
 	// midway arm node used for distance-adjust and y-axis swivel
-    cameraArmBase = GetWorld()->CreatePrototype<GameObject>();
+    cameraArmBase = GetWorld()->Instantiate<GameObject>();
 	cameraArmBase.GetTransform().AddChild(cameraEntity);
 	cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,3,0)).LocalRotateDelta(vector3(deg_to_rad(-10),0,0));
 	

@@ -114,7 +114,7 @@ struct Level : public World{
             auto dir = glm::normalize(start - end);
             const auto linelen = glm::length2(end - start);
             while(linelen > glm::length2(point - start)){ // use length2 for squared length
-                auto dot = CreatePrototype<GameObject>();
+                auto dot = Instantiate<GameObject>();
                 auto dotpt = point;
                 dotpt.y += scalefac * 1.3;
                 dot.GetTransform().SetWorldPosition(dotpt).SetLocalScale({scalefac});
@@ -139,11 +139,11 @@ struct Level : public World{
         dottedLineMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         dottedLineMat->SetAlbedoColor({0,1,0,1});
         
-        cameraRoot = CreatePrototype<GameObject>();
-        cameraGimball = CreatePrototype<GameObject>();
+        cameraRoot = Instantiate<GameObject>();
+        cameraGimball = Instantiate<GameObject>();
         
-        targetBegin = CreatePrototype<GameObject>();
-        targetEnd = CreatePrototype<GameObject>();
+        targetBegin = Instantiate<GameObject>();
+        targetEnd = Instantiate<GameObject>();
         auto targetBeginMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         targetBeginMat->SetAlbedoColor({1,0,0,1});
         auto targetEndMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
@@ -151,7 +151,7 @@ struct Level : public World{
         targetBegin.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("target.obj"), LitMeshMaterialInstance(targetBeginMat));
         targetEnd.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("target.obj"), LitMeshMaterialInstance(targetEndMat));
 
-        cameraEntity = CreatePrototype<GameObject>();
+        cameraEntity = Instantiate<GameObject>();
         auto& camera = cameraEntity.EmplaceComponent<CameraComponent>();
         camera.SetActive(true);
         cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,0,50));
@@ -159,7 +159,7 @@ struct Level : public World{
         cameraRoot.GetTransform().AddChild(cameraGimball);
         cameraGimball.GetTransform().AddChild(cameraEntity).LocalRotateDelta(vector3(deg_to_rad(-45),0,0));
         
-        auto lightEntity = CreatePrototype<GameObject>();
+        auto lightEntity = Instantiate<GameObject>();
         lightEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2f);
         auto& dirLight = lightEntity.EmplaceComponent<DirectionalLight>();
         dirLight.SetCastsShadows(true);
@@ -167,7 +167,7 @@ struct Level : public World{
         dirLight.SetShadowDistance(70);
         lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
-        auto guiEntity = CreatePrototype<GameObject>();
+        auto guiEntity = Instantiate<GameObject>();
         auto& gui = guiEntity.EmplaceComponent<GUIComponent>();
         auto doc = gui.AddDocument("ui.rml");
         ComponentHandle<GUIComponent> gh(guiEntity);
@@ -195,7 +195,7 @@ struct Level : public World{
         im->BindAction("ClickR", owner, &Level::SelectEnd, ActionState::Pressed, CID::ANY);
         
         // create the navigation object
-        auto mazeEntity = CreatePrototype<GameObject>();
+        auto mazeEntity = Instantiate<GameObject>();
         MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
         mesh = MeshAsset::Manager::Get("maze.fbx", opt);

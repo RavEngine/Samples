@@ -56,7 +56,7 @@ public:
 		dyn.SetAxisLock(RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_X | RavEngine::RigidBodyDynamicComponent::AxisLock::Angular_Z);
 		dyn.SetMass(1.0);
 		
-		auto lightEntity = GetWorld()->CreatePrototype<RavEngine::GameObject>();
+		auto lightEntity = GetWorld()->Instantiate<RavEngine::GameObject>();
 				
 		auto& light = lightEntity.EmplaceComponent<RavEngine::PointLight>();
 		light.SetColorRGBA({0,0,1,1});

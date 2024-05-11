@@ -183,7 +183,7 @@ void Character::Create() {
 	material->SetAlbedoColor({1,0.4,0.2,1});
 
 #if TRANSFORM_DEBUG
-	auto childChildForTesting = GetWorld()->CreatePrototype<GameObject>();
+	auto childChildForTesting = GetWorld()->Instantiate<GameObject>();
 	{
 		auto testMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		testMat->SetAlbedoColor({0,1,0,1});
@@ -194,7 +194,7 @@ void Character::Create() {
 	}
 #endif
 
-	auto childEntity = GetWorld()->CreatePrototype<GameObject>();										// I made the animation facing the wrong way
+	auto childEntity = GetWorld()->Instantiate<GameObject>();										// I made the animation facing the wrong way
 	GetTransform().AddChild(childEntity);								// so I need a child entity to rotate it back
 	childEntity.GetTransform().LocalRotateDelta(vector3(0, deg_to_rad(180), 0));	// if your animations are the correct orientation you don't need this
 
@@ -219,14 +219,14 @@ void Character::Create() {
 
 	// the Sockets feature allows you to expose transforms at bones on an animated skeleton as though they were their own entities.
 	// this is useful for attaching an object to a character's hand, as shown below.
-	auto handEntity = GetWorld()->CreatePrototype<GameObject>();
+	auto handEntity = GetWorld()->Instantiate<GameObject>();
     MeshAssetOptions opt;
     opt.scale = 0.4f;
 	handEntity.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cone.obj", opt), LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 	
 	childEntity.EmplaceComponent<ConstraintTarget>();
 	// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n
-	auto handProxyEntity = GetWorld()->CreatePrototype<GameObject>();
+	auto handProxyEntity = GetWorld()->Instantiate<GameObject>();
 	handProxyEntity.EmplaceComponent<SocketConstraint>(childEntity,"character:hand_r");
 	handProxyEntity.GetTransform().AddChild(handEntity);
    

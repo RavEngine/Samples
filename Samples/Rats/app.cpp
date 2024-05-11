@@ -111,7 +111,7 @@ struct Floor : public RavEngine::GameObject {
 		floorMat->SetAlbedoColor({0.5,0.5,0.5,1});
 		EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
 
-		auto childObject = GetWorld()->CreatePrototype<GameObject>();
+		auto childObject = GetWorld()->Instantiate<GameObject>();
 		GetTransform().AddChild(childObject);
 
 		auto& body = childObject.EmplaceComponent<RigidBodyStaticComponent>();
@@ -168,14 +168,14 @@ struct RatsWorld : public RavEngine::World {
 	RatsWorld() {
 		InitPhysics();
 
-		auto pipeEntity = CreatePrototype<Pipe>();
-		CreatePrototype<Floor>();
+		auto pipeEntity = Instantiate<Pipe>();
+		Instantiate<Floor>();
 	
-		camRoot = CreatePrototype<decltype(camRoot)>();
-		camHeadUD = CreatePrototype<decltype(camHeadUD)>();
+		camRoot = Instantiate<decltype(camRoot)>();
+		camHeadUD = Instantiate<decltype(camHeadUD)>();
 		camRoot.GetTransform().AddChild(camHeadUD);
         
-		whatObj = CreatePrototype<What>();
+		whatObj = Instantiate<What>();
 		camHeadUD.GetTransform().AddChild(whatObj);
 		whatObj.GetTransform().LocalTranslateDelta(vector3(0,0,-0.5));
         
@@ -185,19 +185,19 @@ struct RatsWorld : public RavEngine::World {
 		cam.SetActive(true);
         camHeadUD.EmplaceComponent<AudioListener>();
 
-		auto guiEntity = CreatePrototype<GameObject>();
+		auto guiEntity = Instantiate<GameObject>();
 		auto& gui = guiEntity.EmplaceComponent<GUIComponent>();
 		gui.AddDocument("main.rml");
 
 
-		auto lightsEntity = CreatePrototype<GameObject>();
+		auto lightsEntity = Instantiate<GameObject>();
 		auto& light = lightsEntity.EmplaceComponent<DirectionalLight>();	
 		light.SetIntensity(4);
 		light.SetCastsShadows(true);
 		lightsEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
         
         // audio room and listener
-        auto roomEntity = CreatePrototype<GameObject>();
+        auto roomEntity = Instantiate<GameObject>();
         auto& room = roomEntity.EmplaceComponent<SimpleAudioSpace>();
 		room.SetRadius(30);
 
@@ -232,7 +232,7 @@ struct RatsWorld : public RavEngine::World {
 			return;
 		}
 
-		auto rat = CreatePrototype<Rat>(ratmat, ratPhysMat);
+		auto rat = Instantiate<Rat>(ratmat, ratPhysMat);
         
         auto callbackptr = RavEngine::New<RavEngine::PhysicsCallback>();
         callbackptr->OnColliderEnter = [rat, this](RavEngine::PhysicsBodyComponent& other, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) mutable {

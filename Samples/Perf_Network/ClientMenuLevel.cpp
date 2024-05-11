@@ -14,7 +14,7 @@ using namespace std;
 void ClientMenu::OnActivate()
 {
 	// load the menu for joining a server
-	auto guientity = CreatePrototype<GameObject>();
+	auto guientity = Instantiate<GameObject>();
 	auto& guic = guientity.EmplaceComponent<RavEngine::GUIComponent>();
     guientity.EmplaceComponent<CameraComponent>().SetActive(true);
 	auto doc = guic.AddDocument("client.rml");

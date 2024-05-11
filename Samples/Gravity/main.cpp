@@ -107,7 +107,7 @@ struct Level : public World{
     
 	Level(){
         // lighting and cameras
-        auto lightcam = CreatePrototype<GameObject>();
+        auto lightcam = Instantiate<GameObject>();
         lightcam.EmplaceComponent<AmbientLight>().SetIntensity(0.8);
         auto& cam = lightcam.EmplaceComponent<CameraComponent>();
         cam.SetActive(true);
@@ -120,7 +120,7 @@ struct Level : public World{
         skybox->enabled = false;
         
         // the black hole (drawn as white for visibility)
-        auto blackhole = CreatePrototype<HeavyThing>(50000,2,ColorRGBA{1,1,1,1});
+        auto blackhole = Instantiate<HeavyThing>(50000,2,ColorRGBA{1,1,1,1});
         
         Array<int,5> stars      {50,20,10,30,40};
         Array<int, 5> startDist {20,30,40,50,60};
@@ -134,7 +134,7 @@ struct Level : public World{
         };
         
         for(int i = 0; i < stars.size(); i++){
-            auto star = CreatePrototype<HeavyThing>(stars[i],stars[i]/50.0,colors[i]);
+            auto star = Instantiate<HeavyThing>(stars[i],stars[i]/50.0,colors[i]);
             star.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(0, 0, startDist[i]), star.GetTransform().GetWorldRotation());
             star.GetComponent<RigidBodyDynamicComponent>().SetLinearVelocity(vector3(startVel[i],0,0),true);
         }

@@ -65,7 +65,7 @@ public:
 		script = RavEngine::ComponentHandle<PlayerScript>(this);
 		
 		//create a child entity for the camera
-		auto cameraEntity = GetWorld()->CreatePrototype<RavEngine::GameObject>();
+		auto cameraEntity = GetWorld()->Instantiate<RavEngine::GameObject>();
 		auto& cam = cameraEntity.EmplaceComponent<RavEngine::CameraComponent>();
 		script->cameraEntity = cameraEntity;
 		

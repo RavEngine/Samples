@@ -46,8 +46,8 @@ struct Level : public World{
     float cameraSpeed = 0.02;
     float cameraZoomSpeed = 0.07;
     
-    GameObject cameraRoot = CreatePrototype<GameObject>();
-    GameObject cameraGimball = CreatePrototype<GameObject>();
+    GameObject cameraRoot = Instantiate<GameObject>();
+    GameObject cameraGimball = Instantiate<GameObject>();
     GameObject cameraEntity;
 
     Flagpole flagpole;
@@ -72,7 +72,7 @@ struct Level : public World{
     }
     
     Level(){
-        cameraEntity = CreatePrototype<GameObject>();
+        cameraEntity = Instantiate<GameObject>();
         auto& camera = cameraEntity.EmplaceComponent<CameraComponent>();
         camera.SetActive(true);
         cameraEntity.GetTransform().LocalTranslateDelta(vector3(0,0,10));
@@ -81,14 +81,14 @@ struct Level : public World{
         cameraGimball.GetTransform().AddChild(cameraEntity);
         cameraRoot.GetTransform().LocalTranslateDelta(vector3(0,5,0));
         
-        auto lightEntity = CreatePrototype<GameObject>();
+        auto lightEntity = Instantiate<GameObject>();
         lightEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
         auto& dirlight = lightEntity.EmplaceComponent<DirectionalLight>();
         dirlight.SetCastsShadows(true);
         dirlight.SetIntensity(4);
         lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
-        auto guiEntity = CreatePrototype<GameObject>();
+        auto guiEntity = Instantiate<GameObject>();
         auto& gui = guiEntity.EmplaceComponent<GUIComponent>();
         auto doc = gui.AddDocument("ui.rml");
 
@@ -100,7 +100,7 @@ struct Level : public World{
 			grassMatInst = RavEngine::New<GrassMatInst>(Material::Manager::Get<GrassMat>());
 			
 			for (int i = 0; i < nblades; i++) {
-				auto grassEntity = CreatePrototype<GameObject>();
+				auto grassEntity = Instantiate<GameObject>();
 				auto& mesh = grassEntity.EmplaceComponent<StaticMesh>(grassmesh, LitMeshMaterialInstance(grassMatInst));
 
 				auto& transform = grassEntity.GetTransform();
@@ -131,13 +131,13 @@ struct Level : public World{
         im->BindAxis("CLR", GetInput(this), &Level::CameraLR, CID::ANY);
         im->BindAxis("CZ", GetInput(this), &Level::CameraZoom, CID::ANY);
         
-        auto ground = CreatePrototype<GameObject>();
+        auto ground = Instantiate<GameObject>();
         auto groundMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         groundMat->SetAlbedoColor({ 92/255.f, 60/255.f, 29/255.f,1});
         ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), LitMeshMaterialInstance(groundMat));
         ground.GetTransform().LocalScaleDelta(vector3(10));
         
-        flagpole = CreatePrototype<Flagpole>();
+        flagpole = Instantiate<Flagpole>();
         
         auto picker = doc->GetElementById("picker");
         

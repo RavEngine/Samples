@@ -24,15 +24,15 @@ struct SceneViewerLevel : public RavEngine::World {
 	SceneViewerLevel() {
 
 		// create camera
-		camRoot = CreatePrototype<decltype(camRoot)>();
-		camHeadUD = CreatePrototype<decltype(camHeadUD)>();
+		camRoot = Instantiate<decltype(camRoot)>();
+		camHeadUD = Instantiate<decltype(camHeadUD)>();
 		camRoot.GetTransform().AddChild(camHeadUD);
 
 		auto& cam = camHeadUD.EmplaceComponent<CameraComponent>();
 		cam.SetActive(true);
 
 		// default lights
-		auto defaultLights = CreatePrototype<GameObject>();
+		auto defaultLights = Instantiate<GameObject>();
 		defaultLights.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
         auto& dl = defaultLights.EmplaceComponent<DirectionalLight>();
         dl.SetIntensity(4);
@@ -44,7 +44,7 @@ struct SceneViewerLevel : public RavEngine::World {
 		UnorderedMap<string_view, GameObject> nodes;
 		SceneLoader loader(path);
 		loader.LoadLocators([&](const Locator& loc) {
-			auto obj = CreatePrototype<GameObject>();
+			auto obj = Instantiate<GameObject>();
 			nodes[loc.name] = obj;
 			auto& tr = obj.GetTransform();
 			tr.SetWorldPosition(loc.translate);

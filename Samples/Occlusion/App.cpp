@@ -13,7 +13,7 @@ using namespace std;
 
 struct Level : public RavEngine::World {
 	GameObject tri, cube;
-	GameObject cameraRoot = CreatePrototype<decltype(cameraRoot)>(), cameraBoom = CreatePrototype<decltype(cameraBoom)>(), camera = CreatePrototype<decltype(camera)>();
+	GameObject cameraRoot = Instantiate<decltype(cameraRoot)>(), cameraBoom = Instantiate<decltype(cameraBoom)>(), camera = Instantiate<decltype(camera)>();
 
 	struct InputNames {
 		static constexpr char const
@@ -40,7 +40,7 @@ struct Level : public RavEngine::World {
 
 	Level() {
 		// load ground plane
-		auto ground = CreatePrototype<GameObject>();
+		auto ground = Instantiate<GameObject>();
 		ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), LitMeshMaterialInstance(New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 		ground.GetTransform().LocalScaleDelta(vector3(5, 1, 5)).LocalRotateDelta(vector3(0, 0, deg_to_rad(-90))).SetWorldPosition(vector3(10, 0, 0));
 
@@ -52,7 +52,7 @@ struct Level : public RavEngine::World {
 		auto ballMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         ballMat->SetAlbedoColor(ColorRGBA{1,0,0,1});
 		for (const auto& position : positions) {
-			auto object = CreatePrototype<GameObject>();
+			auto object = Instantiate<GameObject>();
 			object.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("sphere.obj"), LitMeshMaterialInstance(ballMat));
 			object.GetTransform().SetWorldPosition(position);
 		}
@@ -64,7 +64,7 @@ struct Level : public RavEngine::World {
 		cameraRoot.GetTransform().AddChild(cameraBoom);
 		cameraBoom.GetTransform().AddChild(camera);
 
-		auto light = CreatePrototype<GameObject>();
+		auto light = Instantiate<GameObject>();
 		auto& dl = light.EmplaceComponent<DirectionalLight>();
 		dl.debugEnabled = false;
 		dl.SetIntensity(0.8);

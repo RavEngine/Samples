@@ -10,7 +10,7 @@ constexpr static bool useGeometrySpace = false;
 
 void Stage::Create() {
     GameObject::Create();
-    roomEntity = GetWorld()->CreatePrototype<GameObject>();
+    roomEntity = GetWorld()->Instantiate<GameObject>();
 
 	if constexpr (useGeometrySpace) {
 		auto& audioRoom = roomEntity.EmplaceComponent<GeometryAudioSpace>();

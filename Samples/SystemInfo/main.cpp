@@ -32,7 +32,7 @@ static const char* GetRating(){
 
 struct Level : public World{
     Level(){
-        auto guientity = CreatePrototype<GameObject>();
+        auto guientity = Instantiate<GameObject>();
         guientity.EmplaceComponent<CameraComponent>().SetActive(true);
         auto& gui = guientity.EmplaceComponent<GUIComponent>();
         auto doc = gui.AddDocument("ui.rml");

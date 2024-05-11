@@ -36,7 +36,7 @@ constexpr static RavEngine::CacheBase::unique_key_t lvl_floors_key = 2;
 
 Level::Level(){
 	
-	auto lights = CreatePrototype<GameObject>();
+	auto lights = Instantiate<GameObject>();
 	lights.EmplaceComponent<AmbientLight>().SetIntensity(0.2f);
 	auto& dl = lights.EmplaceComponent<DirectionalLight>();
 	dl.SetCastsShadows(true);
@@ -45,10 +45,10 @@ Level::Level(){
     auto& gui = lights.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 
-    character = CreatePrototype<Character>();
+    character = Instantiate<Character>();
 	character.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(15, 5, 0), vector3(0, deg_to_rad(90), 0));
 	
-	auto camera = CreatePrototype<CameraEntity>(character);
+	auto camera = Instantiate<CameraEntity>(character);
 	camera.GetTransform().LocalTranslateDelta(vector3(0,0,0));
 
 	EmplaceSystem<CharacterScriptRunner>();
@@ -96,7 +96,7 @@ Level::Level(){
     opt.scale = 1.5;
     opt.keepInSystemRAM = true;
 	{
-		auto floorplane = CreatePrototype<RavEngine::GameObject>();
+		auto floorplane = Instantiate<RavEngine::GameObject>();
 		Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level.fbx", lvl_floors_key, "ground", opt);
 		material->SetAlbedoColor({ 174.f / 255,210.f / 255,234.f / 255,1 });
         floorplane.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
@@ -105,7 +105,7 @@ Level::Level(){
 	}
 
 	// load the walls
-	auto walls = CreatePrototype<GameObject>();
+	auto walls = Instantiate<GameObject>();
 	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level.fbx", lvl_wall_key, "walls", opt);
     walls.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
 	auto& s = walls.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls

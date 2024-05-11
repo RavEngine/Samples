@@ -10,7 +10,7 @@ using namespace std;
 
 void Player::Create() {
     GameObject::Create();
-	auto cameraEntity = GetWorld()->CreatePrototype<GameObject>();
+	auto cameraEntity = GetWorld()->Instantiate<GameObject>();
 
 	auto& camera = cameraEntity.EmplaceComponent<CameraComponent>();
 	camera.SetActive(true);

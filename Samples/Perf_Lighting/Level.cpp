@@ -41,7 +41,7 @@ struct StaticMeshEntity : public GameObject {
 
 Level::Level() {
 	// load camera and lights
-    auto camera = CreatePrototype<GameObject>();
+    auto camera = Instantiate<GameObject>();
 	camera.EmplaceComponent<CameraComponent>().SetActive(true);
 	camera.GetTransform().LocalTranslateDelta(vector3(0, 0.5, 2));
 
@@ -87,13 +87,13 @@ Level::Level() {
 	im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY, 0);
 	im->BindAnyAction(gh->GetData());
 
-	auto lights = CreatePrototype<GameObject>();
+	auto lights = Instantiate<GameObject>();
 	lights.EmplaceComponent<AmbientLight>().SetIntensity(0.1);
 	lights.GetTransform().LocalRotateDelta(vector3(0,deg_to_rad(-30),deg_to_rad(45)));
 	
 
 	// load the ground plane
-	auto ground = CreatePrototype<GameObject>();
+	auto ground = Instantiate<GameObject>();
     MeshAssetOptions opt;
     opt.scale = 1.2;
 	auto mesh = MeshAsset::Manager::Get("quad.obj",opt);
@@ -107,7 +107,7 @@ Level::Level() {
 	auto hmat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	
 	for (int i = 0; i < 150; i++) {
-		auto e = CreatePrototype<StaticMeshEntity>(hmesh, hmat);
+		auto e = Instantiate<StaticMeshEntity>(hmesh, hmat);
 		if (i == 0) {
 			e.GetComponent<StaticMesh>().SetEnabled(true);
 		}
@@ -120,7 +120,7 @@ Level::Level() {
 
 	// load lights
 	for (int i = 0; i < 5; i++) {
-        CreatePrototype<LightEntity>();
+        Instantiate<LightEntity>();
 	}
 
 }

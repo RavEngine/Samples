@@ -12,7 +12,7 @@ STATIC(Speaker::speakerInstance);
 void Speaker::Create(Ref<AudioDataProvider> a) {
     GameObject::Create();
 	// audio source
-	auto sourceEntity = GetWorld()->CreatePrototype<GameObject>();
+	auto sourceEntity = GetWorld()->Instantiate<GameObject>();
 	auto& audio = sourceEntity.EmplaceComponent<RavEngine::AudioSourceComponent>(a);
 
     

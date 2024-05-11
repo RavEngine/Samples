@@ -22,10 +22,10 @@ public:
 	
     
 protected:
-    GameObject hockeytable = CreatePrototype<Table>();
-    GameObject puck = CreatePrototype<Puck>();
+    GameObject hockeytable = Instantiate<Table>();
+    GameObject puck = Instantiate<Puck>();
 	
-	GameObject cameraBoom = CreatePrototype<GameObject>();
+	GameObject cameraBoom = Instantiate<GameObject>();
 	
 	Paddle p1;
 	Paddle p2;

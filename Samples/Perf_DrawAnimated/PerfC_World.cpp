@@ -31,7 +31,7 @@ struct DemoObject : public RavEngine::GameObject{
 	void Create(Ref<PBRMaterialInstance> inst,bool isLight = false){
         GameObject::Create();
         
-		auto child = GetWorld()->CreatePrototype<GameObject>();
+		auto child = GetWorld()->Instantiate<GameObject>();
 		
         EmplaceComponent<SpinComponent>(vector3(spinrng(gen)/3,spinrng(gen)/3,spinrng(gen)/3));
 		
@@ -59,9 +59,9 @@ PerfC_World::PerfC_World(){
 	meshes[2] = MeshAsset::Manager::Get("cone.obj");
 	meshes[3] = MeshAsset::Manager::Get("cylinder.obj");
 	
-	auto cam = CreatePrototype<Camera>();
+	auto cam = Instantiate<Camera>();
 			
-	lightEntity = CreatePrototype<GameObject>();
+	lightEntity = Instantiate<GameObject>();
 	auto& al = lightEntity.EmplaceComponent<AmbientLight>();
 	al.SetIntensity(0.3);
 	
@@ -83,13 +83,13 @@ PerfC_World::PerfC_World(){
 	//spawn the polygons
 	for(int i = 0; i < num_objects; i++){
 		Ref<PBRMaterialInstance> inst = materialInstances[texturerng(gen)];
-        CreatePrototype<DemoObject>(inst);
+        Instantiate<DemoObject>(inst);
 	}
 	
 	//spawn the lights
 	for(int i = 0; i < 10; i++){
 		Ref<PBRMaterialInstance> inst = materialInstances[texturerng(gen)];
-        CreatePrototype<DemoObject>(inst,true);
+        Instantiate<DemoObject>(inst,true);
 	}
 			
 	EmplaceSystem<SpinSystem>();
@@ -117,7 +117,7 @@ PerfC_World::PerfC_World(){
 	GetApp()->inputManager = im;
 	
 	//create HUD
-	auto hudentity = CreatePrototype<Entity>();
+	auto hudentity = Instantiate<Entity>();
     hudentity.EmplaceComponent<GUIComponent>();
     hud = ComponentHandle<GUIComponent>(hudentity);
 	auto doc = hud->AddDocument("main.rml");

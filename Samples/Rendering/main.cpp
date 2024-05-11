@@ -10,6 +10,7 @@
 #include <RavEngine/Texture.hpp>
 #include <RavEngine/BuiltinPostProcess.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/ParticleEmitter.hpp>
 #include "AppInfo.hpp"
 #include <numbers>
 #include <RavEngine/StartApp.hpp>
@@ -62,7 +63,7 @@ struct Level : public RavEngine::World {
     Level() {
 
         constexpr static float floorSize = 20;
-        auto floor = CreatePrototype<GameObject>();
+        auto floor = Instantiate<GameObject>();
         floor.GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
 
         {
@@ -72,8 +73,8 @@ struct Level : public RavEngine::World {
             floor.EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
         }
     
-        camRoot = CreatePrototype<decltype(camRoot)>();
-        camHeadUD = CreatePrototype<decltype(camHeadUD)>();
+        camRoot = Instantiate<decltype(camRoot)>();
+        camHeadUD = Instantiate<decltype(camHeadUD)>();
         camRoot.GetTransform().AddChild(camHeadUD);
         
         camRoot.GetTransform().SetWorldPosition(cameraResetPos);
@@ -81,7 +82,7 @@ struct Level : public RavEngine::World {
         auto& cam = camHeadUD.EmplaceComponent<CameraComponent>();
         cam.SetActive(true);
 
-        auto lightsEntity = CreatePrototype<GameObject>();
+        auto lightsEntity = Instantiate<GameObject>();
         auto& light = lightsEntity.EmplaceComponent<DirectionalLight>();
         light.SetIntensity(4);
         light.SetCastsShadows(true);
@@ -90,12 +91,15 @@ struct Level : public RavEngine::World {
 
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 
+        auto continuousParticleEntity = Instantiate<GameObject>();
+        continuousParticleEntity.EmplaceComponent<ParticleEmitter>(1024); // number of particles we want
+
         SetupInputs();
         
         
         // create the scene
         
-        auto helmetObj = CreatePrototype<GameObject>();
+        auto helmetObj = Instantiate<GameObject>();
         auto helmetMesh = MeshAsset::Manager::Get("helmet.obj");
         auto helmetMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         helmetMat->SetAlbedoTexture(Texture::Manager::Get("Default_albedo.png"));
@@ -111,7 +115,7 @@ struct Level : public RavEngine::World {
         helmetObj.GetTransform().LocalTranslateDelta({-objectDistance,5,0}).LocalScaleDelta(vector3(2.0f));
         
         // the unlit material
-        auto star = CreatePrototype<GameObject>();
+        auto star = Instantiate<GameObject>();
         auto starMesh = MeshAsset::Manager::Get("sphere.obj");
         starMaterialInstance = New<StarMatMaterialInstance>(Material::Manager::Get<StarMat>());
         star.EmplaceComponent<StaticMesh>(starMesh, UnlitMeshMaterialInstance(starMaterialInstance));

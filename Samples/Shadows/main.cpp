@@ -13,7 +13,7 @@ using namespace std;
 
 struct Level : public RavEngine::World{
 	GameObject tri, cube;
-	GameObject cameraRoot = CreatePrototype<decltype(cameraRoot)>(),cameraBoom = CreatePrototype<decltype(cameraBoom)>(), camera = CreatePrototype<decltype(camera)>();
+	GameObject cameraRoot = Instantiate<decltype(cameraRoot)>(),cameraBoom = Instantiate<decltype(cameraBoom)>(), camera = Instantiate<decltype(camera)>();
 
 	struct InputNames {
 		static constexpr char const
@@ -40,12 +40,12 @@ struct Level : public RavEngine::World{
 
 	Level() {
 		// load ground plane
-		auto ground = CreatePrototype<GameObject>();
+		auto ground = Instantiate<GameObject>();
 		ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), LitMeshMaterialInstance(New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 		ground.GetTransform().LocalScaleDelta(vector3(5,1,5));
 
 		// load casting triangle
-		tri = CreatePrototype<decltype(tri)>();
+		tri = Instantiate<decltype(tri)>();
 		constexpr static uint32_t trikey = 1;
 		auto trimat = New<PBRMaterialInstance>(Material::Manager::GetWithKey<PBRMaterial>(trikey,PBRMaterialOptions{.cullMode = RGL::CullMode::None}));
 		trimat->SetAlbedoColor({ 1,0,0,1 });
@@ -54,7 +54,7 @@ struct Level : public RavEngine::World{
             .LocalRotateDelta(vector3(deg_to_rad(90), deg_to_rad(90), deg_to_rad(180)))
             .LocalRotateDelta(vector3(0, deg_to_rad(90), 0));
   
-        cube = CreatePrototype<decltype(cube)>();
+        cube = Instantiate<decltype(cube)>();
         auto cubeMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         cubeMat->SetAlbedoColor({0,0,1,1});
         cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cube.obj"), LitMeshMaterialInstance(cubeMat));
@@ -109,7 +109,7 @@ struct Level : public RavEngine::World{
 		};
 
 		for (const auto& cam : cameras) {
-			auto camEntity = CreatePrototype<GameObject>();
+			auto camEntity = Instantiate<GameObject>();
 			auto& camera = camEntity.EmplaceComponent<CameraComponent>();
 			camera.SetEnabled(true);
 			camera.SetActive(true);
@@ -121,7 +121,7 @@ struct Level : public RavEngine::World{
 		}
 
 
-		auto light = CreatePrototype<GameObject>();
+		auto light = Instantiate<GameObject>();
 		auto& dl = light.EmplaceComponent<DirectionalLight>();
 		dl.debugEnabled = false;
         dl.SetIntensity(0.8);
@@ -130,7 +130,7 @@ struct Level : public RavEngine::World{
 		light.GetTransform().LocalRotateDelta(vector3(0, 0, deg_to_rad(45))).LocalTranslateDelta(vector3(0,2,0));
         
         
-        auto pointLight = CreatePrototype<GameObject>();
+        auto pointLight = Instantiate<GameObject>();
         auto& pLight = pointLight.EmplaceComponent<PointLight>();
         pLight.debugEnabled = true;
         pLight.SetColorRGBA({1,0,0,1});
@@ -139,7 +139,7 @@ struct Level : public RavEngine::World{
 		pLight.SetCastsShadows(true);
          
 
-		auto spotLightEntity = CreatePrototype<GameObject>();
+		auto spotLightEntity = Instantiate<GameObject>();
 		auto& spotLight = spotLightEntity.EmplaceComponent<SpotLight>();
 		spotLight.SetCastsShadows(true);
 		spotLight.debugEnabled = true;

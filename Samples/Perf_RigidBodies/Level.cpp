@@ -68,7 +68,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 		if (count > 0){
 			// spawn rigid bodies
 			GetApp()->DispatchMainThread([&](){
-                auto rigid = ownWorld->CreatePrototype<RigidBody>(mat,mesh, physmat, RigidBody::BodyType::Sphere);
+                auto rigid = ownWorld->Instantiate<RigidBody>(mat,mesh, physmat, RigidBody::BodyType::Sphere);
 				rigid.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(GenSpawnpoint(),quaternion(0,0,0,1));
 
                 rigid.GetTransform().SetLocalScale(vector3(0.5,0.5,0.5));
@@ -103,7 +103,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 Level::Level(){
 	
 	// create camera and lights
-	auto camEntity = CreatePrototype<GameObject>();
+	auto camEntity = Instantiate<GameObject>();
 	auto& camera = camEntity.EmplaceComponent<CameraComponent>();
 	camera.SetActive(true);
 	camera.farClip = 1000;
@@ -111,7 +111,7 @@ Level::Level(){
     auto& gui = camEntity.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 	
-	auto lightEntity = CreatePrototype<GameObject>();
+	auto lightEntity = Instantiate<GameObject>();
 	auto& ambientLight = lightEntity.EmplaceComponent<AmbientLight>();
 	auto& dirLight = lightEntity.EmplaceComponent<DirectionalLight>();
 	lightEntity.EmplaceComponent<SpawnerMarker>();
@@ -122,7 +122,7 @@ Level::Level(){
 	lightEntity.GetTransform().SetLocalRotation(vector3(0,deg_to_rad(45),deg_to_rad(45)));
 	
 	// create ground
-	auto ground = CreatePrototype<Ground>();
+	auto ground = Instantiate<Ground>();
 	
 	// initialize physics
 	InitPhysics();

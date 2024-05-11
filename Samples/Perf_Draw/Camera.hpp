@@ -41,7 +41,7 @@ struct Camera : public RavEngine::GameObject {
     void Create() {
         RavEngine::GameObject::Create();
 
-		auto cameraBoom = GetWorld()->CreatePrototype<GameObject>();
+		auto cameraBoom = GetWorld()->Instantiate<GameObject>();
 
 		EmplaceComponent<Player>();
 

@@ -29,7 +29,7 @@ static int ct = 0;
 
 void TestWorld::SpawnEntities(float f) {
     if (f > 0.99) {
-		CreatePrototype<TestEntity>();
+		Instantiate<TestEntity>();
     }
 }
 
@@ -46,7 +46,7 @@ void TestWorld::PostTick(float fpsScale){
 }
 
 TestWorld::TestWorld(){
-    player = CreatePrototype<PlayerActor>();
+    player = Instantiate<PlayerActor>();
 
 	//setup inputs
 	Ref<RavEngine::InputManager> is = make_shared<RavEngine::InputManager>();
@@ -105,7 +105,7 @@ TestWorld::TestWorld(){
 	
 	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("cube.obj");
 	
-	anonymous = CreatePrototype<GameObject>();
+	anonymous = Instantiate<GameObject>();
 	anonymous.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
 	auto& spotlight = anonymous.EmplaceComponent<SpotLight>();
 	spotlight.SetIntensity(4);
@@ -114,7 +114,7 @@ TestWorld::TestWorld(){
 	
 	InitPhysics();
 	
-	anonymousChild = CreatePrototype<GameObject>();
+	anonymousChild = Instantiate<GameObject>();
 	anonymousChild.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
 	anonymous.GetTransform().AddChild(anonymousChild);
 	anonymousChild.GetTransform().LocalTranslateDelta(vector3(17,0,0));
@@ -126,7 +126,7 @@ TestWorld::TestWorld(){
 	// PlaySound(InstantaneousAudioSource(audioAsset,vector3(0,0,0),2));
 	//PlayAmbientSound(InstantaneousAmbientAudioSource(audioAsset));
 	
-	floorplane = CreatePrototype<GameObject>();
+	floorplane = Instantiate<GameObject>();
 	floorplane.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
 	floorplane.GetTransform().LocalScaleDelta(vector3(10, 0.5, 10)).LocalTranslateDelta(vector3(0, -20, 0));
 	auto& s = floorplane.EmplaceComponent<RigidBodyStaticComponent>();
@@ -147,14 +147,14 @@ TestWorld::TestWorld(){
 	//audiosource->SetLoop(true);
 //	audiosource->SetVolume(5);
 		
-	dl = CreatePrototype<GameObject>();
+	dl = Instantiate<GameObject>();
 	auto& dll = dl.EmplaceComponent<DirectionalLight>();
 	dll.SetCastsShadows(true);
 	auto amt = deg_to_rad(45);
 	dl.GetTransform().LocalRotateDelta(vector3(amt,0,0)).LocalTranslateDelta(vector3(0,1,1));
 	dll.SetColorRGBA({1,0.5,0});
 	
-	ambientLight1 = CreatePrototype<GameObject>();
+	ambientLight1 = Instantiate<GameObject>();
 	auto& light = ambientLight1.EmplaceComponent<AmbientLight>();
 	light.SetIntensity(1);
 	light.SetColorRGBA({0.1, 0.2, 0.4});

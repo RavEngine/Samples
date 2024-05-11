@@ -13,15 +13,15 @@ using namespace std;
 
 struct Level : public RavEngine::World{
 	GameObject cube;
-	GameObject cameraRoot = CreatePrototype<decltype(cameraRoot)>(),cameraBoom = CreatePrototype<decltype(cameraBoom)>(), camera = CreatePrototype<decltype(camera)>();
+	GameObject cameraRoot = Instantiate<decltype(cameraRoot)>(),cameraBoom = Instantiate<decltype(cameraBoom)>(), camera = Instantiate<decltype(camera)>();
 
 	Level() {
 		// load ground plane
-		auto ground = CreatePrototype<GameObject>();
+		auto ground = Instantiate<GameObject>();
 		ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), LitMeshMaterialInstance(New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 		ground.GetTransform().LocalScaleDelta(vector3(5,1,5));
   
-        cube = CreatePrototype<decltype(cube)>();
+        cube = Instantiate<decltype(cube)>();
         auto cubeMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         cubeMat->SetAlbedoColor({0,0,1,1});
         cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cube.obj"), LitMeshMaterialInstance(cubeMat));
@@ -37,7 +37,7 @@ struct Level : public RavEngine::World{
 		cameraRoot.GetTransform().AddChild(cameraBoom);
 		cameraBoom.GetTransform().AddChild(camera);
 
-		auto light = CreatePrototype<GameObject>();
+		auto light = Instantiate<GameObject>();
 		auto& dl = light.EmplaceComponent<DirectionalLight>();
 		dl.debugEnabled = false;
         dl.SetIntensity(3);

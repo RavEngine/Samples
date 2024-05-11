@@ -34,20 +34,20 @@ void Level::ToggleMouse(){
 
 Level::Level(){
 	// lights
-	auto lightEntity = CreatePrototype<GameObject>();
+	auto lightEntity = Instantiate<GameObject>();
 	lightEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
 	lightEntity.EmplaceComponent<DirectionalLight>().SetCastsShadows(true);
 	lightEntity.GetTransform().LocalRotateDelta(vector3{deg_to_rad(35),deg_to_rad(-30),0});
 
 	// create the audio room
-	auto stage = CreatePrototype<Stage>();
+	auto stage = Instantiate<Stage>();
 
 	// create player 
-	auto player = CreatePrototype<Player>();
+	auto player = Instantiate<Player>();
 	player.GetTransform().SetLocalRotation(vector3(0, deg_to_rad(-90), 0)).SetLocalPosition(vector3(-5,2,0));
 
 	// load UI
-	auto uiEntity = CreatePrototype<Entity>();
+	auto uiEntity = Instantiate<Entity>();
 	auto& ui = uiEntity.EmplaceComponent<GUIComponent>();
 	auto doc = ui.AddDocument("main.rml");
 
@@ -145,10 +145,10 @@ Level::Level(){
     auto& firstSong = (*tracks.begin()).second;
 
 	// create speakers
-	auto speaker1 = CreatePrototype<Speaker>(firstSong);
+	auto speaker1 = Instantiate<Speaker>(firstSong);
 	speaker1.GetTransform().LocalTranslateDelta(vector3(5, 0, -2));
 
-	auto speaker2 = CreatePrototype<Speaker>(firstSong);
+	auto speaker2 = Instantiate<Speaker>(firstSong);
 	speaker2.GetTransform().LocalTranslateDelta(vector3(5, 0, 2));
 
 	// setup inputs

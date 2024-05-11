@@ -13,12 +13,12 @@ STATIC(NetEntity::matinst);
 Level::Level() : World("level") {
 
 	// create camera and lights
-	auto camEntity = CreatePrototype<GameObject>();
+	auto camEntity = Instantiate<GameObject>();
 	auto& camera = camEntity.EmplaceComponent<CameraComponent>();
 	camera.SetActive(true);
 	camEntity.GetTransform().LocalTranslateDelta(vector3(0, 0, 10));
 
-	auto lightEntity = CreatePrototype<GameObject>();
+	auto lightEntity = Instantiate<GameObject>();
 	auto& ambientLight = lightEntity.EmplaceComponent<AmbientLight>();
 	auto& dirLight = lightEntity.EmplaceComponent<DirectionalLight>();
     dirLight.SetIntensity(4);
@@ -66,7 +66,7 @@ void Level::ServerUpdateGUI()
 
 void Level::SetupServer()
 {
-    CreatePrototype<ManagementRelay>();
+    Instantiate<ManagementRelay>();
 	EmplaceSystem<TweenEntities>();
 	GetApp()->networkManager.server->OnClientConnected = [&](HSteamNetConnection) {
 		ServerUpdateGUI();
@@ -75,7 +75,7 @@ void Level::SetupServer()
 		ServerUpdateGUI();
 	};
 
-	auto guientity = CreatePrototype<Entity>();
+	auto guientity = Instantiate<Entity>();
 	auto& guic = guientity.EmplaceComponent<GUIComponent>();
 	guic.AddDocument("server.rml");
 
@@ -115,7 +115,7 @@ void RelayComp::RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConn
     auto wptr = GetOwner().GetWorld();
     Array<NetEntity, num_entities> entities;
 	for (int i = 0; i < entities.size(); i++) {
-		entities[i] = wptr->CreatePrototype<NetEntity>();
+		entities[i] = wptr->Instantiate<NetEntity>();
 	}
     
 	// transfer their ownership to the client

@@ -10,7 +10,7 @@ using namespace RavEngine;
 using namespace std;
 
 MainMenu::MainMenu(){
-	mainMenu = CreatePrototype<RavEngine::GameObject>();
+	mainMenu = Instantiate<RavEngine::GameObject>();
 	mainMenu.EmplaceComponent<CameraComponent>().SetActive(true);
 	
 	auto& menu = mainMenu.EmplaceComponent<GUIComponent>();

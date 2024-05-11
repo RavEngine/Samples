@@ -59,7 +59,7 @@ PerfB_World::PerfB_World() {
 
     Debug::Log("Spawning {} instances",num_entities);
 	for (uint32_t i = 0; i < num_entities; i++) {
-		auto e = CreatePrototype<InstanceEntity>(currentMesh, matinst);
+		auto e = Instantiate<InstanceEntity>(currentMesh, matinst);
 		auto& transform = e.GetTransform();
 
 		vector3 pos;
@@ -73,10 +73,10 @@ PerfB_World::PerfB_World() {
 		transform.SetLocalRotation(rot);
 	}
 
-    auto player = CreatePrototype<Camera>();
+    auto player = Instantiate<Camera>();
 
 	// spawn Control entity
-    auto control = CreatePrototype<GameObject>();
+    auto control = Instantiate<GameObject>();
 	auto& gui = control.EmplaceComponent<GUIComponent>();
 	auto& dirlight = control.EmplaceComponent<DirectionalLight>();
 	auto& ambientLight = control.EmplaceComponent<AmbientLight>();
