@@ -11,6 +11,7 @@
 #include <RavEngine/BuiltinPostProcess.hpp>
 #include <RavEngine/RenderEngine.hpp>
 #include <RavEngine/ParticleEmitter.hpp>
+#include <RavEngine/ParticleMaterial.hpp>
 #include "AppInfo.hpp"
 #include <numbers>
 #include <RavEngine/StartApp.hpp>
@@ -25,6 +26,11 @@ struct RenderingApp : public RavEngine::App {
     }
 };
 
+struct CustomParticleMaterial : public RavEngine::ParticleMaterial {
+    CustomParticleMaterial() : ParticleMaterial("", "") {}        //TODO: fill with shader names
+
+    
+};
 
 struct Level : public RavEngine::World {
 
@@ -92,7 +98,7 @@ struct Level : public RavEngine::World {
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 
         auto continuousParticleEntity = Instantiate<GameObject>();
-        continuousParticleEntity.EmplaceComponent<ParticleEmitter>(1024); // number of particles we want
+        continuousParticleEntity.EmplaceComponent<ParticleEmitter>(1024, RavEngine::New<CustomParticleMaterial>()); // number of particles we want
 
         SetupInputs();
         
