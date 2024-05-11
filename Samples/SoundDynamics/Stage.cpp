@@ -6,13 +6,21 @@
 using namespace std;
 using namespace RavEngine;
 
+constexpr static bool useGeometrySpace = false;
+
 void Stage::Create() {
     GameObject::Create();
     roomEntity = GetWorld()->CreatePrototype<GameObject>();
 
-	auto& audioRoom = roomEntity.EmplaceComponent<GeometryAudioSpace>();
-	audioRoom.SetAudioSourceRadius(50);
-	audioRoom.SetMeshRadius(50);
+	if constexpr (useGeometrySpace) {
+		auto& audioRoom = roomEntity.EmplaceComponent<GeometryAudioSpace>();
+		audioRoom.SetAudioSourceRadius(50);
+		audioRoom.SetMeshRadius(50);
+	}
+	else {
+		auto& audioRoom = roomEntity.EmplaceComponent<BoxReverbationAudioSpace>();
+		audioRoom.SetHalfExts({50,50,50});
+	}
 
 	GetTransform().AddChild(roomEntity);
     
