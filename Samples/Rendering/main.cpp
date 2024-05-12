@@ -98,7 +98,8 @@ struct Level : public RavEngine::World {
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 
         auto continuousParticleEntity = Instantiate<GameObject>();
-        continuousParticleEntity.EmplaceComponent<ParticleEmitter>(1024, RavEngine::New<CustomParticleMaterial>()); // number of particles we want
+        auto& smokeEmitter = continuousParticleEntity.EmplaceComponent<ParticleEmitter>(1024, RavEngine::New<CustomParticleMaterial>()); // number of particles we want
+        smokeEmitter.Play();
 
         SetupInputs();
         
