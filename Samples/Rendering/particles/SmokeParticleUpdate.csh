@@ -9,12 +9,12 @@ struct ParticleState
     uint createdThisFrame;
 };
 
-layout(std430, binding = 0) readonly buffer particleStateSSBO
+layout(std430, binding = 0) buffer particleStateSSBO
 {   
     ParticleState particleState[];
 };
 
-layout(std430, binding = 1) readonly buffer aliveSSBO
+layout(std430, binding = 1) buffer aliveSSBO
 {
     uint aliveParticleIndexBuffer[];
 };
@@ -29,6 +29,11 @@ struct ParticleData{
 layout(std430, binding = 2) buffer particleDataSSBO
 {
     ParticleData particleData[];
+};
+
+layout(std430, binding = 3)buffer freelistSSBO
+{
+    uint particleFreelist[];
 };
 
 layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
@@ -48,8 +53,16 @@ void main()
     
     data.age += ubo.fpsScale;
 
-    if (data.age > 500){
-        // KillParticle();  //TODO: implement
+    if (data.age > 300){
+        // destroy the particle
+
+        //TODO: turn this into the DestroyParticle() library function
+        //TODO: some mechanism to prevent this getting called multiple times
+
+        uint freelistIdx = atomicAdd(particleState[0].freeListCount,1);
+        particleFreelist[freelistIdx] = particleID;
+        uint prevTotalAlive = atomicAdd(particleState[0].aliveParticleCount,-1) - 1;
+        aliveParticleIndexBuffer[gl_GlobalInvocationID.x] = aliveParticleIndexBuffer[prevTotalAlive];
     }
 
     particleData[particleID] = data;
