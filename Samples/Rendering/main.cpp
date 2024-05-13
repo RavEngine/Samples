@@ -26,10 +26,16 @@ struct RenderingApp : public RavEngine::App {
     }
 };
 
-struct CustomParticleMaterial : public RavEngine::ParticleMaterial {
-    CustomParticleMaterial() : ParticleMaterial("", "") {}        //TODO: fill with shader names
+struct SmokeParticleData {
+    float currentLife = 0;
+};
 
-    
+struct SmokeParticleMaterial : public RavEngine::ParticleMaterial {
+    SmokeParticleMaterial() : ParticleMaterial("SmokeParticleInitialize", "SmokeParticleUpdate") {}        //TODO: fill with shader names
+
+    uint16_t ParticleUserDataSize() const final {
+        return sizeof(SmokeParticleData);
+    }
 };
 
 struct Level : public RavEngine::World {
@@ -98,7 +104,7 @@ struct Level : public RavEngine::World {
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 
         auto continuousParticleEntity = Instantiate<GameObject>();
-        auto& smokeEmitter = continuousParticleEntity.EmplaceComponent<ParticleEmitter>(1024, RavEngine::New<CustomParticleMaterial>()); // number of particles we want
+        auto& smokeEmitter = continuousParticleEntity.EmplaceComponent<ParticleEmitter>(1024, RavEngine::New<SmokeParticleMaterial>()); // number of particles we want
         smokeEmitter.Play();
 
         SetupInputs();
