@@ -6,12 +6,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIGURATION>)
 set(CMAKE_XCODE_ATTRIBUTE_EXCLUDED_ARCHS[sdk=iphonesimulator*] "arm64" CACHE INTERNAL "")
 set(CMAKE_XCODE_ATTRIBUTE_DEBUG_INFORMATION_FORMAT "dwarf-with-dsym" CACHE INTERNAL "")	# don't embed symbols in the binaries themselves
 
-# linux detection
-if(UNIX AND NOT APPLE)
-	set(LINUX TRUE CACHE INTERNAL "")
-endif()
-
-if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+if(LINUX)
 	set(atomic_lib atomic CACHE INTERNAL "") # need libatomic on linux
 endif()
 
@@ -27,7 +22,7 @@ if("${CMAKE_SYSTEM_NAME}" STREQUAL "")
 		set(TARGET_NAME "macOS")
 	elseif(MSVC)
 		set(TARGET_NAME "win32")
-	elseif(UNIX AND NOT APPLE)
+	elseif(LINUX)
 		set(TARGET_NAME "Linux")
 	endif()
 else()
@@ -44,15 +39,11 @@ set(CMAKE_SYSTEM_PROCESSOR ${CMAKE_SYSTEM_PROCESSOR} CACHE INTERNAL "")
 add_subdirectory("RavEngine")
 
 file(GLOB COMMON_FILES "Samples/Common/*.hpp" "Samples/Common/*.cpp")
-if(CMAKE_SYSTEM_NAME MATCHES Emscripten)
+if(EMSCRIPTEN)
 	set(CMAKE_EXECUTABLE_SUFFIX ".html" CACHE INTERNAL "")
 	# required for higher memory, atomics, and threads
 	add_definitions(-pthread)
 	add_definitions(-fexceptions)
-endif()
-
-if(TARGET_EMSCRIPTEN)
-	add_definitions(-sUSE_SDL=2)
 endif()
 
 string(TIMESTAMP CURRENTYEAR "%Y")
@@ -73,7 +64,7 @@ function (add_sample sample_dir)
 	# creates a mac app if applicable
 	add_executable("${APPNAME}" ${TEST_SOURCES} ${COMMON_FILES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard" "${CMAKE_BINARY_DIR}/${APPNAME}/Sample.appxManifest")
 
-	if(CMAKE_SYSTEM_NAME MATCHES "WindowsStore")
+	if(WINDOWS_STORE)
 		target_sources("${APPNAME}" PRIVATE "Samples/logo44.png" "Samples/logo150.png" "Samples/logo50.png" "Samples/logo620x300.png")
 	endif()
 	
@@ -118,7 +109,7 @@ function (add_sample sample_dir)
 	rve_enable_IPO(${APPNAME})
 
 
-	if(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
+	if(EMSCRIPTEN)
 		if (EXISTS "${sample_dir}/streaming/")
 			set(EM_PRELOAD "--preload-file \"${sample_dir}/streaming/@${APPNAME}_Streaming/\"")
 		endif()
@@ -161,7 +152,7 @@ function (add_sample sample_dir)
 			" 
 			COMPONENT Runtime
 		)
-    elseif(LINUX AND NOT TARGET_EMSCRIPTEN)
+    elseif(LINUX AND NOT EMSCRIPTEN)
         if(CMAKE_BUILD_TYPE STREQUAL Release)
         	if (NOT DEFINED CMAKE_SYSTEM_PROCESSOR)
         		set(CMAKE_SYSTEM_PROCESSOR ${CMAKE_HOST_SYSTEM_PROCESSOR} CACHE INTERNAL "")
@@ -189,16 +180,6 @@ function (add_sample sample_dir)
             )
         endif()
 	endif()
-
-    # Strip binary for release builds
-    if (CMAKE_BUILD_TYPE STREQUAL Release)
-		if(LINUX)
-			#add_custom_command(TARGET ${APPNAME} POST_BUILD COMMAND ${CMAKE_STRIP} ${CMAKE_BUILD_TYPE}/${APPNAME})
-		elseif(APPLE)
-			#add_custom_command(TARGET ${APPNAME} POST_BUILD COMMAND ${CMAKE_STRIP} ${CMAKE_BUILD_TYPE}/${APPNAME}.app/Contents/MacOS/${APPNAME})
-		endif()
-    endif ()
-
 endfunction()
 
 
