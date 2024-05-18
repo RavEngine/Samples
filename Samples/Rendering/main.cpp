@@ -31,7 +31,7 @@ struct SmokeParticleData {
 };
 
 struct SmokeParticleMaterial : public RavEngine::ParticleMaterial {
-    SmokeParticleMaterial() : ParticleMaterial("SmokeParticleInitialize", "SmokeParticleUpdate") {}        //TODO: fill with shader names
+    SmokeParticleMaterial() : ParticleMaterial("SmokeParticleInitialize", "SmokeParticleUpdate","default_billboard_particle","default_billboard_particle") {}        //TODO: fill with shader names
 
     uint16_t ParticleUserDataSize() const final {
         return sizeof(SmokeParticleData);

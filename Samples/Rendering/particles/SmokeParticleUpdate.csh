@@ -1,3 +1,5 @@
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+
 layout(push_constant, std430) uniform UniformBufferObject{
     float fpsScale;
 } ubo;
@@ -20,9 +22,9 @@ layout(std430, binding = 1) buffer aliveSSBO
 };
 
 struct ParticleData{
-    vec4 rotation;
     vec3 pos;
-    vec3 scale;
+    vec2 scale;
+    uint animationFrame;
     float age;
 };
 
@@ -52,6 +54,8 @@ void main()
     data.pos.y += ubo.fpsScale * 0.1;
     
     data.age += ubo.fpsScale;
+
+    data.animationFrame++;
 
     if (data.age > 300){
         // destroy the particle

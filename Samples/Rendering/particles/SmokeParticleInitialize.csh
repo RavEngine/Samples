@@ -1,3 +1,5 @@
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+
 struct ParticleState
 {
     uint aliveParticleCount;
@@ -16,9 +18,9 @@ layout(std430, binding = 1) readonly buffer createdThisFrameSSBO
 };
 
 struct ParticleData{
-    vec4 rotation;
     vec3 pos;
-    vec3 scale;
+    vec2 scale;
+    uint animationFrame;
     float age;
 };
 
@@ -54,13 +56,13 @@ void main()
 
     ParticleData data;
     data.age = 0;
-    data.scale = vec3(0.1,0.1,0.1);
+    data.scale = vec2(0.1,0.1);
     data.pos = vec3(
         rand(vec2(particleID,particleID)),
         rand(vec2(particleID * 2,particleID * 2)),
         rand(vec2(particleID / 2,particleID / 2))
     );
-    data.rotation = vec4(0,0,0,1);
+    data.animationFrame = 0;
 
     particleData[particleID] = data;
 }
