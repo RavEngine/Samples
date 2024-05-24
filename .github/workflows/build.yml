@@ -14,6 +14,7 @@ jobs:
         run: | 
               sudo apt-get update -y
               sudo apt-get install -y lsb-release wget software-properties-common apt-utils
+              sudo add-apt-repository ppa:ubuntu-toolchain-r/test
               wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
               sudo add-apt-repository -y "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main"
               wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
