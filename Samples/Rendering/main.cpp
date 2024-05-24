@@ -26,15 +26,12 @@ struct RenderingApp : public RavEngine::App {
     }
 };
 
-struct SmokeParticleData {
-    float currentLife = 0;
-};
 
 struct SmokeParticleMaterial : public RavEngine::ParticleMaterial {
     SmokeParticleMaterial() : ParticleMaterial("SmokeParticleInitialize", "SmokeParticleUpdate","default_billboard_particle","default_billboard_particle") {}        //TODO: fill with shader names
 
     uint16_t ParticleUserDataSize() const final {
-        return sizeof(SmokeParticleData);
+        return 0;   // needs no extra data
     }
 };
 
@@ -71,6 +68,7 @@ struct Level : public RavEngine::World {
     };
     
     Ref<StarMatMaterialInstance> starMaterialInstance;
+    ComponentHandle<ParticleEmitter> smokeParticle;
     
     Level() {
 
@@ -104,10 +102,18 @@ struct Level : public RavEngine::World {
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 
         auto continuousParticleEntity = Instantiate<GameObject>();
-        auto& smokeEmitter = continuousParticleEntity.EmplaceComponent<ParticleEmitter>(1024, RavEngine::New<SmokeParticleMaterial>()); // number of particles we want
-        smokeEmitter.Play();
+        auto& smokeEmitter = continuousParticleEntity.EmplaceComponent<ParticleEmitter>(8192, RavEngine::New<SmokeParticleMaterial>()); // number of particles we want
+        //smokeEmitter.mode = ParticleEmitter::Mode::Burst;
+        //smokeEmitter.Play();
+        smokeParticle = { continuousParticleEntity };
 
         SetupInputs();
+
+        constexpr auto MoveParticleSystem = [](const ParticleEmitter& emitter, Transform& t) {
+            auto time = GetApp()->GetCurrentTime();
+            t.SetLocalPosition({ std::sin(time) * 5, 0, 0 });
+        };
+        EmplaceSystem<decltype(MoveParticleSystem)>();
         
         
         // create the scene
@@ -157,7 +163,8 @@ struct Level : public RavEngine::World {
             * LookRight = "LookRight",
             * LookUp = "LookUp",
             * ToggleMouse = "ToggleMouse",
-            * ResetCamera = "ResetCam"
+            * ResetCamera = "ResetCam",
+            * PlayParticle = "PlayParticle"
             ;
     };
 
@@ -200,6 +207,7 @@ struct Level : public RavEngine::World {
         im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_D);
         im->AddAxisMap(InputNames::LookRight, Special::MOUSEMOVE_XVEL, -1);
         im->AddAxisMap(InputNames::LookUp, Special::MOUSEMOVE_YVEL, -1);
+        im->AddActionMap(InputNames::PlayParticle, SDL_SCANCODE_P);
         im->AddActionMap(InputNames::ResetCamera, SDL_SCANCODE_RETURN);
 
         im->AddActionMap(InputNames::ToggleMouse, SDL_SCANCODE_ESCAPE);
@@ -214,7 +222,13 @@ struct Level : public RavEngine::World {
         im->BindAction(InputNames::ResetCamera, GetInput(this), &Level::CameraResetCallback, ActionState::Pressed, CID::ANY);
         im->SetRelativeMouseMode(relativeMouseMode);
 
+        im->BindAction(InputNames::PlayParticle, GetInput(this), &Level::PlayParticle, ActionState::Pressed, CID::ANY);
+
         GetApp()->inputManager = im;
+    }
+
+    void PlayParticle() {
+        smokeParticle->Play();
     }
 
     void PreTick(float scale) final {

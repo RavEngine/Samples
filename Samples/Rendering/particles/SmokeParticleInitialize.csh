@@ -5,6 +5,7 @@ struct ParticleState
     uint aliveParticleCount;
     uint freeListCount;
     uint createdThisFrame;
+    uint emitterOwnerID;
 };
 
 layout(std430, binding = 0) readonly buffer particleStateSSBO
@@ -21,13 +22,22 @@ struct ParticleData{
     vec3 pos;
     vec2 scale;
     uint animationFrame;
-    float age;
 };
 
-layout(std430, binding = 2) buffer particleDataSSBO
+layout(scalar, binding = 2) buffer particleDataSSBO
 {
     ParticleData particleData[];
 };
+
+layout(std430, binding = 3) buffer lifeSSBO
+{
+    float particleLifeBuffer[];
+};
+
+layout(std430, binding = 4) readonly buffer modelMatrixBuffer{
+    mat4 model[];
+};
+
 
 float rand(in vec2 ip) {
     const float seed = 12345678;
@@ -48,21 +58,31 @@ float rand(in vec2 ip) {
 layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
 void main()
 {
-    if (gl_GlobalInvocationID.x > particleState[0].createdThisFrame){
+    if (gl_GlobalInvocationID.x >= particleState[0].createdThisFrame){
         return;
     }
 
     uint particleID = particlesCreatedThisFrameBuffer[gl_GlobalInvocationID.x];
 
     ParticleData data;
-    data.age = 0;
+    
     data.scale = vec2(0.1,0.1);
-    data.pos = vec3(
+    vec4 pos = vec4(
         rand(vec2(particleID,particleID)),
         rand(vec2(particleID * 2,particleID * 2)),
-        rand(vec2(particleID / 2,particleID / 2))
+        rand(vec2(particleID / 2,particleID / 2)),
+        1
     );
+
+    mat4 emitterModel = model[particleState[0].emitterOwnerID];
+
+    pos = emitterModel * pos;
+
+    data.pos = pos.xyz;
+
     data.animationFrame = 0;
 
     particleData[particleID] = data;
+
+    particleLifeBuffer[particleID] = 1.0;
 }
