@@ -56,6 +56,7 @@ float rand(in vec2 ip) {
     return float(n*50323U) / float(0xFFFFFFFFU);
 }
 
+const float maxLife = 200;
 
 layout(local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
 void main()
@@ -72,16 +73,25 @@ void main()
 
     data.pos.y += ubo.fpsScale * 0.1;
 
-    data.pos.x += (rand(vec2(particleID, particleID)) * 2 - 1) * 0.1;
-    data.pos.z += (rand(vec2(particleID * 2, particleID * 2)) * 2 - 1) * 0.1;
+    vec2 movevec = vec2(
+        rand(vec2(particleID, particleID)) * 2 - 1,
+        rand(vec2(particleID * 2, particleID * 2)) * 2 - 1
+    );
+
+    float life = maxLife;
+
+    movevec *= 0.02;
+
+    data.pos.x += movevec.x;
+    data.pos.z += movevec.y;
 
     float newLife = particleLifeBuffer[particleID];
     
     newLife += ubo.fpsScale;
 
-    data.animationFrame = uint(remap(newLife,0,300,0,9));
+    data.animationFrame = uint(remap(newLife,0,life,0,9));
 
-    if (newLife > 300){
+    if (newLife > life){
         // destroy the particle
 
        newLife = 0;
