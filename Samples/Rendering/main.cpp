@@ -27,8 +27,8 @@ struct RenderingApp : public RavEngine::App {
 };
 
 
-struct SmokeParticleMaterial : public RavEngine::ParticleMaterial {
-    SmokeParticleMaterial() : ParticleMaterial("SmokeParticleInitialize", "SmokeParticleUpdate","default_billboard_particle","default_billboard_particle") {}        //TODO: fill with shader names
+struct SmokeParticleMaterial : public RavEngine::BillboardParticleMaterial {
+    SmokeParticleMaterial() : BillboardParticleMaterial("SmokeParticleInitialize", "SmokeParticleUpdate","default_billboard_particle","default_billboard_particle") {}        //TODO: fill with shader names
 
     uint16_t ParticleUserDataSize() const final {
         return 0;   // needs no extra data
@@ -102,7 +102,13 @@ struct Level : public RavEngine::World {
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 
         auto continuousParticleEntity = Instantiate<GameObject>();
-        auto& smokeEmitter = continuousParticleEntity.EmplaceComponent<ParticleEmitter>(8192, RavEngine::New<SmokeParticleMaterial>()); // number of particles we want
+        auto smokeMat = RavEngine::New<SmokeParticleMaterial>();
+        smokeMat->spriteTex = Texture::Manager::Get("smoke.png");
+        smokeMat->spriteDim = {
+            .numSpritesWidth = 3,
+            .numSpritesHeight = 3
+        };
+        auto& smokeEmitter = continuousParticleEntity.EmplaceComponent<ParticleEmitter>(8192, smokeMat); // number of particles we want
         //smokeEmitter.mode = ParticleEmitter::Mode::Burst;
         //smokeEmitter.Play();
         smokeParticle = { continuousParticleEntity };

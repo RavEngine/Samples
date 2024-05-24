@@ -1,5 +1,7 @@
 #extension GL_EXT_shader_explicit_arithmetic_types : enable
 
+#include "ravengine_shader.glsl"
+
 layout(push_constant, std430) uniform UniformBufferObject{
     float fpsScale;
 } ubo;
@@ -72,16 +74,19 @@ void main()
 
     data.pos.x += (rand(vec2(particleID, particleID)) * 2 - 1) * 0.1;
     data.pos.z += (rand(vec2(particleID * 2, particleID * 2)) * 2 - 1) * 0.1;
+
+    float newLife = particleLifeBuffer[particleID];
     
-    particleLifeBuffer[particleID] += ubo.fpsScale;
+    newLife += ubo.fpsScale;
 
-    data.animationFrame++;
+    data.animationFrame = uint(remap(newLife,0,300,0,9));
 
-    if (particleLifeBuffer[particleID] > 300){
+    if (newLife > 300){
         // destroy the particle
 
-        particleLifeBuffer[particleID] = 0;
+       newLife = 0;
     }
+    particleLifeBuffer[particleID] = newLife;
 
     particleData[particleID] = data;
 }
