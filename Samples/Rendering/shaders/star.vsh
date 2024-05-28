@@ -6,11 +6,11 @@ layout(push_constant, std430) uniform UniformBufferObject{
 
 layout(location = 0) out vec2 outUV;
 
-UnlitVertexOut vertex(mat4 inModel)
+UnlitVertexOut vertex(EntityIn entity)
 {
     UnlitVertexOut vs_out;
 
-    vec4 worldPos = inModel * vec4(inPosition,1);
+    vec4 worldPos = entity.modelMtx * vec4(inPosition,1);
     
     outUV = inUV;
 

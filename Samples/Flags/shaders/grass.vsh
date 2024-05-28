@@ -7,8 +7,9 @@ layout(location = 0) out vec3 outNormal;
 layout(location = 1) out vec2 outUV;
 layout(location = 2) out float mixFactor;
 
-LitVertexOut vertex(mat4 inModel)
+LitVertexOut vertex(EntityIn entity)
 {
+    mat4 inModel = entity.modelMtx;
     LitVertexOut vs_out;
 
     vec3 a_position = inPosition;

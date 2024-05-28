@@ -111,7 +111,7 @@ vec4 colFromGreyscale(float f) {
 }
 
 UnlitOut fragment() {
-    
+
     UnlitOut fs_out;
 
     float timeSinceStart = ubo.time;
