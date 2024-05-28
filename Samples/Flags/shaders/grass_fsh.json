@@ -1,0 +1,5 @@
+{
+  "shader": "grass.fsh",
+  "stage": "fragment",
+  "type": "lit-mesh"
+}

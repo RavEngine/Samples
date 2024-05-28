@@ -1,9 +1,6 @@
-#include "ravengine_fsh.h"
 
 layout(location = 0) in vec3 inNormal;
 layout(location = 1) in vec2 inUV;
-
-FS_OUTPUTS()
 
 layout(binding = 0) uniform sampler2D diffuseSampler; 
 
@@ -83,8 +80,10 @@ vec3 calcAlt(vec2 uv){
      return uv.y < 0.5 ? colorBot : colorTop;
 }
 
-void main()
+LitOutput fragment()
 {
+    LitOutput fs_out;
+
     vec2 uv = 1 - inUV;  // model UVs are upside-down
 
     // "rounded square wave" blending function
@@ -92,8 +91,10 @@ void main()
     
     vec3 resCol = mix(calcMain(uv),calcAlt(uv),factor);
   
-    outcolor = vec4(resCol,1);
-    outnormal = vec4(inNormal, 1);
+    fs_out.color = vec4(resCol,1);
+    fs_out.normal = inNormal;
+
+    return fs_out;
 }
 
 

@@ -1,0 +1,5 @@
+{
+  "shader": "flag_special.fsh",
+  "stage": "fragment",
+  "type": "lit-mesh"
+}

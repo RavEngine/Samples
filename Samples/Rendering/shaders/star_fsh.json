@@ -1,0 +1,5 @@
+{
+  "shader": "star.fsh",
+  "stage": "fragment",
+  "type": "unlit-mesh"
+}

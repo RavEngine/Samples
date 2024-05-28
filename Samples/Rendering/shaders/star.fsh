@@ -1,8 +1,5 @@
-#extension GL_GOOGLE_include_directive : enable
 
 layout(location = 0) in vec2 inUV;
-
-layout(location = 0) out vec4 outColor;
 
 layout(push_constant, std430) uniform UniformBufferObject{
     mat4 viewProj;
@@ -113,8 +110,10 @@ vec4 colFromGreyscale(float f) {
     return res;
 }
 
-void main() {
+UnlitOut fragment() {
     
+    UnlitOut fs_out;
+
     float timeSinceStart = ubo.time;
     
     vec2 uv = inUV;
@@ -127,5 +126,7 @@ void main() {
 
     float colorMult = 2.0f;
     
-    outColor = vec4(color * colorMult, 1.0);
+    fs_out.color = vec4(color * colorMult, 1.0);
+
+    return fs_out;
 }

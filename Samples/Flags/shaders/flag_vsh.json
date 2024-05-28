@@ -1,0 +1,5 @@
+{
+  "shader": "flag.vsh",
+  "stage": "vertex",
+  "type": "lit-mesh"
+}

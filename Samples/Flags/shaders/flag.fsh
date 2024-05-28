@@ -1,9 +1,6 @@
-#include "ravengine_fsh.h"
 
 layout(location = 0) in vec3 inNormal;
 layout(location = 1) in vec2 inUV;
-
-FS_OUTPUTS()
 
 layout(binding = 0) uniform sampler g_sampler;
 layout(binding = 1) uniform texture2D t_diffuse;
@@ -13,10 +10,14 @@ layout(push_constant) uniform UniformBufferObject{
     float time;
 } ubo;
 
-void main()
+LitOutput fragment()
 {
-    outcolor = texture(sampler2D(t_diffuse, g_sampler), inUV);
-    outnormal = vec4(inNormal,1);
+    LitOutput fs_out;
+
+    fs_out.color = texture(sampler2D(t_diffuse, g_sampler), inUV);
+    fs_out.normal = inNormal;
+
+    return fs_out;
 }
 
 

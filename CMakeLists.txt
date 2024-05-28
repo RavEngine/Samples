@@ -79,7 +79,7 @@ function (add_sample sample_dir)
 
 	file(GLOB objects "${sample_dir}/objects/*.fbx" "${sample_dir}/objects/*.dae" "${sample_dir}/objects/*.ozz" "${sample_dir}/objects/*.obj" "${sample_dir}/objects/*.ply")
 	file(GLOB textures "${sample_dir}/textures/*.jpg" "${sample_dir}/textures/*.png" "${sample_dir}/textures/*.svg" "${sample_dir}/textures/*.tiff")
-	file(GLOB shaders "${sample_dir}/shaders/*.vsh" "${sample_dir}/shaders/*.csh" "${sample_dir}/shaders/*.fsh" "${sample_dir}/particles/*.csh")
+	file(GLOB shaders "${sample_dir}/shaders/*.json")
 	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png" "${sample_dir}/ui/*.json" "${sample_dir}/ui/*.ids")
 	file(GLOB sounds "${sample_dir}/sounds/*.mp3" "${sample_dir}/sounds/*.wav" "${sample_dir}/sounds/*.ogg" "${sample_dir}/sounds/*.mid")
 	file(GLOB_RECURSE streaming "${sample_dir}/streaming/*.ogg" "${sample_dir}/streaming/*.sfz")

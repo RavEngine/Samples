@@ -1,22 +1,20 @@
-#include "ravengine_vsh.h"
 
 layout(push_constant, std430) uniform UniformBufferObject{
     mat4 viewProj;
     float time;
 } ubo;
 
-VS_INPUTS()
-
 layout(location = 0) out vec2 outUV;
 
-void main()
+UnlitVertexOut vertex(mat4 inModel)
 {
-    mat4 inModel = model[inEntityID];
+    UnlitVertexOut vs_out;
 
     vec4 worldPos = inModel * vec4(inPosition,1);
     
     outUV = inUV;
 
-    gl_Position = ubo.viewProj * worldPos;
+    vs_out.position = ubo.viewProj * worldPos;
 
+    return vs_out;
 }
