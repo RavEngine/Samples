@@ -28,7 +28,7 @@ struct RenderingApp : public RavEngine::App {
 
 
 struct SmokeParticleMaterial : public RavEngine::BillboardParticleMaterial {
-    SmokeParticleMaterial() : BillboardParticleMaterial("SmokeParticleInitialize", "SmokeParticleUpdate","default_billboard_particle","default_billboard_particle") {}        //TODO: fill with shader names
+    SmokeParticleMaterial() : BillboardParticleMaterial("SmokeParticleInit", "SmokeParticleUpdate","default_billboard_particle","default_billboard_particle") {}        //TODO: fill with shader names
 
     uint16_t ParticleUserDataSize() const final {
         return 0;   // needs no extra data
