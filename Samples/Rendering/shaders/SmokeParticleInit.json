@@ -1,0 +1,5 @@
+{
+    "shader": "SmokeParticleInitialize.csh",
+    "type": "particle-init",
+    "stage" : "compute"
+}
