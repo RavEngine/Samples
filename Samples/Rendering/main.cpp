@@ -110,7 +110,7 @@ struct Level : public RavEngine::World {
         };
         auto& smokeEmitter = continuousParticleEntity.EmplaceComponent<ParticleEmitter>(8192, smokeMat); // number of particles we want
         //smokeEmitter.mode = ParticleEmitter::Mode::Burst;
-        //smokeEmitter.Play();
+        smokeEmitter.Play();
         smokeParticle = { continuousParticleEntity };
 
         SetupInputs();
