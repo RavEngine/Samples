@@ -80,7 +80,7 @@ vec3 calcAlt(vec2 uv){
      return uv.y < 0.5 ? colorBot : colorTop;
 }
 
-LitOutput fragment()
+LitOutput frag()
 {
     LitOutput fs_out;
 

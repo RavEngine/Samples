@@ -6,7 +6,7 @@ layout(push_constant, std430) uniform UniformBufferObject{
 
 layout(location = 0) out vec2 outUV;
 
-UnlitVertexOut vertex(EntityIn entity)
+UnlitVertexOut vert(EntityIn entity)
 {
     UnlitVertexOut vs_out;
 

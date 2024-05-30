@@ -110,7 +110,7 @@ vec4 colFromGreyscale(float f) {
     return res;
 }
 
-UnlitOut fragment() {
+UnlitOut frag() {
 
     UnlitOut fs_out;
 
