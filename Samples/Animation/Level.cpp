@@ -6,8 +6,6 @@
 #include <RavEngine/SkinnedMeshComponent.hpp>
 #include <RavEngine/Utilities.hpp>
 #include <RavEngine/InputManager.hpp>
-#include "Character.hpp"
-#include "CameraEntity.hpp"
 #include <RavEngine/SceneLoader.hpp>
 #include <FPSSystem.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
@@ -28,7 +26,8 @@ struct InputNames{
 		* MoveRight = "MoveRight",
 		* Sprint = "Sprint",
 		* Jump = "Jump",
-		* Pound = "Pound";
+		* Pound = "Pound",
+		* ChangeChar = "ChangeChar";
 };
 
 constexpr static RavEngine::CacheBase::unique_key_t lvl_wall_key = 1;
@@ -47,8 +46,17 @@ Level::Level(){
 
     character = Instantiate<Character>();
 	character.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(15, 5, 0), vector3(0, deg_to_rad(90), 0));
+	characters.push_back(character);
+
+	auto character2 = Instantiate<Character>();
+	character2.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(5, 30, 0), vector3(0,0,0));
+	characters.push_back(character2);
+
+	auto character3 = Instantiate<Character>();
+	character3.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(5, 30,10), vector3(0, 0, 0));
+	characters.push_back(character3);
 	
-	auto camera = Instantiate<CameraEntity>(character);
+	camera = Instantiate<CameraEntity>(character);
 	camera.GetTransform().LocalTranslateDelta(vector3(0,0,0));
 
 	EmplaceSystem<CharacterScriptRunner>();
@@ -67,6 +75,7 @@ Level::Level(){
 	im->AddAxisMap(InputNames::Sprint, SDL_SCANCODE_LSHIFT);
 	im->AddActionMap(InputNames::Jump, SDL_SCANCODE_SPACE);
 	im->AddActionMap(InputNames::Pound, SDL_SCANCODE_LCTRL);
+	im->AddActionMap(InputNames::ChangeChar, SDL_SCANCODE_C);
 	
 	// AppleTV remote
 	im->AddAxisMap(InputNames::Sprint, SDL_SCANCODE_PAUSE);
@@ -86,6 +95,7 @@ Level::Level(){
 	im->BindAxis(InputNames::Sprint, camera, &CameraEntity::SpeedIncrement, CID::ANY);
 	im->BindAction(InputNames::Jump, character, &Character::Jump, ActionState::Pressed, CID::ANY);
 	im->BindAction(InputNames::Pound, character, &Character::Pound, ActionState::Pressed, CID::ANY);
+	im->BindAction(InputNames::ChangeChar, GetInput(this),&Level::ChangeChar, ActionState::Pressed, CID::ANY);
 #else
 #endif
 
@@ -114,6 +124,14 @@ Level::Level(){
 	InitPhysics();
     
     EmplaceTimedSystem<FPSSystem>(std::chrono::seconds(1), "ui.rml", "metrics");    
+}
+
+void Level::ChangeChar()
+{
+	currentChar++;
+	currentChar %= characters.size();
+	
+	camera.GetComponent<CameraScript>().target = characters[currentChar];
 }
 
 void Level::PostTick(float)
