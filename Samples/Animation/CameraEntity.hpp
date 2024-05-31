@@ -19,6 +19,8 @@ struct CameraEntity : public RavEngine::GameObject {
 	void MoveForward(float);
 	void MoveRight(float);
 	void SpeedIncrement(float);
+    void Jump();
+    void Pound();
     
     inline auto get_id( )const{
         return id;

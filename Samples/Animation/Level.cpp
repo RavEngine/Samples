@@ -93,8 +93,8 @@ Level::Level(){
 	im->BindAxis(InputNames::MoveForward, camera, &CameraEntity::MoveForward, CID::ANY);
 	im->BindAxis(InputNames::MoveRight, camera, &CameraEntity::MoveRight, CID::ANY);
 	im->BindAxis(InputNames::Sprint, camera, &CameraEntity::SpeedIncrement, CID::ANY);
-	im->BindAction(InputNames::Jump, character, &Character::Jump, ActionState::Pressed, CID::ANY);
-	im->BindAction(InputNames::Pound, character, &Character::Pound, ActionState::Pressed, CID::ANY);
+	im->BindAction(InputNames::Jump, camera, &CameraEntity::Jump, ActionState::Pressed, CID::ANY);
+	im->BindAction(InputNames::Pound, camera, &CameraEntity::Pound, ActionState::Pressed, CID::ANY);
 	im->BindAction(InputNames::ChangeChar, GetInput(this),&Level::ChangeChar, ActionState::Pressed, CID::ANY);
 #else
 #endif

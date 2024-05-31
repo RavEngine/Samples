@@ -65,6 +65,16 @@ void CameraEntity::SpeedIncrement(float s)
 	cameraScript->speedIncrement = s;
 }
 
+void CameraEntity::Jump()
+{
+	cameraScript->target.Jump();
+}
+
+void CameraEntity::Pound()
+{
+	cameraScript->target.Pound();
+}
+
 void CameraScriptRunner::operator()(CameraScript& script)
 {
 	const auto fpsScale = GetApp()->GetCurrentFPSScale();
