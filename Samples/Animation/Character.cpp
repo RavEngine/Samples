@@ -162,13 +162,12 @@ void CharacterScript::StartPounding() {
 }
 
 
-void Character::Create() {
+void Character::Create(Ref<MeshAssetSkinned> mesh, Ref<PBRMaterialInstance> material, Ref<SkeletonAsset> skeleton) {
     GameObject::Create();
 	// setup animation
 	// note: if you are loading multiple instances
 	// of an animated character, you will want to load and store
 	// the assets separately to avoid unnecessary disk i/o and parsing.
-	auto skeleton = RavEngine::New<SkeletonAsset>("character_anims.fbx");
 	auto all_clips = RavEngine::New<AnimationAsset>("character_anims.fbx", skeleton);
 	auto walk_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 0, 47);
 	auto idle_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 60,120);
@@ -178,9 +177,6 @@ void Character::Create() {
 	auto pound_begin_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 180, 195);
 	auto pound_do_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 196, 200);
 	auto pound_end_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 201, 207);
-	auto mesh = RavEngine::New<MeshAssetSkinned>("character_anims.fbx", skeleton);
-	auto material = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-	material->SetAlbedoColor({1,0.4,0.2,1});
 
 #if TRANSFORM_DEBUG
 	auto childChildForTesting = GetWorld()->Instantiate<GameObject>();

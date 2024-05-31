@@ -44,17 +44,40 @@ Level::Level(){
     auto& gui = lights.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 
-    character = Instantiate<Character>();
-	character.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(15, 5, 0), vector3(0, deg_to_rad(90), 0));
-	characters.push_back(character);
+	auto spawnCharacter = [this](Ref<MeshAssetSkinned> mesh, Ref<PBRMaterialInstance> charMat, Ref<SkeletonAsset> skeleton, vector3 pos) {
+		auto character2 = Instantiate<Character>(mesh, charMat, skeleton);
+		character2.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(pos, vector3(0, 0, 0));
+		characters.push_back(character2);
+	};
 
-	auto character2 = Instantiate<Character>();
-	character2.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(5, 30, 0), vector3(0,0,0));
-	characters.push_back(character2);
+	{
+		auto skeleton = RavEngine::New<SkeletonAsset>("character_anims.fbx");
+		auto mesh = RavEngine::New<MeshAssetSkinned>("character_anims.fbx", skeleton);
+		auto charMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+		charMat->SetAlbedoColor({ 1,0.4,0.2,1 });
 
-	auto character3 = Instantiate<Character>();
-	character3.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(5, 30,10), vector3(0, 0, 0));
-	characters.push_back(character3);
+		character = Instantiate<Character>(mesh, charMat, skeleton);
+		character.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(15, 5, 0), vector3(0, deg_to_rad(90), 0));
+		characters.push_back(character);
+
+		for (const vector3& vec : { vector3{ 5, 10, 0 }, vector3{-5, 10, 0} }) {
+			spawnCharacter(mesh, charMat, skeleton, vec);
+		}
+	}
+	
+	// this one uses its own assets to be considered distinct by the engine
+	{
+		auto skeleton = RavEngine::New<SkeletonAsset>("character_anims.fbx");
+		auto mesh = RavEngine::New<MeshAssetSkinned>("character_anims.fbx", skeleton);
+		auto charMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+		charMat->SetAlbedoColor({ 0.2,0.4,1,1 });
+		
+		for (const vector3& vec : { vector3{ 5, 10, 10 }, vector3{-5, 10, 10} }) {
+			spawnCharacter(mesh, charMat, skeleton, vec);
+		}
+	}
+
+	
 	
 	camera = Instantiate<CameraEntity>(character);
 	camera.GetTransform().LocalTranslateDelta(vector3(0,0,0));

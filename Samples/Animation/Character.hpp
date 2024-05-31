@@ -3,6 +3,7 @@
 #include <RavEngine/DebugDrawer.hpp>
 #include <RavEngine/AnimatorComponent.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
+#include <RavEngine/Ref.hpp>
 
 struct CharacterScript : public RavEngine::ComponentWithOwner {
 
@@ -33,9 +34,15 @@ struct CharacterScript : public RavEngine::ComponentWithOwner {
 
 };
 
+namespace RavEngine {
+    class MeshAssetSkinned;
+    class PBRMaterialInstance;
+    class SkeletonAsset;
+}
+
 
 struct Character : public RavEngine::GameObject {
-	void Create();
+	void Create(Ref<RavEngine::MeshAssetSkinned> skinnedMesh, Ref<RavEngine::PBRMaterialInstance> materialInstance, Ref<RavEngine::SkeletonAsset> skeleton);
 	void Move(const vector3&, decimalType speedMultiplier = 0);
 	void Jump();
 	void Pound();
