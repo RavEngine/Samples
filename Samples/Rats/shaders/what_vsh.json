@@ -1,0 +1,5 @@
+{
+  "shader": "what.vsh",
+  "stage": "vertex",
+  "type": "unlit-mesh"
+}

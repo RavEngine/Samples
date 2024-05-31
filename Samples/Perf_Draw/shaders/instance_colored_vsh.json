@@ -1,0 +1,5 @@
+{
+  "shader": "instance_colored.vsh",
+  "stage": "vertex",
+  "type": "lit-mesh"
+}

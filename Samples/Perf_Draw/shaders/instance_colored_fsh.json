@@ -1,0 +1,5 @@
+{
+  "shader": "instance_colored.fsh",
+  "stage": "fragment",
+  "type": "lit-mesh"
+}

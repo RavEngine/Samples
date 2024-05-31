@@ -1,0 +1,5 @@
+{
+  "shader": "what.fsh",
+  "stage": "fragment",
+  "type": "unlit-mesh"
+}

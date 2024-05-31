@@ -1,12 +1,8 @@
-#include "ravengine_vsh.h"
 
 layout(push_constant) uniform UniformBufferObject{
     mat4 viewProj;
     float time;
 } ubo;
-
-
-VS_INPUTS()
 
 layout(location = 0) out vec3 outNormal;
 layout(location = 1) out vec2 outUV;
@@ -18,8 +14,13 @@ float rand(vec2 co){
   return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-void main()
+LitVertexOut vert(EntityIn entity)
 {    
+    uint inEntityID = entity.entityID;
+    mat4 worldTransform = entity.modelMtx;
+
+     LitVertexOut vs_out;
+
     // give every instance a randomish rotation speed
     float theta = ubo.time * M_PI / 4 * rand(vec2(inEntityID % 10, inEntityID % 3));
     float scaleInput = ubo.time * M_PI / 4 * rand(vec2(inEntityID % 3, inEntityID % 7));
@@ -65,13 +66,13 @@ void main()
     transformed = scalemat * transformed;
     transformed = fullrotmat * transformed;
     transformed = transpose(transmat) * transformed;
-    
-    mat4 worldTransform = model[inEntityID];
-    
+        
     transformed = worldTransform * vec4(transformed.xyz, 1);
     
-    gl_Position = ubo.viewProj * vec4(transformed.xyz, 1);
+    vs_out.position = ubo.viewProj * vec4(transformed.xyz, 1);
         
 	outNormal = inNormal;
     v_position = transformed.xyz;
+
+    return vs_out;
 }
