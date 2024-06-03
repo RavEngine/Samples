@@ -21,6 +21,9 @@ private:
 
             SetWindowTitle(VFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
     }
+    bool NeedsAudio() const final {
+        return false;
+    }
 };
 
 START_APP(Performance_A)

@@ -17,6 +17,9 @@ struct App : public RavEngine::App{
     void OnFatal(const std::string_view msg) final{
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);
     }
+    bool NeedsAudio() const final {
+        return false;
+    }
 };
 
 START_APP(App)

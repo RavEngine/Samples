@@ -168,7 +168,7 @@ struct Level : public RavEngine::World{
 };
 
 // level boilerplate
-struct ShadowApp : public RavEngine::App {
+struct VRApp : public RavEngine::App {
 	void OnStartup(int argc, char** argv) final{
 		AddWorld(RavEngine::New<Level>());
 		SetWindowTitle(VFormat("{} | {}", APPNAME, GetRenderEngine().GetCurrentBackendName()).c_str());
@@ -176,5 +176,8 @@ struct ShadowApp : public RavEngine::App {
 	void OnFatal(const std::string_view msg) final {
 		RavEngine::Dialog::ShowBasic("Fatal Error", msg, RavEngine::Dialog::MessageBoxType::Error);
 	}
+	bool NeedsAudio() const final {
+		return false;
+	}
 };
-START_APP(ShadowApp);
+START_APP(VRApp);

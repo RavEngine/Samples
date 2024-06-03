@@ -24,6 +24,9 @@ struct RenderingApp : public RavEngine::App {
     void OnFatal(const std::string_view msg) final {
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
     }
+    bool NeedsAudio() const final {
+        return false;
+    }
 };
 
 
@@ -248,6 +251,7 @@ struct Level : public RavEngine::World {
 
         auto now = GetApp()->GetCurrentTime();
     }
+
 };
 
 void RenderingApp::OnStartup(int argc, char** argv) {
