@@ -32,7 +32,7 @@ struct MetricsSystem : public AutoCTTI {
 		auto doc = gui.GetDocument("main.rml");
 		auto elem = doc->GetElementById("diag");
 		gui.EnqueueUIUpdate([this,elem] {
-			elem->SetInnerRML(VFormat(
+			elem->SetInnerRML(Format(
 				"TPS: {} <br /> Num Entities: {}",
 				(int)GetApp()->CurrentTPS(),
 				num_entities

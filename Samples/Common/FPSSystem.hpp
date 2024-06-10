@@ -13,7 +13,7 @@ struct FPSSystem : public RavEngine::AutoCTTI {
         auto doc = gui.GetDocument(document);
         auto App = RavEngine::GetApp();
         gui.EnqueueUIUpdate([=]{
-            doc->GetElementById(element)->SetInnerRML(RavEngine::VFormat("TPS: {}",
+            doc->GetElementById(element)->SetInnerRML(RavEngine::Format("TPS: {}",
                                                                            std::round(App->CurrentTPS())));
         });
     };

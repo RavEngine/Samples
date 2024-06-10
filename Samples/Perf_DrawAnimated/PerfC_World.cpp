@@ -74,7 +74,7 @@ PerfC_World::PerfC_World(){
 	
 	Debug::Log("Loading {} textures", textures.size());
 	for(int i = 0; i < textures.size(); i++){
-		textures[i] = Texture::Manager::Get(VFormat("tx{}.png",i+1));
+		textures[i] = Texture::Manager::Get(Format("tx{}.png",i+1));
 		materialInstances[i] = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		materialInstances[i]->SetAlbedoTexture(textures[i]);
     }
@@ -177,7 +177,7 @@ PerfC_World::PerfC_World(){
 
 void PerfC_World::PostTick(float scale){
 	hud->EnqueueUIUpdate([this] {
-		fpslabel->SetInnerRML(VFormat("TPS: {}", (int)GetApp()->CurrentTPS()));
+		fpslabel->SetInnerRML(Format("TPS: {}", (int)GetApp()->CurrentTPS()));
 	});
 }
 

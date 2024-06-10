@@ -11,7 +11,7 @@
 #include "AppInfo.hpp"
 #include <RavEngine/StartApp.hpp>
 #include <RavEngine/Window.hpp>
-#include <SDL_dialog.h>
+#include <SDL3/SDL_dialog.h>
 
 using namespace RavEngine;
 using namespace std;
@@ -168,7 +168,7 @@ struct SceneViewerApp : public RavEngine::App {
 			}
 
 
-		}, this, GetMainWindow()->window, filters, startLocation.c_str(), 0);
+		}, this, GetMainWindow()->window, filters, std::size(filters), startLocation.c_str(), SDL_FALSE);
 
 	}
 

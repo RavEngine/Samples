@@ -67,7 +67,7 @@ struct Level : public World{
             std::ostringstream oss;
             std::copy(begin(featuresStr), end(featuresStr), std::ostream_iterator<decltype(featuresStr)::value_type>(oss, ", "));
 
-            view->SetInnerRML(VFormat(
+            view->SetInnerRML(Format(
 R"(
 Platform<br/>
 {} {} v{}.{}.{}.{}<br/><br/>

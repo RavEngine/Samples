@@ -87,7 +87,7 @@ Level::Level(){
             
             auto createElement = [&music_id,doc,musicsel](const std::string& name){
                 auto opt = doc->CreateElement("option");
-                opt->SetAttribute("value", VFormat("{}",music_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
+                opt->SetAttribute("value", Format("{}",music_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
                 opt->SetInnerRML(name);
                 musicsel->AppendChild(std::move(opt));
             };

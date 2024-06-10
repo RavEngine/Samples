@@ -144,7 +144,7 @@ struct Level : public World{
         uint8_t flag_id = 0;
         for(const auto& f : flagpole.flags){
             auto opt = doc->CreateElement("option");
-            opt->SetAttribute("value", VFormat("{}",flag_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
+            opt->SetAttribute("value", Format("{}",flag_id++));     // when creating options, we must assign them a value, otherwise the change event on the selector doesn't trigger if the option is selected
             opt->SetInnerRML(f.name);
             picker->AppendChild(std::move(opt));
         }
