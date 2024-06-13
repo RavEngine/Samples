@@ -1,0 +1,5 @@
+{
+  "shader": "FireParticleInit.csh",
+  "type": "particle-init",
+  "stage": "compute"
+}

@@ -31,10 +31,18 @@ struct RenderingApp : public RavEngine::App {
 
 
 struct SmokeParticleMaterial : public RavEngine::BillboardParticleMaterial {
-    SmokeParticleMaterial() : BillboardParticleMaterial("SmokeParticleInit", "SmokeParticleUpdate","default_billboard_particle","default_billboard_particle") {}        //TODO: fill with shader names
+    SmokeParticleMaterial() : BillboardParticleMaterial("SmokeParticleInit", "SmokeParticleUpdate","default_billboard_particle","default_billboard_particle") {}
 
     uint16_t ParticleUserDataSize() const final {
         return 0;   // needs no extra data
+    }
+};
+
+struct FireParticleMaterial : public RavEngine::BillboardParticleMaterial {
+    FireParticleMaterial() : BillboardParticleMaterial("FireParticleInit", "FireParticleUpdate", "default_billboard_particle", "default_billboard_particle") {};
+
+    uint16_t ParticleUserDataSize() const final {
+        return 0;
     }
 };
 
@@ -104,17 +112,27 @@ struct Level : public RavEngine::World {
 
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 
-        auto continuousParticleEntity = Instantiate<GameObject>();
+        auto smokeParticleEntity = Instantiate<GameObject>();
         auto smokeMat = RavEngine::New<SmokeParticleMaterial>();
         smokeMat->spriteTex = Texture::Manager::Get("smoke.png");
         smokeMat->spriteDim = {
             .numSpritesWidth = 3,
             .numSpritesHeight = 3
         };
-        auto& smokeEmitter = continuousParticleEntity.EmplaceComponent<ParticleEmitter>(8192, smokeMat); // number of particles we want
+        auto& smokeEmitter = smokeParticleEntity.EmplaceComponent<ParticleEmitter>(8192, smokeMat); // number of particles we want
         //smokeEmitter.mode = ParticleEmitter::Mode::Burst;
         smokeEmitter.Play();
-        smokeParticle = { continuousParticleEntity };
+        smokeParticle = { smokeParticleEntity };
+
+        auto fireParticleEntity = Instantiate<GameObject>();
+        auto fireMat = New<FireParticleMaterial>();
+        fireMat->spriteTex = Texture::Manager::Get("fire.png");
+        fireMat->spriteDim = {
+            .numSpritesWidth = 11,
+            .numSpritesHeight = 1
+        };
+        auto& fireEmitter = fireParticleEntity.EmplaceComponent<ParticleEmitter>(8192, fireMat);
+        fireEmitter.Play();
 
         SetupInputs();
 
