@@ -123,6 +123,7 @@ struct Level : public RavEngine::World {
         //smokeEmitter.mode = ParticleEmitter::Mode::Burst;
         smokeEmitter.Play();
         smokeParticle = { smokeParticleEntity };
+        smokeEmitter.SetEmissionRate(1000);
 
         auto fireParticleEntity = Instantiate<GameObject>();
         auto fireMat = New<FireParticleMaterial>();
@@ -133,6 +134,7 @@ struct Level : public RavEngine::World {
         };
         auto& fireEmitter = fireParticleEntity.EmplaceComponent<ParticleEmitter>(8192, fireMat);
         fireEmitter.Play();
+        fireEmitter.SetEmissionRate(1000);
 
         SetupInputs();
 
