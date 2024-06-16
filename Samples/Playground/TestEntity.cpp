@@ -15,6 +15,7 @@
 #include <RavEngine/mathtypes.hpp>
 #include <RavEngine/NetworkIdentity.hpp>
 #include <RavEngine/RPCComponent.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace std;
 using namespace physx;
@@ -30,7 +31,7 @@ void TestEntity::CommonInit(){
     if (!sharedMatInst) {
         sharedMatInst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
     }
-	auto mesh = EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("bunny_decimated.fbx"), LitMeshMaterialInstance(sharedMatInst));
+	auto mesh = EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bunny_decimated.fbx"), LitMeshMaterialInstance(sharedMatInst));
 
     auto& script = EmplaceComponent<TestEntityController>();
 	auto& r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);

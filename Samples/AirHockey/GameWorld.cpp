@@ -9,6 +9,7 @@
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/Ref.hpp>
+#include <RavEngine/PhysicsBodyComponent.hpp>
 #include <memory>
 
 Ref<PBRMaterialInstance> Puck::material;

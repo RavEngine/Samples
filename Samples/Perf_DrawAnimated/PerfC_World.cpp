@@ -9,6 +9,7 @@
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/Utilities.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/MeshCollection.hpp>
 #include <array>
 
 using namespace RavEngine;
@@ -54,10 +55,10 @@ struct DemoObject : public RavEngine::GameObject{
 };
 
 PerfC_World::PerfC_World(){
-	meshes[0] = MeshAsset::Manager::Get("cube.obj");
-	meshes[1] = MeshAsset::Manager::Get("sphere.obj");
-	meshes[2] = MeshAsset::Manager::Get("cone.obj");
-	meshes[3] = MeshAsset::Manager::Get("cylinder.obj");
+	meshes[0] = New<MeshCollectionStatic>(MeshAsset::Manager::Get("cube.obj"));
+	meshes[1] = New<MeshCollectionStatic>(MeshAsset::Manager::Get("sphere.obj"));
+	meshes[2] = New<MeshCollectionStatic>(MeshAsset::Manager::Get("cone.obj"));
+	meshes[3] = New<MeshCollectionStatic>(MeshAsset::Manager::Get("cylinder.obj"));
 	
 	auto cam = Instantiate<Camera>();
 			

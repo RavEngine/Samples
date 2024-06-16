@@ -5,6 +5,8 @@
 #include <FPSSystem.hpp>
 #include <RavEngine/CameraComponent.hpp>
 #include <RavEngine/Texture.hpp>
+#include <RavEngine/PhysicsBodyComponent.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace std;
 using namespace RavEngine;
@@ -39,7 +41,7 @@ struct SpawnerMarker : public AutoCTTI{};
 
 struct SpawnerSystem : public RavEngine::AutoCTTI{
 	Level* ownWorld;
-	Ref<MeshAsset> mesh;
+	Ref<MeshCollectionStatic> mesh;
 	Ref<PBRMaterialInstance> mat;
 	Ref<PhysicsMaterial> physmat;
 	Ref<Texture> texture;
@@ -55,7 +57,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 		mat->SetAlbedoTexture(texture);
         MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
-		mesh = RavEngine::MeshAsset::Manager::Get("sphere.obj",opt);
+		mesh = RavEngine::MeshCollectionStaticManager::Get("sphere.obj",opt);
 	}
 	
     static constexpr auto total = 20000;

@@ -12,6 +12,7 @@
 #include <RavEngine/PhysicsSolver.hpp>
 #include <RavEngine/AnimatorSystem.hpp>
 #include <RavEngine/PhysicsLinkSystem.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 #define NOCONTROLS 0
 
@@ -132,7 +133,7 @@ Level::Level(){
 		auto floorplane = Instantiate<RavEngine::GameObject>();
 		Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level.fbx", lvl_floors_key, "ground", opt);
 		material->SetAlbedoColor({ 174.f / 255,210.f / 255,234.f / 255,1 });
-        floorplane.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
+        floorplane.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(sharedMesh), LitMeshMaterialInstance(material));
 		auto& r = floorplane.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
 		r.EmplaceCollider<MeshCollider>(sharedMesh, physmat);
 	}
@@ -140,7 +141,7 @@ Level::Level(){
 	// load the walls
 	auto walls = Instantiate<GameObject>();
 	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level.fbx", lvl_wall_key, "walls", opt);
-    walls.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
+    walls.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(sharedMesh), LitMeshMaterialInstance(material));
 	auto& s = walls.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls
     s.EmplaceCollider<MeshCollider>(sharedMesh, physmat);
 

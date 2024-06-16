@@ -13,6 +13,7 @@
 #include <RavEngine/VirtualFileSystem.hpp>
 #include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/StartApp.hpp>
+#include <RavEngine/MeshCollection.hpp>
 #include <numbers>
 
 using namespace RavEngine;
@@ -77,7 +78,7 @@ struct Rat : public RavEngine::GameObject {
 
 		MeshAssetOptions opt;
 		opt.scale = 0.2;
-		EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("rat.obj", opt), LitMeshMaterialInstance(matInst));
+		EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("rat.obj", opt), LitMeshMaterialInstance(matInst));
         
         EmplaceComponent<RatComponent>();
 	}
@@ -86,7 +87,7 @@ struct Rat : public RavEngine::GameObject {
 struct Pipe : public RavEngine::GameObject {
 	void Create() {
 		GameObject::Create();
-		auto pipeMesh = MeshAsset::Manager::Get("pipe.obj");
+		auto pipeMesh = MeshCollectionStaticManager::Get("pipe.obj");
 		auto pipeMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		pipeMat->SetAlbedoTexture(Texture::Manager::Get("pipe.png"));
 		EmplaceComponent<StaticMesh>(pipeMesh, LitMeshMaterialInstance(pipeMat));
@@ -106,7 +107,7 @@ struct Floor : public RavEngine::GameObject {
 		constexpr static float floorSize = 20;
 		GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
 
-		auto floorMesh = MeshAsset::Manager::Get("quad.obj");
+		auto floorMesh = MeshCollectionStaticManager::Get("quad.obj");
 		auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		floorMat->SetAlbedoColor({0.5,0.5,0.5,1});
 		EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
@@ -127,7 +128,7 @@ struct What : public RavEngine::GameObject {
 	void Create() {
 		GameObject::Create();
 
-		auto whatMesh = MeshAsset::Manager::Get("what.obj", MeshAssetOptions{.scale = 0.25});
+		auto whatMesh = MeshCollectionStaticManager::Get("what.obj", MeshAssetOptions{.scale = 0.25});
 		auto whatMat = RavEngine::New<WhatMatInstance>(Material::Manager::Get<WhatMat>());
 		whatMat->SetTexture(Texture::Manager::Get("what.png"));
 

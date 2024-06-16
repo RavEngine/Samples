@@ -11,17 +11,9 @@ protected:
 	decimalType sensitivity = 15;
 public:
     Player(entity_t id) : ComponentWithOwner(id){}
-	void MoveUpDown(float amt){
-		if (std::abs(amt) > 0.1){
-			GetOwner().GetComponent<RavEngine::RigidBodyDynamicComponent>().AddForce(vector3(amt,0,0) * sensitivity);
-		}
-	}
+	void MoveUpDown(float amt);
 	
-	void MoveLeftRight(float amt){
-		if (std::abs(amt) > 0.1){
-			GetOwner().GetComponent<RavEngine::RigidBodyDynamicComponent>().AddForce(vector3(0,0,amt) * sensitivity);
-		}
-	}
+	void MoveLeftRight(float amt);
 };
 
 class BotPlayer : public RavEngine::ScriptComponent{

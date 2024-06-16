@@ -4,6 +4,7 @@
 #include <RavEngine/AnimatorComponent.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
 #include <RavEngine/Texture.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -19,8 +20,8 @@ void Flagpole::Create(){
         meshes.push_back(mesh);
     });
     auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-    EmplaceComponent<StaticMesh>(meshes[0], LitMeshMaterialInstance(mat));
-    EmplaceComponent<StaticMesh>(meshes[1], LitMeshMaterialInstance(mat));
+    EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(meshes[0]), LitMeshMaterialInstance(mat));
+    EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(meshes[1]), LitMeshMaterialInstance(mat));
     
     // load animation
     auto skeleton = RavEngine::New<SkeletonAsset>("flag.fbx");

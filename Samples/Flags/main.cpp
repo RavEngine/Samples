@@ -11,6 +11,7 @@
 #include <RavEngine/RenderEngine.hpp>
 #include <ravengine_shader_defs.h>
 #include <RavEngine/StartApp.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -96,7 +97,7 @@ struct Level : public World{
         {
 			constexpr int nblades = 4096;
 			constexpr float scale = 0.3;
-			auto grassmesh = MeshAsset::Manager::Get("grass.obj");
+			auto grassmesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("grass.obj"));
 			grassMatInst = RavEngine::New<GrassMatInst>(Material::Manager::Get<GrassMat>());
 			
 			for (int i = 0; i < nblades; i++) {
@@ -134,7 +135,7 @@ struct Level : public World{
         auto ground = Instantiate<GameObject>();
         auto groundMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         groundMat->SetAlbedoColor({ 92/255.f, 60/255.f, 29/255.f,1});
-        ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), LitMeshMaterialInstance(groundMat));
+        ground.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj")), LitMeshMaterialInstance(groundMat));
         ground.GetTransform().LocalScaleDelta(vector3(10));
         
         flagpole = Instantiate<Flagpole>();

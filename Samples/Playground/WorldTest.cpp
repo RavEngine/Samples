@@ -17,6 +17,7 @@
 #include "RavEngine/Light.hpp"
 #include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -103,7 +104,7 @@ TestWorld::TestWorld(){
 	//	Ref<Texture> t = new Texture("youcantrun.png");
 	//	material->SetAlbedoTexture(t);
 	
-	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::Get("cube.obj");
+	auto sharedMesh = MeshCollectionStaticManager::Get("cube.obj");
 	
 	anonymous = Instantiate<GameObject>();
 	anonymous.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));

@@ -13,6 +13,7 @@
 #include <RavEngine/RenderEngine.hpp>
 #include <RavEngine/Skybox.hpp>
 #include <RavEngine/StartApp.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -27,7 +28,7 @@ struct HeavyThing : public GameObject{
         opt.scale = scaleOverride;
         auto matinst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         matinst->SetAlbedoColor(colorOverride);
-        EmplaceComponent<StaticMesh>(MeshAsset::Manager::GetWithKey("sphere.obj", scaleOverride * 100, opt), LitMeshMaterialInstance(matinst));
+        EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::GetWithKey("sphere.obj", scaleOverride * 100, opt)), LitMeshMaterialInstance(matinst));
         if (mass < 1000){
             auto& light = EmplaceComponent<PointLight>();
             light.SetIntensity(scaleOverride * 7);

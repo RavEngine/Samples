@@ -7,6 +7,7 @@
 #include <RavEngine/SystemInfo.hpp>
 #include <FPSSystem.hpp>
 #include <RavEngine/StaticMesh.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -28,7 +29,7 @@ struct ObjectMarker : public ComponentWithOwner {
 };
 
 struct StaticMeshEntity : public GameObject {
-	void Create(Ref<MeshAsset> mesh, Ref<PBRMaterialInstance> mat) {
+	void Create(Ref<MeshCollectionStatic> mesh, Ref<PBRMaterialInstance> mat) {
         GameObject::Create();
 		EmplaceComponent<StaticMesh>(mesh, LitMeshMaterialInstance(mat)).SetEnabled(false);
 		EmplaceComponent<SpinComponent>();
@@ -96,14 +97,14 @@ Level::Level() {
 	auto ground = Instantiate<GameObject>();
     MeshAssetOptions opt;
     opt.scale = 1.2;
-	auto mesh = MeshAsset::Manager::Get("quad.obj",opt);
+	auto mesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj",opt));
 	auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	mat->SetAlbedoColor({0.2,0.2,0.2,1.0});
 	ground.EmplaceComponent<StaticMesh>(mesh, LitMeshMaterialInstance(mat));
 
 	// load the stanford dragon
     opt.scale = 0.05;
-	auto hmesh = MeshAsset::Manager::Get("dragon_stanford.fbx", opt);
+	auto hmesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("dragon_stanford.fbx", opt));
 	auto hmat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	
 	for (int i = 0; i < 150; i++) {
@@ -119,8 +120,9 @@ Level::Level() {
 	EmplaceTimedSystem<FPSSystem>(chrono::seconds(1),"ui.rml","metrics");
 
 	// load lights
+	auto sphereMesh = New<MeshCollectionStatic>(RavEngine::MeshAsset::Manager::Get("sphere.obj", opt));
 	for (int i = 0; i < 5; i++) {
-        Instantiate<LightEntity>();
+        Instantiate<LightEntity>(sphereMesh);
 	}
 
 }

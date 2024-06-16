@@ -11,6 +11,7 @@
 #include "AppInfo.hpp"
 #include <RavEngine/StartApp.hpp>
 #include <RavEngine/Window.hpp>
+#include <RavEngine/MeshCollection.hpp>
 #include <SDL3/SDL_dialog.h>
 
 using namespace RavEngine;
@@ -56,7 +57,7 @@ struct SceneViewerLevel : public RavEngine::World {
 
 		loader.LoadMeshes([&](const PreloadedAsset&) -> bool {return true; }, [&](Ref<MeshAsset> asset, Ref<PBRMaterialInstance> mat, const PreloadedAsset& data) {
 			try {
-				nodes.at(data.name).EmplaceComponent<StaticMesh>(asset, LitMeshMaterialInstance(mat));
+				nodes.at(data.name).EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(asset), LitMeshMaterialInstance(mat));
 			}
 			catch (exception& e) {
 				// continue silently...

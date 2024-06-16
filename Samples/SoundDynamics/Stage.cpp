@@ -2,6 +2,7 @@
 #include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/SceneLoader.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace std;
 using namespace RavEngine;
@@ -43,7 +44,7 @@ void Stage::Create() {
 	}, [&](Ref<MeshAsset> rm, Ref<PBRMaterialInstance>, const PreloadedAsset& pr) {
 		auto pos = std::distance(faceOrder.begin(),std::find(faceOrder.begin(), faceOrder.end(), pr.name));
 		auto inst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-		EmplaceComponent<StaticMesh>(rm, LitMeshMaterialInstance(inst));
+		EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(rm), LitMeshMaterialInstance(inst));
 		this->wallMaterials[pos] = inst;
 	});
 

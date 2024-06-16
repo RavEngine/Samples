@@ -15,6 +15,7 @@
 #include "AppInfo.hpp"
 #include <numbers>
 #include <RavEngine/StartApp.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -81,7 +82,7 @@ struct Level : public RavEngine::World {
         floor.GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
 
         {
-            auto floorMesh = MeshAsset::Manager::Get("quad.obj");
+            auto floorMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj"));
             auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
             floorMat->SetAlbedoColor({ 0.5,0.5,0.5,1 });
             floor.EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
@@ -147,7 +148,7 @@ struct Level : public RavEngine::World {
         // create the scene
         
         auto helmetObj = Instantiate<GameObject>();
-        auto helmetMesh = MeshAsset::Manager::Get("helmet.obj");
+        auto helmetMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("helmet.obj"));
         auto helmetMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         helmetMat->SetAlbedoTexture(Texture::Manager::Get("Default_albedo.png"));
         helmetMat->SetNormalTexture(Texture::Manager::Get("Default_normal.png"));
@@ -163,7 +164,7 @@ struct Level : public RavEngine::World {
         
         // the unlit material
         auto star = Instantiate<GameObject>();
-        auto starMesh = MeshAsset::Manager::Get("sphere.obj");
+        auto starMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("sphere.obj"));
         starMaterialInstance = New<StarMatMaterialInstance>(Material::Manager::Get<StarMat>());
         star.EmplaceComponent<StaticMesh>(starMesh, UnlitMeshMaterialInstance(starMaterialInstance));
         star.GetTransform().LocalTranslateDelta({objectDistance,5,0});

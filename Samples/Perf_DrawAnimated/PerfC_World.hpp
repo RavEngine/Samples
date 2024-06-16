@@ -8,6 +8,10 @@
 #include <array>
 #include "Systems.hpp"
 
+namespace RavEngine {
+	struct MeshCollectionStatic;
+}
+
 class PerfC_World : public RavEngine::World{
 public:
 	PerfC_World();
@@ -15,7 +19,7 @@ public:
 	RavEngine::GameObject lightEntity;
 	
 	static constexpr size_t num_meshes = 4;
-	static RavEngine::Array<Ref<RavEngine::MeshAsset>,num_meshes> meshes;
+	static RavEngine::Array<Ref<RavEngine::MeshCollectionStatic>,num_meshes> meshes;
 	
 	static constexpr size_t num_textures = 80;
 	static RavEngine::Array<Ref<RavEngine::Texture>, num_textures> textures;

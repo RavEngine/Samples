@@ -7,6 +7,7 @@
 #include <RavEngine/RenderEngine.hpp>
 #include "AppInfo.hpp"
 #include <RavEngine/StartApp.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -41,7 +42,7 @@ struct Level : public RavEngine::World{
 	Level() {
 		// load ground plane
 		auto ground = Instantiate<GameObject>();
-		ground.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("quad.obj"), LitMeshMaterialInstance(New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
+		ground.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("quad.obj"), LitMeshMaterialInstance(New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 		ground.GetTransform().LocalScaleDelta(vector3(5,1,5));
 
 		// load casting triangle
@@ -49,7 +50,7 @@ struct Level : public RavEngine::World{
 		constexpr static uint32_t trikey = 1;
 		auto trimat = New<PBRMaterialInstance>(Material::Manager::GetWithKey<PBRMaterial>(trikey,PBRMaterialOptions{.cullMode = RGL::CullMode::None}));
 		trimat->SetAlbedoColor({ 1,0,0,1 });
-		tri.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("triangle.obj"), LitMeshMaterialInstance(trimat));
+		tri.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("triangle.obj"), LitMeshMaterialInstance(trimat));
 		tri.GetTransform().LocalTranslateDelta(vector3(-1.5, 0.8, 0))
             .LocalRotateDelta(vector3(deg_to_rad(90), deg_to_rad(90), deg_to_rad(180)))
             .LocalRotateDelta(vector3(0, deg_to_rad(90), 0));
@@ -57,7 +58,7 @@ struct Level : public RavEngine::World{
         cube = Instantiate<decltype(cube)>();
         auto cubeMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         cubeMat->SetAlbedoColor({0,0,1,1});
-        cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cube.obj"), LitMeshMaterialInstance(cubeMat));
+        cube.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cube.obj"), LitMeshMaterialInstance(cubeMat));
         cube.GetTransform()
             .LocalTranslateDelta(vector3(1,0.7,0))
             .LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(90),0))

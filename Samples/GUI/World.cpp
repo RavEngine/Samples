@@ -7,6 +7,7 @@
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/App.hpp>
 #include <RavEngine/Debug.hpp>
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -34,7 +35,7 @@ struct FPSSystem : public AutoCTTI {
 	dirlight.GetTransform().LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(45),0));
 	
 	cube = Instantiate<GameObject>();
-	auto& cubemesh = cube.EmplaceComponent<StaticMesh>(MeshAsset::Manager::Get("cube.obj"), LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
+	auto& cubemesh = cube.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("cube.obj")), LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 	
 	auto gui = Instantiate<Entity>();
 	auto& doc = gui.EmplaceComponent<GUIComponent>();
