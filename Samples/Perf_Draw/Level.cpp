@@ -8,6 +8,7 @@
 #include <RavEngine/Utilities.hpp>
 #include <RavEngine/RenderEngine.hpp>
 #include "CustomMaterials.hpp"
+#include <RavEngine/MeshCollection.hpp>
 
 using namespace std;
 using namespace RavEngine;
@@ -20,7 +21,7 @@ static constexpr uint32_t num_entities =
 #endif
 
 struct InstanceEntity : public RavEngine::GameObject {
-	void Create(Ref<RavEngine::MeshAsset> mesh, Ref<InstanceColorMatInstance> matinst) {
+	void Create(Ref<RavEngine::MeshCollectionStatic> mesh, Ref<InstanceColorMatInstance> matinst) {
 		GameObject::Create();
 		auto& ism = EmplaceComponent<RavEngine::StaticMesh>(mesh, LitMeshMaterialInstance(matinst));
 	}
@@ -45,21 +46,20 @@ PerfB_World::PerfB_World() {
 
 	Debug::Log("Loading Assets");
 	matinst = RavEngine::New<InstanceColorMatInstance>(Material::Manager::Get<InstanceColorMat>());
-	currentMesh = RavEngine::New<MeshAsset>();
 	cube = RavEngine::MeshAsset::Manager::Get("cube.obj");
 	cone = RavEngine::MeshAsset::Manager::Get("cone.obj");
 	sphere = RavEngine::MeshAsset::Manager::Get("sphere.obj");
 	cylinder = RavEngine::MeshAsset::Manager::Get("cylinder.obj");
-	currentMesh->Exchange(cube);
-    currentMesh->destroyOnDestruction = false;
 	
 	// spawn demo entities
 
 	int32_t range = 200;
 
+	meshCollection = New<MeshCollectionStatic>(cube);
+
     Debug::Log("Spawning {} instances",num_entities);
 	for (uint32_t i = 0; i < num_entities; i++) {
-		auto e = Instantiate<InstanceEntity>(currentMesh, matinst);
+		auto e = Instantiate<InstanceEntity>(meshCollection, matinst);
 		auto& transform = e.GetTransform();
 
 		vector3 pos;
@@ -130,6 +130,24 @@ PerfB_World::PerfB_World() {
     // load systems
     EmplaceSystem<PlayerSystem>();
     EmplaceTimedSystem<MetricsSystem>(std::chrono::seconds(1));
+}
+
+void PerfB_World::SwitchMesh(meshes nextMesh)
+{
+	switch (nextMesh) {
+	case meshes::cube:
+		meshCollection->SetMeshForLOD(0, cube);
+		break;
+	case meshes::cone:
+		meshCollection->SetMeshForLOD(0, cone);
+		break;
+	case meshes::cylinder:
+		meshCollection->SetMeshForLOD(0, cylinder);
+		break;
+	case meshes::sphere:
+		meshCollection->SetMeshForLOD(0, sphere);
+		break;
+	}
 }
 
 void PerfB_World::PreTick(float fpsscale)
