@@ -163,7 +163,7 @@ void CharacterScript::StartPounding() {
 }
 
 
-void Character::Create(Ref<MeshAssetSkinned> mesh, Ref<PBRMaterialInstance> material, Ref<SkeletonAsset> skeleton) {
+void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance> material, Ref<SkeletonAsset> skeleton) {
     GameObject::Create();
 	// setup animation
 	// note: if you are loading multiple instances
@@ -184,7 +184,7 @@ void Character::Create(Ref<MeshAssetSkinned> mesh, Ref<PBRMaterialInstance> mate
 	{
 		auto testMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		testMat->SetAlbedoColor({0,1,0,1});
-		auto mesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("cube.obj"));
+		auto mesh = MeshCollectionStaticManager::Get("cube.obj");
 		childChildForTesting.EmplaceComponent<StaticMesh>(mesh,LitMeshMaterialInstance(testMat));
 
 		EmplaceComponent<StaticMesh>(mesh, LitMeshMaterialInstance(testMat));	// also putting a mesh on the base object for testing transforms
@@ -219,7 +219,7 @@ void Character::Create(Ref<MeshAssetSkinned> mesh, Ref<PBRMaterialInstance> mate
 	auto handEntity = GetWorld()->Instantiate<GameObject>();
     MeshAssetOptions opt;
     opt.scale = 0.4f;
-	handEntity.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("cone.obj", opt)), LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
+	handEntity.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cone.obj", opt), LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
 	
 	childEntity.EmplaceComponent<ConstraintTarget>();
 	// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n

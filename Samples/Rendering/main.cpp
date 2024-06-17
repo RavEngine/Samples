@@ -81,11 +81,32 @@ struct Level : public RavEngine::World {
         auto floor = Instantiate<GameObject>();
         floor.GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
 
-        {
-            auto floorMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj"));
-            auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-            floorMat->SetAlbedoColor({ 0.5,0.5,0.5,1 });
-            floor.EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
+        auto floorMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj"));
+        auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        floorMat->SetAlbedoColor({ 0.5,0.5,0.5,1 });
+        floor.EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
+        
+
+        // asteroids
+        auto asteroidMeshCol = New<MeshCollectionStatic>(std::initializer_list<MeshCollectionStatic::Entry>{
+            {
+                .mesh = MeshAsset::Manager::Get("asteroid_lod0.obj"),
+                .maxDistance = 40
+            },
+            {
+                .mesh = MeshAsset::Manager::Get("asteroid_lod1.obj"),
+                .maxDistance = 80,
+            },
+            {
+                .mesh = MeshAsset::Manager::Get("asteroid_lod2.obj"),
+                .maxDistance = std::numeric_limits<float>::infinity(),
+            },
+        });
+        for (int i = 0; i < 100; i++) {
+            auto asteroid = Instantiate<GameObject>();
+            asteroid.EmplaceComponent<StaticMesh>(asteroidMeshCol, LitMeshMaterialInstance(floorMat));
+            auto pos = vector3(std::sin(Random::get(0.f, 2*3.14f)),Random::get(0.f, 1.f), std::cos(Random::get(0.f, 2 * 3.14f))) * Random::get(50.f, 80.f);
+            asteroid.GetTransform().SetWorldPosition(pos);
         }
     
         camRoot = Instantiate<decltype(camRoot)>();
@@ -142,8 +163,7 @@ struct Level : public RavEngine::World {
             auto time = GetApp()->GetCurrentTime();
             t.SetLocalPosition({ std::sin(time) * 5, 0, 0 });
         };
-        EmplaceSystem<decltype(MoveParticleSystem)>();
-        
+        EmplaceSystem<decltype(MoveParticleSystem)>();      
         
         // create the scene
         

@@ -26,7 +26,7 @@ void Flagpole::Create(){
     // load animation
     auto skeleton = RavEngine::New<SkeletonAsset>("flag.fbx");
     auto clips = RavEngine::New<AnimationAsset>("flag.fbx",skeleton);
-    auto meshAssetSkinned = MeshAssetSkinned::Manager::Get("flag.fbx",skeleton);
+    auto meshAssetSkinned = MeshCollectionSkinnedManager::Get("flag.fbx",skeleton);
     
     auto flagEntity = GetWorld()->Instantiate<GameObject>();
     GetTransform().AddChild(flagEntity);

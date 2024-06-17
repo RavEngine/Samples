@@ -5,6 +5,10 @@
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/Ref.hpp>
 
+namespace RavEngine {
+    struct MeshCollectionSkinned;
+}
+
 struct CharacterScript : public RavEngine::ComponentWithOwner {
 
     RavEngine::ComponentHandle<RavEngine::AnimatorComponent> animator;
@@ -42,7 +46,7 @@ namespace RavEngine {
 
 
 struct Character : public RavEngine::GameObject {
-	void Create(Ref<RavEngine::MeshAssetSkinned> skinnedMesh, Ref<RavEngine::PBRMaterialInstance> materialInstance, Ref<RavEngine::SkeletonAsset> skeleton);
+	void Create(Ref<RavEngine::MeshCollectionSkinned> skinnedMesh, Ref<RavEngine::PBRMaterialInstance> materialInstance, Ref<RavEngine::SkeletonAsset> skeleton);
 	void Move(const vector3&, decimalType speedMultiplier = 0);
 	void Jump();
 	void Pound();

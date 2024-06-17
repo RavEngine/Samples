@@ -45,7 +45,7 @@ Level::Level(){
     auto& gui = lights.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 
-	auto spawnCharacter = [this](Ref<MeshAssetSkinned> mesh, Ref<PBRMaterialInstance> charMat, Ref<SkeletonAsset> skeleton, vector3 pos) {
+	auto spawnCharacter = [this](Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance> charMat, Ref<SkeletonAsset> skeleton, vector3 pos) {
 		auto character2 = Instantiate<Character>(mesh, charMat, skeleton);
 		character2.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(pos, vector3(0, 0, 0));
 		characters.push_back(character2);
@@ -53,7 +53,7 @@ Level::Level(){
 
 	{
 		auto skeleton = RavEngine::New<SkeletonAsset>("character_anims.fbx");
-		auto mesh = RavEngine::New<MeshAssetSkinned>("character_anims.fbx", skeleton);
+		auto mesh = MeshCollectionSkinnedManager::Get("character_anims.fbx", skeleton);
 		auto charMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		charMat->SetAlbedoColor({ 1,0.4,0.2,1 });
 
@@ -69,7 +69,7 @@ Level::Level(){
 	// this one uses its own assets to be considered distinct by the engine
 	{
 		auto skeleton = RavEngine::New<SkeletonAsset>("character_anims.fbx");
-		auto mesh = RavEngine::New<MeshAssetSkinned>("character_anims.fbx", skeleton);
+		auto mesh = MeshCollectionSkinnedManager::Get("character_anims.fbx", skeleton);
 		auto charMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		charMat->SetAlbedoColor({ 0.2,0.4,1,1 });
 		
