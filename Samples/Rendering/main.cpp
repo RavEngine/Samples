@@ -43,7 +43,7 @@ struct FireParticleUpdateMaterial : public ParticleUpdateMaterial {
 struct Level : public RavEngine::World {
 
     GameObject camRoot, camHeadUD;
-    constexpr static float camSpeed = 0.005;
+    float camSpeed = 0.05;
     constexpr static float camTurnSpeed = 0.003;
 
     decimalType fsScale = 0;
@@ -91,15 +91,15 @@ struct Level : public RavEngine::World {
         auto asteroidMeshCol = New<MeshCollectionStatic>(std::initializer_list<MeshCollectionStatic::Entry>{
             {
                 .mesh = MeshAsset::Manager::Get("asteroid_lod0.obj"),
-                .maxDistance = 40
+                .minDistance = 0
             },
             {
                 .mesh = MeshAsset::Manager::Get("asteroid_lod1.obj"),
-                .maxDistance = 80,
+                .minDistance = 40,
             },
             {
                 .mesh = MeshAsset::Manager::Get("asteroid_lod2.obj"),
-                .maxDistance = std::numeric_limits<float>::infinity(),
+                .minDistance = 60,
             },
         });
         for (int i = 0; i < 100; i++) {
@@ -213,9 +213,19 @@ struct Level : public RavEngine::World {
             * LookUp = "LookUp",
             * ToggleMouse = "ToggleMouse",
             * ResetCamera = "ResetCam",
+            * ChangeSpeed = "ChangeSpeed",
             * PlayParticle = "PlayParticle"
             ;
     };
+
+    void CamChangeSpeed(float val){
+        if (val > 0) {
+            camSpeed = std::max(camSpeed - 0.05f, 0.f);
+        }
+        else if (val < 0) {
+            camSpeed += 0.05f;
+        }
+    }
 
     void CamMoveY(float amt) {
         velvec.y += amt * camSpeed * fsScale;
@@ -256,6 +266,8 @@ struct Level : public RavEngine::World {
         im->AddAxisMap(InputNames::MoveRight, SDL_SCANCODE_D);
         im->AddAxisMap(InputNames::LookRight, Special::MOUSEMOVE_XVEL, -1);
         im->AddAxisMap(InputNames::LookUp, Special::MOUSEMOVE_YVEL, -1);
+        im->AddAxisMap(InputNames::ChangeSpeed, Special::MOUSEWHEEL_Y);
+
         im->AddActionMap(InputNames::PlayParticle, SDL_SCANCODE_P);
         im->AddActionMap(InputNames::ResetCamera, SDL_SCANCODE_RETURN);
 
@@ -266,6 +278,7 @@ struct Level : public RavEngine::World {
         im->BindAxis(InputNames::MoveRight, GetInput(this), &Level::CamMoveStrafe, CID::ANY);
         im->BindAxis(InputNames::LookRight, GetInput(this), &Level::CamLookLR, CID::ANY);
         im->BindAxis(InputNames::LookUp, GetInput(this), &Level::CamLookUD, CID::ANY);
+        im->BindAxis(InputNames::ChangeSpeed, GetInput(this), &Level::CamChangeSpeed, CID::ANY);
 
         im->BindAction(InputNames::ToggleMouse, GetInput(this), &Level::ToggleMouse, ActionState::Pressed, CID::ANY);
         im->BindAction(InputNames::ResetCamera, GetInput(this), &Level::CameraResetCallback, ActionState::Pressed, CID::ANY);
