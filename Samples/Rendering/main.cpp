@@ -130,7 +130,13 @@ struct Level : public RavEngine::World {
         auto smokeParticleEntity = Instantiate<GameObject>();
         auto particleRenderMat = New<SpritesheetParticleRenderMaterial>();
 
-        auto smokeRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(particleRenderMat);
+        struct ParticleRenderData {
+            glm::vec3 pos;
+            glm::vec2 scale;
+            uint32_t animationFrame;
+        };
+
+        auto smokeRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(particleRenderMat, sizeof(ParticleRenderData), 0, offsetof(ParticleRenderData,scale), offsetof(ParticleRenderData, animationFrame));
         smokeRenderMat->SetSpritesheet(Texture::Manager::Get("smoke.png"));
         smokeRenderMat->spriteDim = {
             .numSpritesWidth = 3,
@@ -146,7 +152,7 @@ struct Level : public RavEngine::World {
         smokeEmitter.SetEmissionRate(1000);
 
         auto fireParticleEntity = Instantiate<GameObject>();
-        auto fireRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(particleRenderMat);
+        auto fireRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(particleRenderMat, sizeof(ParticleRenderData), 0, offsetof(ParticleRenderData, scale), offsetof(ParticleRenderData, animationFrame));
         fireRenderMat->SetSpritesheet(Texture::Manager::Get("fire.png"));
         fireRenderMat->spriteDim = {
             .numSpritesWidth = 11,
