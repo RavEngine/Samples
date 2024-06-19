@@ -20,6 +20,7 @@
 using namespace RavEngine;
 using namespace std;
 
+
 struct RenderingApp : public RavEngine::App {
     void OnStartup(int argc, char** argv) final;
     void OnFatal(const std::string_view msg) final {
@@ -130,7 +131,8 @@ struct Level : public RavEngine::World {
         auto smokeParticleEntity = Instantiate<GameObject>();
         auto particleRenderMat = New<SpritesheetParticleRenderMaterial>();
 
-        struct ParticleRenderData {
+
+        struct alignas(4) ParticleRenderData {
             glm::vec3 pos;
             glm::vec2 scale;
             uint32_t animationFrame;
