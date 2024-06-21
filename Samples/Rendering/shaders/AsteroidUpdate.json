@@ -1,0 +1,5 @@
+{
+  "shader": "AsteroidUpdate.csh",
+  "type": "particle-update",
+  "stage": "compute"
+}

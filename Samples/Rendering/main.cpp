@@ -40,6 +40,9 @@ struct FireParticleUpdateMaterial : public ParticleUpdateMaterial {
     FireParticleUpdateMaterial() : ParticleUpdateMaterial("FireParticleInit", "FireParticleUpdate") {}
 };
 
+struct AsteroidUpdateMaterial : public ParticleUpdateMaterial {
+    AsteroidUpdateMaterial() : ParticleUpdateMaterial("AsteroidInit", "AsteroidUpdate") {}
+};
 
 struct Level : public RavEngine::World {
 
@@ -147,7 +150,7 @@ struct Level : public RavEngine::World {
 
         auto smokeUpdateMat = New<ParticleUpdateMaterialInstance>(New<SmokeParticleUpdateMaterial>());
 
-        auto& smokeEmitter = smokeParticleEntity.EmplaceComponent<ParticleEmitter>(8192, smokeUpdateMat, smokeRenderMat); // number of particles we want
+        auto& smokeEmitter = smokeParticleEntity.EmplaceComponent<ParticleEmitter>(8192, sizeof(ParticleRenderData), smokeUpdateMat, smokeRenderMat); // number of particles we want
         //smokeEmitter.mode = ParticleEmitter::Mode::Burst;
         smokeEmitter.Play();
         smokeParticle = { smokeParticleEntity };
@@ -161,9 +164,20 @@ struct Level : public RavEngine::World {
             .numSpritesHeight = 1
         };
         auto fireUpdateMat = New<ParticleUpdateMaterialInstance>(New<FireParticleUpdateMaterial>());
-        auto& fireEmitter = fireParticleEntity.EmplaceComponent<ParticleEmitter>(8192, fireUpdateMat, fireRenderMat);
+        auto& fireEmitter = fireParticleEntity.EmplaceComponent<ParticleEmitter>(8192, sizeof(ParticleRenderData), fireUpdateMat, fireRenderMat);
         fireEmitter.Play();
         fireEmitter.SetEmissionRate(1000);
+
+        struct AsteroidParticleData {
+            glm::vec3 pos;
+            glm::vec3 velocity;
+        };
+
+        auto asteroidUpdateMat = New<ParticleUpdateMaterialInstance>(New<AsteroidUpdateMaterial>());
+        auto asteroidRenderMat = New<PBRMeshParticleRenderMaterialInstance>(New<PBRMeshParticleRenderMaterial>());
+
+        auto asteroidEmitterEntity = Instantiate<GameObject>();
+        auto& emitter = asteroidEmitterEntity.EmplaceComponent<ParticleEmitter>(1024, sizeof(AsteroidParticleData), asteroidUpdateMat, asteroidRenderMat);
 
         SetupInputs();
 

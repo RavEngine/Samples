@@ -1,0 +1,5 @@
+{
+  "shader": "AsteroidInit.csh",
+  "type": "particle-init",
+  "stage": "compute"
+}
