@@ -174,10 +174,13 @@ struct Level : public RavEngine::World {
         };
 
         auto asteroidUpdateMat = New<ParticleUpdateMaterialInstance>(New<AsteroidUpdateMaterial>());
-        auto asteroidRenderMat = New<PBRMeshParticleRenderMaterialInstance>(New<PBRMeshParticleRenderMaterial>());
+        auto asteroidRenderMat = New<PBRMeshParticleRenderMaterialInstance>(New<PBRMeshParticleRenderMaterial>(),asteroidMeshCol, sizeof(AsteroidParticleData), offsetof(AsteroidParticleData,pos));
 
         auto asteroidEmitterEntity = Instantiate<GameObject>();
         auto& emitter = asteroidEmitterEntity.EmplaceComponent<ParticleEmitter>(1024, sizeof(AsteroidParticleData), asteroidUpdateMat, asteroidRenderMat);
+
+        emitter.Play();
+        emitter.SetEmissionRate(500);
 
         SetupInputs();
 
