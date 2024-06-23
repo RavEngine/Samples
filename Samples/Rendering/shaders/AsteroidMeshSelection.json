@@ -1,0 +1,5 @@
+{
+  "shader": "AsteroidMeshSelection.csh",
+  "type": "mesh-particle-selection",
+  "stage" : "compute"
+}
