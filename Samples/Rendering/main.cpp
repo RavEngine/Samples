@@ -170,12 +170,13 @@ struct Level : public RavEngine::World {
 
         struct AsteroidParticleData {
             glm::vec3 pos;
+            glm::vec3 scale;
             glm::vec3 velocity;
         };
 
         auto asteroidUpdateMat = New<ParticleUpdateMaterialInstance>(New<AsteroidUpdateMaterial>());
         auto asteroidSelectionMat = New<MeshParticleMeshSelectionMaterialInstance>(New<MeshParticleMeshSelectionMaterial>("AsteroidMeshSelection"));
-        auto asteroidRenderMat = New<PBRMeshParticleRenderMaterialInstance>(New<PBRMeshParticleRenderMaterial>(),asteroidMeshCol, sizeof(AsteroidParticleData), offsetof(AsteroidParticleData,pos));
+        auto asteroidRenderMat = New<PBRMeshParticleRenderMaterialInstance>(New<PBRMeshParticleRenderMaterial>(),asteroidMeshCol, sizeof(AsteroidParticleData), offsetof(AsteroidParticleData,pos), offsetof(AsteroidParticleData, scale));
 
         asteroidRenderMat->SetMeshSelectionFunction(asteroidSelectionMat);
 
@@ -183,7 +184,7 @@ struct Level : public RavEngine::World {
         auto& emitter = asteroidEmitterEntity.EmplaceComponent<ParticleEmitter>(1024, sizeof(AsteroidParticleData), asteroidUpdateMat, asteroidRenderMat);
 
         emitter.Play();
-        emitter.SetEmissionRate(500);
+        emitter.SetEmissionRate(50);
 
         SetupInputs();
 
