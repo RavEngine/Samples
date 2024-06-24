@@ -169,6 +169,7 @@ struct Level : public RavEngine::World {
         fireEmitter.SetEmissionRate(1000);
 
         struct AsteroidParticleData {
+            glm::quat rot;
             glm::vec3 pos;
             glm::vec3 scale;
             glm::vec3 velocity;
@@ -176,7 +177,7 @@ struct Level : public RavEngine::World {
 
         auto asteroidUpdateMat = New<ParticleUpdateMaterialInstance>(New<AsteroidUpdateMaterial>());
         auto asteroidSelectionMat = New<MeshParticleMeshSelectionMaterialInstance>(New<MeshParticleMeshSelectionMaterial>("AsteroidMeshSelection"));
-        auto asteroidRenderMat = New<PBRMeshParticleRenderMaterialInstance>(New<PBRMeshParticleRenderMaterial>(),asteroidMeshCol, sizeof(AsteroidParticleData), offsetof(AsteroidParticleData,pos), offsetof(AsteroidParticleData, scale));
+        auto asteroidRenderMat = New<PBRMeshParticleRenderMaterialInstance>(New<PBRMeshParticleRenderMaterial>(),asteroidMeshCol, sizeof(AsteroidParticleData), offsetof(AsteroidParticleData,pos), offsetof(AsteroidParticleData, scale), offsetof(AsteroidParticleData, rot));
 
         asteroidRenderMat->SetMeshSelectionFunction(asteroidSelectionMat);
 

@@ -1,4 +1,5 @@
 #include "AsteroidShared.glsl"
+#include "RavEngine/quat.glsl"
 
 layout(push_constant, std430) uniform UniformBufferObject{
     float fpsScale;
@@ -16,6 +17,7 @@ void update(inout ParticleData data, inout float newLife, uint particleID)
     data.scale -= scaleDelta * ubo.fpsScale;
 
     data.pos += data.velocity; 
+    data.rot = quatAdd(data.rot, eulerToQuat(degToRad(vec3(5,5,5)))); 
 
     if (newLife > 300)
     {
