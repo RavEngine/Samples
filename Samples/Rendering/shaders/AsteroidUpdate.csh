@@ -17,7 +17,11 @@ void update(inout ParticleData data, inout float newLife, uint particleID)
     data.scale -= scaleDelta * ubo.fpsScale;
 
     data.pos += data.velocity; 
-    data.rot = quatAdd(data.rot, eulerToQuat(degToRad(vec3(5,5,5)))); 
+    data.rot = quatAdd(data.rot, eulerToQuat(degToRad(vec3(5,30,5)))); 
+
+    if (data.pos.y < data.scale.y){
+        data.velocity.y = abs(data.velocity.y);
+    }
 
     if (newLife > 300)
     {

@@ -75,6 +75,8 @@ struct Level : public RavEngine::World {
             return pushConstantData;
         }
     };
+
+    struct FlameTag {};
     
     Ref<StarMatMaterialInstance> starMaterialInstance;
     ComponentHandle<ParticleEmitter> smokeParticle;
@@ -155,6 +157,7 @@ struct Level : public RavEngine::World {
         smokeEmitter.Play();
         smokeParticle = { smokeParticleEntity };
         smokeEmitter.SetEmissionRate(1000);
+        smokeParticleEntity.EmplaceComponent<FlameTag>();
 
         auto fireParticleEntity = Instantiate<GameObject>();
         auto fireRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(particleRenderMat, sizeof(ParticleRenderData), 0, offsetof(ParticleRenderData, scale), offsetof(ParticleRenderData, animationFrame));
@@ -167,6 +170,7 @@ struct Level : public RavEngine::World {
         auto& fireEmitter = fireParticleEntity.EmplaceComponent<ParticleEmitter>(8192, sizeof(ParticleRenderData), fireUpdateMat, fireRenderMat);
         fireEmitter.Play();
         fireEmitter.SetEmissionRate(1000);
+        fireParticleEntity.EmplaceComponent<FlameTag>();
 
         struct AsteroidParticleData {
             glm::quat rot;
@@ -183,13 +187,13 @@ struct Level : public RavEngine::World {
 
         auto asteroidEmitterEntity = Instantiate<GameObject>();
         auto& emitter = asteroidEmitterEntity.EmplaceComponent<ParticleEmitter>(1024, sizeof(AsteroidParticleData), asteroidUpdateMat, asteroidRenderMat);
-
+        asteroidEmitterEntity.GetTransform().LocalTranslateDelta({0,2,0});
         emitter.Play();
         emitter.SetEmissionRate(50);
 
         SetupInputs();
 
-        constexpr auto MoveParticleSystem = [](const ParticleEmitter& emitter, Transform& t) {
+        constexpr auto MoveParticleSystem = [](const ParticleEmitter& emitter, const FlameTag& ft, Transform& t) {
             auto time = GetApp()->GetCurrentTime();
             t.SetLocalPosition({ std::sin(time) * 5, 0, 0 });
         };
