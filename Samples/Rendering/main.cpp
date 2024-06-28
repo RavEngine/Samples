@@ -168,6 +168,7 @@ struct Level : public RavEngine::World {
         };
         auto fireUpdateMat = New<ParticleUpdateMaterialInstance>(New<FireParticleUpdateMaterial>());
         auto& fireEmitter = fireParticleEntity.EmplaceComponent<ParticleEmitter>(8192, sizeof(ParticleRenderData), fireUpdateMat, fireRenderMat);
+        fireEmitter.SetCastsShadows(false);
         fireEmitter.Play();
         fireEmitter.SetEmissionRate(1000);
         fireParticleEntity.EmplaceComponent<FlameTag>();
@@ -324,7 +325,7 @@ struct Level : public RavEngine::World {
     }
 
     void PlayParticle() {
-        smokeParticle->Play();
+        smokeParticle->Reset();
     }
 
     void PreTick(float scale) final {
