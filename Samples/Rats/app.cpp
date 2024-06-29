@@ -19,11 +19,9 @@
 using namespace RavEngine;
 using namespace std;
 
-struct WhatMat : public RavEngine::Material {
-    WhatMat() : Material("what", RavEngine::MaterialConfig{
-            .vertConfig = RavEngine::defaultVertexConfig,
-            .colorBlendConfig = RavEngine::defaultUnlitColorBlendConfig,
-			.bindings = {
+struct WhatMat : public RavEngine::UnlitMaterial {
+	WhatMat() : UnlitMaterial("what", {
+		.bindings = {
 				 {
 				.binding = 0,
 				.type = RGL::BindingType::Sampler,
@@ -35,7 +33,8 @@ struct WhatMat : public RavEngine::Material {
 					.stageFlags = RGL::BindingVisibility::Fragment,
 				},
 			},
-        }) {}
+		}	
+        ) {}
 };
 struct WhatMatInstance : public RavEngine::MaterialInstance{
     WhatMatInstance(Ref<WhatMat> m) : MaterialInstance(m) { };
@@ -78,7 +77,7 @@ struct Rat : public RavEngine::GameObject {
 
 		MeshAssetOptions opt;
 		opt.scale = 0.2;
-		EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("rat.obj", opt), LitMeshMaterialInstance(matInst));
+		EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("rat.obj", opt), matInst);
         
         EmplaceComponent<RatComponent>();
 	}
@@ -90,7 +89,7 @@ struct Pipe : public RavEngine::GameObject {
 		auto pipeMesh = MeshCollectionStaticManager::Get("pipe.obj");
 		auto pipeMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		pipeMat->SetAlbedoTexture(Texture::Manager::Get("pipe.png"));
-		EmplaceComponent<StaticMesh>(pipeMesh, LitMeshMaterialInstance(pipeMat));
+		EmplaceComponent<StaticMesh>(pipeMesh, pipeMat);
 
 		auto& body = EmplaceComponent<RigidBodyStaticComponent>();
 		auto physMat = RavEngine::New<PhysicsMaterial>();
@@ -110,7 +109,7 @@ struct Floor : public RavEngine::GameObject {
 		auto floorMesh = MeshCollectionStaticManager::Get("quad.obj");
 		auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		floorMat->SetAlbedoColor({0.5,0.5,0.5,1});
-		EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
+		EmplaceComponent<StaticMesh>(floorMesh, floorMat);
 
 		auto childObject = GetWorld()->Instantiate<GameObject>();
 		GetTransform().AddChild(childObject);
@@ -132,7 +131,7 @@ struct What : public RavEngine::GameObject {
 		auto whatMat = RavEngine::New<WhatMatInstance>(Material::Manager::Get<WhatMat>());
 		whatMat->SetTexture(Texture::Manager::Get("what.png"));
 
-		auto& mesh = EmplaceComponent<StaticMesh>(whatMesh, UnlitMeshMaterialInstance(whatMat));
+		auto& mesh = EmplaceComponent<StaticMesh>(whatMesh, whatMat);
 		mesh.SetEnabled(false);
 	}
 };

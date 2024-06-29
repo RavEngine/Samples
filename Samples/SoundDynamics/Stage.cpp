@@ -44,7 +44,7 @@ void Stage::Create() {
 	}, [&](Ref<MeshAsset> rm, Ref<PBRMaterialInstance>, const PreloadedAsset& pr) {
 		auto pos = std::distance(faceOrder.begin(),std::find(faceOrder.begin(), faceOrder.end(), pr.name));
 		auto inst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-		EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(rm), LitMeshMaterialInstance(inst));
+		EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(rm), inst);
 		this->wallMaterials[pos] = inst;
 	});
 

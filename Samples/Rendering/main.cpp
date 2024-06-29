@@ -60,10 +60,8 @@ struct Level : public RavEngine::World {
         float applicationTime = 0;
     };
     
-    struct StarMat : public RavEngine::Material{
-        StarMat() : Material("star", RavEngine::MaterialConfig{
-            .vertConfig = RavEngine::defaultVertexConfig,
-            .colorBlendConfig = RavEngine::defaultUnlitColorBlendConfig,
+    struct StarMat : public RavEngine::UnlitMaterial{
+        StarMat() : UnlitMaterial("star", {
             .pushConstantSize = sizeof(StarMatPushConstants),
         }){}
     };
@@ -90,7 +88,7 @@ struct Level : public RavEngine::World {
         auto floorMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj"));
         auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         floorMat->SetAlbedoColor({ 0.5,0.5,0.5,1 });
-        floor.EmplaceComponent<StaticMesh>(floorMesh, LitMeshMaterialInstance(floorMat));
+        floor.EmplaceComponent<StaticMesh>(floorMesh, floorMat);
         
 
         // asteroids
@@ -110,7 +108,7 @@ struct Level : public RavEngine::World {
         });
         for (int i = 0; i < 100; i++) {
             auto asteroid = Instantiate<GameObject>();
-            asteroid.EmplaceComponent<StaticMesh>(asteroidMeshCol, LitMeshMaterialInstance(floorMat));
+            asteroid.EmplaceComponent<StaticMesh>(asteroidMeshCol, floorMat);
             auto pos = vector3(std::sin(Random::get(0.f, 2*3.14f)),Random::get(0.f, 1.f), std::cos(Random::get(0.f, 2 * 3.14f))) * Random::get(50.f, 80.f);
             asteroid.GetTransform().SetWorldPosition(pos);
         }
@@ -211,7 +209,7 @@ struct Level : public RavEngine::World {
         helmetMat->SetRoughnessTexture(Texture::Manager::Get("Default_roughness.png"));
         helmetMat->SetAOTexture(Texture::Manager::Get("Default_AO.png"));
         
-        helmetObj.EmplaceComponent<StaticMesh>(helmetMesh, LitMeshMaterialInstance(helmetMat));
+        helmetObj.EmplaceComponent<StaticMesh>(helmetMesh, helmetMat);
         
         auto objectDistance = 5;
         
@@ -221,7 +219,7 @@ struct Level : public RavEngine::World {
         auto star = Instantiate<GameObject>();
         auto starMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("sphere.obj"));
         starMaterialInstance = New<StarMatMaterialInstance>(Material::Manager::Get<StarMat>());
-        star.EmplaceComponent<StaticMesh>(starMesh, UnlitMeshMaterialInstance(starMaterialInstance));
+        star.EmplaceComponent<StaticMesh>(starMesh, starMaterialInstance);
         star.GetTransform().LocalTranslateDelta({objectDistance,5,0});
         
         // post procesing

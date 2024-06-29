@@ -9,7 +9,7 @@ void LightEntity::Create(Ref<RavEngine::MeshCollectionStatic> mesh)
 	auto mat = RavEngine::New<RavEngine::PBRMaterialInstance>(RavEngine::Material::Manager::Get<RavEngine::PBRMaterial>());
 	RavEngine::MeshAssetOptions opt;
 	opt.scale = 0.03;
-	EmplaceComponent<RavEngine::StaticMesh>(mesh, RavEngine::LitMeshMaterialInstance(mat));
+	EmplaceComponent<RavEngine::StaticMesh>(mesh,mat);
 	auto& cc = EmplaceComponent<CirculateComponent>();
 	auto& light = EmplaceComponent<RavEngine::PointLight>();
 	light.SetIntensity(cc.radius * 2);

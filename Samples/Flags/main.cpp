@@ -20,12 +20,8 @@ struct GrassMatUniforms {
     float time = 0;
 };
 
-struct GrassMat : public RavEngine::Material {
-    GrassMat() : Material("grass", RavEngine::MaterialConfig{
-        .vertConfig = RavEngine::defaultVertexConfig,
-            .colorBlendConfig = RavEngine::defaultColorBlendConfig,
-            .pushConstantSize = sizeof(GrassMatUniforms)
-    }) {}
+struct GrassMat : public RavEngine::LitMaterial {
+    GrassMat() : LitMaterial("grass", { .pushConstantSize = sizeof(GrassMatUniforms) }) {}
 };
 
 struct GrassMatInst : public RavEngine::MaterialInstance {
@@ -102,7 +98,7 @@ struct Level : public World{
 			
 			for (int i = 0; i < nblades; i++) {
 				auto grassEntity = Instantiate<GameObject>();
-				auto& mesh = grassEntity.EmplaceComponent<StaticMesh>(grassmesh, LitMeshMaterialInstance(grassMatInst));
+				auto& mesh = grassEntity.EmplaceComponent<StaticMesh>(grassmesh, grassMatInst);
 
 				auto& transform = grassEntity.GetTransform();
 
@@ -135,7 +131,7 @@ struct Level : public World{
         auto ground = Instantiate<GameObject>();
         auto groundMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         groundMat->SetAlbedoColor({ 92/255.f, 60/255.f, 29/255.f,1});
-        ground.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj")), LitMeshMaterialInstance(groundMat));
+        ground.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj")), groundMat);
         ground.GetTransform().LocalScaleDelta(vector3(10));
         
         flagpole = Instantiate<Flagpole>();

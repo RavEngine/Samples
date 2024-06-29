@@ -8,23 +8,22 @@ struct FlagMatUniforms {
     float time = 0;
 };
 
-struct FlagMat : public RavEngine::Material{
-    FlagMat(std::string_view secondShader = "flag") : Material("flag", secondShader, RavEngine::MaterialConfig{
-        .vertConfig = RavEngine::defaultVertexConfig,
-        .colorBlendConfig = RavEngine::defaultColorBlendConfig,
-        .bindings = {
-            {
-                .binding = 0,
-                .type = RGL::BindingType::Sampler,
-                .stageFlags = RGL::BindingVisibility::Fragment,
+struct FlagMat : public RavEngine::LitMaterial {
+    FlagMat(std::string_view secondShader = "flag") : LitMaterial("flag", secondShader, {
+            .bindings = {
+                {
+                    .binding = 0,
+                    .type = RGL::BindingType::Sampler,
+                    .stageFlags = RGL::BindingVisibility::Fragment,
+                },
+                 {
+                    .binding = 1,
+                    .type = RGL::BindingType::SampledImage,
+                    .stageFlags = RGL::BindingVisibility::Fragment,
+                },
             },
-             {
-                .binding = 1,
-                .type = RGL::BindingType::SampledImage,
-                .stageFlags = RGL::BindingVisibility::Fragment,
-            },
-        },
-        .pushConstantSize = sizeof(FlagMatUniforms),
+        .pushConstantSize = sizeof(FlagMatUniforms)
+        }, {        
         .cullMode = RGL::CullMode::None
         }) {}
 };

@@ -44,7 +44,7 @@ struct DemoObject : public RavEngine::GameObject{
             inst->SetAlbedoColor({1,1,1,1});
             light.SetIntensity(20);
         }
-		auto& mesh = child.EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)], LitMeshMaterialInstance(inst));
+		auto& mesh = child.EmplaceComponent<StaticMesh>(PerfC_World::meshes[meshrng(gen)], inst);
 				
 		GetTransform().AddChild(child);
 		

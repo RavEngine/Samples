@@ -57,7 +57,7 @@ struct SceneViewerLevel : public RavEngine::World {
 
 		loader.LoadMeshes([&](const PreloadedAsset&) -> bool {return true; }, [&](Ref<MeshAsset> asset, Ref<PBRMaterialInstance> mat, const PreloadedAsset& data) {
 			try {
-				nodes.at(data.name).EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(asset), LitMeshMaterialInstance(mat));
+				nodes.at(data.name).EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(asset), mat);
 			}
 			catch (exception& e) {
 				// continue silently...

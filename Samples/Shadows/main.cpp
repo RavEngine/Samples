@@ -42,15 +42,15 @@ struct Level : public RavEngine::World{
 	Level() {
 		// load ground plane
 		auto ground = Instantiate<GameObject>();
-		ground.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("quad.obj"), LitMeshMaterialInstance(New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
+		ground.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("quad.obj"), New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
 		ground.GetTransform().LocalScaleDelta(vector3(5,1,5));
 
 		// load casting triangle
 		tri = Instantiate<decltype(tri)>();
 		constexpr static uint32_t trikey = 1;
-		auto trimat = New<PBRMaterialInstance>(Material::Manager::GetWithKey<PBRMaterial>(trikey,PBRMaterialOptions{.cullMode = RGL::CullMode::None}));
+		auto trimat = New<PBRMaterialInstance>(Material::Manager::GetWithKey<PBRMaterial>(trikey,LitMaterialOptions{.cullMode = RGL::CullMode::None}));
 		trimat->SetAlbedoColor({ 1,0,0,1 });
-		tri.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("triangle.obj"), LitMeshMaterialInstance(trimat));
+		tri.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("triangle.obj"), trimat);
 		tri.GetTransform().LocalTranslateDelta(vector3(-1.5, 0.8, 0))
             .LocalRotateDelta(vector3(deg_to_rad(90), deg_to_rad(90), deg_to_rad(180)))
             .LocalRotateDelta(vector3(0, deg_to_rad(90), 0));
@@ -58,7 +58,7 @@ struct Level : public RavEngine::World{
         cube = Instantiate<decltype(cube)>();
         auto cubeMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         cubeMat->SetAlbedoColor({0,0,1,1});
-        cube.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cube.obj"), LitMeshMaterialInstance(cubeMat));
+        cube.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cube.obj"), cubeMat);
         cube.GetTransform()
             .LocalTranslateDelta(vector3(1,0.7,0))
             .LocalRotateDelta(vector3(deg_to_rad(45),deg_to_rad(90),0))

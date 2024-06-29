@@ -120,7 +120,7 @@ struct Level : public World{
                 auto dotpt = point;
                 dotpt.y += scalefac * 1.3;
                 dot.GetTransform().SetWorldPosition(dotpt).SetLocalScale({scalefac});
-                dot.EmplaceComponent<StaticMesh>(sphereMeshCol, LitMeshMaterialInstance(dottedLineMat));
+                dot.EmplaceComponent<StaticMesh>(sphereMeshCol, dottedLineMat);
                 dot.EmplaceComponent<DottedLineMarker>();
                 point -= dir * step;
             }
@@ -153,8 +153,8 @@ struct Level : public World{
 
         auto targetMeshCol = New<MeshCollectionStatic>(MeshAsset::Manager::Get("target.obj"));
 
-        targetBegin.EmplaceComponent<StaticMesh>(targetMeshCol, LitMeshMaterialInstance(targetBeginMat));
-        targetEnd.EmplaceComponent<StaticMesh>(targetMeshCol, LitMeshMaterialInstance(targetEndMat));
+        targetBegin.EmplaceComponent<StaticMesh>(targetMeshCol, targetBeginMat);
+        targetEnd.EmplaceComponent<StaticMesh>(targetMeshCol, targetEndMat);
 
         cameraEntity = Instantiate<GameObject>();
         auto& camera = cameraEntity.EmplaceComponent<CameraComponent>();
@@ -204,7 +204,7 @@ struct Level : public World{
         MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
         mesh = MeshAsset::Manager::Get("maze.fbx", opt);
-        mazeEntity.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(mesh), LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
+        mazeEntity.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(mesh), RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
         // used for raycasting clicks onto the maze
         auto& rigid = mazeEntity.EmplaceComponent<RigidBodyStaticComponent>();
         rigid.debugEnabled = true;

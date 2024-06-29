@@ -107,7 +107,7 @@ TestWorld::TestWorld(){
 	auto sharedMesh = MeshCollectionStaticManager::Get("cube.obj");
 	
 	anonymous = Instantiate<GameObject>();
-	anonymous.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
+	anonymous.EmplaceComponent<StaticMesh>(sharedMesh, material);
 	auto& spotlight = anonymous.EmplaceComponent<SpotLight>();
 	spotlight.SetIntensity(4);
 	spotlight.SetConeAngle(10);
@@ -116,7 +116,7 @@ TestWorld::TestWorld(){
 	InitPhysics();
 	
 	anonymousChild = Instantiate<GameObject>();
-	anonymousChild.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
+	anonymousChild.EmplaceComponent<StaticMesh>(sharedMesh, material);
 	anonymous.GetTransform().AddChild(anonymousChild);
 	anonymousChild.GetTransform().LocalTranslateDelta(vector3(17,0,0));
 	anonymousChild.EmplaceComponent<PointLight>().SetIntensity(4);
@@ -128,7 +128,7 @@ TestWorld::TestWorld(){
 	//PlayAmbientSound(InstantaneousAmbientAudioSource(audioAsset));
 	
 	floorplane = Instantiate<GameObject>();
-	floorplane.EmplaceComponent<StaticMesh>(sharedMesh, LitMeshMaterialInstance(material));
+	floorplane.EmplaceComponent<StaticMesh>(sharedMesh, material);
 	floorplane.GetTransform().LocalScaleDelta(vector3(10, 0.5, 10)).LocalTranslateDelta(vector3(0, -20, 0));
 	auto& s = floorplane.EmplaceComponent<RigidBodyStaticComponent>();
 	s.EmplaceCollider<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5));

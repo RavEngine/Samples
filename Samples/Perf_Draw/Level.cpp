@@ -23,7 +23,7 @@ static constexpr uint32_t num_entities =
 struct InstanceEntity : public RavEngine::GameObject {
 	void Create(Ref<RavEngine::MeshCollectionStatic> mesh, Ref<InstanceColorMatInstance> matinst) {
 		GameObject::Create();
-		auto& ism = EmplaceComponent<RavEngine::StaticMesh>(mesh, LitMeshMaterialInstance(matinst));
+		auto& ism = EmplaceComponent<RavEngine::StaticMesh>(mesh, matinst);
 	}
 };
 

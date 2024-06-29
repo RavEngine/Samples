@@ -202,7 +202,7 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance>
 
 	// load the mesh and material onto the character
 	auto& cubemesh = childEntity.EmplaceComponent<SkinnedMeshComponent>(skeleton, mesh);
-	cubemesh.SetMaterial(LitMeshMaterialInstance(material));
+	cubemesh.SetMaterial(material);
 
 	// load the collider and physics settings
     auto& r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
@@ -219,7 +219,7 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance>
 	auto handEntity = GetWorld()->Instantiate<GameObject>();
     MeshAssetOptions opt;
     opt.scale = 0.4f;
-	handEntity.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cone.obj", opt), LitMeshMaterialInstance(RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>())));
+	handEntity.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cone.obj", opt), RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
 	
 	childEntity.EmplaceComponent<ConstraintTarget>();
 	// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n

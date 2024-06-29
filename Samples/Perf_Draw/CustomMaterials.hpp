@@ -6,12 +6,8 @@ struct MatInstUniforms {
 	float time = 0;
 };
 
-struct InstanceColorMat : public RavEngine::Material {
-	InstanceColorMat() : Material("instance_colored", RavEngine::MaterialConfig{
-			.vertConfig = RavEngine::defaultVertexConfig,
-			.colorBlendConfig = RavEngine::defaultColorBlendConfig,
-			.pushConstantSize = sizeof(MatInstUniforms)
-		}) {}
+struct InstanceColorMat : public RavEngine::LitMaterial {
+	InstanceColorMat() : LitMaterial("instance_colored", { .pushConstantSize = sizeof(MatInstUniforms)}) {}
 };
 
 struct InstanceColorMatInstance : public RavEngine::MaterialInstance{

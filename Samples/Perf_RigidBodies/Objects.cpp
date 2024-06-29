@@ -13,7 +13,7 @@ void Ground::Create()
 	MeshAssetOptions opt;
 	opt.keepInSystemRAM = true;
 	auto mesh = MeshAsset::Manager::Get("ground.obj", opt);	//need to retain the mesh data in system memory 
-	EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(mesh), LitMeshMaterialInstance(mat));
+	EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(mesh), mat);
 	EmplaceComponent<RotationComponent>();
 	auto& rs = EmplaceComponent<RigidBodyStaticComponent>();
 	rs.EmplaceCollider<MeshCollider>(mesh, New<PhysicsMaterial>(0.3, 0.3, 0.1));
@@ -25,7 +25,7 @@ void Ground::Create()
 void RigidBody::Create(Ref<PBRMaterialInstance> mat, Ref<MeshCollectionStatic> mesh, Ref<PhysicsMaterial> physmat, BodyType type)
 {
 	GameObject::Create();
-	EmplaceComponent<StaticMesh>(mesh, LitMeshMaterialInstance(mat));
+	EmplaceComponent<StaticMesh>(mesh, mat);
 	auto& rd = EmplaceComponent<RigidBodyDynamicComponent>();
 
 	switch (type) {

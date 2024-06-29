@@ -17,7 +17,7 @@ void Paddle::Create(const ColorRGBA& color)
 
 	Ref<PBRMaterialInstance> material = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	material->SetAlbedoColor(color);
-	auto& mesh = EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("HockeyPaddle.fbx", opt)), LitMeshMaterialInstance(material));
+	auto& mesh = EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("HockeyPaddle.fbx", opt)), material);
 
 	//PhysX doesn't have a cylinder primitive, so we use a sphere offset upwards and lock the axes
 	auto& dyn = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
