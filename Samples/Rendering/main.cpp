@@ -132,7 +132,7 @@ struct Level : public RavEngine::World {
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
 
         auto smokeParticleEntity = Instantiate<GameObject>();
-        auto particleRenderMat = New<SpritesheetParticleRenderMaterial>();
+        auto smokeParticleRenderMat = New<SpritesheetParticleRenderMaterial<LightingMode::Lit>>();
 
 
         struct alignas(4) ParticleRenderData {
@@ -141,7 +141,7 @@ struct Level : public RavEngine::World {
             uint32_t animationFrame;
         };
 
-        auto smokeRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(particleRenderMat, sizeof(ParticleRenderData), 0, offsetof(ParticleRenderData,scale), offsetof(ParticleRenderData, animationFrame));
+        auto smokeRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(smokeParticleRenderMat, sizeof(ParticleRenderData), 0, offsetof(ParticleRenderData,scale), offsetof(ParticleRenderData, animationFrame));
         smokeRenderMat->SetSpritesheet(Texture::Manager::Get("smoke.png"));
         smokeRenderMat->spriteDim = {
             .numSpritesWidth = 3,
@@ -158,7 +158,8 @@ struct Level : public RavEngine::World {
         smokeParticleEntity.EmplaceComponent<FlameTag>();
 
         auto fireParticleEntity = Instantiate<GameObject>();
-        auto fireRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(particleRenderMat, sizeof(ParticleRenderData), 0, offsetof(ParticleRenderData, scale), offsetof(ParticleRenderData, animationFrame));
+        auto fireParticleRenderMat = New<SpritesheetParticleRenderMaterial<LightingMode::Unlit>>();
+        auto fireRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(fireParticleRenderMat, sizeof(ParticleRenderData), 0, offsetof(ParticleRenderData, scale), offsetof(ParticleRenderData, animationFrame));
         fireRenderMat->SetSpritesheet(Texture::Manager::Get("fire.png"));
         fireRenderMat->spriteDim = {
             .numSpritesWidth = 11,
