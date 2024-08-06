@@ -1,6 +1,5 @@
 
 layout(push_constant) uniform UniformBufferObject{
-    mat4 viewProj;
     float time;
 } ubo;
 
@@ -14,7 +13,7 @@ float rand(vec2 co){
   return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-LitVertexOut vert(EntityIn entity)
+LitVertexOut vert(EntityIn entity, EngineData data)
 {    
     uint inEntityID = entity.entityID;
     mat4 worldTransform = entity.modelMtx;
@@ -69,7 +68,7 @@ LitVertexOut vert(EntityIn entity)
         
     transformed = worldTransform * vec4(transformed.xyz, 1);
     
-    vs_out.position = ubo.viewProj * vec4(transformed.xyz, 1);
+    vs_out.position = data.viewProj * vec4(transformed.xyz, 1);
         
 	outNormal = inNormal;
     v_position = transformed.xyz;

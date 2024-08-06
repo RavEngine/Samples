@@ -171,7 +171,7 @@ struct Level : public RavEngine::World {
         fireEmitter.Play();
         fireEmitter.SetEmissionRate(1000);
         fireParticleEntity.EmplaceComponent<FlameTag>();
-
+#if 1
         struct AsteroidParticleData {
             glm::quat rot;
             glm::vec3 pos;
@@ -190,6 +190,7 @@ struct Level : public RavEngine::World {
         asteroidEmitterEntity.GetTransform().LocalTranslateDelta({0,2,0});
         emitter.Play();
         emitter.SetEmissionRate(50);
+#endif
 
         SetupInputs();
 

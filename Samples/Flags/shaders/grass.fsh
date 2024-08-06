@@ -4,7 +4,6 @@ layout(location = 1) in vec2 inUV;
 layout(location = 2) in float mixFactor;
 
 layout(push_constant) uniform UniformBufferObject{
-    mat4 viewProj;
 	float time;
 } ubo;
 

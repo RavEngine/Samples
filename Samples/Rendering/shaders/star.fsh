@@ -2,7 +2,6 @@
 layout(location = 0) in vec2 inUV;
 
 layout(push_constant, std430) uniform UniformBufferObject{
-    mat4 viewProj;
     float time;
 } ubo;
 

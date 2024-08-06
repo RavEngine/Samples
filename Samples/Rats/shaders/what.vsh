@@ -1,11 +1,7 @@
 
-layout(push_constant, std430) uniform UniformBufferObject{
-    mat4 viewProj;
-} ubo;
-
 layout(location = 0) out vec2 outUV;
 
-UnlitVertexOut vert(EntityIn entity)
+UnlitVertexOut vert(EntityIn entity, EngineData data)
 {
     UnlitVertexOut vs_out;
 
@@ -13,7 +9,7 @@ UnlitVertexOut vert(EntityIn entity)
 
     outUV = inUV;
 
-    vs_out.position = ubo.viewProj * worldPos;
+    vs_out.position = data.viewProj * worldPos;
 
     return vs_out;
 }

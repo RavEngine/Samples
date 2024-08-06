@@ -5,7 +5,6 @@ layout(location = 1) in vec2 inUV;
 layout(binding = 0) uniform sampler2D diffuseSampler; 
 
 layout(push_constant) uniform UniformBufferObject{
-    mat4 viewProj;
     float time;
 } ubo;
 
@@ -18,12 +17,6 @@ vec3 hsb2rgb( in vec3 c ){
                      1.0 );
     rgb = rgb*rgb*(3.0-2.0*rgb);
     return c.z * mix(vec3(1.0,1.0,1.0), rgb, c.y);
-}
-
-
-// linear value remap
-float remap(float value, float low1, float high1, float low2, float high2){
-    return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
 }
 
 // step function w/ floor
@@ -93,6 +86,10 @@ LitOutput frag()
   
     fs_out.color = vec4(resCol,1);
     fs_out.normal = inNormal;
+    fs_out.roughness = 0.5;
+	fs_out.specular = 0.2;
+	fs_out.metallic = 0;
+	fs_out.ao = 0;
 
     return fs_out;
 }
