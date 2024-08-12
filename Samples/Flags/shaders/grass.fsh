@@ -13,6 +13,10 @@ LitOutput frag()
 
     fs_out.color = vec4(mix(vec3(110/255.0, 219/255.0, 0),vec3(33/255.0, 143/255.0, 0),mixFactor),1);
     fs_out.normal = inNormal;
+    fs_out.roughness = 0.5;
+	fs_out.specular = 0.2;
+	fs_out.metallic = 0;
+	fs_out.ao = 0;
 
     return fs_out;
 }

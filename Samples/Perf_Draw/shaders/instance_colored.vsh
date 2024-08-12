@@ -68,6 +68,8 @@ LitVertexOut vert(EntityIn entity, EngineData data)
         
     transformed = worldTransform * vec4(transformed.xyz, 1);
     
+    vs_out.worldPosition = transformed.xyz;
+    
     vs_out.position = data.viewProj * vec4(transformed.xyz, 1);
         
 	outNormal = inNormal;

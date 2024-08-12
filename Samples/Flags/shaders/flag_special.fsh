@@ -8,6 +8,12 @@ layout(push_constant) uniform UniformBufferObject{
     float time;
 } ubo;
 
+// linear value remap
+float remap(float value, float low1, float high1, float low2, float high2){
+    return low2 + (value - low1) * (high2 - low2) / (high1 - low1);
+}
+
+
 //  Function from Iñigo Quiles
 //  https://www.shadertoy.com/view/MsS3Wc
 vec3 hsb2rgb( in vec3 c ){
@@ -23,6 +29,7 @@ vec3 hsb2rgb( in vec3 c ){
 float stepf(float value,float steps){
     return remap(floor(remap(value,0.0,1.0,0.0,steps)),0.0,steps,0.0,1.0);
 }
+
 
 // step function w/ ceiling 
 float stepc(float value, float steps){

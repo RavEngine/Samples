@@ -21,6 +21,7 @@ LitVertexOut vert(EntityIn entity, EngineData data)
     worldPos = inModel * vec4(a_position, 1);
 
     vs_out.position = data.viewProj * worldPos;
+    vs_out.worldPosition = worldPos.xyz;
 
 	outNormal = normalize(transpose(mat3(inModel)) * inNormal);
     mixFactor = height - a_position.y;
