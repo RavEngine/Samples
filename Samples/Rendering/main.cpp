@@ -112,6 +112,20 @@ struct Level : public RavEngine::World {
             auto pos = vector3(std::sin(Random::get(0.f, 2*3.14f)),Random::get(0.f, 1.f), std::cos(Random::get(0.f, 2 * 3.14f))) * Random::get(50.f, 80.f);
             asteroid.GetTransform().SetWorldPosition(pos);
         }
+
+        // wine glasses
+
+        auto wineglassMeshCol = MeshCollectionStaticManager::Get("wineglass.obj");
+        auto glassMat = New<PBRMaterialInstance>(New<PBRMaterial>(MaterialRenderOptions{.opacityMode = OpacityMode::Transparent}));
+        for (int i = 0; i < 100; i++) {
+            auto glass = Instantiate<GameObject>();
+            glass.EmplaceComponent<StaticMesh>(wineglassMeshCol, glassMat);
+
+            vector3 pos{i % 10, 0, i / 10};
+
+            glass.GetTransform().SetWorldPosition(pos);
+        }
+
     
         camRoot = Instantiate<decltype(camRoot)>();
         camHeadUD = Instantiate<decltype(camHeadUD)>();
