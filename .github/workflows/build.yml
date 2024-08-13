@@ -177,7 +177,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: recursive
       - name: Configure
         run: |
           mkdir build
@@ -216,7 +216,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: recursive
       - name: Configure
         run: | 
               mkdir build
