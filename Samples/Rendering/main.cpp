@@ -136,7 +136,7 @@ struct Level : public RavEngine::World {
             auto glass = Instantiate<GameObject>();
             glass.EmplaceComponent<StaticMesh>(wineglassMeshCol, glassMat);
 
-            vector3 pos{i % 10, 0, i / 10};
+            vector3 pos = vector3(i % 10, 0, i / 10) * 2.f;
 
             glass.GetTransform().SetWorldPosition(pos);
         }

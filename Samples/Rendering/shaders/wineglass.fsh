@@ -2,11 +2,17 @@
 layout(location = 0) in vec2 inUV;
 layout(location = 1) in vec3[3] inTBN;
 
+vec3 colors[] = {
+    vec3(0.3,0,0),
+    vec3(0,0.3,0),
+    vec3(0,0,0.3)
+};
+
 LitOutput frag()
 {
 	LitOutput mat_out;
 
-	mat_out.color = vec4(1,1,1,0.2);
+	mat_out.color = vec4(colors[gl_PrimitiveID % colors.length()],0.5);
 
     mat3 TBN = mat3(inTBN[0],inTBN[1],inTBN[2]);
 	mat_out.normal = normalize(TBN * vec3(0,0,1));
