@@ -44,6 +44,21 @@ struct AsteroidUpdateMaterial : public ParticleUpdateMaterial {
     AsteroidUpdateMaterial() : ParticleUpdateMaterial("AsteroidInit", "AsteroidUpdate") {}
 };
 
+struct GlassMat : public LitMaterial {
+    GlassMat() : LitMaterial("pbr", "wineglass", 
+        {
+            
+        }, 
+        {
+            .cullMode = RGL::CullMode::None,
+            .opacityMode = OpacityMode::Transparent
+        }) {}
+};
+
+struct GlassMatInstance : public MaterialInstance {
+    GlassMatInstance(Ref<GlassMat> m) : MaterialInstance(m) {}
+};
+
 struct Level : public RavEngine::World {
 
     GameObject camRoot, camHeadUD;
@@ -116,7 +131,7 @@ struct Level : public RavEngine::World {
         // wine glasses
 
         auto wineglassMeshCol = MeshCollectionStaticManager::Get("wineglass.obj");
-        auto glassMat = New<PBRMaterialInstance>(New<PBRMaterial>(MaterialRenderOptions{.opacityMode = OpacityMode::Transparent}));
+        auto glassMat = New<GlassMatInstance>(New<GlassMat>());
         for (int i = 0; i < 100; i++) {
             auto glass = Instantiate<GameObject>();
             glass.EmplaceComponent<StaticMesh>(wineglassMeshCol, glassMat);

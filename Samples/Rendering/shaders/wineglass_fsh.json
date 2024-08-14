@@ -1,0 +1,6 @@
+{
+  "shader": "wineglass.fsh",
+  "stage": "fragment",
+  "type": "lit-mesh",
+  "opacity": "transparent"
+}
