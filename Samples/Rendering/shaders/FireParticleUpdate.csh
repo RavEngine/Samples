@@ -33,6 +33,10 @@ void update(inout ParticleData data, inout float newLife, uint particleID)
 
     data.animationFrame = uint(remap(newLife,0,life,0,11));
 
+    if (data.animationFrame >= 6){
+        data.alpha = remap(data.animationFrame, 6,11, 1,0);
+    }
+
     if (newLife > life){
         // destroy the particle
 
