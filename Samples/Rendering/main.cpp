@@ -89,6 +89,18 @@ struct Level : public RavEngine::World {
         }
     };
 
+    struct TQuadMat : public UnlitMaterial {
+        TQuadMat() : UnlitMaterial("unlit_transparent", {}, {
+            .cullMode = RGL::CullMode::None,
+            .opacityMode = OpacityMode::Transparent
+        }) {}
+    };
+
+    struct TQuadMatInstance : public MaterialInstance {
+        TQuadMatInstance(Ref<TQuadMat>m) : MaterialInstance(m) {}
+    };
+
+
     struct FlameTag {};
     
     Ref<StarMatMaterialInstance> starMaterialInstance;
@@ -139,6 +151,16 @@ struct Level : public RavEngine::World {
             vector3 pos = vector3(i % 10, 0, i / 10) * 2.f;
 
             glass.GetTransform().SetWorldPosition(pos);
+        }
+
+        // unlit transparent quads
+        auto tquadMat = New< TQuadMatInstance>(New<TQuadMat>());
+        for (int i = 0; i < 10; i++) {
+            auto obj = Instantiate<GameObject>();
+            obj.EmplaceComponent<StaticMesh>(floorMesh, tquadMat);
+
+            obj.GetTransform().SetWorldPosition({-10, 2, i});
+            obj.GetTransform().SetWorldRotation(vector3{PI / 2,0,0});
         }
 
     

@@ -1,0 +1,6 @@
+{
+  "shader": "unlit_transparent.fsh",
+  "stage": "fragment",
+  "type": "unlit-mesh",
+  "opacity": "transparent"
+}
