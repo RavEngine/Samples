@@ -1,4 +1,4 @@
-#include "sprite_particle_layout.glsl"
+#include "sprite_particle_layout_transparent.glsl"
 
 #include "utility.glsl"
 
@@ -20,6 +20,8 @@ ParticleData init(ParticleInitData initData)
     data.pos = pos.xyz;
 
     data.animationFrame = 0;
+
+    data.alpha = 1;
 
     return data;
 }

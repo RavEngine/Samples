@@ -1,0 +1,8 @@
+{
+  "shader": "FireParticleRender.vsh",
+  "stage": "vertex",
+  "type": "unlit-particle-quad",
+  "defines": [
+    "CUSTOM_INDEXING 1"
+  ]
+}

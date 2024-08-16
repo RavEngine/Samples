@@ -1,0 +1,6 @@
+{
+  "shader": "FireParticleRender.fsh",
+  "stage": "fragment",
+  "type": "unlit-particle-quad",
+  "opacity":  "transparent"
+}

@@ -100,6 +100,46 @@ struct Level : public RavEngine::World {
         TQuadMatInstance(Ref<TQuadMat>m) : MaterialInstance(m) {}
     };
 
+    struct alignas(4) ParticleRenderData {
+        glm::vec3 pos;
+        glm::vec2 scale;
+        uint32_t animationFrame;
+    };
+
+    struct FireParticleDataUBO {
+        ParticleBillboardUBO innerUbo;
+        uint32_t particleAlphaOffset;
+    };
+
+    struct FireParticleMaterial : public SpritesheetParticleRenderMaterial<LightingMode::Unlit>{
+        FireParticleMaterial() : SpritesheetParticleRenderMaterial("FireParticleRender","FireParticleRender", OpacityMode::Transparent, sizeof(FireParticleDataUBO)) {}
+    };
+
+    struct FireParticleRenderData {
+        ParticleRenderData innerData;
+        float alpha;
+    };
+
+    struct FireParticleMaterialInstance : public SpritesheetParticleRenderMaterialInstance {
+
+        FireParticleMaterialInstance(Ref<FireParticleMaterial> m, uint32_t alphaOffset) : SpritesheetParticleRenderMaterialInstance(Ref<SpritesheetParticleRenderMaterial<LightingMode::Unlit>>(m),
+            sizeof(FireParticleRenderData), 0, offsetof(FireParticleRenderData, innerData.scale), offsetof(FireParticleRenderData, innerData.animationFrame)) {
+            this->alphaOffset = alphaOffset;
+        }
+
+        uint32_t alphaOffset;
+
+        uint8_t SetPushConstantData(std::span<std::byte, 128> data) const {
+            SpritesheetParticleRenderMaterialInstance::SetPushConstantData(data);
+            struct fireUBO {
+                ParticleBillboardUBO inner;
+                uint32_t alphaOffset;
+            };
+            std::memcpy(data.data() + offsetof(fireUBO, alphaOffset), &alphaOffset, sizeof(alphaOffset));
+
+            return sizeof(fireUBO);
+        }
+    };
 
     struct FlameTag {};
     
@@ -186,12 +226,6 @@ struct Level : public RavEngine::World {
         auto smokeParticleRenderMat = New<SpritesheetParticleRenderMaterial<LightingMode::Lit>>();
 
 
-        struct alignas(4) ParticleRenderData {
-            glm::vec3 pos;
-            glm::vec2 scale;
-            uint32_t animationFrame;
-        };
-
         auto smokeRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(smokeParticleRenderMat, sizeof(ParticleRenderData), 0, offsetof(ParticleRenderData,scale), offsetof(ParticleRenderData, animationFrame));
         smokeRenderMat->SetSpritesheet(Texture::Manager::Get("smoke.png"));
         smokeRenderMat->spriteDim = {
@@ -209,8 +243,8 @@ struct Level : public RavEngine::World {
         smokeParticleEntity.EmplaceComponent<FlameTag>();
 
         auto fireParticleEntity = Instantiate<GameObject>();
-        auto fireParticleRenderMat = New<SpritesheetParticleRenderMaterial<LightingMode::Unlit>>();
-        auto fireRenderMat = RavEngine::New<SpritesheetParticleRenderMaterialInstance>(fireParticleRenderMat, sizeof(ParticleRenderData), 0, offsetof(ParticleRenderData, scale), offsetof(ParticleRenderData, animationFrame));
+        auto fireParticleRenderMat = New<FireParticleMaterial>();
+        auto fireRenderMat = RavEngine::New<FireParticleMaterialInstance>(fireParticleRenderMat, offsetof(FireParticleRenderData, alpha));
         fireRenderMat->SetSpritesheet(Texture::Manager::Get("fire.png"));
         fireRenderMat->spriteDim = {
             .numSpritesWidth = 11,

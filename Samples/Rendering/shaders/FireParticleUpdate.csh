@@ -5,7 +5,7 @@ layout(push_constant, std430) uniform UniformBufferObject{
 } ubo;
 
 
-#include "sprite_particle_layout.glsl"
+#include "sprite_particle_layout_transparent.glsl"
 
 #include "utility.glsl"
 
