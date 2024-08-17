@@ -44,6 +44,44 @@ struct AsteroidUpdateMaterial : public ParticleUpdateMaterial {
     AsteroidUpdateMaterial() : ParticleUpdateMaterial("AsteroidInit", "AsteroidUpdate") {}
 };
 
+struct AsteroidUBO {
+    uint32_t bytesPerParticle;
+    uint32_t positionOffset;
+    uint32_t scaleOffset;
+    uint32_t rotationOffset;
+    uint32_t alphaOffset;
+};
+
+struct AsteroidParticleData {
+    glm::vec4 rot;
+    glm::vec3 pos;
+    glm::vec3 scale;
+    glm::vec3 velocity;
+    float alpha;
+};
+
+struct AsteroidRenderMaterial : public MeshParticleRenderMaterial<LightingMode::Lit> {
+    AsteroidRenderMaterial() : MeshParticleRenderMaterial("AsteroidRender", "AsteroidRender", {.pushConstantSize = sizeof(AsteroidUBO), .opacityMode = OpacityMode::Transparent}) {}
+};
+
+struct AsteroidRenderMaterialInstance : public MeshParticleRenderMaterialInstance {
+    AsteroidRenderMaterialInstance(Ref<AsteroidRenderMaterial> m, Ref<MeshCollectionStatic> meshes) : MeshParticleRenderMaterialInstance(Ref<MeshParticleRenderMaterial<LightingMode::Lit>>(m),meshes) {}
+
+    uint8_t SetPushConstantData(std::span<std::byte, 128> data) const override {
+        constexpr static AsteroidUBO ubo{
+            .bytesPerParticle = sizeof(AsteroidParticleData),
+            .positionOffset = offsetof(AsteroidParticleData,pos),
+            .scaleOffset = offsetof(AsteroidParticleData,scale),
+            .rotationOffset = offsetof(AsteroidParticleData,rot),
+            .alphaOffset = offsetof(AsteroidParticleData,alpha)
+        };
+
+        std::memcpy(data.data(), &ubo, sizeof(ubo));
+
+        return sizeof(ubo);
+    }
+};
+
 struct GlassMat : public LitMaterial {
     GlassMat() : LitMaterial("pbr", "wineglass", 
         {
@@ -256,17 +294,10 @@ struct Level : public RavEngine::World {
         fireEmitter.Play();
         fireEmitter.SetEmissionRate(1000);
         fireParticleEntity.EmplaceComponent<FlameTag>();
-#if 1
-        struct AsteroidParticleData {
-            glm::quat rot;
-            glm::vec3 pos;
-            glm::vec3 scale;
-            glm::vec3 velocity;
-        };
 
         auto asteroidUpdateMat = New<ParticleUpdateMaterialInstance>(New<AsteroidUpdateMaterial>());
         auto asteroidSelectionMat = New<MeshParticleMeshSelectionMaterialInstance>(New<MeshParticleMeshSelectionMaterial>("AsteroidMeshSelection"));
-        auto asteroidRenderMat = New<PBRMeshParticleRenderMaterialInstance>(New<PBRMeshParticleRenderMaterial>(),asteroidMeshCol, sizeof(AsteroidParticleData), offsetof(AsteroidParticleData,pos), offsetof(AsteroidParticleData, scale), offsetof(AsteroidParticleData, rot));
+        auto asteroidRenderMat = New<AsteroidRenderMaterialInstance>(New<AsteroidRenderMaterial>(),asteroidMeshCol);
 
         asteroidRenderMat->SetMeshSelectionFunction(asteroidSelectionMat);
 
@@ -275,7 +306,7 @@ struct Level : public RavEngine::World {
         asteroidEmitterEntity.GetTransform().LocalTranslateDelta({0,2,0});
         emitter.Play();
         emitter.SetEmissionRate(50);
-#endif
+
 
         SetupInputs();
 

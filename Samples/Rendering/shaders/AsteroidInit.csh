@@ -16,6 +16,7 @@ ParticleData init(ParticleInitData initData)
     data.rot = vec4(0,0,0,1);
     data.scale = vec3(rand(vec2(particleID,particleID))) * 0.4 + 0.2;
     data.pos = (initData.emitterModel * vec4(0, 0, 0, 1)).xyz;
+    data.alpha = 1;
     
     return data;
 }
