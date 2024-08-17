@@ -12,7 +12,7 @@ layout(push_constant, std430) uniform UniformBufferObject{
 } ubo;
 
 layout(location = 0) out vec2 out_uv; 
-layout(location = 1) out float alphaFactor; 
+layout(location = 1) out flat float alphaFactor; 
 
 ParticleVertexOut vert(uint particleID, ParticleMatrices matrices, vec2 inVertex){
 

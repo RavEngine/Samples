@@ -9,7 +9,7 @@ layout(push_constant, std430) uniform UniformBufferObject{
 #include "RavEngine/meshparticle.glsl"
 
 layout(location = 0) out vec2 outUV;
-layout(location = 1) out float alphaFactor;
+layout(location = 1) out flat float alphaFactor;
 layout(location = 2) out vec3[3] outTBN;
 
 ParticleVertexOut vert(uint particleID, ParticleMatrices matrices){
