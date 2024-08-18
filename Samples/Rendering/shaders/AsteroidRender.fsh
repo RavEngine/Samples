@@ -137,6 +137,7 @@ LitOutput frag()
 	mat_out.roughness =  0.8;
 	mat_out.specular = 0.1;
 	mat_out.metallic =  0.1;
+    mat_out.emissiveColor = vec3(0,0,0);
 
 	return mat_out;
 }

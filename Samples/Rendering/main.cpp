@@ -326,6 +326,7 @@ struct Level : public RavEngine::World {
         helmetMat->SetMetallicTexture(Texture::Manager::Get("Default_metalness.png"));
         helmetMat->SetRoughnessTexture(Texture::Manager::Get("Default_roughness.png"));
         helmetMat->SetAOTexture(Texture::Manager::Get("Default_AO.png"));
+        helmetMat->SetEmissiveTexture(Texture::Manager::Get("Default_emissive.png"));
         
         helmetObj.EmplaceComponent<StaticMesh>(helmetMesh, helmetMat);
         
