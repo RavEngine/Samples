@@ -70,7 +70,7 @@ jobs:
               mkdir -p build
               mkdir -p build/linuxarm
               cd build/linuxarm
-              CC=/usr/bin/aarch64-linux-gnu-gcc-12 CXX=/usr/bin/aarch64-linux-gnu-g++-12 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DRAVENGINE_BUILD_TESTS=OFF ../.. 
+              CC=/usr/bin/aarch64-linux-gnu-gcc-12 CXX=/usr/bin/aarch64-linux-gnu-g++-12 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_SYSTEM_NAME=Linux -DRAVENGINE_BUILD_TESTS=OFF ../.. 
       - name: Build
         run: cd build/linuxarm && cmake --build . --config release --target install 
       - name: Upload Artifacts
