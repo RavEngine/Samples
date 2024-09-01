@@ -17,6 +17,7 @@
 #include "RavEngine/Light.hpp"
 #include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/RenderEngine.hpp>
+#include <RavEngine/Window.hpp>
 #include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
@@ -94,7 +95,7 @@ TestWorld::TestWorld(){
 	//is->BindAction("Click", click, ActionState::Released);
 	GetApp()->inputManager = is;
 	
-	InputManager::SetRelativeMouseMode(true);
+	GetApp()->GetMainWindow()->SetRelativeMouseMode(true);
 	
 	//spawn player (it will make its camera active)
 	ResetCam();

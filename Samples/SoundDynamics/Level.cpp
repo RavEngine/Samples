@@ -11,6 +11,7 @@
 #include <RavEngine/AudioGraphAsset.hpp>
 #include <RavEngine/VirtualFileSystem.hpp>
 #include <RavEngine/Texture.hpp>
+#include <RavEngine/Window.hpp>
 #include "AudioMIDI.hpp"
 #include "AudioExporter.hpp"
 
@@ -29,7 +30,7 @@ struct InputNames {
 };
 
 void Level::ToggleMouse(){
-	GetApp()->inputManager->SetRelativeMouseMode(!GetApp()->inputManager->GetRelativeMouseMode());
+	GetApp()->GetMainWindow()->SetRelativeMouseMode(not GetApp()->GetMainWindow()->GetRelativeMouseMode());
 }
 
 Level::Level(){
@@ -177,7 +178,7 @@ Level::Level(){
     im->BindAction(InputNames::ToggleMouse, GetInput(this), &Level::ToggleMouse, Pressed, CID::ANY);
     
     // default to camera control
-    im->SetRelativeMouseMode(true);
+    GetApp()->GetMainWindow()->SetRelativeMouseMode(true);
 
 	// for gui
     ComponentHandle<GUIComponent> gh(uiEntity);

@@ -103,7 +103,7 @@ struct SceneViewerLevel : public RavEngine::World {
 
 	void ToggleMouse() {
 		relativeMouseMode = !relativeMouseMode;
-		GetApp()->inputManager->SetRelativeMouseMode(relativeMouseMode);
+		GetApp()->GetMainWindow()->SetRelativeMouseMode(relativeMouseMode);
 	}
 
 	void SetupInputs() {
@@ -126,7 +126,7 @@ struct SceneViewerLevel : public RavEngine::World {
 		im->BindAxis(InputNames::LookUp, GetInput(this), &SceneViewerLevel::CamLookUD, CID::ANY);
 
 		im->BindAction(InputNames::ToggleMouse, GetInput(this), &SceneViewerLevel::ToggleMouse, ActionState::Pressed, CID::ANY);
-		im->SetRelativeMouseMode(relativeMouseMode);
+		GetApp()->GetMainWindow()->SetRelativeMouseMode(relativeMouseMode);
 
 		GetApp()->inputManager = im;
 	}
