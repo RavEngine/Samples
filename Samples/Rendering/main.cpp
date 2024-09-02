@@ -15,6 +15,7 @@
 #include "AppInfo.hpp"
 #include <numbers>
 #include <RavEngine/StartApp.hpp>
+#include <RavEngine/Window.hpp>
 #include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
@@ -405,7 +406,7 @@ struct Level : public RavEngine::World {
 
     void ToggleMouse() {
         relativeMouseMode = !relativeMouseMode;
-        GetApp()->inputManager->SetRelativeMouseMode(relativeMouseMode);
+        GetApp()->GetMainWindow()->SetRelativeMouseMode(relativeMouseMode);
     }
 
     void SetupInputs() {
@@ -434,7 +435,7 @@ struct Level : public RavEngine::World {
 
         im->BindAction(InputNames::ToggleMouse, GetInput(this), &Level::ToggleMouse, ActionState::Pressed, CID::ANY);
         im->BindAction(InputNames::ResetCamera, GetInput(this), &Level::CameraResetCallback, ActionState::Pressed, CID::ANY);
-        im->SetRelativeMouseMode(relativeMouseMode);
+        GetApp()->GetMainWindow()->SetRelativeMouseMode(relativeMouseMode);
 
         im->BindAction(InputNames::PlayParticle, GetInput(this), &Level::PlayParticle, ActionState::Pressed, CID::ANY);
 

@@ -14,6 +14,7 @@
 #include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/StartApp.hpp>
 #include <RavEngine/MeshCollection.hpp>
+#include <RavEngine/Window.hpp>
 #include <numbers>
 
 using namespace RavEngine;
@@ -321,7 +322,7 @@ struct RatsWorld : public RavEngine::World {
 
 	void ToggleMouse() {
 		relativeMouseMode = !relativeMouseMode;
-		GetApp()->inputManager->SetRelativeMouseMode(relativeMouseMode);
+		GetApp()->GetMainWindow()->SetRelativeMouseMode(relativeMouseMode);
 	}
 
 	void SetupInputs() {
@@ -352,7 +353,7 @@ struct RatsWorld : public RavEngine::World {
 
 		im->BindAction(InputNames::ToggleMouse, GetInput(this), &RatsWorld::ToggleMouse, ActionState::Pressed, CID::ANY);
         im->BindAction(InputNames::ResetCamera, GetInput(this), &RatsWorld::CameraResetCallback, ActionState::Pressed, CID::ANY);
-		im->SetRelativeMouseMode(relativeMouseMode);
+		GetApp()->GetMainWindow()->SetRelativeMouseMode(relativeMouseMode);
 
 		GetApp()->inputManager = im;
 	}

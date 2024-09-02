@@ -4,6 +4,7 @@
 #include <RavEngine/Transform.hpp>
 #include <RavEngine/InputManager.hpp>
 #include <RavEngine/Transform.hpp>
+#include <RavEngine/Window.hpp>
 
 struct PlayerController : public RavEngine::ScriptComponent {
     float scaleFactor = 0;
@@ -12,7 +13,7 @@ struct PlayerController : public RavEngine::ScriptComponent {
     RavEngine::ComponentHandle<RavEngine::Transform> childTransform;
 
     inline decimalType scale(float amt) {
-        return amt * scaleFactor * movementSpeed * RavEngine::GetApp()->inputManager->GetRelativeMouseMode();
+        return amt * scaleFactor * movementSpeed * RavEngine::GetApp()->GetMainWindow()->GetRelativeMouseMode();
     }
 
     inline void MoveForward(float amt) {
@@ -31,12 +32,12 @@ struct PlayerController : public RavEngine::ScriptComponent {
     }
 
     inline void LookUp(float amt) {
-        childTransform->LocalRotateDelta(vector3(deg_to_rad(amt * rotationSpeed * RavEngine::GetApp()->inputManager->GetRelativeMouseMode()), 0, 0));
+        childTransform->LocalRotateDelta(vector3(deg_to_rad(amt * rotationSpeed * RavEngine::GetApp()->GetMainWindow()->GetRelativeMouseMode()), 0, 0));
     }
 
     inline void LookRight(float amt) {
         auto& tr = GetTransform();
-        tr.LocalRotateDelta(vector3(0, deg_to_rad(amt * rotationSpeed * RavEngine::GetApp()->inputManager->GetRelativeMouseMode()), 0));
+        tr.LocalRotateDelta(vector3(0, deg_to_rad(amt * rotationSpeed * RavEngine::GetApp()->GetMainWindow()->GetRelativeMouseMode()), 0));
     }
 
     void Tick(float scale) final {
