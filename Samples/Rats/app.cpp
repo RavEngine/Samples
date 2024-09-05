@@ -76,9 +76,7 @@ struct Rat : public RavEngine::GameObject {
 		body.EmplaceCollider<CapsuleCollider>(0.1f, 0.3f, physMat);
 		body.debugEnabled = true;
 
-		MeshAssetOptions opt;
-		opt.scale = 0.2;
-		EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("rat.obj", opt), matInst);
+		EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("rat.obj"), matInst);
         
         EmplaceComponent<RatComponent>();
 	}
@@ -128,7 +126,7 @@ struct What : public RavEngine::GameObject {
 	void Create() {
 		GameObject::Create();
 
-		auto whatMesh = MeshCollectionStaticManager::Get("what.obj", MeshAssetOptions{.scale = 0.25});
+		auto whatMesh = MeshCollectionStaticManager::Get("what.obj");
 		auto whatMat = RavEngine::New<WhatMatInstance>(Material::Manager::Get<WhatMat>());
 		whatMat->SetTexture(Texture::Manager::Get("what.png"));
 
