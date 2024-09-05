@@ -25,7 +25,7 @@ void NetEntity::Create()
 	}
 	MeshAssetOptions opt;
 	opt.scale = 0.1;
-	EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cube.obj", opt), matinst);
+	EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cube", opt), matinst);
 	EmplaceComponent<InterpolationTransform>();
 }
 

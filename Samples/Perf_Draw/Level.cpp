@@ -46,10 +46,10 @@ PerfB_World::PerfB_World() {
 
 	Debug::Log("Loading Assets");
 	matinst = RavEngine::New<InstanceColorMatInstance>(Material::Manager::Get<InstanceColorMat>());
-	cube = RavEngine::MeshAsset::Manager::Get("cube.obj");
-	cone = RavEngine::MeshAsset::Manager::Get("cone.obj");
-	sphere = RavEngine::MeshAsset::Manager::Get("sphere.obj");
-	cylinder = RavEngine::MeshAsset::Manager::Get("cylinder.obj");
+	cube = RavEngine::MeshAsset::Manager::Get("cube");
+	cone = RavEngine::MeshAsset::Manager::Get("cone");
+	sphere = RavEngine::MeshAsset::Manager::Get("sphere");
+	cylinder = RavEngine::MeshAsset::Manager::Get("cylinder");
 	
 	// spawn demo entities
 

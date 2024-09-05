@@ -191,7 +191,7 @@ struct Level : public RavEngine::World {
         auto floor = Instantiate<GameObject>();
         floor.GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
 
-        auto floorMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj"));
+        auto floorMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad"));
         auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         floorMat->SetAlbedoColor({ 0.5,0.5,0.5,1 });
         floor.EmplaceComponent<StaticMesh>(floorMesh, floorMat);
@@ -200,15 +200,15 @@ struct Level : public RavEngine::World {
         // asteroids
         auto asteroidMeshCol = New<MeshCollectionStatic>(std::initializer_list<MeshCollectionStatic::Entry>{
             {
-                .mesh = MeshAsset::Manager::Get("asteroid_lod0.obj"),
+                .mesh = MeshAsset::Manager::Get("asteroid_lod0"),
                 .minDistance = 0
             },
             {
-                .mesh = MeshAsset::Manager::Get("asteroid_lod1.obj"),
+                .mesh = MeshAsset::Manager::Get("asteroid_lod1"),
                 .minDistance = 40,
             },
             {
-                .mesh = MeshAsset::Manager::Get("asteroid_lod2.obj"),
+                .mesh = MeshAsset::Manager::Get("asteroid_lod2"),
                 .minDistance = 60,
             },
         });
@@ -221,7 +221,7 @@ struct Level : public RavEngine::World {
 
         // wine glasses
 
-        auto wineglassMeshCol = MeshCollectionStaticManager::Get("wineglass.obj");
+        auto wineglassMeshCol = MeshCollectionStaticManager::Get("wineglass");
         auto glassMat = New<GlassMatInstance>(New<GlassMat>());
         for (int i = 0; i < 100; i++) {
             auto glass = Instantiate<GameObject>();
@@ -320,7 +320,7 @@ struct Level : public RavEngine::World {
         // create the scene
         
         auto helmetObj = Instantiate<GameObject>();
-        auto helmetMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("helmet.obj"));
+        auto helmetMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("helmet"));
         auto helmetMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         helmetMat->SetAlbedoTexture(Texture::Manager::Get("Default_albedo.png"));
         helmetMat->SetNormalTexture(Texture::Manager::Get("Default_normal.png"));
@@ -337,7 +337,7 @@ struct Level : public RavEngine::World {
         
         // the unlit material
         auto star = Instantiate<GameObject>();
-        auto starMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("sphere.obj"));
+        auto starMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("sphere"));
         starMaterialInstance = New<StarMatMaterialInstance>(Material::Manager::Get<StarMat>());
         star.EmplaceComponent<StaticMesh>(starMesh, starMaterialInstance);
         star.GetTransform().LocalTranslateDelta({objectDistance,5,0});

@@ -57,7 +57,7 @@ struct SpawnerSystem : public RavEngine::AutoCTTI{
 		mat->SetAlbedoTexture(texture);
         MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
-		mesh = RavEngine::MeshCollectionStaticManager::Get("sphere.obj",opt);
+		mesh = RavEngine::MeshCollectionStaticManager::Get("sphere",opt);
 	}
 	
     static constexpr auto total = 20000;

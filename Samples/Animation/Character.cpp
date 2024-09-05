@@ -218,8 +218,8 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance>
 	// this is useful for attaching an object to a character's hand, as shown below.
 	auto handEntity = GetWorld()->Instantiate<GameObject>();
     MeshAssetOptions opt;
-    opt.scale = 0.4f;
 	handEntity.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cone.obj", opt), RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+	handEntity.GetTransform().SetLocalScale(0.4);
 	
 	childEntity.EmplaceComponent<ConstraintTarget>();
 	// you must use the name from the importer. To see imported names, have your debugger print animcomp->skeleton->skeleton->joint_names_.data_+n

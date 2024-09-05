@@ -17,12 +17,11 @@ void Puck::Create()
 {
     GameObject::Create();
     MeshAssetOptions opt;
-    opt.scale = 0.35;
     if (material == nullptr) {
         material = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         material->SetAlbedoColor({ 0.2,0.2,0.2,1 });
     }
-    auto& puckmesh = EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("HockeyPuck.fbx", opt)), material);
+    auto& puckmesh = EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("HockeyPuck", opt)), material);
 
     auto& dyn = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);
     dyn.EmplaceCollider<SphereCollider>(0.3f, New<PhysicsMaterial>(0.f, 0.f, 1.f), vector3(0.f, 0.3f, 0.f));

@@ -105,7 +105,7 @@ TestWorld::TestWorld(){
 	//	Ref<Texture> t = new Texture("youcantrun.png");
 	//	material->SetAlbedoTexture(t);
 	
-	auto sharedMesh = MeshCollectionStaticManager::Get("cube.obj");
+	auto sharedMesh = MeshCollectionStaticManager::Get("cube");
 	
 	anonymous = Instantiate<GameObject>();
 	anonymous.EmplaceComponent<StaticMesh>(sharedMesh, material);

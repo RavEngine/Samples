@@ -12,7 +12,7 @@ void Ground::Create()
 	auto mat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	MeshAssetOptions opt;
 	opt.keepInSystemRAM = true;
-	auto mesh = MeshAsset::Manager::Get("ground.obj", opt);	//need to retain the mesh data in system memory 
+	auto mesh = MeshAsset::Manager::Get("ground", opt);	//need to retain the mesh data in system memory 
 	EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(mesh), mat);
 	EmplaceComponent<RotationComponent>();
 	auto& rs = EmplaceComponent<RigidBodyStaticComponent>();
