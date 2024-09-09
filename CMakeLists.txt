@@ -79,6 +79,7 @@ function (add_sample sample_dir)
 
 	file(GLOB objects "${sample_dir}/objects/*.fbx" "${sample_dir}/objects/*.dae" "${sample_dir}/objects/*.ozz" "${sample_dir}/objects/*.obj" "${sample_dir}/objects/*.ply")
 	file(GLOB meshes "${sample_dir}/meshes/*.json")
+	file(GLOB skeletons "${sample_dir}/meshes/*.skeleton")
 	file(GLOB textures "${sample_dir}/textures/*.jpg" "${sample_dir}/textures/*.png" "${sample_dir}/textures/*.svg" "${sample_dir}/textures/*.tiff")
 	file(GLOB shaders "${sample_dir}/shaders/*.json")
 	file(GLOB uis "${sample_dir}/ui/*.rml" "${sample_dir}/ui/*.rcss" "${sample_dir}/ui/*.png" "${sample_dir}/ui/*.json" "${sample_dir}/ui/*.ids")
@@ -89,6 +90,7 @@ function (add_sample sample_dir)
 		OUTPUT_FILE DATA_PACK
 		OBJECTS ${objects}
 		MESHES ${meshes}
+		SKELETONS ${skeletons}
 		SHADERS ${shaders}
 		TEXTURES ${textures}
 		UIS ${uis}
