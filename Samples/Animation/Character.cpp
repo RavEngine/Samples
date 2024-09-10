@@ -163,7 +163,7 @@ void CharacterScript::StartPounding() {
 }
 
 
-void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance> material, Ref<SkeletonAsset> skeleton) {
+void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic> handMesh, Ref<PBRMaterialInstance> handMatInst, Ref<PBRMaterialInstance> material, Ref<SkeletonAsset> skeleton) {
     GameObject::Create();
 	// setup animation
 	// note: if you are loading multiple instances
@@ -217,8 +217,7 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance>
 	// the Sockets feature allows you to expose transforms at bones on an animated skeleton as though they were their own entities.
 	// this is useful for attaching an object to a character's hand, as shown below.
 	auto handEntity = GetWorld()->Instantiate<GameObject>();
-    MeshAssetOptions opt;
-	handEntity.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cone.obj", opt), RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+	handEntity.EmplaceComponent<StaticMesh>(handMesh, handMatInst);
 	handEntity.GetTransform().SetLocalScale(0.4);
 	
 	childEntity.EmplaceComponent<ConstraintTarget>();

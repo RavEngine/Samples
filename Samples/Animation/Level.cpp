@@ -45,8 +45,11 @@ Level::Level(){
     auto& gui = lights.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 
-	auto spawnCharacter = [this](Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance> charMat, Ref<SkeletonAsset> skeleton, vector3 pos) {
-		auto character2 = Instantiate<Character>(mesh, charMat, skeleton);
+	auto coneMesh = MeshCollectionStaticManager::Get("cone");
+	auto handMatInst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+
+	auto spawnCharacter = [this,&coneMesh, &handMatInst](Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance> charMat, Ref<SkeletonAsset> skeleton, vector3 pos) {
+		auto character2 = Instantiate<Character>(mesh, coneMesh, handMatInst, charMat, skeleton);
 		character2.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(pos, vector3(0, 0, 0));
 		characters.push_back(character2);
 	};
@@ -57,7 +60,7 @@ Level::Level(){
 		auto charMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		charMat->SetAlbedoColor({ 1,0.4,0.2,1 });
 
-		character = Instantiate<Character>(mesh, charMat, skeleton);
+		character = Instantiate<Character>(mesh, coneMesh, handMatInst, charMat, skeleton);
 		character.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(15, 5, 0), vector3(0, deg_to_rad(90), 0));
 		characters.push_back(character);
 
