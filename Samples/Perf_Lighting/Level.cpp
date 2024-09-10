@@ -96,15 +96,14 @@ Level::Level() {
 	// load the ground plane
 	auto ground = Instantiate<GameObject>();
     MeshAssetOptions opt;
-    opt.scale = 1.2;
-	auto mesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj",opt));
+	auto mesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad",opt));
 	auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	mat->SetAlbedoColor({0.2,0.2,0.2,1.0});
 	ground.EmplaceComponent<StaticMesh>(mesh, mat);
+	ground.GetTransform().SetLocalScale(1.2);
 
 	// load the stanford dragon
-    opt.scale = 0.05;
-	auto hmesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("dragon_stanford.fbx", opt));
+	auto hmesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("dragon_stanford", opt));
 	auto hmat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	
 	for (int i = 0; i < 150; i++) {
@@ -120,7 +119,7 @@ Level::Level() {
 	EmplaceTimedSystem<FPSSystem>(chrono::seconds(1),"ui.rml","metrics");
 
 	// load lights
-	auto sphereMesh = New<MeshCollectionStatic>(RavEngine::MeshAsset::Manager::Get("sphere.obj", opt));
+	auto sphereMesh = New<MeshCollectionStatic>(RavEngine::MeshAsset::Manager::Get("sphere", opt));
 	for (int i = 0; i < 5; i++) {
         Instantiate<LightEntity>(sphereMesh);
 	}

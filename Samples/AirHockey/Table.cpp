@@ -15,7 +15,7 @@ void Table::Create()
     GameObject::Create();
     //create the table
     Ref<PBRMaterialInstance> matinst = New< PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-    auto tableMeshAsset = MeshAsset::Manager::Get("HockeyTable.fbx", MeshAssetOptions{ .keepInSystemRAM = true });
+    auto tableMeshAsset = MeshAsset::Manager::Get("HockeyTable", MeshAssetOptions{ .keepInSystemRAM = true });
     auto& tablemesh = EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(tableMeshAsset), matinst);
 
     //low-friction

@@ -76,9 +76,7 @@ struct Rat : public RavEngine::GameObject {
 		body.EmplaceCollider<CapsuleCollider>(0.1f, 0.3f, physMat);
 		body.debugEnabled = true;
 
-		MeshAssetOptions opt;
-		opt.scale = 0.2;
-		EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("rat.obj", opt), matInst);
+		EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("rat"), matInst);
         
         EmplaceComponent<RatComponent>();
 	}
@@ -87,7 +85,7 @@ struct Rat : public RavEngine::GameObject {
 struct Pipe : public RavEngine::GameObject {
 	void Create() {
 		GameObject::Create();
-		auto pipeMesh = MeshCollectionStaticManager::Get("pipe.obj");
+		auto pipeMesh = MeshCollectionStaticManager::Get("pipe");
 		auto pipeMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		pipeMat->SetAlbedoTexture(Texture::Manager::Get("pipe.png"));
 		EmplaceComponent<StaticMesh>(pipeMesh, pipeMat);
@@ -107,7 +105,7 @@ struct Floor : public RavEngine::GameObject {
 		constexpr static float floorSize = 20;
 		GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
 
-		auto floorMesh = MeshCollectionStaticManager::Get("quad.obj");
+		auto floorMesh = MeshCollectionStaticManager::Get("quad");
 		auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		floorMat->SetAlbedoColor({0.5,0.5,0.5,1});
 		EmplaceComponent<StaticMesh>(floorMesh, floorMat);
@@ -128,7 +126,7 @@ struct What : public RavEngine::GameObject {
 	void Create() {
 		GameObject::Create();
 
-		auto whatMesh = MeshCollectionStaticManager::Get("what.obj", MeshAssetOptions{.scale = 0.25});
+		auto whatMesh = MeshCollectionStaticManager::Get("what");
 		auto whatMat = RavEngine::New<WhatMatInstance>(Material::Manager::Get<WhatMat>());
 		whatMat->SetTexture(Texture::Manager::Get("what.png"));
 

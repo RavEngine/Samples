@@ -109,7 +109,7 @@ struct Level : public World{
             }
         }
         
-        auto sphereMeshCol = New<MeshCollectionStatic>(MeshAsset::Manager::Get("sphere.obj"));
+        auto sphereMeshCol = New<MeshCollectionStatic>(MeshAsset::Manager::Get("sphere"));
         auto drawDottedLine = [this,sphereMeshCol](const vector3& start, const vector3& end, decimalType step){
             vector3 point = start;
             auto scalefac = (step / 2) / 1.7f;
@@ -151,7 +151,7 @@ struct Level : public World{
         auto targetEndMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         targetEndMat->SetAlbedoColor({0,0,1,1});
 
-        auto targetMeshCol = New<MeshCollectionStatic>(MeshAsset::Manager::Get("target.obj"));
+        auto targetMeshCol = New<MeshCollectionStatic>(MeshAsset::Manager::Get("target"));
 
         targetBegin.EmplaceComponent<StaticMesh>(targetMeshCol, targetBeginMat);
         targetEnd.EmplaceComponent<StaticMesh>(targetMeshCol, targetEndMat);
@@ -203,7 +203,7 @@ struct Level : public World{
         auto mazeEntity = Instantiate<GameObject>();
         MeshAssetOptions opt;
         opt.keepInSystemRAM = true;
-        mesh = MeshAsset::Manager::Get("maze.fbx", opt);
+        mesh = MeshAsset::Manager::Get("maze", opt);
         mazeEntity.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(mesh), RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
         // used for raycasting clicks onto the maze
         auto& rigid = mazeEntity.EmplaceComponent<RigidBodyStaticComponent>();
