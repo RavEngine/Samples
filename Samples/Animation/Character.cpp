@@ -169,7 +169,7 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance>
 	// note: if you are loading multiple instances
 	// of an animated character, you will want to load and store
 	// the assets separately to avoid unnecessary disk i/o and parsing.
-	auto all_clips = RavEngine::New<AnimationAsset>("character_anims.fbx", skeleton);
+	auto all_clips = RavEngine::New<AnimationAsset>("character");
 	auto walk_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 0, 47);
 	auto idle_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 60,120);
 	auto run_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 131, 149);
