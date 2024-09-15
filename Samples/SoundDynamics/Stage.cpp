@@ -1,7 +1,6 @@
 #include "Speaker.hpp"
 #include <RavEngine/AudioSpace.hpp>
 #include <RavEngine/StaticMesh.hpp>
-#include <RavEngine/SceneLoader.hpp>
 #include <RavEngine/MeshCollection.hpp>
 
 using namespace std;
@@ -34,18 +33,13 @@ void Stage::Create() {
 		"wall_negz",
 		"wall_posz"
 	};
-
-	// load room
-	SceneLoader loader("room.fbx");
-	loader.LoadMeshes([&](const PreloadedAsset& pr) -> bool {
-		// we want to load all meshes in this case
-		return true;
-
-	}, [&](Ref<MeshAsset> rm, Ref<PBRMaterialInstance>, const PreloadedAsset& pr) {
-		auto pos = std::distance(faceOrder.begin(),std::find(faceOrder.begin(), faceOrder.end(), pr.name));
-		auto inst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-		EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(rm), inst);
-		this->wallMaterials[pos] = inst;
-	});
+    
+    for(const auto& name : faceOrder){
+        auto pos = std::distance(faceOrder.begin(),std::find(faceOrder.begin(), faceOrder.end(), name));
+        auto inst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        auto rm = MeshCollectionStaticManager::Get(std::string(name));
+        EmplaceComponent<StaticMesh>(rm, inst);
+        this->wallMaterials[pos] = inst;
+    }
 
 }

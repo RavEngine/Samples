@@ -1,5 +1,4 @@
 #include "Flagpole.hpp"
-#include <RavEngine/SceneLoader.hpp>
 #include <RavEngine/StaticMesh.hpp>
 #include <RavEngine/AnimatorComponent.hpp>
 #include <RavEngine/SkinnedMeshComponent.hpp>
@@ -12,21 +11,15 @@ using namespace std;
 void Flagpole::Create(){
     GameObject::Create();
     // load meshes
-    SceneLoader sl("flagpole.fbx");
-    Vector<Ref<MeshAsset>> meshes;
-    sl.LoadMeshes([](const PreloadedAsset& asset){
-        return true;
-    }, [&](Ref<MeshAsset> mesh, Ref<PBRMaterialInstance> inst, const PreloadedAsset & data){
-        meshes.push_back(mesh);
-    });
+
     auto mat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-    EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(meshes[0]), mat);
-    EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(meshes[1]), mat);
+    EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("flagpole"), mat);
+    EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("flagpole_top"), mat);
     
     // load animation
-    auto skeleton = RavEngine::New<SkeletonAsset>("flag.fbx");
-    auto clips = RavEngine::New<AnimationAsset>("flag.fbx",skeleton);
-    auto meshAssetSkinned = MeshCollectionSkinnedManager::Get("flag.fbx",skeleton);
+    auto skeleton = RavEngine::New<SkeletonAsset>("flag");
+    auto clips = RavEngine::New<AnimationAsset>("flag");
+    auto meshAssetSkinned = MeshCollectionSkinnedManager::Get("flag");
     
     auto flagEntity = GetWorld()->Instantiate<GameObject>();
     GetTransform().AddChild(flagEntity);

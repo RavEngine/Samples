@@ -6,7 +6,6 @@
 #include <RavEngine/SkinnedMeshComponent.hpp>
 #include <RavEngine/Utilities.hpp>
 #include <RavEngine/InputManager.hpp>
-#include <RavEngine/SceneLoader.hpp>
 #include <FPSSystem.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/PhysicsSolver.hpp>

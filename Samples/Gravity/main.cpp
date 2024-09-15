@@ -24,11 +24,10 @@ struct HeavyThing : public GameObject{
         auto& body = EmplaceComponent<RigidBodyDynamicComponent>();
         body.SetGravityEnabled(false);
         body.SetMass(mass);
-        MeshAssetOptions opt;
-        opt.scale = scaleOverride;
         auto matinst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         matinst->SetAlbedoColor(colorOverride);
-        EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::GetWithKey("sphere.obj", scaleOverride * 100, opt)), matinst);
+        EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("sphere")), matinst);
+        GetTransform().SetLocalScale(scaleOverride);
         if (mass < 1000){
             auto& light = EmplaceComponent<PointLight>();
             light.SetIntensity(scaleOverride * 7);
