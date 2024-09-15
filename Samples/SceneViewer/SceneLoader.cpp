@@ -2,13 +2,14 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "Debug.hpp"
-#include "App.hpp"
-#include "Utilities.hpp"
-#include "Filesystem.hpp"
-#include "MeshAsset.hpp"
-#include "VirtualFileSystem.hpp"
-#include "Texture.hpp"
+#include <RavEngine/Debug.hpp>
+#include  <RavEngine/App.hpp>
+#include  <RavEngine/Utilities.hpp>
+#include  <RavEngine/Filesystem.hpp>
+#include  <RavEngine/MeshAsset.hpp>
+#include  <RavEngine/VirtualFileSystem.hpp>
+#include  <RavEngine/Texture.hpp>
+#include <RavEngine/ImportLib.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -75,7 +76,7 @@ void RavEngine::SceneLoader::LoadMeshes(const Function<bool(const PreloadedAsset
 
 		// user chooses if we load this mesh
 		if (filterFunc(pa)) {
-			auto mp = MeshAsset::AIMesh2MeshPart(scene->mMeshes[i],identity);
+			auto mp = AIMesh2MeshPart(scene->mMeshes[i],identity);
 			auto asset = New<MeshAsset>(std::move(mp));
 			// load the material data
 			auto idx = scene->mMeshes[i]->mMaterialIndex;
