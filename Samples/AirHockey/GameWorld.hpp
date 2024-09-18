@@ -4,7 +4,6 @@
 #include "Paddle.hpp"
 #include "Player.hpp"
 #include <RavEngine/GUI.hpp>
-#include <RavEngine/SharedObject.hpp>
 
 namespace RavEngine{
 	class AudioAsset;

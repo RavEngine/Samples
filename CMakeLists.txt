@@ -64,6 +64,8 @@ function (add_sample sample_dir)
 	# creates a mac app if applicable
 	add_executable("${APPNAME}" ${TEST_SOURCES} ${COMMON_FILES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard" "${CMAKE_BINARY_DIR}/${APPNAME}/Sample.appxManifest")
 
+	rve_disable_rtti("${APPNAME}")
+
 	if(WINDOWS_STORE)
 		target_sources("${APPNAME}" PRIVATE "Samples/logo44.png" "Samples/logo150.png" "Samples/logo50.png" "Samples/logo620x300.png")
 	endif()

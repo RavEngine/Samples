@@ -1,6 +1,5 @@
 #pragma once
 #include <RavEngine/World.hpp>
-#include <RavEngine/SharedObject.hpp>
 
 class ClientMenu : public RavEngine::World {
 public:

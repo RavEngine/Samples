@@ -2,7 +2,6 @@
 #include <RavEngine/Entity.hpp>
 #include <RavEngine/World.hpp>
 #include <RavEngine/IInputListener.hpp>
-#include <RavEngine/SharedObject.hpp>
 #include <semaphore>
 
 namespace RavEngine {
