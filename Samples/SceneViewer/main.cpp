@@ -1,7 +1,7 @@
 #include <RavEngine/App.hpp>
 #include <RavEngine/World.hpp>
 #include <RavEngine/Filesystem.hpp>
-#include <RavEngine/SceneLoader.hpp>
+#include "SceneLoader.hpp"
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/Dialogs.hpp>
 #include <RavEngine/CameraComponent.hpp>

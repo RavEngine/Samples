@@ -191,6 +191,7 @@ jobs:
           path: |
                 build\win\release\RavEngine*.exe 
                 build\win\release\RavEngine*.rvedata
+                build\win\release\D3D12\*
                 build\win\release\RavEngine*Streaming\*
       - name: Prepare Transfer.sh upload
         run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\ -DestinationPath Samples${{ matrix.arch }}.zip

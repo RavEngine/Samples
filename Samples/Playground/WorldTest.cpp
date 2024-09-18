@@ -105,7 +105,7 @@ TestWorld::TestWorld(){
 	//	Ref<Texture> t = new Texture("youcantrun.png");
 	//	material->SetAlbedoTexture(t);
 	
-	auto sharedMesh = MeshCollectionStaticManager::Get("cube.obj");
+	auto sharedMesh = MeshCollectionStaticManager::Get("cube");
 	
 	anonymous = Instantiate<GameObject>();
 	anonymous.EmplaceComponent<StaticMesh>(sharedMesh, material);
@@ -133,21 +133,7 @@ TestWorld::TestWorld(){
 	floorplane.GetTransform().LocalScaleDelta(vector3(10, 0.5, 10)).LocalTranslateDelta(vector3(0, -20, 0));
 	auto& s = floorplane.EmplaceComponent<RigidBodyStaticComponent>();
 	s.EmplaceCollider<BoxCollider>(vector3(10, 1, 10), make_shared<PhysicsMaterial>(0.5,0.5,0.5));
-	
-	auto& room = floorplane.EmplaceComponent<SimpleAudioSpace>();
-	room.SetRadius(30);
-	//room.WallMaterials()[0] = RoomMat::kMarble;
-//	room->WallMaterials()[1] = RoomMat::kMarble;
-//	room->WallMaterials()[2] = RoomMat::kMarble;
-//	room->WallMaterials()[3] = RoomMat::kMarble;
-//	room->WallMaterials()[4] = RoomMat::kMarble;
-//	room->WallMaterials()[5] = RoomMat::kMarble;
 
-	//room->SetRoomMaterial(testMat);
-	
-	//audiosource->Play();
-	//audiosource->SetLoop(true);
-//	audiosource->SetVolume(5);
 		
 	dl = Instantiate<GameObject>();
 	auto& dll = dl.EmplaceComponent<DirectionalLight>();

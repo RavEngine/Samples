@@ -93,7 +93,7 @@ struct Level : public World{
         {
 			constexpr int nblades = 4096;
 			constexpr float scale = 0.3;
-			auto grassmesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("grass.obj"));
+			auto grassmesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("grass"));
 			grassMatInst = RavEngine::New<GrassMatInst>(Material::Manager::Get<GrassMat>());
 			
 			for (int i = 0; i < nblades; i++) {
@@ -131,7 +131,7 @@ struct Level : public World{
         auto ground = Instantiate<GameObject>();
         auto groundMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         groundMat->SetAlbedoColor({ 92/255.f, 60/255.f, 29/255.f,1});
-        ground.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad.obj")), groundMat);
+        ground.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad")), groundMat);
         ground.GetTransform().LocalScaleDelta(vector3(10));
         
         flagpole = Instantiate<Flagpole>();

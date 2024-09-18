@@ -31,7 +31,7 @@ void TestEntity::CommonInit(){
     if (!sharedMatInst) {
         sharedMatInst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
     }
-	auto mesh = EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bunny_decimated.fbx"), sharedMatInst);
+	auto mesh = EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bunny_decimated"), sharedMatInst);
 
     auto& script = EmplaceComponent<TestEntityController>();
 	auto& r = EmplaceComponent<RigidBodyDynamicComponent>(FilterLayers::L0, FilterLayers::L0 | FilterLayers::L1);

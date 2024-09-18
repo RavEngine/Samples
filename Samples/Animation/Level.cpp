@@ -6,7 +6,6 @@
 #include <RavEngine/SkinnedMeshComponent.hpp>
 #include <RavEngine/Utilities.hpp>
 #include <RavEngine/InputManager.hpp>
-#include <RavEngine/SceneLoader.hpp>
 #include <FPSSystem.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/PhysicsSolver.hpp>
@@ -45,19 +44,22 @@ Level::Level(){
     auto& gui = lights.EmplaceComponent<GUIComponent>();
     gui.AddDocument("ui.rml");
 
-	auto spawnCharacter = [this](Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance> charMat, Ref<SkeletonAsset> skeleton, vector3 pos) {
-		auto character2 = Instantiate<Character>(mesh, charMat, skeleton);
+	auto coneMesh = MeshCollectionStaticManager::Get("cone");
+	auto handMatInst = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+
+	auto spawnCharacter = [this,&coneMesh, &handMatInst](Ref<MeshCollectionSkinned> mesh, Ref<PBRMaterialInstance> charMat, Ref<SkeletonAsset> skeleton, vector3 pos) {
+		auto character2 = Instantiate<Character>(mesh, coneMesh, handMatInst, charMat, skeleton);
 		character2.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(pos, vector3(0, 0, 0));
 		characters.push_back(character2);
 	};
 
 	{
-		auto skeleton = RavEngine::New<SkeletonAsset>("character_anims.fbx");
-		auto mesh = MeshCollectionSkinnedManager::Get("character_anims.fbx", skeleton);
+		auto skeleton = RavEngine::New<SkeletonAsset>("character_bones");
+		auto mesh = MeshCollectionSkinnedManager::Get("character_skin");
 		auto charMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		charMat->SetAlbedoColor({ 1,0.4,0.2,1 });
 
-		character = Instantiate<Character>(mesh, charMat, skeleton);
+		character = Instantiate<Character>(mesh, coneMesh, handMatInst, charMat, skeleton);
 		character.GetComponent<RigidBodyDynamicComponent>().setDynamicsWorldPose(vector3(15, 5, 0), vector3(0, deg_to_rad(90), 0));
 		characters.push_back(character);
 
@@ -68,8 +70,8 @@ Level::Level(){
 	
 	// this one uses its own assets to be considered distinct by the engine
 	{
-		auto skeleton = RavEngine::New<SkeletonAsset>("character_anims.fbx");
-		auto mesh = MeshCollectionSkinnedManager::Get("character_anims.fbx", skeleton);
+		auto skeleton = RavEngine::New<SkeletonAsset>("character_bones");
+		auto mesh = MeshCollectionSkinnedManager::Get("character_skin");
 		auto charMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 		charMat->SetAlbedoColor({ 0.2,0.4,1,1 });
 		
@@ -127,11 +129,10 @@ Level::Level(){
 	Ref<PBRMaterialInstance> material = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	auto physmat = RavEngine::New<PhysicsMaterial>(0.5, 0.5, 0);
     MeshAssetOptions opt;
-    opt.scale = 1.5;
     opt.keepInSystemRAM = true;
 	{
 		auto floorplane = Instantiate<RavEngine::GameObject>();
-		Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level.fbx", lvl_floors_key, "ground", opt);
+		Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level_floors", lvl_floors_key, opt);
 		material->SetAlbedoColor({ 174.f / 255,210.f / 255,234.f / 255,1 });
         floorplane.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(sharedMesh), material);
 		auto& r = floorplane.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L0, FilterLayers::L0);
@@ -140,7 +141,7 @@ Level::Level(){
 
 	// load the walls
 	auto walls = Instantiate<GameObject>();
-	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level.fbx", lvl_wall_key, "walls", opt);
+	Ref<MeshAsset> sharedMesh = MeshAsset::Manager::GetWithKey("level_walls", lvl_wall_key, opt);
     walls.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(sharedMesh),material);
 	auto& s = walls.EmplaceComponent<RigidBodyStaticComponent>(FilterLayers::L1, FilterLayers::L1);	// we use L0 to determine floor vs walls
     s.EmplaceCollider<MeshCollider>(sharedMesh, physmat);

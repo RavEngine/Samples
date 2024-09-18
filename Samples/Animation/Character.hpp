@@ -7,6 +7,7 @@
 
 namespace RavEngine {
     struct MeshCollectionSkinned;
+    struct MeshCollectionStatic;
 }
 
 struct CharacterScript : public RavEngine::ComponentWithOwner {
@@ -46,7 +47,7 @@ namespace RavEngine {
 
 
 struct Character : public RavEngine::GameObject {
-	void Create(Ref<RavEngine::MeshCollectionSkinned> skinnedMesh, Ref<RavEngine::PBRMaterialInstance> materialInstance, Ref<RavEngine::SkeletonAsset> skeleton);
+	void Create(Ref<RavEngine::MeshCollectionSkinned> skinnedMesh, Ref<RavEngine::MeshCollectionStatic> handMesh, Ref<RavEngine::PBRMaterialInstance> handMatInst, Ref<RavEngine::PBRMaterialInstance> materialInstance, Ref<RavEngine::SkeletonAsset> skeleton);
 	void Move(const vector3&, decimalType speedMultiplier = 0);
 	void Jump();
 	void Pound();

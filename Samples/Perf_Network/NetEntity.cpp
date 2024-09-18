@@ -23,9 +23,8 @@ void NetEntity::Create()
 	if (!matinst) {
 		matinst = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	}
-	MeshAssetOptions opt;
-	opt.scale = 0.1;
-	EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cube.obj", opt), matinst);
+	EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cube"), matinst);
+    GetTransform().SetLocalScale(0.1);
 	EmplaceComponent<InterpolationTransform>();
 }
 
