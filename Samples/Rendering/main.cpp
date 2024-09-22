@@ -337,6 +337,7 @@ struct Level : public RavEngine::World {
         
         // the unlit material
         auto star = Instantiate<GameObject>();
+        star.SetEntityAttributes(star.GetEntityAttributes() & ~CastsShadowsBit);
         auto starMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("sphere"));
         starMaterialInstance = New<StarMatMaterialInstance>(Material::Manager::Get<StarMat>());
         star.EmplaceComponent<StaticMesh>(starMesh, starMaterialInstance);
