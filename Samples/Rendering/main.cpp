@@ -352,6 +352,22 @@ struct Level : public RavEngine::World {
 
         globalEffects.push_back(fxaaEffectInstance);
         globalEffects.push_back(bloomEffectInstance);
+        
+        // render texture
+        auto renderTexture = New<RenderTexture>(640,480);
+        
+        auto renderTextureCam = Instantiate<GameObject>();
+        renderTextureCam.GetTransform().SetLocalPosition({-5,2,10});
+        renderTextureCam.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cube"),New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>()));
+        auto& rtcam = renderTextureCam.EmplaceComponent<CameraComponent>();
+        rtcam.SetActive(true);
+        rtcam.target = renderTexture;
+
+        auto quadEntity = Instantiate<GameObject>();
+        auto renderTextureMatInst = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        renderTextureMatInst->SetAlbedoTexture(renderTexture->GetTexture());
+        quadEntity.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("quad"),renderTextureMatInst);
+        quadEntity.GetTransform().SetWorldPosition({10,10,0}).SetWorldRotation(vector3{deg_to_rad(90),0,0}).SetLocalScale(5);
     }
 
     
