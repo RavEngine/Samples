@@ -64,7 +64,7 @@ struct Level : public World{
     }
 
     std::optional<PhysicsSolver::RaycastHit> RaycastFromPixel(const vector2& pixel) {
-        auto cam = cameraEntity.GetComponent<CameraComponent>();
+        auto& cam = cameraEntity.GetComponent<CameraComponent>();
         auto res = GetApp()->GetMainWindow()->GetSizeInPixels();
         auto camRay = cam.ScreenPointToRay(pixel,res.width,res.height);
         auto camPos = cameraEntity.GetTransform().GetWorldPosition();

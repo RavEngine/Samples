@@ -251,6 +251,11 @@ struct Level : public RavEngine::World {
 
         auto& cam = camHeadUD.EmplaceComponent<CameraComponent>();
         cam.SetActive(true);
+        // post procesing
+        auto& camEffects = cam.postProcessingEffects.effects;
+
+        camEffects.push_back(std::make_unique<FXAAEffect>());
+        camEffects.push_back(std::make_unique<BloomEffect>());
 
         auto lightsEntity = Instantiate<GameObject>();
         auto& light = lightsEntity.EmplaceComponent<DirectionalLight>();
@@ -343,15 +348,6 @@ struct Level : public RavEngine::World {
         starMaterialInstance = New<StarMatMaterialInstance>(Material::Manager::Get<StarMat>());
         star.EmplaceComponent<StaticMesh>(starMesh, starMaterialInstance);
         star.GetTransform().LocalTranslateDelta({objectDistance,5,0});
-        
-        // post procesing
-        auto& globalEffects = GetApp()->GetRenderEngine().globalEffects.effects;
-
-        auto fxaaEffectInstance = New<FXAAEffect>();
-        auto bloomEffectInstance = New<BloomEffect>();
-
-        globalEffects.push_back(fxaaEffectInstance);
-        globalEffects.push_back(bloomEffectInstance);
         
         // render texture
         auto renderTexture = New<RenderTexture>(640,480);
