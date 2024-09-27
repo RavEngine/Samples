@@ -19,11 +19,12 @@ void NetEntity::Create()
 		};
 	rpc.RegisterServerRPC(to_underlying(RPCs::UpdateTransform), fn);
 	rpc.RegisterClientRPC(to_underlying(RPCs::UpdateTransform), fn, RPCComponent::Directionality::Bidirectional);
-
+#if !RVE_SERVER
 	if (!matinst) {
 		matinst = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 	}
 	EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("cube"), matinst);
+#endif
     GetTransform().SetLocalScale(0.1);
 	EmplaceComponent<InterpolationTransform>();
 }

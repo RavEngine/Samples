@@ -25,9 +25,15 @@ struct NetApp : public RavEngine::App {
         auto name = type_name<NetEntity>();
 		
 		//argc = 2;
+        constexpr bool serverOverride =
+#if !RVE_SERVER
+        false;
+#else
+        true;
+#endif
 
 		// to start as a server, simply launch with any extra argument
-		if (argc > 1) {
+		if (argc > 1 || serverOverride) {
 			this->networkManager.server = std::make_unique<NetworkServer>();
 			networkManager.server->OnClientConnecting = [](auto a) {
 				Debug::Log("Client is connecting, id = {}",a);
@@ -44,6 +50,7 @@ struct NetApp : public RavEngine::App {
 		}
 		// otherwise we will launch as a client
 		else {
+#if !RVE_SERVER
 			this->networkManager.client = std::make_unique<NetworkClient>();
 			networkManager.client->OnConnecting = [](auto a) {
 				Debug::Log("Connecting to server, id = {}",a);
@@ -54,12 +61,19 @@ struct NetApp : public RavEngine::App {
 			AddWorld(RavEngine::New<ClientMenu>());
 
 			Debug::Log("Started client on {}", PORT);
+#endif
 		}
+#if !RVE_SERVER
 
 		SetWindowTitle(VFormat("{} {} | {}", APPNAME, networkManager.IsServer()? "Server" : "Client", GetRenderEngine().GetCurrentBackendName()).c_str());
+#endif
 	}
     void OnFatal(const std::string_view msg) final{
+#if !RVE_SERVER
         RavEngine::Dialog::ShowBasic("Fatal Error", msg, Dialog::MessageBoxType::Error);
+#else
+        Debug::Log("Fatal Error: {}", msg);
+#endif
     }
 	bool NeedsAudio() const final {
 		return false;

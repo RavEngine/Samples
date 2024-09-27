@@ -7,8 +7,9 @@ struct MoveEntities : public RavEngine::AutoCTTI {
 };
 
 struct NetEntity : public RavEngine::GameObject {
-
+#if !RVE_SERVER
 	static Ref<RavEngine::PBRMaterialInstance> matinst;
+#endif
 
 	void Create();
 

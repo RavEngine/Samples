@@ -8,10 +8,13 @@
 using namespace RavEngine;
 using namespace std;
 
+#if !RVE_SERVER
 STATIC(NetEntity::matinst);
+#endif
 
 Level::Level() : World("level") {
 
+#if !RVE_SERVER
 	// create camera and lights
 	auto camEntity = Instantiate<GameObject>();
 	auto& camera = camEntity.EmplaceComponent<CameraComponent>();
@@ -24,6 +27,7 @@ Level::Level() : World("level") {
     dirLight.SetIntensity(4);
 	ambientLight.SetIntensity(0.2);
 	lightEntity.GetTransform().SetLocalRotation(vector3(0, deg_to_rad(45.0), deg_to_rad(45.0)));
+#endif
 
 	// spawn the management relay if on server
 	// if on client, this will be spawned automatically
@@ -37,6 +41,8 @@ Level::Level() : World("level") {
 
 void Level::ServerUpdateGUI()
 {
+#if !RVE_SERVER
+
 	// get the GUIComponent
 	auto& gui = GetComponent<GUIComponent>();
 	auto doc = gui.GetDocument("server.rml");
@@ -62,10 +68,17 @@ void Level::ServerUpdateGUI()
 		textNode->AppendChild(std::move(button));
 		root->AppendChild(std::move(textNode));
 	}
+#else
+    Debug::Log("Connections:\n");
+    for (const auto& con : GetApp()->networkManager.server->GetClients()) {
+        Debug::Log("{}", con);
+    }
+#endif
 }
 
 void Level::SetupServer()
 {
+    
     Instantiate<ManagementRelay>();
 	EmplaceSystem<TweenEntities>();
 	GetApp()->networkManager.server->OnClientConnected = [&](HSteamNetConnection) {
@@ -74,7 +87,7 @@ void Level::SetupServer()
 	GetApp()->networkManager.server->OnClientDisconnected = [&](HSteamNetConnection) {
 		ServerUpdateGUI();
 	};
-
+#if !RVE_SERVER
 	auto guientity = Instantiate<Entity>();
 	auto& guic = guientity.EmplaceComponent<GUIComponent>();
 	guic.AddDocument("server.rml");
@@ -86,6 +99,7 @@ void Level::SetupServer()
 	im->BindAxis("MouseX", gh, &GUIComponent::MouseX, CID::ANY, 0);
 	im->BindAxis("MouseY", gh, &GUIComponent::MouseY, CID::ANY, 0);
 	im->BindAnyAction(gh->GetData());
+#endif
 }
 
 void Level::SetupClient()

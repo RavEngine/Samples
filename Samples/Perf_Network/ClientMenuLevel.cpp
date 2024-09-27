@@ -1,3 +1,4 @@
+#if !RVE_SERVER
 #include "ClientMenuLevel.hpp"
 #include <RavEngine/App.hpp>
 #include <RavEngine/GUI.hpp>
@@ -59,3 +60,4 @@ void ClientMenu::ConnectToServer(const std::string& addr, uint16_t port) {
 			GetApp()->Quit();
 		};
 }
+#endif
