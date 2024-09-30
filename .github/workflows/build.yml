@@ -5,43 +5,39 @@ jobs:
   build-linux:
     name: Build Samples for Linux x64
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [ {cc: "gcc-13", cxx: "g++-13", lk: "DEFAULT"}, {cc: "clang-18", cxx: "clang++-18", lk: "LLD"} ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: true
       - name: Install Dependencies
-        run: | 
-              sudo apt-get update -y
-              sudo apt-get install -y lsb-release wget software-properties-common apt-utils
-              sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        run: |
+              sudo apt update -y
+              sudo apt install -y lsb-release wget software-properties-common apt-utils
               wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
-              sudo add-apt-repository -y "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main"
-              wget -qO- https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo tee /etc/apt/trusted.gpg.d/lunarg.asc
-              sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
-              sudo apt-get update -y
+              sudo add-apt-repository -y "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-18 main"
+              sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+              sudo apt update -y
               sudo apt remove build-essential -y
-              sudo apt-get install cmake g++-13 fuse libfuse2 ninja-build vulkan-sdk libgl1-mesa-dev libgtk-3-dev libasound2-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libegl1-mesa-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev -y --no-install-recommends 
+              sudo apt install gcc-13 g++-13 gcc-13 clang-18 llvm-18 lld-18 snap ninja-build libgl1-mesa-dev uuid-dev libwayland-dev libxkbcommon-dev libasound2-dev libegl-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev -y --no-install-recommends
+              sudo snap install cmake --classic
+              cmake --version
       - name: Configure
         run: |
-            mkdir -p build
-            mkdir -p build/linux
-            cd build/linux
-            export CC=/usr/bin/gcc-13
-            export CXX=/usr/bin/g++-13
-            cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ../.. 
+            mkdir -p build 
+            cd build
+            CC=/usr/bin/${{ matrix.compiler.cc }} CXX=/usr/bin/${{ matrix.compiler.cxx }} cmake -G "Ninja" -DRAVENGINE_SERVER=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_LINKER_TYPE=${{ matrix.compiler.lk }} .. 
       - name: Build
-        run: cd build/linux && cmake --build . --config release --target install  
+        run: cmake --build build --config release --target install  
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name:  RavEngine_Samples_linux64
-          path:  build/linux/Release/*.AppImage
-      - name: Prepare Transfer upload
-        run: cd build/linux/Release ; zip -r -9 Samples.zip *.AppImage
-      - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/linux/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linux.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g" 
-        continue-on-error: true
+          name:  RavEngine_Samples_linux64_${{ matrix.compiler.cc }}
+          path:  build/Release/*.AppImage
 
   build-linux-arm:
     name: Build Samples for Linux arm64
@@ -78,11 +74,6 @@ jobs:
         with:
           name:  RavEngine_Samples_linuxARM
           path:  build/linuxarm/Release/*.AppImage
-      - name: Prepare Transfer upload
-        run: cd build/linuxarm/Release ; zip -r -9 Samples.zip *.AppImage
-      - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/linuxarm/Release/Samples.zip https://transfer.sh/RavEngine_Samples_linuxARM.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
-        continue-on-error: true
   
   build-emscripten:
     name: Build samples for Emscripten-Linux
@@ -110,12 +101,6 @@ jobs:
                 build/Release/*.html
                 build/Release/*.wasm
                 build/Release/*.data
-      - name: Prepare Transfer upload
-        run: cd build/Release ; zip -r -9 Samples.zip *.js *.html *.wasm *.data
-      - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/Release/Samples.zip https://transfer.sh/RavEngine_Samples_Web.zip` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
-        continue-on-error: true
-        
   build-apple:
     name: Build Samples for Apple Platforms (unsigned)
     runs-on: macos-latest
@@ -157,9 +142,6 @@ jobs:
         with:
           name: RavEngine_Samples_Apple_${{ matrix.platform }}
           path: build/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg
-      - name: Upload to Transfer.sh
-        run: URL=`curl --upload-file build/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg https://transfer.sh/RavEngine_Samples_Apple_${{ matrix.platform }}.dmg` ; echo "::notice file=.github/workflows/build.yml::$URL" | sed "s/.sh/.sh\/get/g"
-        continue-on-error: true
    
   build-windows:
     name: Build samples for Windows
@@ -193,11 +175,6 @@ jobs:
                 build\win\release\RavEngine*.rvedata
                 build\win\release\D3D12\*
                 build\win\release\RavEngine*Streaming\*
-      - name: Prepare Transfer.sh upload
-        run: Compress-Archive -Path build\win\release\*.exe,build\win\release\*.rvedata,build\win\release\*Streaming\ -DestinationPath Samples${{ matrix.arch }}.zip
-      - name: Upload to Transfer.sh
-        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_Win${{ matrix.arch }}.zip -Method PUT -InFile Samples${{ matrix.arch }}.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
-        continue-on-error: true
       
   build-uwp:
     name: Build samples for UWP
@@ -231,11 +208,3 @@ jobs:
         with:
           name: RavEngine_Samples_${{ matrix.sdk }}_${{ matrix.arch }}
           path: build\uwp\AppPackages
-      - name: Prepare Transfer.sh upload
-        run: |
-              Move-Item -Path build\uwp\AppPackages\ -Destination .
-              Remove-Item -Path build -Recurse
-              Compress-Archive -Path AppPackages\ -DestinationPath Samples${{ matrix.sdk }}_${{ matrix.arch }}.zip
-      - name: Upload to Transfer.sh
-        run: $URL = Invoke-RestMethod -Uri https://transfer.sh/RavEngine_Samples_${{ matrix.sdk }}_${{ matrix.arch }}.zip -Method PUT -InFile Samples${{ matrix.sdk }}_${{ matrix.arch }}.zip -UseDefaultCredentials ; echo "::notice file=.github/workflows/build.yml::$URL" | %{$_ -replace ".sh",".sh/get"}
-        continue-on-error: true
