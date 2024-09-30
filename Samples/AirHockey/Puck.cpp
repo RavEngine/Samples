@@ -53,7 +53,7 @@ void Puck::Create()
     dyn.AddReceiver(callbackptr);
 }
 
-PuckScript::PuckScript(entity_t owner) : ScriptComponent(owner), sounds{
+PuckScript::PuckScript(Entity owner) : ScriptComponent(owner), sounds{
         New<AudioAsset>("hockeyhit1.wav"),
         New<AudioAsset>("hockeyhit2.wav"),
         New<AudioAsset>("hockeyhit3.wav"),

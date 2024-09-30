@@ -95,7 +95,7 @@ struct Level : public World{
     
     void DisplayNavPathWithDottedLine(){
         struct DottedLineMarker : RavEngine::ComponentWithOwner{
-            DottedLineMarker(entity_t owner) : ComponentWithOwner(owner){}
+            DottedLineMarker(RavEngine::Entity owner) : ComponentWithOwner(owner){}
         };
         // delete all the previous dots
         if (auto allDots = GetAllComponentsOfType<DottedLineMarker>()){

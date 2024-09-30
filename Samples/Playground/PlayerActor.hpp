@@ -11,7 +11,7 @@ class PlayerActor;
 struct PlayerScript : public RavEngine::ScriptComponent, public RavEngine::IInputListener, public RavEngine::Queryable<PlayerScript,RavEngine::ScriptComponent> {
 	using Queryable<PlayerScript, RavEngine::ScriptComponent>::GetQueryTypes;
 
-    PlayerScript(entity_t owner) : ScriptComponent(owner){}
+    PlayerScript(RavEngine::Entity owner) : ScriptComponent(owner){}
     
 	RavEngine::Entity cameraEntity;
 	decimalType dt = 0;

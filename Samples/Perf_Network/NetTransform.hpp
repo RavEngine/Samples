@@ -18,7 +18,7 @@ struct InterpolationTransform : public RavEngine::AutoCTTI {
 };
 
 struct NetTransform : public RavEngine::ComponentWithOwner {
-    NetTransform(entity_t owner) : ComponentWithOwner(owner){}
+    NetTransform(RavEngine::Entity owner) : ComponentWithOwner(owner){}
 	void UpdateTransform(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin);
 };
 

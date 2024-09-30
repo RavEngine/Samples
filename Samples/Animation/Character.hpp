@@ -19,7 +19,7 @@ struct CharacterScript : public RavEngine::ComponentWithOwner {
 
     int16_t groundCounter = 0;
 
-    CharacterScript(entity_t owner, decltype(animator) a, decltype(rigidBody) r) : animator(a), rigidBody(r), ComponentWithOwner(owner) {}
+    CharacterScript(RavEngine::Entity owner, decltype(animator) a, decltype(rigidBody) r) : animator(a), rigidBody(r), ComponentWithOwner(owner) {}
 
     bool OnGround() const;
 

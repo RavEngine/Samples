@@ -12,7 +12,7 @@ namespace RavEngine {
 
 //marker for querying
 struct PuckComponent : public RavEngine::ComponentWithOwner{
-    PuckComponent(entity_t owner) : ComponentWithOwner(owner){}
+    PuckComponent(RavEngine::Entity owner) : ComponentWithOwner(owner){}
 };
 
 struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::Queryable<PuckScript,RavEngine::ScriptComponent>{
@@ -20,7 +20,7 @@ struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::Queryab
     using RavEngine::Queryable<PuckScript,RavEngine::ScriptComponent>::GetQueryTypes;
     
     RavEngine::Array<Ref<RavEngine::AudioAsset>,4> sounds;
-	PuckScript(entity_t owner);
+	PuckScript(RavEngine::Entity owner);
 	void Tick(float scale) override{}
 	void OnColliderEnter(RavEngine::PhysicsBodyComponent&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints);
 };

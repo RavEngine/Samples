@@ -43,7 +43,7 @@ struct PlayerController : public RavEngine::ScriptComponent {
     void Tick(float scale) final {
         scaleFactor = scale;
     }
-    PlayerController(entity_t owner) : ScriptComponent(owner){}
+    PlayerController(RavEngine::Entity owner) : ScriptComponent(owner){}
 };
 struct Player : public RavEngine::GameObject {
 	void Create();

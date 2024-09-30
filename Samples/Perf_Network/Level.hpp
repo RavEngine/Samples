@@ -14,7 +14,7 @@ private:
 
 struct RelayComp : public RavEngine::ComponentWithOwner, public RavEngine::Queryable<RelayComp> {
 	void RequestSpawnObject(RavEngine::RPCMsgUnpacker& upk, HSteamNetConnection origin);
-    RelayComp(entity_t owner) : ComponentWithOwner(owner){}
+    RelayComp(RavEngine::Entity owner) : ComponentWithOwner(owner){}
 };
 
 enum ManagerRPCs {

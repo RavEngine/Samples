@@ -6,7 +6,7 @@
 
 struct Player : public RavEngine::ComponentWithOwner{
     
-    Player(entity_t owner) : ComponentWithOwner(owner){}
+    Player(RavEngine::Entity owner) : ComponentWithOwner(owner){}
 	float zoomspeed = 1;
 
 	float fpsScale = 0;

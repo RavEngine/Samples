@@ -61,7 +61,7 @@ struct RatComponent : public ComponentWithOwner{
     double lastSoundTime = 0;
 	double lastLaunchTime = 0;
 	bool didTouchdown = false;
-    RatComponent(entity_t owner) : ComponentWithOwner(owner){}
+    RatComponent(RavEngine::Entity owner) : ComponentWithOwner(owner){}
 };
 
 struct Rat : public RavEngine::GameObject {

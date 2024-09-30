@@ -8,7 +8,7 @@ struct CameraScript : public RavEngine::ComponentWithOwner {
     vector3 rightVector = vector3(0, 0, 0);
     decimalType speedIncrement = 0;
 
-    CameraScript(entity_t owner, const decltype(target)& t) : target(t), ComponentWithOwner(owner) {}
+    CameraScript(RavEngine::Entity owner, const decltype(target)& t) : target(t), ComponentWithOwner(owner) {}
     void Tick(float);
 };
 struct CameraEntity : public RavEngine::GameObject {

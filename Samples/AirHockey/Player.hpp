@@ -10,7 +10,7 @@ class Player : public RavEngine::ComponentWithOwner, public RavEngine::Queryable
 protected:
 	decimalType sensitivity = 15;
 public:
-    Player(entity_t id) : ComponentWithOwner(id){}
+    Player(RavEngine::Entity id) : ComponentWithOwner(id){}
 	void MoveUpDown(float amt);
 	
 	void MoveLeftRight(float amt);
@@ -21,7 +21,7 @@ protected:
     RavEngine::ComponentHandle<Player> pl;
 	bool leftSide;
 public:
-	BotPlayer(entity_t owner, decltype(pl) p, bool leftSide) : pl(p), leftSide(leftSide), ScriptComponent(owner){}
+	BotPlayer(RavEngine::Entity owner, decltype(pl) p, bool leftSide) : pl(p), leftSide(leftSide), ScriptComponent(owner){}
 	
 	void Tick(float scale) override;
 };

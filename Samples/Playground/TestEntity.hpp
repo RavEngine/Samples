@@ -28,7 +28,7 @@
 
 struct TestEntityController : public RavEngine::ScriptComponent, public RavEngine::Queryable<TestEntityController, RavEngine::ScriptComponent> {
 	using RavEngine::Queryable<TestEntityController, RavEngine::ScriptComponent>::GetQueryTypes;
-	TestEntityController(entity_t owner) : ScriptComponent(owner) {}
+	TestEntityController(RavEngine::Entity owner) : ScriptComponent(owner) {}
     void Tick(float scale) override;
 
 	void OnColliderEnter(RavEngine::PhysicsBodyComponent&, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints) {

@@ -25,7 +25,7 @@ struct SpinSystem : public RavEngine::AutoCTTI {
 };
 
 struct ObjectMarker : public ComponentWithOwner {
-    ObjectMarker(entity_t owner) : ComponentWithOwner(owner){}
+    ObjectMarker(RavEngine::Entity owner) : ComponentWithOwner(owner){}
 };
 
 struct StaticMeshEntity : public GameObject {
