@@ -8,6 +8,7 @@
 #include "AppInfo.hpp"
 #include <RavEngine/StartApp.hpp>
 #include <RavEngine/MeshCollection.hpp>
+#include <RavEngine/GetApp.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -38,6 +39,18 @@ struct Level : public RavEngine::World{
 	void Zoom(float amt) {
 		camera.GetTransform().LocalTranslateDelta(vector3(0,0,amt * fpsScale * moveSpeed));
 	}
+    
+    struct PointLightMover{
+        void operator()(const PointLight& p, Transform& t) const{
+            auto time = GetApp()->GetCurrentTime();
+            auto scale = GetApp()->GetCurrentFPSScale();
+            t.SetLocalPosition({
+                std::sin(time * 0.5) * 1.5 - 2,
+                1,
+                std::cos(time * 0.5) * 2 + 0.5,
+            });
+        }
+    };
 
 	Level() {
 		// load ground plane
@@ -136,7 +149,6 @@ struct Level : public RavEngine::World{
         pLight.debugEnabled = true;
         pLight.SetColorRGBA({1,0,0,1});
         pLight.SetIntensity(2);
-        pointLight.GetTransform().LocalTranslateDelta(vector3(-2,1,-0.5));
 		pLight.SetCastsShadows(true);
          
 
@@ -161,6 +173,8 @@ struct Level : public RavEngine::World{
 
 		// initial orientation
 		TurnUD(-5);
+        
+        EmplaceSystem<PointLightMover>();
 
 	}
 	void PostTick(float fpsScale) final {
