@@ -23,7 +23,7 @@ jobs:
               sudo add-apt-repository ppa:ubuntu-toolchain-r/test
               sudo apt update -y
               sudo apt remove build-essential -y
-              sudo apt install gcc-13 g++-13 gcc-13 clang-18 llvm-18 lld-18 snap ninja-build libgl1-mesa-dev uuid-dev libwayland-dev libxkbcommon-dev libasound2-dev libegl-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev -y --no-install-recommends
+              sudo apt install gcc-13 g++-13 gcc-13 clang-18 llvm-18 lld-18 snap ninja-build libgl1-mesa-dev uuid-dev libwayland-dev libxkbcommon-dev libasound2-dev libegl-dev libvulkan-dev libx11-xcb-dev libxcb-dri2-0-dev libxcb-glx0-dev libxcb-icccm4-dev libxcb-keysyms1-dev libxcb-randr0-dev libxrandr-dev libxxf86vm-dev mesa-common-dev tree -y --no-install-recommends
               sudo snap install cmake --classic
               cmake --version
       - name: Configure
@@ -32,7 +32,10 @@ jobs:
             cd build
             CC=/usr/bin/${{ matrix.compiler.cc }} CXX=/usr/bin/${{ matrix.compiler.cxx }} cmake -G "Ninja" -DRAVENGINE_SERVER=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_LINKER_TYPE=${{ matrix.compiler.lk }} .. 
       - name: Build
-        run: cd build && cmake --build . --config release --target install  
+        run: |
+            cd build
+            cmake --build . --config release --target install
+            tree -L 3
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
