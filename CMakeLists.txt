@@ -56,17 +56,11 @@ function (add_sample sample_dir)
 	# create the helper header file
 	make_directory("${APPNAME}")
 	configure_file("Samples/AppInfo.hpp" "${CMAKE_BINARY_DIR}/${APPNAME}/" @ONLY)
-	configure_file("Samples/Sample.appxManifest" "${CMAKE_BINARY_DIR}/${APPNAME}" @ONLY)
-	source_group("Resources" FILES "${CMAKE_BINARY_DIR}/${APPNAME}/Sample.appxManifest")
 
 	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" )
 
 	# creates a mac app if applicable
-	add_executable("${APPNAME}" ${TEST_SOURCES} ${COMMON_FILES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard" "${CMAKE_BINARY_DIR}/${APPNAME}/Sample.appxManifest")
-
-	if(WINDOWS_STORE)
-		target_sources("${APPNAME}" PRIVATE "Samples/logo44.png" "Samples/logo150.png" "Samples/logo50.png" "Samples/logo620x300.png")
-	endif()
+	add_executable("${APPNAME}" ${TEST_SOURCES} ${COMMON_FILES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard")
 	
 	target_include_directories("${APPNAME}" PUBLIC
         "${CMAKE_BINARY_DIR}/${APPNAME}"
