@@ -44,7 +44,7 @@ jobs:
 
   build-linux-arm:
     name: Build Samples for Linux arm64
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -61,7 +61,7 @@ jobs:
             sudo add-apt-repository ppa:ubuntu-toolchain-r/test 
             sudo apt update 
       - name: Install Host Dependencies
-        run: sudo apt install cmake:amd64 fuse:amd64 libfuse2:amd64 ninja-build:amd64 libx11-dev:amd64 libgl1-mesa-dev gcc-13:amd64 g++-13:amd64 gcc-12-aarch64-linux-gnu:amd64 g++-12-aarch64-linux-gnu:amd64 -y --no-install-recommends
+        run: sudo apt install cmake:amd64 fuse:amd64 libfuse2:amd64 ninja-build:amd64 libx11-dev:amd64 libgl1-mesa-dev gcc-13:amd64 g++-13:amd64 gcc-13-aarch64-linux-gnu:amd64 g++-13-aarch64-linux-gnu:amd64 -y --no-install-recommends
       - name: Install Target Dependencies
         run: sudo apt install libgl1-mesa-dev:arm64 uuid-dev:arm64 libasound2-dev:arm64 libx11-dev:arm64 libxext-dev:arm64 libxrender-dev:arm64 libxrandr-dev:arm64 libxtst-dev:arm64 libxt-dev:arm64 libegl1-mesa-dev:arm64 libx11-xcb-dev:arm64 libxcb-dri2-0-dev:arm64 libxcb-glx0-dev:arm64 libxcb-icccm4-dev:arm64 libxcb-keysyms1-dev:arm64 libxcb-randr0-dev:arm64 libxrandr-dev:arm64 libxxf86vm-dev:arm64 mesa-common-dev:arm64 libwayland-dev:arm64 -y --no-install-recommends
       - name: Configure
@@ -69,7 +69,7 @@ jobs:
               mkdir -p build
               mkdir -p build/linuxarm
               cd build/linuxarm
-              CC=/usr/bin/aarch64-linux-gnu-gcc-12 CXX=/usr/bin/aarch64-linux-gnu-g++-12 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_SYSTEM_NAME=Linux -DRAVENGINE_BUILD_TESTS=OFF ../.. 
+              CC=/usr/bin/aarch64-linux-gnu-gcc-13 CXX=/usr/bin/aarch64-linux-gnu-g++-13 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_SYSTEM_NAME=Linux -DRAVENGINE_BUILD_TESTS=OFF ../.. 
       - name: Build
         run: cd build/linuxarm && cmake --build . --config release --target install 
       - name: Upload Artifacts

@@ -1,6 +1,6 @@
-deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy main restricted universe
-deb [arch=amd64] http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe
-deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy-updates main restricted universe
+deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ noble main restricted universe
+deb [arch=amd64] http://security.ubuntu.com/ubuntu/ noble-security main restricted universe
+deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ noble-updates main restricted universe
 
-deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy main restricted multiverse universe
-deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted multiverse universe
+deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble main restricted multiverse universe
+deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted multiverse universe
