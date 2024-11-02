@@ -169,7 +169,6 @@ struct Level : public World{
         auto& dirLight = lightEntity.EmplaceComponent<DirectionalLight>();
         dirLight.SetCastsShadows(true);
         dirLight.SetIntensity(4);
-        dirLight.SetShadowDistance(70);
         lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
         auto guiEntity = Instantiate<GameObject>();

@@ -119,7 +119,6 @@ Level::Level(){
 	lightEntity.EmplaceComponent<SpawnerMarker>();
 	dirLight.SetIntensity(4);
 	dirLight.SetCastsShadows(true);
-    dirLight.SetShadowDistance(160);
 	ambientLight.SetIntensity(0.2);
 	lightEntity.GetTransform().SetLocalRotation(vector3(0,deg_to_rad(45),deg_to_rad(45)));
 	
