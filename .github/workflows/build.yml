@@ -30,7 +30,7 @@ jobs:
         run: |
             mkdir -p build 
             cd build
-            CC=/usr/bin/${{ matrix.compiler.cc }} CXX=/usr/bin/${{ matrix.compiler.cxx }} cmake -G "Ninja" -DRAVENGINE_SERVER=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_LINKER_TYPE=${{ matrix.compiler.lk }} .. 
+            CC=/usr/bin/${{ matrix.compiler.cc }} CXX=/usr/bin/${{ matrix.compiler.cxx }} cmake -G "Ninja" -DRAVENGINE_SERVER=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_LINKER_TYPE=${{ matrix.compiler.lk }} -DCMAKE_EXE_LINKER_FLAGS="-static -static-libgcc -static-libstdc++" .. 
       - name: Build
         run: |
             cd build
@@ -69,7 +69,7 @@ jobs:
               mkdir -p build
               mkdir -p build/linuxarm
               cd build/linuxarm
-              CC=/usr/bin/aarch64-linux-gnu-gcc-12 CXX=/usr/bin/aarch64-linux-gnu-g++-12 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_SYSTEM_NAME=Linux -DRAVENGINE_BUILD_TESTS=OFF ../.. 
+              CC=/usr/bin/aarch64-linux-gnu-gcc-12 CXX=/usr/bin/aarch64-linux-gnu-g++-12 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DCMAKE_SYSTEM_NAME=Linux -DRAVENGINE_BUILD_TESTS=OFF -DCMAKE_EXE_LINKER_FLAGS="-static -static-libgcc -static-libstdc++" ../.. 
       - name: Build
         run: cd build/linuxarm && cmake --build . --config release --target install 
       - name: Upload Artifacts
