@@ -2,5 +2,5 @@ deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ noble main restricted univers
 deb [arch=amd64] http://security.ubuntu.com/ubuntu/ noble-security main restricted universe
 deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ noble-updates main restricted universe
 
-deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble main restricted multiverse universe
-deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted multiverse universe
+deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ noble main restricted multiverse universe
+deb [arch=arm64] http://azure.ports.ubuntu.com/ubuntu-ports/ noble-updates main restricted multiverse universe

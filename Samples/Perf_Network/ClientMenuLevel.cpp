@@ -51,13 +51,18 @@ void ClientMenu::ConnectToServer(const std::string& addr, uint16_t port) {
 	auto& cl = GetApp()->networkManager.client;
 	cl->Connect(addr,port);
 		cl->OnConnected = [&](HSteamNetConnection) {
-			Debug::Log("Client successfully connected");
-			GetApp()->inputManager.reset();
-			GetApp()->AddReplaceWorld(this->shared_from_this(), RavEngine::New<Level>());
+            GetApp()->DispatchMainThread([&]{
+                Debug::Log("Client successfully connected");
+                GetApp()->inputManager.reset();
+                GetApp()->AddReplaceWorld(this->shared_from_this(), RavEngine::New<Level>());
+            });
 		};
 		cl->OnLostConnection = [&](HSteamNetConnection) {
-            Dialog::ShowBasic("Information", "Disconnected", Dialog::MessageBoxType::Info);
-			GetApp()->Quit();
+            GetApp()->DispatchMainThread([&]{
+                Dialog::ShowBasic("Information", "Disconnected", Dialog::MessageBoxType::Info);
+                GetApp()->Quit();
+            });
+           
 		};
 }
 #endif
