@@ -35,13 +35,14 @@ bool CharacterScript::OnGround() const {
 }
 
 void CharacterScript::Tick(float fpsScale) {
-	switch (animator->GetCurrentState()) {
+    auto& mainLayer = animator->GetLayerAtIndex(0);
+	switch (mainLayer.GetCurrentState()) {
 		case CharAnims::PoundBegin:
 		case CharAnims::InPound:
 		case CharAnims::PoundEnd:
 			// hit the ground? go to poundEnd
-			if (OnGround() && animator->GetCurrentState() != PoundEnd) {
-				animator->Goto(PoundEnd);
+			if (OnGround() && mainLayer.GetCurrentState() != PoundEnd) {
+                mainLayer.Goto(PoundEnd);
 			}
 			break;
 		default: {
@@ -53,32 +54,32 @@ void CharacterScript::Tick(float fpsScale) {
 
 			if (OnGround()) {
 				if (xzspeed > 0.4 && xzspeed < 2.2) {
-					animator->Goto(CharAnims::Walk);
+                    mainLayer.Goto(CharAnims::Walk);
 				}
 				else if (xzspeed >= 2.2) {
-					animator->Goto(CharAnims::Run);
+                    mainLayer.Goto(CharAnims::Run);
 				}
 				// not jumping?
 				else if (velocity.y < 0.3) {
-					animator->Goto(CharAnims::Idle);
+                    mainLayer.Goto(CharAnims::Idle);
 				}
 			}
 			else {
 				// falling and not in pound animation?
 				if (velocity.y < -0.05) {
-					switch (animator->GetCurrentState()) {
+					switch (animator->GetLayerAtIndex(0).GetCurrentState()) {
 					case CharAnims::PoundBegin:
 					case CharAnims::PoundEnd:
 					case CharAnims::InPound:
 						break;
 					default:
-						animator->Goto(CharAnims::Fall);
+                            mainLayer.Goto(CharAnims::Fall);
 					}
 				}
 			}
 			// jumping?
 			if (velocity.y > 5) {
-				animator->Goto(CharAnims::Jump);
+                mainLayer.Goto(CharAnims::Jump);
 			}
 		}
 	}
@@ -122,10 +123,10 @@ void CharacterScript::Jump() {
 
 void CharacterScript::Pound() {
 	// we can pound if we are jumping or falling
-	switch (animator->GetCurrentState()) {
+	switch (animator->GetLayerAtIndex(0).GetCurrentState()) {
 		case CharAnims::Fall:
 		case CharAnims::Jump:
-			animator->Goto(CharAnims::PoundBegin);
+			animator->GetLayerAtIndex(0).Goto(CharAnims::PoundBegin);
 			rigidBody->ClearAllForces();
 			rigidBody->SetLinearVelocity(vector3(0,0,0), false);
 			break;
@@ -316,23 +317,24 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic
 	// add transitions to the animator component
 	// note that these are copied into the component, so making changes
 	// to states after insertion will not work!
-	animcomp.InsertState(walk_state);
-	animcomp.InsertState(idle_state);
-	animcomp.InsertState(run_state);
-	animcomp.InsertState(jump_state);
-	animcomp.InsertState(fall_state);
-	animcomp.InsertState(pound_begin_state);
-	animcomp.InsertState(pound_end_state);
-	animcomp.InsertState(pound_do_state);
+    auto& layer = animcomp.AddLayer();
+    layer.InsertState(walk_state);
+    layer.InsertState(idle_state);
+    layer.InsertState(run_state);
+    layer.InsertState(jump_state);
+    layer.InsertState(fall_state);
+    layer.InsertState(pound_begin_state);
+    layer.InsertState(pound_end_state);
+    layer.InsertState(pound_do_state);
 
 	// initialize the state machine
 	// if an entry state is not set before play, your game will crash.
-	animcomp.Goto(CharAnims::Idle, true);
+    layer.Goto(CharAnims::Idle, true);
 
 	// begin playing the animator controller.
 	// animator controllers are asynchronous to your other code
 	// so play and pause simply signal the controller to perform an action
-	animcomp.Play();
+    layer.Play();
     animcomp.debugEnabled = true;
 }
 
