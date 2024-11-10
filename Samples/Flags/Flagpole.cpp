@@ -59,9 +59,10 @@ void Flagpole::Create(){
     
     AnimatorComponent::State all_anim{ 0, clips };
     all_anim.isLooping = true;
-    animcomp.InsertState(all_anim);
-    animcomp.Goto(0,true);
-    animcomp.Play();
+    auto& layer = animcomp.AddLayer();
+    layer.InsertState(all_anim);
+    layer.Goto(0,true);
+    layer.Play();
     animcomp.debugEnabled = true;
     
     // load shaders

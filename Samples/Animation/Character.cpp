@@ -10,6 +10,7 @@
 #include <RavEngine/Constraint.hpp>
 #include <RavEngine/PhysicsSolver.hpp>
 #include <RavEngine/MeshCollection.hpp>
+#include <RavEngine/SkeletonMask.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -326,6 +327,10 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic
     layer.InsertState(pound_begin_state);
     layer.InsertState(pound_end_state);
     layer.InsertState(pound_do_state);
+    
+    auto mask = RavEngine::New<SkeletonMask>(skeleton);
+    layer.SetSkeletonMask(mask);
+    mask->SetMaskForJoint(skeleton->IndexForBone("character:arm_l").value(),0);
 
 	// initialize the state machine
 	// if an entry state is not set before play, your game will crash.

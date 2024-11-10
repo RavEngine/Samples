@@ -110,7 +110,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [iOS, tvOS, '']
+        platform: [iOS, tvOS, visionOS, '']
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
