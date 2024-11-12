@@ -89,6 +89,13 @@ void CharacterScript::Tick(float fpsScale) {
 		rigidBody->setDynamicsWorldPose(vector3(0, 5, 0), GetOwner().GetTransform().GetLocalRotation());
 		//GetTransform().SetWorldPosition(vector3(0, 5, 0));
 	}
+    
+    if (tweenEnabled){
+        waveInfluenceTween.Step(fpsScale);
+        if (waveInfluenceTween.GetProgress() >= 1){
+            tweenEnabled = false;
+        }
+    }
 }
 
 void CharacterScript::Move(const vector3& dir, decimalType speedMultiplier) {
@@ -165,6 +172,25 @@ void CharacterScript::StartPounding() {
 	rigidBody->SetLinearVelocity(vector3(0,-5,0),false);
 }
 
+CharacterScript::CharacterScript(RavEngine::Entity owner, decltype(animator) a, decltype(rigidBody) r) :  animator(a), rigidBody(r), ComponentWithOwner(owner) {
+    waveInfluenceTween = {[a](decimalType d) mutable{
+        a->GetLayerAtIndex(1)->SetWeight(d);
+    },0};
+    waveInfluenceTween.AddKeyframe(0.1, RavEngine::TweenCurves::LinearCurve, 1);
+    waveInfluenceTween.AddKeyframe(0.4, RavEngine::TweenCurves::LinearCurve, 1);
+    waveInfluenceTween.AddKeyframe(0.5, RavEngine::TweenCurves::LinearCurve, 0);
+}
+
+void CharacterScript::Wave(){
+    waveInfluenceTween.Seek(0);
+    tweenEnabled = true;
+    animator->GetLayerAtIndex(1)->Play(true);
+}
+
+
+void Character::Wave(){
+    GetComponent<CharacterScript>().Wave();
+}
 
 void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic> handMesh, Ref<PBRMaterialInstance> handMatInst, Ref<PBRMaterialInstance> material, Ref<SkeletonAsset> skeleton) {
     GameObject::Create();
@@ -250,6 +276,7 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic
 	pound_begin_state.isLooping = false;
 	pound_end_state.isLooping = false;
 	pound_do_state.isLooping = false;
+    waveState.isLooping = false;
 	
 	// adjust the speed of clips
 	walk_state.speed = 2.0;
@@ -332,6 +359,7 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic
     layer->InsertState(pound_do_state);
 
 	auto waveLayer = animcomp.AddLayer();
+    waveLayer->SetWeight(0);
 	waveLayer->InsertState(waveState);
     
     auto mask = RavEngine::New<SkeletonMask>(skeleton, 0);	// we only want to enable the arm on this layer

@@ -4,6 +4,7 @@
 #include <RavEngine/AnimatorComponent.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <RavEngine/Ref.hpp>
+#include <RavEngine/Tween.hpp>
 
 namespace RavEngine {
     struct MeshCollectionSkinned;
@@ -14,12 +15,14 @@ struct CharacterScript : public RavEngine::ComponentWithOwner {
 
     RavEngine::ComponentHandle<RavEngine::AnimatorComponent> animator;
     RavEngine::ComponentHandle<RavEngine::RigidBodyDynamicComponent> rigidBody;
+    RavEngine::Tween<decimalType> waveInfluenceTween;
+    bool tweenEnabled = false;
     bool controlsEnabled = true;
     constexpr static decimalType sprintSpeed = 2.5, walkSpeed = 2;
 
     int16_t groundCounter = 0;
 
-    CharacterScript(RavEngine::Entity owner, decltype(animator) a, decltype(rigidBody) r) : animator(a), rigidBody(r), ComponentWithOwner(owner) {}
+    CharacterScript(RavEngine::Entity owner, decltype(animator) a, decltype(rigidBody) r);
 
     bool OnGround() const;
 
@@ -36,6 +39,8 @@ struct CharacterScript : public RavEngine::ComponentWithOwner {
     void OnColliderExit(RavEngine::PhysicsBodyComponent& other, const RavEngine::ContactPairPoint* contactPoints, size_t numContactPoints);
 
     void StartPounding();
+    
+    void Wave();
 
 };
 
@@ -51,6 +56,7 @@ struct Character : public RavEngine::GameObject {
 	void Move(const vector3&, decimalType speedMultiplier = 0);
 	void Jump();
 	void Pound();
+    void Wave();
     
     // anything that has these 2 calls
     // can be a target for input manager

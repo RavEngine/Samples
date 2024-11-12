@@ -76,6 +76,10 @@ void CameraEntity::Pound()
 	cameraScript->target.Pound();
 }
 
+void CameraEntity::Wave(){
+    cameraScript->target.Wave();
+}
+
 void CameraScriptRunner::operator()(CameraScript& script)
 {
 	const auto fpsScale = GetApp()->GetCurrentFPSScale();

@@ -27,7 +27,8 @@ struct InputNames{
 		* Sprint = "Sprint",
 		* Jump = "Jump",
 		* Pound = "Pound",
-		* ChangeChar = "ChangeChar";
+		* ChangeChar = "ChangeChar",
+        * Wave = "Wave";
 };
 
 constexpr static RavEngine::CacheBase::unique_key_t lvl_wall_key = 1;
@@ -89,7 +90,8 @@ Level::Level(){
 	EmplaceSystem<CameraScriptRunner>();
 	CreateDependency<CharacterScriptRunner, CameraScriptRunner>();	// character script runs after camera script
 	CreateDependency<AnimatorSystem, CharacterScriptRunner>();		// Animator system runs after the character script
-	CreateDependency<PhysicsLinkSystemWrite, CharacterScriptRunner>();	// physics writer runs afer 
+	CreateDependency<PhysicsLinkSystemWrite, CharacterScriptRunner>();	// physics writer runs afer
+    CreateDependency<AnimatorSystem,CharacterScriptRunner>();      // CharacterScript modifies animation values
 	
 #if !NOCONTROLS
 	auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
@@ -102,6 +104,7 @@ Level::Level(){
 	im->AddActionMap(InputNames::Jump, SDL_SCANCODE_SPACE);
 	im->AddActionMap(InputNames::Pound, SDL_SCANCODE_LCTRL);
 	im->AddActionMap(InputNames::ChangeChar, SDL_SCANCODE_C);
+    im->AddActionMap(InputNames::Wave, SDL_SCANCODE_E);
 	
 	// AppleTV remote
 	im->AddAxisMap(InputNames::Sprint, SDL_SCANCODE_PAUSE);
@@ -122,6 +125,7 @@ Level::Level(){
 	im->BindAction(InputNames::Jump, camera, &CameraEntity::Jump, ActionState::Pressed, CID::ANY);
 	im->BindAction(InputNames::Pound, camera, &CameraEntity::Pound, ActionState::Pressed, CID::ANY);
 	im->BindAction(InputNames::ChangeChar, GetInput(this),&Level::ChangeChar, ActionState::Pressed, CID::ANY);
+    im->BindAction(InputNames::Wave, camera, &CameraEntity::Wave, ActionState::Pressed, CID::ANY);
 #else
 #endif
 
