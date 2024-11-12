@@ -32,7 +32,8 @@ void CameraEntity::Create(Character cm){
     GameObject::Create();
 	// tip node with the camera, used for height-adjust and x-axis swivel
 	cameraEntity = GetWorld()->Instantiate<GameObject>();
-	cameraEntity.EmplaceComponent<CameraComponent>().SetActive(true);
+	auto& cam = cameraEntity.EmplaceComponent<CameraComponent>();
+	cam.SetActive(true);
 	
 	// midway arm node used for distance-adjust and y-axis swivel
     cameraArmBase = GetWorld()->Instantiate<GameObject>();

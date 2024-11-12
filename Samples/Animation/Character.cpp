@@ -26,7 +26,8 @@ enum CharAnims {
 	Jump,
 	PoundBegin,
 	InPound,
-	PoundEnd
+	PoundEnd,
+	Wave
 };
 
 
@@ -36,14 +37,14 @@ bool CharacterScript::OnGround() const {
 }
 
 void CharacterScript::Tick(float fpsScale) {
-    auto& mainLayer = animator->GetLayerAtIndex(0);
-	switch (mainLayer.GetCurrentState()) {
+    auto mainLayer = animator->GetLayerAtIndex(0);
+	switch (mainLayer->GetCurrentState()) {
 		case CharAnims::PoundBegin:
 		case CharAnims::InPound:
 		case CharAnims::PoundEnd:
 			// hit the ground? go to poundEnd
-			if (OnGround() && mainLayer.GetCurrentState() != PoundEnd) {
-                mainLayer.Goto(PoundEnd);
+			if (OnGround() && mainLayer->GetCurrentState() != PoundEnd) {
+                mainLayer->Goto(PoundEnd);
 			}
 			break;
 		default: {
@@ -55,32 +56,32 @@ void CharacterScript::Tick(float fpsScale) {
 
 			if (OnGround()) {
 				if (xzspeed > 0.4 && xzspeed < 2.2) {
-                    mainLayer.Goto(CharAnims::Walk);
+                    mainLayer->Goto(CharAnims::Walk);
 				}
 				else if (xzspeed >= 2.2) {
-                    mainLayer.Goto(CharAnims::Run);
+                    mainLayer->Goto(CharAnims::Run);
 				}
 				// not jumping?
 				else if (velocity.y < 0.3) {
-                    mainLayer.Goto(CharAnims::Idle);
+                    mainLayer->Goto(CharAnims::Idle);
 				}
 			}
 			else {
 				// falling and not in pound animation?
 				if (velocity.y < -0.05) {
-					switch (animator->GetLayerAtIndex(0).GetCurrentState()) {
+					switch (mainLayer->GetCurrentState()) {
 					case CharAnims::PoundBegin:
 					case CharAnims::PoundEnd:
 					case CharAnims::InPound:
 						break;
 					default:
-                            mainLayer.Goto(CharAnims::Fall);
+                            mainLayer->Goto(CharAnims::Fall);
 					}
 				}
 			}
 			// jumping?
 			if (velocity.y > 5) {
-                mainLayer.Goto(CharAnims::Jump);
+                mainLayer->Goto(CharAnims::Jump);
 			}
 		}
 	}
@@ -124,10 +125,10 @@ void CharacterScript::Jump() {
 
 void CharacterScript::Pound() {
 	// we can pound if we are jumping or falling
-	switch (animator->GetLayerAtIndex(0).GetCurrentState()) {
+	switch (animator->GetLayerAtIndex(0)->GetCurrentState()) {
 		case CharAnims::Fall:
 		case CharAnims::Jump:
-			animator->GetLayerAtIndex(0).Goto(CharAnims::PoundBegin);
+			animator->GetLayerAtIndex(0)->Goto(CharAnims::PoundBegin);
 			rigidBody->ClearAllForces();
 			rigidBody->SetLinearVelocity(vector3(0,0,0), false);
 			break;
@@ -180,6 +181,7 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic
 	auto pound_begin_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 180, 195);
 	auto pound_do_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 196, 200);
 	auto pound_end_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 201, 207);
+	auto wave_anim = RavEngine::New<AnimationAssetSegment>(all_clips, 211, 230);
 
 #if TRANSFORM_DEBUG
 	auto childChildForTesting = GetWorld()->Instantiate<GameObject>();
@@ -240,7 +242,8 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic
 		jump_state{ CharAnims::Jump, jump_anim },
 		pound_begin_state{ CharAnims::PoundBegin, pound_begin_anim },
 		pound_do_state{ CharAnims::InPound, pound_do_anim },
-		pound_end_state{ CharAnims::PoundEnd, pound_end_anim };
+		pound_end_state{ CharAnims::PoundEnd, pound_end_anim },
+		waveState{CharAnims::Wave, wave_anim};
 	// some states should not loop
 	jump_state.isLooping = false;
 	fall_state.isLooping = false;
@@ -318,28 +321,33 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic
 	// add transitions to the animator component
 	// note that these are copied into the component, so making changes
 	// to states after insertion will not work!
-    auto& layer = animcomp.AddLayer();
-    layer.InsertState(walk_state);
-    layer.InsertState(idle_state);
-    layer.InsertState(run_state);
-    layer.InsertState(jump_state);
-    layer.InsertState(fall_state);
-    layer.InsertState(pound_begin_state);
-    layer.InsertState(pound_end_state);
-    layer.InsertState(pound_do_state);
+    auto layer = animcomp.AddLayer();
+    layer->InsertState(walk_state);
+    layer->InsertState(idle_state);
+    layer->InsertState(run_state);
+    layer->InsertState(jump_state);
+    layer->InsertState(fall_state);
+    layer->InsertState(pound_begin_state);
+    layer->InsertState(pound_end_state);
+    layer->InsertState(pound_do_state);
+
+	auto waveLayer = animcomp.AddLayer();
+	waveLayer->InsertState(waveState);
     
-    auto mask = RavEngine::New<SkeletonMask>(skeleton);
-    layer.SetSkeletonMask(mask);
-    mask->SetMaskForJoint(skeleton->IndexForBone("character:arm_l").value(),0);
+    auto mask = RavEngine::New<SkeletonMask>(skeleton, 0);	// we only want to enable the arm on this layer
+    waveLayer->SetSkeletonMask(mask);
+    mask->SetMaskForJoint(skeleton->IndexForBone("character:arm_l").value(),1);
 
 	// initialize the state machine
 	// if an entry state is not set before play, your game will crash.
-    layer.Goto(CharAnims::Idle, true);
+    layer->Goto(CharAnims::Idle, true);
+	waveLayer->Goto(CharAnims::Walk, true);
 
 	// begin playing the animator controller.
 	// animator controllers are asynchronous to your other code
 	// so play and pause simply signal the controller to perform an action
-    layer.Play();
+    layer->Play();
+	waveLayer->Play();
     animcomp.debugEnabled = true;
 }
 
