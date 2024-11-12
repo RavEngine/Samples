@@ -341,7 +341,7 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic
 	// initialize the state machine
 	// if an entry state is not set before play, your game will crash.
     layer->Goto(CharAnims::Idle, true);
-	waveLayer->Goto(CharAnims::Walk, true);
+	waveLayer->Goto(CharAnims::Wave, true);
 
 	// begin playing the animator controller.
 	// animator controllers are asynchronous to your other code
