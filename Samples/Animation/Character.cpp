@@ -27,7 +27,8 @@ enum CharAnims {
 	PoundBegin,
 	InPound,
 	PoundEnd,
-	Wave
+	Wave,
+    HeadTurn
 };
 
 
@@ -358,24 +359,54 @@ void Character::Create(Ref<MeshCollectionSkinned> mesh, Ref<MeshCollectionStatic
     layer->InsertState(pound_end_state);
     layer->InsertState(pound_do_state);
 
+    // arm wave animation
 	auto waveLayer = animcomp.AddLayer();
     waveLayer->SetWeight(0);
 	waveLayer->InsertState(waveState);
     
-    auto mask = RavEngine::New<SkeletonMask>(skeleton, 0);	// we only want to enable the arm on this layer
-    waveLayer->SetSkeletonMask(mask);
-    mask->SetMaskForJoint(skeleton->IndexForBone("character:arm_l").value(),1);
+    auto waveMask = RavEngine::New<SkeletonMask>(skeleton, 0);	// we only want to enable the arm on this layer
+    waveLayer->SetSkeletonMask(waveMask);
+    waveMask->SetMaskForJoint(skeleton->IndexForBone("character:arm_l").value(),1);
+    
+    // procedural head animation
+    struct HeadAnimation : public CustomSkeletonAnimationFunction{
+        uint16_t headBone;
+        HeadAnimation(uint16_t headBone) : headBone(headBone){}
+        
+        bool operator()(BoneTransforms transforms, const ozz::animation::Skeleton* skeleton, float t, float start, float end, bool loop){
+            auto headTransform = transforms.GetBone(headBone);
+            
+            headTransform.rotation = vector3{0, std::sin(t * 2) ,0};
+            
+            transforms.SetBone(headBone, headTransform);
+            
+            return false;
+        }
+    };
+    
+    auto headBone = skeleton->IndexForBone("character:head").value();
+    auto headAnimation = New<CustomSkeletonAnimation>(HeadAnimation{headBone});
+    auto headMask = New<SkeletonMask>(skeleton, 0);
+    headMask->SetMaskForJoint(headBone, 1);
+    
+    auto headLayer = animcomp.AddLayer();
+    headLayer->SetWeight(1);
+    headLayer->InsertState({CharAnims::HeadTurn,headAnimation});
+    headLayer->SetSkeletonMask(headMask);
+    
 
 	// initialize the state machine
 	// if an entry state is not set before play, your game will crash.
     layer->Goto(CharAnims::Idle, true);
 	waveLayer->Goto(CharAnims::Wave, true);
+    headLayer->Goto(CharAnims::HeadTurn, true);
 
 	// begin playing the animator controller.
 	// animator controllers are asynchronous to your other code
 	// so play and pause simply signal the controller to perform an action
     layer->Play();
 	waveLayer->Play();
+    headLayer->Play();
     animcomp.debugEnabled = true;
 }
 
