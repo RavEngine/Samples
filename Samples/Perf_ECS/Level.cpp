@@ -86,7 +86,7 @@ PerfA_World::PerfA_World() {
 
 	// spawn Control entity
 	auto control = Instantiate<GameObject>();
-	auto gui = control.EmplaceComponent<GUIComponent>();
+	auto& gui = control.EmplaceComponent<GUIComponent>();
 	auto doc = gui.AddDocument("ui.rml");
     control.EmplaceComponent<CameraComponent>().SetActive(true);
 
