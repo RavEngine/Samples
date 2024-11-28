@@ -82,7 +82,7 @@ struct Level : public World{
         lightEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
         auto& dirlight = lightEntity.EmplaceComponent<DirectionalLight>();
         dirlight.SetCastsShadows(true);
-        dirlight.SetIntensity(4);
+        dirlight.SetIntensity(6);
         lightEntity.GetTransform().LocalRotateDelta(vector3(PI/4,PI/4,PI/3));
         
         auto guiEntity = Instantiate<GameObject>();

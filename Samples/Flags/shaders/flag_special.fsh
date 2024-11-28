@@ -63,7 +63,7 @@ vec3 calcMain(vec2 uv){
     
 }
 
-vec3 calcAlt(vec2 uv){
+vec3 calcAlt_v1(vec2 uv){
      // green, white, blue
      vec3 col1 = vec3(0.24,0.54,0.44);
      vec3 col2 = vec3(1.0,1.0,1.0);
@@ -80,6 +80,29 @@ vec3 calcAlt(vec2 uv){
      return uv.y < 0.5 ? colorBot : colorTop;
 }
 
+vec3 calcAlt_v2(vec2 uv){
+    // Normalized pixel coordinates (from 0 to 1)
+     
+     vec3 resCol = vec3(0);
+     
+     if (uv.y > 0.0 && uv.y < 0.25){
+        resCol = vec3(60) / 256.0;
+     }
+     else if (uv.y >= 0.25 && uv.y < 0.5){
+         resCol = vec3(175,0,250) / 256.0;
+     }
+     else if (uv.y >= 0.5 && uv.y < 0.75){
+         resCol = vec3(1);
+     }
+     else if (uv.y >= 0.75 && uv.y < 1.0) {
+         resCol = vec3(247,229,12) / 256.0;
+     }
+ 
+
+    // Output to screen
+    return resCol;
+}
+
 LitOutput frag()
 {
     LitOutput fs_out;
@@ -89,7 +112,7 @@ LitOutput frag()
     // "rounded square wave" blending function
     float factor = (atan(sin(3*ubo.time)/0.1))/3+0.5;
     
-    vec3 resCol = mix(calcMain(uv),calcAlt(uv),factor);
+    vec3 resCol = mix(calcMain(uv),calcAlt_v2(uv),factor);
   
     fs_out.color = vec4(resCol,1);
     fs_out.normal = inNormal;
