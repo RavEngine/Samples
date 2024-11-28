@@ -111,12 +111,13 @@ struct Floor : public RavEngine::GameObject {
 		EmplaceComponent<StaticMesh>(floorMesh, floorMat);
 
 		auto childObject = GetWorld()->Instantiate<GameObject>();
-		GetTransform().AddChild(childObject);
+		auto& childTransform = GetTransform();
+		childTransform.AddChild(childObject);
 
 		auto& body = childObject.EmplaceComponent<RigidBodyStaticComponent>();
 		auto physMat = RavEngine::New<PhysicsMaterial>(0.5f, 0.5f, 0.5f);
 		body.EmplaceCollider<BoxCollider>(vector3(floorSize, 0.5, floorSize), physMat);
-		childObject.GetTransform().LocalTranslateDelta({0,-0.5,0});
+		childTransform.LocalTranslateDelta({0,-0.5,0});
 
 		body.debugEnabled = true;
 	}
