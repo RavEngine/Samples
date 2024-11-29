@@ -22,6 +22,8 @@ namespace RavEngine {
 	struct Locator : public PreloadedAsset {
 		vector3 translate, scale;
 		quaternion rotation;
+		Ref<MeshAsset> mesh;
+		Ref<PBRMaterialInstance> material;
 	};
 
 	struct SceneLoader{

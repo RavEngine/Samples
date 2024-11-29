@@ -67,45 +67,19 @@ RavEngine::SceneLoader::~SceneLoader()
 
 void RavEngine::SceneLoader::LoadMeshes(const Function<bool(const PreloadedAsset&)>& filterFunc, const Function<void(Ref<MeshAsset>, Ref<PBRMaterialInstance>, const PreloadedAsset&)>& constructionFunc)
 {
-	matrix4 identity(1);
-	UnorderedMap<uint32_t, Ref<PBRMaterialInstance>> materials;	 // not an array because they can be encountered out of order
-	Filesystem::Path base_path = decltype(base_path)(scene_path).parent_path();
+#if 0
 	for (decltype(scene->mNumMeshes) i = 0; i < scene->mNumMeshes; i++) {
 		const auto& name = scene->mMeshes[i]->mName;
 		PreloadedAsset pa{ string_view(name.C_Str(), name.length) };
 
 		// user chooses if we load this mesh
 		if (filterFunc(pa)) {
-			auto mp = AIMesh2MeshPart(scene->mMeshes[i],identity);
-			auto asset = New<MeshAsset>(std::move(mp));
-			// load the material data
-			auto idx = scene->mMeshes[i]->mMaterialIndex;
-			Ref<PBRMaterialInstance> matinst;
-			if (materials.contains(idx)) {
-				matinst = materials.at(idx);
-			}
-			else {
-				// create the material here
-				matinst = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-				materials[idx] = matinst;
-				auto aimat = scene->mMaterials[idx];
-				aiColor3D albedo;
-				aimat->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
-				matinst->SetAlbedoColor({ albedo.r,albedo.g,albedo.b,1 });
-
-				// load textures
-				aiString texpath;
-				if (aimat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texpath) == AI_SUCCESS) {
-					auto imgpath = Filesystem::Path(Format("{}/{}", base_path.string(), texpath.C_Str()));
-					auto tx = New<Texture>(imgpath);
-					matinst->SetAlbedoTexture(tx);
-				}
-
-			}
+			
 			
 			constructionFunc(asset, matinst, pa);
 		}
 	}
+#endif
 }
 #endif
 
@@ -136,6 +110,8 @@ void RavEngine::SceneLoader::LoadLocators(const Function<void(const Locator&)>& 
 		return mat;
 	};
 
+	UnorderedMap<uint32_t, Ref<PBRMaterialInstance>> materials;	 // not an array because they can be encountered out of order
+	const Filesystem::Path base_path = decltype(base_path)(scene_path).parent_path();
 	auto recurse_node = [&](aiNode* node) -> void {
 		auto recurse_node_impl = [&](aiNode* node, auto& recursive_func) -> void {
 			// process the node
@@ -148,7 +124,47 @@ void RavEngine::SceneLoader::LoadLocators(const Function<void(const Locator&)>& 
 			l.scale = vector3(scale.x, scale.y, scale.z);
 			l.rotation = quaternion(rotation.w, rotation.x, rotation.y, rotation.z);
 
-			func(l);
+			// get the meshes
+			for (uint32_t i = 0; i < node->mNumMeshes; i++) {
+				constexpr matrix4 identity(1);
+
+				const auto mesh = scene->mMeshes[node->mMeshes[i]];
+
+				auto mp = AIMesh2MeshPart(mesh, identity);
+				auto asset = New<MeshAsset>(std::move(mp));
+				// load the material data
+				auto idx = mesh->mMaterialIndex;
+				Ref<PBRMaterialInstance> matinst;
+				if (materials.contains(idx)) {
+					matinst = materials.at(idx);
+				}
+				else {
+					// create the material here
+					matinst = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+					materials[idx] = matinst;
+					auto aimat = scene->mMaterials[idx];
+					aiColor3D albedo;
+					aimat->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
+					matinst->SetAlbedoColor({ albedo.r,albedo.g,albedo.b,1 });
+
+					// load textures
+					aiString texpath;
+					if (aimat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texpath) == AI_SUCCESS) {
+						auto imgpath = Filesystem::Path(Format("{}/{}", base_path.string(), texpath.C_Str()));
+						auto tx = New<Texture>(imgpath);
+						matinst->SetAlbedoTexture(tx);
+					}
+
+				}
+
+				Debug::Assert(asset != nullptr, "mesh is null!");
+				Debug::Assert(matinst != nullptr, "material is null!");
+
+				l.material = matinst;
+				l.mesh = asset;
+
+				func(l);
+			}
 
 			for ( decltype(node->mNumChildren) i = 0; i < node->mNumChildren; i++) {
 				recursive_func(node->mChildren[i], recursive_func);

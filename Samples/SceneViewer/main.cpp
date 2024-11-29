@@ -42,27 +42,15 @@ struct SceneViewerLevel : public RavEngine::World {
 	}
 
 	void AddData(const Filesystem::Path& path) {
-		UnorderedMap<string_view, GameObject> nodes;
 		SceneLoader loader(path);
 		loader.LoadLocators([&](const Locator& loc) {
 			auto obj = Instantiate<GameObject>();
-			nodes[loc.name] = obj;
 			auto& tr = obj.GetTransform();
 			tr.SetWorldPosition(loc.translate);
 			tr.SetWorldRotation(loc.rotation);
 			tr.SetLocalScale(loc.scale);
-		});
 
-		auto defaultMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-
-		loader.LoadMeshes([&](const PreloadedAsset&) -> bool {return true; }, [&](Ref<MeshAsset> asset, Ref<PBRMaterialInstance> mat, const PreloadedAsset& data) {
-			try {
-				nodes.at(data.name).EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(asset), mat);
-			}
-			catch (exception& e) {
-				// continue silently...
-				Debug::Log("Cannot load {} - {}", data.name, e.what());
-			}
+			obj.EmplaceComponent<StaticMesh>(New<MeshCollectionStatic>(loc.mesh),loc.material);
 		});
 	}
 
