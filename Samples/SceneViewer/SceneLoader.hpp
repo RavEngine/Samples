@@ -19,7 +19,7 @@ namespace RavEngine {
 		// light details here...
 	};
  
-	struct Locator : public PreloadedAsset {
+	struct ImportedObject : public PreloadedAsset {
 		vector3 translate, scale;
 		quaternion rotation;
 		Ref<MeshAsset> mesh;
@@ -46,19 +46,11 @@ namespace RavEngine {
 		* Unloads internal representation
 		*/
 		~SceneLoader();
-#if !RVE_SERVER
-		/**
-		* Load the meshes for this scene
-		* @param filterFunc the function to invoke to filter items. Return true if the mesh should be loaded, false to skip
-		* @param constructionFunc the funciton to invoke with the created MeshAssets.
-		*/
-		void LoadMeshes(const Function<bool(const PreloadedAsset&)>& filterFunc, const Function<void(Ref<MeshAsset>, Ref<PBRMaterialInstance>, const PreloadedAsset&)>& constructionFunc);
-#endif
 		/**
 		* Load the scene nodes for this scene
 		* @param func the function to invoke with each node
 		*/
-		void LoadLocators(const Function<void(const Locator&)>& func);
+		void LoadObjects(const Function<void(const ImportedObject&)>& func);
 
 	private:
 		const aiScene* scene;

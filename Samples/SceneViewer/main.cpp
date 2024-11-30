@@ -43,7 +43,7 @@ struct SceneViewerLevel : public RavEngine::World {
 
 	void AddData(const Filesystem::Path& path) {
 		SceneLoader loader(path);
-		loader.LoadLocators([&](const Locator& loc) {
+		loader.LoadObjects([&](const ImportedObject& loc) {
 			auto obj = Instantiate<GameObject>();
 			auto& tr = obj.GetTransform();
 			tr.SetWorldPosition(loc.translate);

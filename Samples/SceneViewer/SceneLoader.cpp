@@ -63,28 +63,8 @@ RavEngine::SceneLoader::~SceneLoader()
 {
 	aiReleaseImport(scene);
 }
-#if !RVE_SERVER
 
-void RavEngine::SceneLoader::LoadMeshes(const Function<bool(const PreloadedAsset&)>& filterFunc, const Function<void(Ref<MeshAsset>, Ref<PBRMaterialInstance>, const PreloadedAsset&)>& constructionFunc)
-{
-#if 0
-	for (decltype(scene->mNumMeshes) i = 0; i < scene->mNumMeshes; i++) {
-		const auto& name = scene->mMeshes[i]->mName;
-		PreloadedAsset pa{ string_view(name.C_Str(), name.length) };
-
-		// user chooses if we load this mesh
-		if (filterFunc(pa)) {
-			
-			
-			constructionFunc(asset, matinst, pa);
-		}
-	}
-#endif
-}
-#endif
-
-
-void RavEngine::SceneLoader::LoadLocators(const Function<void(const Locator&)>& func)
+void RavEngine::SceneLoader::LoadObjects(const Function<void(const ImportedObject&)>& func)
 {
 	auto getWorldMatrix = [](const aiNode * node) -> aiMatrix4x4 {
 		// figure out size
@@ -118,7 +98,7 @@ void RavEngine::SceneLoader::LoadLocators(const Function<void(const Locator&)>& 
 			aiVector3t<float> scale, position;
 			aiQuaterniont<float> rotation;
 			getWorldMatrix(node).Decompose(scale, rotation, position);
-			Locator l;
+			ImportedObject l;
 			l.name = std::string_view(node->mName.C_Str(), node->mName.length);
 			l.translate = vector3(position.x, position.y, position.z);
 			l.scale = vector3(scale.x, scale.y, scale.z);
@@ -129,41 +109,45 @@ void RavEngine::SceneLoader::LoadLocators(const Function<void(const Locator&)>& 
 				constexpr matrix4 identity(1);
 
 				const auto mesh = scene->mMeshes[node->mMeshes[i]];
+				try {
+					auto mp = AIMesh2MeshPart(mesh, identity);
+					auto asset = New<MeshAsset>(std::move(mp));
+					// load the material data
+					auto idx = mesh->mMaterialIndex;
+					Ref<PBRMaterialInstance> matinst;
+					if (materials.contains(idx)) {
+						matinst = materials.at(idx);
+					}
+					else {
+						// create the material here
+						matinst = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+						materials[idx] = matinst;
+						auto aimat = scene->mMaterials[idx];
+						aiColor3D albedo;
+						aimat->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
+						matinst->SetAlbedoColor({ albedo.r,albedo.g,albedo.b,1 });
 
-				auto mp = AIMesh2MeshPart(mesh, identity);
-				auto asset = New<MeshAsset>(std::move(mp));
-				// load the material data
-				auto idx = mesh->mMaterialIndex;
-				Ref<PBRMaterialInstance> matinst;
-				if (materials.contains(idx)) {
-					matinst = materials.at(idx);
-				}
-				else {
-					// create the material here
-					matinst = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
-					materials[idx] = matinst;
-					auto aimat = scene->mMaterials[idx];
-					aiColor3D albedo;
-					aimat->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
-					matinst->SetAlbedoColor({ albedo.r,albedo.g,albedo.b,1 });
+						// load textures
+						aiString texpath;
+						if (aimat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texpath) == AI_SUCCESS) {
+							auto imgpath = Filesystem::Path(Format("{}/{}", base_path.string(), texpath.C_Str()));
+							auto tx = New<Texture>(imgpath);
+							matinst->SetAlbedoTexture(tx);
+						}
 
-					// load textures
-					aiString texpath;
-					if (aimat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texpath) == AI_SUCCESS) {
-						auto imgpath = Filesystem::Path(Format("{}/{}", base_path.string(), texpath.C_Str()));
-						auto tx = New<Texture>(imgpath);
-						matinst->SetAlbedoTexture(tx);
 					}
 
+					Debug::Assert(asset != nullptr, "mesh is null!");
+					Debug::Assert(matinst != nullptr, "material is null!");
+
+					l.material = matinst;
+					l.mesh = asset;
+
+					func(l);
 				}
-
-				Debug::Assert(asset != nullptr, "mesh is null!");
-				Debug::Assert(matinst != nullptr, "material is null!");
-
-				l.material = matinst;
-				l.mesh = asset;
-
-				func(l);
+				catch (const std::exception& e) {
+					Debug::Warning("Skipping {} due to error {}", l.name, e.what());
+				}
 			}
 
 			for ( decltype(node->mNumChildren) i = 0; i < node->mNumChildren; i++) {
