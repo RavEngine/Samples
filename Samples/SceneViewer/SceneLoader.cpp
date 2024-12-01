@@ -122,19 +122,58 @@ void RavEngine::SceneLoader::LoadObjects(const Function<void(const ImportedObjec
 						// create the material here
 						matinst = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
 						materials[idx] = matinst;
+                        
 						auto aimat = scene->mMaterials[idx];
-						aiColor3D albedo;
-						aimat->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
-						matinst->SetAlbedoColor({ albedo.r,albedo.g,albedo.b,1 });
+                        {
+                            aiColor3D albedo;
+                            aimat->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
+                            matinst->SetAlbedoColor({ albedo.r,albedo.g,albedo.b,1 });
+                        }
+                        {
+                            aiColor3D val;
+                            if (aimat->Get(AI_MATKEY_COLOR_SPECULAR, val) == aiReturn_SUCCESS){
+                                matinst->SetSpecularTint(val.r);
+                            }
+                        }
+                        {
+                            aiColor3D val;
+                            if(aimat->Get(AI_MATKEY_SHININESS_STRENGTH, val) == aiReturn_SUCCESS){
+                                matinst->SetMetallicTint(val.r);
+                            }
+                        }
+                        
+                        // load textures
+                        auto loadtexture = [&](aiTextureType texture) -> Ref<Texture>{
+                            aiString texpath;
+                            if (aimat->Get(AI_MATKEY_TEXTURE(texture, 0), texpath) == AI_SUCCESS) {
+                                auto imgpath = Filesystem::Path(Format("{}/{}", base_path.string(), texpath.C_Str()));
+                                auto tx = New<Texture>(imgpath);
+                                return tx;
+                            }
+                            return nullptr;
+                        };
 
-						// load textures
-						aiString texpath;
-						if (aimat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texpath) == AI_SUCCESS) {
-							auto imgpath = Filesystem::Path(Format("{}/{}", base_path.string(), texpath.C_Str()));
-							auto tx = New<Texture>(imgpath);
-							matinst->SetAlbedoTexture(tx);
-						}
-
+                        if (auto albedo = loadtexture(aiTextureType_DIFFUSE)){
+                            matinst->SetAlbedoTexture(albedo);
+                        }
+                        if (auto normal = loadtexture(aiTextureType_NORMALS)){
+                            matinst->SetNormalTexture(normal);
+                        }
+                        if (auto specular = loadtexture(aiTextureType_SPECULAR)){
+                            matinst->SetSpecularTexture(specular);
+                        }
+                        if (auto metallic = loadtexture(aiTextureType_METALNESS)){
+                            matinst->SetMetallicTexture(metallic);
+                        }
+                        if (auto roughness = loadtexture(aiTextureType_DIFFUSE_ROUGHNESS)){
+                            matinst->SetMetallicTexture(roughness);
+                        }
+                        if (auto ao = loadtexture(aiTextureType_AMBIENT_OCCLUSION)){
+                            matinst->SetAOTexture(ao);
+                        }
+                        if (auto emissive = loadtexture(aiTextureType_EMISSION_COLOR)){
+                            matinst->SetEmissiveTexture(emissive);
+                        }
 					}
 
 					Debug::Assert(asset != nullptr, "mesh is null!");
