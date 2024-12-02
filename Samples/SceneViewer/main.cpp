@@ -13,6 +13,7 @@
 #include <RavEngine/Window.hpp>
 #include <RavEngine/MeshCollection.hpp>
 #include <SDL3/SDL_dialog.h>
+#include <RavEngine/BuiltinPostProcess.hpp>
 
 using namespace RavEngine;
 using namespace std;
@@ -31,6 +32,11 @@ struct SceneViewerLevel : public RavEngine::World {
 
 		auto& cam = camHeadUD.EmplaceComponent<CameraComponent>();
 		cam.SetActive(true);
+
+		// post procesing
+		auto& camEffects = cam.postProcessingEffects.effects;
+
+		camEffects.push_back(std::make_unique<BloomEffect>());
 
 		// default lights
 		auto defaultLights = Instantiate<GameObject>();
