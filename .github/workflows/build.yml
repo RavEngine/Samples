@@ -163,7 +163,8 @@ jobs:
           cd build
           mkdir win 
           cd win
-          cmake -A${{ matrix.arch }} -D_AGILITY_SDK_ARCH="${{ matrix.arch }}".ToLower() -DCMAKE_SYSTEM_NAME=${{ matrix.sdk }} -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
+          $arch="${{ matrix.arch }}".ToLower()
+          cmake -A${{ matrix.arch }} -D_AGILITY_SDK_ARCH=$arch -DCMAKE_SYSTEM_NAME=${{ matrix.sdk }} -DCMAKE_SYSTEM_VERSION="10.0" -DCMAKE_BUILD_TYPE=Release -DRAVENGINE_BUILD_TESTS=OFF ..\.. 
           cmake -Wno-dev ..\.. 
       - name: Build
         run: cd build; cd win; cmake --build . --config release --target install
