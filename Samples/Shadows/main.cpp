@@ -142,7 +142,7 @@ struct Level : public RavEngine::World{
 		dl.SetCastsShadows(true);
 		light.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
 		light.GetTransform().LocalRotateDelta(vector3(0, 0, deg_to_rad(45))).LocalTranslateDelta(vector3(0,2,0));
-        
+
         
         auto pointLight = Instantiate<GameObject>();
         auto& pLight = pointLight.EmplaceComponent<PointLight>();
@@ -151,13 +151,14 @@ struct Level : public RavEngine::World{
         pLight.SetIntensity(2);
 		pLight.SetCastsShadows(true);
          
+        constexpr vector3 spotLightInitialPos{0,3,2};
 
 		auto spotLightEntity = Instantiate<GameObject>();
 		auto& spotLight = spotLightEntity.EmplaceComponent<SpotLight>();
 		spotLight.SetCastsShadows(true);
 		spotLight.debugEnabled = true;
-		spotLightEntity.GetTransform().LocalTranslateDelta(vector3(0,3,2)).LocalRotateDelta(vector3(deg_to_rad(30),0,0));
-		spotLight.SetIntensity(2);
+		spotLightEntity.GetTransform().LocalTranslateDelta(spotLightInitialPos).LocalRotateDelta(vector3(deg_to_rad(30),0,0));
+		spotLight.SetIntensity(10);
 		auto sfwd = spotLightEntity.GetTransform().WorldForward();
 
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
@@ -175,6 +176,16 @@ struct Level : public RavEngine::World{
 		TurnUD(-5);
         
         EmplaceSystem<PointLightMover>();
+
+        EmplaceSystem<decltype([](const SpotLight&, Transform& t){
+            auto time = GetApp()->GetCurrentTime();
+            auto scale = GetApp()->GetCurrentFPSScale();
+            t.SetLocalPosition({
+                std::sin(time * 0.5) * 1.5 + spotLightInitialPos.x,
+                spotLightInitialPos.y,
+                spotLightInitialPos.z,
+            });
+        })>();
 
 	}
 	void PostTick(float fpsScale) final {

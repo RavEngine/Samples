@@ -223,7 +223,7 @@ struct Level : public RavEngine::World {
 
         auto wineglassMeshCol = MeshCollectionStaticManager::Get("wineglass");
         auto glassMat = New<GlassMatInstance>(New<GlassMat>());
-        for (int i = 0; i < 0; i++) {
+        for (int i = 0; i < 100; i++) {
             auto glass = Instantiate<GameObject>();
             glass.EmplaceComponent<StaticMesh>(wineglassMeshCol, glassMat);
 
@@ -234,7 +234,7 @@ struct Level : public RavEngine::World {
 
         // unlit transparent quads
         auto tquadMat = New< TQuadMatInstance>(New<TQuadMat>());
-        for (int i = 0; i < 0; i++) {
+        for (int i = 0; i < 10; i++) {
             auto obj = Instantiate<GameObject>();
             obj.EmplaceComponent<StaticMesh>(floorMesh, tquadMat);
 
