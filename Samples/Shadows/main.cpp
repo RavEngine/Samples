@@ -177,7 +177,7 @@ struct Level : public RavEngine::World{
         
         EmplaceSystem<PointLightMover>();
 
-        EmplaceSystem<decltype([](const SpotLight&, Transform& t){
+        EmplaceSystem<decltype([=](const SpotLight&, Transform& t){
             auto time = GetApp()->GetCurrentTime();
             auto scale = GetApp()->GetCurrentFPSScale();
             t.SetLocalPosition({
