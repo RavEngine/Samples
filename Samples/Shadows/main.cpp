@@ -151,7 +151,7 @@ struct Level : public RavEngine::World{
         pLight.SetIntensity(2);
 		pLight.SetCastsShadows(true);
          
-        constexpr vector3 spotLightInitialPos{0,3,2};
+        constexpr static vector3 spotLightInitialPos{0,3,2};
 
 		auto spotLightEntity = Instantiate<GameObject>();
 		auto& spotLight = spotLightEntity.EmplaceComponent<SpotLight>();
@@ -177,7 +177,7 @@ struct Level : public RavEngine::World{
         
         EmplaceSystem<PointLightMover>();
 
-        EmplaceSystem<decltype([=](const SpotLight&, Transform& t){
+        EmplaceSystem<decltype([](const SpotLight&, Transform& t){
             auto time = GetApp()->GetCurrentTime();
             auto scale = GetApp()->GetCurrentFPSScale();
             t.SetLocalPosition({
