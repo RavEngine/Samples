@@ -2,9 +2,7 @@ layout(push_constant) uniform UniformBufferObject{
     float time;
 } ubo;
 
-layout(location = 0) out vec3 outNormal;
-layout(location = 1) out vec2 outUV;
-layout(location = 2) out float mixFactor;
+layout(location = 0) out float mixFactor;
 
 LitVertexOut vert(EntityIn entity, EngineData data)
 {
@@ -20,7 +18,6 @@ LitVertexOut vert(EntityIn entity, EngineData data)
     a_position.x += sin(ubo.time * -5 + worldPos.x + worldPos.z) * (a_position.y / height) * extentFactor;
     vs_out.localPosition = a_position;
 
-	outNormal = inNormal;
     mixFactor = height - a_position.y;
 
     return vs_out;

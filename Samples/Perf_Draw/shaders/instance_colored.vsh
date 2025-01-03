@@ -3,9 +3,7 @@ layout(push_constant) uniform UniformBufferObject{
     float time;
 } ubo;
 
-layout(location = 0) out vec3 outNormal;
-layout(location = 1) out vec2 outUV;
-layout(location = 2) out vec3 v_position;
+layout(location = 0) out vec3 v_position;
 
 #define M_PI 3.1415926
 
@@ -67,7 +65,6 @@ LitVertexOut vert(EntityIn entity, EngineData data)
             
     vs_out.localPosition = transformed.xyz;
            
-	outNormal = inNormal;
     v_position = transformed.xyz;
 
     return vs_out;
