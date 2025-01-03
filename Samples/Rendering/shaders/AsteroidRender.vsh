@@ -25,8 +25,7 @@ ParticleVertexOut vert(uint particleID, ParticleMatrices matrices){
     outTBN[2] = mesh_out.N;
 
     ParticleVertexOut vs_out;
-    vs_out.position = mesh_out.position;
-    vs_out.worldPosition = mesh_out.worldPosition;
+    vs_out.localPosition = mesh_out.localPosition;
     
     const uint particleDataOffset = (particleID * ubo.bytesPerParticle) / 4;
     const uint alphaOffset = particleDataOffset + ubo.alphaOffset / 4;

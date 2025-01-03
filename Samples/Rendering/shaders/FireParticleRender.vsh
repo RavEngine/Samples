@@ -23,8 +23,7 @@ ParticleVertexOut vert(uint particleID, ParticleMatrices matrices, vec2 inVertex
 
     ParticleVertexOut v_out;
 
-    v_out.position = vertdata.position;
-    v_out.worldPosition = vertdata.worldPosition;
+    v_out.localPosition = vertdata.localPosition;
     out_uv = vertdata.uv;
 
     const uint particleDataOffset = (particleID * ubo.bytesPerParticle) / 4;

@@ -16,10 +16,8 @@ LitVertexOut vert(EntityIn entity, EngineData data)
     a_position.z += sin(ubo.time * 10 + a_position.x * -5) / 40;
     a_position.y += cos(ubo.time * 10 + a_position.x * -5) / 50;
 
-	vec4 worldPos = inModel * vec4(a_position,1);
-    vs_out.position = data.viewProj * worldPos;
-    vs_out.worldPosition = worldPos.xyz;
-	outNormal = normalize(transpose(mat3(inModel)) * inNormal);
+    vs_out.localPosition = a_position;
+	outNormal = inNormal;
 
 	outUV = inUV;
     return vs_out;

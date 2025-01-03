@@ -16,7 +16,6 @@ float rand(vec2 co){
 LitVertexOut vert(EntityIn entity, EngineData data)
 {    
     uint inEntityID = entity.entityID;
-    mat4 worldTransform = entity.modelMtx;
 
      LitVertexOut vs_out;
 
@@ -65,13 +64,9 @@ LitVertexOut vert(EntityIn entity, EngineData data)
     transformed = scalemat * transformed;
     transformed = fullrotmat * transformed;
     transformed = transpose(transmat) * transformed;
-        
-    transformed = worldTransform * vec4(transformed.xyz, 1);
-    
-    vs_out.worldPosition = transformed.xyz;
-    
-    vs_out.position = data.viewProj * vec4(transformed.xyz, 1);
-        
+            
+    vs_out.localPosition = transformed.xyz;
+           
 	outNormal = inNormal;
     v_position = transformed.xyz;
 

@@ -18,12 +18,9 @@ LitVertexOut vert(EntityIn entity, EngineData data)
     const float extentFactor = 0.5;
 
     a_position.x += sin(ubo.time * -5 + worldPos.x + worldPos.z) * (a_position.y / height) * extentFactor;
-    worldPos = inModel * vec4(a_position, 1);
+    vs_out.localPosition = a_position;
 
-    vs_out.position = data.viewProj * worldPos;
-    vs_out.worldPosition = worldPos.xyz;
-
-	outNormal = normalize(transpose(mat3(inModel)) * inNormal);
+	outNormal = inNormal;
     mixFactor = height - a_position.y;
 
     return vs_out;

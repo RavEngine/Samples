@@ -46,6 +46,7 @@ Level::Level() {
 	camera.EmplaceComponent<CameraComponent>().SetActive(true);
 	camera.GetTransform().LocalTranslateDelta(vector3(0, 0.5, 2));
 
+
 	// GUI
 	auto& g = camera.EmplaceComponent<GUIComponent>();
 	auto doc = g.AddDocument("ui.rml");
@@ -116,7 +117,7 @@ Level::Level() {
 	// load Systems
 	EmplaceSystem<SpinSystem>();
 	EmplaceSystem<CirculateSystem>();
-	EmplaceTimedSystem<FPSSystem>(chrono::seconds(1),"ui.rml","metrics");
+	//EmplaceTimedSystem<FPSSystem>(chrono::seconds(1),"ui.rml","metrics");
 
 	// load lights
 	auto sphereMesh = New<MeshCollectionStatic>(RavEngine::MeshAsset::Manager::Get("sphere", opt));

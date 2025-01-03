@@ -17,6 +17,7 @@
 #include <RavEngine/StartApp.hpp>
 #include <RavEngine/Window.hpp>
 #include <RavEngine/MeshCollection.hpp>
+#include <RavEngine/BuiltinTonemap.hpp>
 
 using namespace RavEngine;
 using namespace std;
