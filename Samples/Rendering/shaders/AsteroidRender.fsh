@@ -8,7 +8,6 @@ layout(push_constant, std430) uniform UniformBufferObject{
 
 layout(location = 0) in vec2 inUV;
 layout(location = 1) in flat float alphaFactor;
-layout(location = 2) in vec3[3] inTBN;
 
 
 // adapted from "5 procedural textures" by ianertson https://www.shadertoy.com/view/csyGzw
@@ -126,8 +125,7 @@ LitOutput frag()
 
 	mat_out.color = vec4(rockTexture(inUV),alphaFactor);
 
-	mat3 TBN = mat3(inTBN[0],inTBN[1],inTBN[2]);
-	mat_out.normal = normalize(TBN * vec3(0,0,1));
+	mat_out.normal = vec3(0,0,1);
 
 	float specular = 0.1;
 	float metallic = 0.1;

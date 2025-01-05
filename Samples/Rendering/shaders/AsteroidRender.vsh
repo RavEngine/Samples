@@ -10,7 +10,6 @@ layout(push_constant, std430) uniform UniformBufferObject{
 
 layout(location = 0) out vec2 outUV;
 layout(location = 1) out flat float alphaFactor;
-layout(location = 2) out vec3[3] outTBN;
 
 ParticleVertexOut vert(uint particleID, ParticleMatrices matrices){
 
@@ -19,10 +18,6 @@ ParticleVertexOut vert(uint particleID, ParticleMatrices matrices){
     );
 
     outUV = inUV;
-
-    outTBN[0] = mesh_out.T;
-    outTBN[1] = mesh_out.B;
-    outTBN[2] = mesh_out.N;
 
     ParticleVertexOut vs_out;
     vs_out.localPosition = mesh_out.localPosition;
