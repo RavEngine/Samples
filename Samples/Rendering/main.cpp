@@ -22,6 +22,8 @@
 using namespace RavEngine;
 using namespace std;
 
+// Metal bug on x86 macOS prevents transparency from working
+#define ENABLE_TRANSPARENTS !(__APPLE__ && __x86_64__)
 
 struct RenderingApp : public RavEngine::App {
     void OnStartup(int argc, char** argv) final;
@@ -221,7 +223,7 @@ struct Level : public RavEngine::World {
         }
 
         // wine glasses
-
+#if ENABLE_TRANSPARENTS
         auto wineglassMeshCol = MeshCollectionStaticManager::Get("wineglass");
         auto glassMat = New<GlassMatInstance>(New<GlassMat>());
         for (int i = 0; i < 100; i++) {
@@ -242,7 +244,7 @@ struct Level : public RavEngine::World {
             obj.GetTransform().SetWorldPosition({-10, 2, i});
             obj.GetTransform().SetWorldRotation(vector3{PI / 2,0,0});
         }
-
+#endif
     
         camRoot = Instantiate<decltype(camRoot)>();
         camHeadUD = Instantiate<decltype(camHeadUD)>();
@@ -286,7 +288,7 @@ struct Level : public RavEngine::World {
         smokeParticle = { smokeParticleEntity };
         smokeEmitter.SetEmissionRate(1000);
         smokeParticleEntity.EmplaceComponent<FlameTag>();
-
+#if ENABLE_TRANSPARENTS
         auto fireParticleEntity = Instantiate<GameObject>();
         auto fireParticleRenderMat = New<FireParticleMaterial>();
         auto fireRenderMat = RavEngine::New<FireParticleMaterialInstance>(fireParticleRenderMat, offsetof(FireParticleRenderData, alpha));
@@ -314,7 +316,7 @@ struct Level : public RavEngine::World {
         asteroidEmitterEntity.GetTransform().LocalTranslateDelta({0,2,0});
         emitter.Play();
         emitter.SetEmissionRate(50);
-
+#endif
 
         SetupInputs();
 
