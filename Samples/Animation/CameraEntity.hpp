@@ -24,7 +24,7 @@ struct CameraEntity : public RavEngine::GameObject {
     void Wave();
     
     inline auto get_id( )const{
-        return id;
+        return id.id;
     }
     
     inline auto get(){
