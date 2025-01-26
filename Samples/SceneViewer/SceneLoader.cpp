@@ -166,7 +166,7 @@ void RavEngine::SceneLoader::LoadObjects(const Function<void(const ImportedObjec
                             matinst->SetMetallicTexture(metallic);
                         }
                         if (auto roughness = loadtexture(aiTextureType_DIFFUSE_ROUGHNESS)){
-                            matinst->SetMetallicTexture(roughness);
+                            matinst->SetRoughnessTexture(roughness);
                         }
                         if (auto ao = loadtexture(aiTextureType_AMBIENT_OCCLUSION)){
                             matinst->SetAOTexture(ao);

@@ -163,7 +163,7 @@ struct SceneViewerApp : public RavEngine::App {
 			}
 
 
-		}, this, GetMainWindow()->window, filters, std::size(filters), startLocation.c_str(), false);
+		}, this, GetMainWindow()->window, filters, std::size(filters), NULL, false);
 
 	}
 
