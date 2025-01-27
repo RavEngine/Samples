@@ -16,7 +16,8 @@ struct PuckComponent : public RavEngine::ComponentWithOwner{
 };
 
 struct PuckScript : public RavEngine::ScriptComponent, public RavEngine::Queryable<PuckScript,RavEngine::ScriptComponent>{
-    
+	double lastSoundTime = 0;
+
     using RavEngine::Queryable<PuckScript,RavEngine::ScriptComponent>::GetQueryTypes;
     
     RavEngine::Array<Ref<RavEngine::AudioAsset>,4> sounds;

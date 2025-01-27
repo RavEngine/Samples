@@ -9,6 +9,7 @@
 #include <RavEngine/AudioSource.hpp>
 #include <RavEngine/RenderEngine.hpp>
 #include <RavEngine/PhysicsSolver.hpp>
+#include <RavEngine/App.hpp>
 #include <RavEngine/MeshCollection.hpp>
 
 using namespace RavEngine;
@@ -64,5 +65,9 @@ PuckScript::PuckScript(Entity owner) : ScriptComponent(owner), sounds{
 
 void PuckScript::OnColliderEnter(PhysicsBodyComponent&, const ContactPairPoint* contactPoints, size_t numContactPoints)
 {
-    GetOwner().GetWorld()->PlaySound(InstantaneousAudioSource(sounds[std::rand() % 4], GetTransform().GetWorldPosition(), 3));
+    auto now = GetApp()->GetCurrentTime();
+    if (now - lastSoundTime > 0.25) {
+        GetOwner().GetWorld()->PlaySound(InstantaneousAudioSource(sounds[std::rand() % 4], GetTransform().GetWorldPosition(), 3));
+        lastSoundTime = now;
+    }
 }
