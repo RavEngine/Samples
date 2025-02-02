@@ -98,7 +98,8 @@ struct GlassMat : public LitMaterial {
 };
 
 struct GlassMatInstance : public MaterialInstance {
-    GlassMatInstance(Ref<GlassMat> m) : MaterialInstance(m) {}
+    constexpr static uint32_t priority = 2;
+    GlassMatInstance(Ref<GlassMat> m) : MaterialInstance(m, priority) {}
 };
 
 struct Level : public RavEngine::World {
@@ -139,7 +140,8 @@ struct Level : public RavEngine::World {
     };
 
     struct TQuadMatInstance : public MaterialInstance {
-        TQuadMatInstance(Ref<TQuadMat>m) : MaterialInstance(m) {}
+        constexpr static uint32_t priority = 1;
+        TQuadMatInstance(Ref<TQuadMat>m) : MaterialInstance(m,priority) {}
     };
 
     struct alignas(4) ParticleRenderData {
@@ -195,7 +197,7 @@ struct Level : public RavEngine::World {
         floor.GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
 
         auto floorMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad"));
-        auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>(),2);
         floorMat->SetAlbedoColor({ 0.5,0.5,0.5,1 });
         floor.EmplaceComponent<StaticMesh>(floorMesh, floorMat);
         
@@ -330,7 +332,7 @@ struct Level : public RavEngine::World {
         
         auto helmetObj = Instantiate<GameObject>();
         auto helmetMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("helmet"));
-        auto helmetMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+        auto helmetMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>(),1);
         helmetMat->SetAlbedoTexture(Texture::Manager::Get("Default_albedo.png"));
         helmetMat->SetNormalTexture(Texture::Manager::Get("Default_normal.png"));
         helmetMat->SetMetallicTexture(Texture::Manager::Get("Default_metalness.png"));

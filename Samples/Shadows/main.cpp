@@ -147,12 +147,12 @@ struct Level : public RavEngine::World{
         auto pointLight = Instantiate<GameObject>();
         auto& pLight = pointLight.EmplaceComponent<PointLight>();
         pLight.debugEnabled = true;
-        pLight.SetColorRGBA({1,0,0,1});
-        pLight.SetIntensity(2);
+        pLight.SetColorRGBA({1,1,1,1});
+        pLight.SetIntensity(15);
 		pLight.SetCastsShadows(true);
          
         constexpr static vector3 spotLightInitialPos{0,3,2};
-
+#if 0
 		auto spotLightEntity = Instantiate<GameObject>();
 		auto& spotLight = spotLightEntity.EmplaceComponent<SpotLight>();
 		spotLight.SetCastsShadows(true);
@@ -160,7 +160,7 @@ struct Level : public RavEngine::World{
 		spotLightEntity.GetTransform().LocalTranslateDelta(spotLightInitialPos).LocalRotateDelta(vector3(deg_to_rad(30),0,0));
 		spotLight.SetIntensity(10);
 		auto sfwd = spotLightEntity.GetTransform().WorldForward();
-
+#endif
 		auto im = GetApp()->inputManager = RavEngine::New<InputManager>();
 		im->AddAxisMap(InputNames::TurnLR, SDL_SCANCODE_D);
 		im->AddAxisMap(InputNames::TurnLR, SDL_SCANCODE_A, -1);
@@ -171,6 +171,22 @@ struct Level : public RavEngine::World{
 		im->AddAxisMap(InputNames::Zoom, SDL_SCANCODE_UP,-1);
 		im->AddAxisMap(InputNames::Zoom, SDL_SCANCODE_DOWN);
 		im->BindAxis(InputNames::Zoom, GetInput(this), &Level::Zoom, CID::ANY);
+
+		struct DemoObj {
+			vector3 pos;
+			std::string name;
+		};
+		DemoObj objs[] = {
+			{{0,0,-3},"bunny_decimated"},
+			{{0,0,3},"wineglass"},
+			{{0,3,0},"helmet"},
+			{{0,-2,0},"rat"},
+		};
+		for (const auto& obj : objs) {
+			auto ent = Instantiate<GameObject>();
+			ent.GetTransform().SetWorldPosition(obj.pos);
+			ent.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get(obj.name), cubeMat);
+		}
 
 		// initial orientation
 		TurnUD(-5);
