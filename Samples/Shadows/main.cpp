@@ -67,7 +67,7 @@ struct Level : public RavEngine::World{
 		tri.GetTransform().LocalTranslateDelta(vector3(-1.5, 0.8, 0))
             .LocalRotateDelta(vector3(deg_to_rad(90), deg_to_rad(90), deg_to_rad(180)))
             .LocalRotateDelta(vector3(0, deg_to_rad(90), 0));
-  
+
         cube = Instantiate<decltype(cube)>();
         auto cubeMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
         cubeMat->SetAlbedoColor({0,0,1,1});
@@ -147,8 +147,8 @@ struct Level : public RavEngine::World{
         auto pointLight = Instantiate<GameObject>();
         auto& pLight = pointLight.EmplaceComponent<PointLight>();
         pLight.debugEnabled = true;
-        pLight.SetColorRGBA({1,1,1,1});
-        pLight.SetIntensity(15);
+        pLight.SetColorRGBA({1,0,0,1});
+        pLight.SetIntensity(4);
 		pLight.SetCastsShadows(true);
          
         constexpr static vector3 spotLightInitialPos{0,3,2};
