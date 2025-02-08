@@ -205,5 +205,6 @@ add_sample("Rendering")
 add_sample("SoundDynamics")
 add_sample("SceneViewer")
 add_sample("Rats")
+add_sample("TextureViewer")
 
 target_link_libraries(RavEngineSceneViewer PUBLIC rve_importlib assimp)
