@@ -1,0 +1,5 @@
+{
+  "file": "SimpleBake.fbx",
+  "mesh": "Quad",
+  "bake_transform" : true
+}

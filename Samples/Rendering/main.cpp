@@ -224,6 +224,25 @@ struct Level : public RavEngine::World {
             asteroid.GetTransform().SetWorldPosition(pos);
         }
 
+        // baked lighting demo
+        {
+            auto bakedMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+            auto lightmapTex = Texture::Manager::Get("Lightmap-0_comp_light.exr");
+
+            bakedMat->SetAlbedoColor({1,0,0,1});
+            auto bakedCubeObj = Instantiate<GameObject>();
+            bakedCubeObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedcube"), bakedMat);
+            auto& cubeTransform = bakedCubeObj.GetTransform();
+            cubeTransform.SetLocalScale({ 0.01 });
+            cubeTransform.SetLocalPosition({-20,1,0});
+
+            auto bakedPlaneObj = Instantiate<GameObject>();
+            bakedPlaneObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedplane"), bakedMat);
+            auto& planeTransform = bakedPlaneObj.GetTransform();
+            planeTransform.SetLocalScale({ 0.01 });
+            planeTransform.SetLocalPosition({ -20,1,0 });
+        }
+
         // wine glasses
 #if ENABLE_TRANSPARENTS
         auto wineglassMeshCol = MeshCollectionStaticManager::Get("wineglass");
