@@ -1,0 +1,8 @@
+{
+  "shader": "bakedlight.fsh",
+  "stage": "fragment",
+  "type": "lit-mesh",
+  "defines": [
+    "RVE_LIGHTMAP_UV"
+  ]
+}

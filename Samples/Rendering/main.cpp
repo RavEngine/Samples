@@ -102,6 +102,21 @@ struct GlassMatInstance : public MaterialInstance {
     GlassMatInstance(Ref<GlassMat> m) : MaterialInstance(m, priority) {}
 };
 
+struct BakedMat : public LitMaterial {
+    BakedMat() : LitMaterial("bakedlight", PipelineOptions{}, { .requiredAttributes = {
+        .position = true,
+        .normal = true,
+        .tangent = true,
+        .bitangent = true,
+        .uv0 = true,
+        .lightmapUV = true
+        } }) {}
+};
+
+struct BakedMatInstance : public MaterialInstance {
+    BakedMatInstance(Ref<BakedMat> m) : MaterialInstance(m) {}
+};
+
 struct Level : public RavEngine::World {
 
     GameObject camRoot, camHeadUD;
@@ -226,10 +241,9 @@ struct Level : public RavEngine::World {
 
         // baked lighting demo
         {
-            auto bakedMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+            auto bakedMat = RavEngine::New<BakedMatInstance>(Material::Manager::Get<BakedMat>());
             auto lightmapTex = Texture::Manager::Get("Lightmap-0_comp_light.exr");
 
-            bakedMat->SetAlbedoColor({1,0,0,1});
             auto bakedCubeObj = Instantiate<GameObject>();
             bakedCubeObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedcube"), bakedMat);
             auto& cubeTransform = bakedCubeObj.GetTransform();
