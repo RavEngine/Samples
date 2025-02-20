@@ -241,20 +241,23 @@ struct Level : public RavEngine::World {
 
         // baked lighting demo
         {
-            auto bakedMat = RavEngine::New<BakedMatInstance>(Material::Manager::Get<BakedMat>());
-            auto lightmapTex = Texture::Manager::Get("Lightmap-0_comp_light.exr");
+            auto bakedMat = RavEngine::New<PBRMaterialBakedInstance>(Material::Manager::Get<PBRMaterialBaked>());
+            auto lightmapTex = Texture::Manager::Get("Lightmap-0_comp_dir.png");
+            auto lightmapDirTex = Texture::Manager::Get("Lightmap-0_comp_light.exr");
+            bakedMat->SetBakedEmissivityTexture(lightmapTex);
 
             auto bakedCubeObj = Instantiate<GameObject>();
             bakedCubeObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedcube"), bakedMat);
             auto& cubeTransform = bakedCubeObj.GetTransform();
             cubeTransform.SetLocalScale({ 0.01 });
             cubeTransform.SetLocalPosition({-20,1,0});
-
+#if 0
             auto bakedPlaneObj = Instantiate<GameObject>();
             bakedPlaneObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedplane"), bakedMat);
             auto& planeTransform = bakedPlaneObj.GetTransform();
             planeTransform.SetLocalScale({ 0.01 });
             planeTransform.SetLocalPosition({ -20,1,0 });
+#endif
         }
 
         // wine glasses

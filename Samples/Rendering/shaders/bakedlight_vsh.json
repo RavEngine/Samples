@@ -1,8 +1,0 @@
-{
-  "shader": "bakedlight.vsh",
-  "stage": "vertex",
-  "type": "lit-mesh",
-  "defines": [
-    "RVE_LIGHTMAP_UV 1"
-  ]
-}
