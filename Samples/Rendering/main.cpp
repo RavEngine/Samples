@@ -245,6 +245,7 @@ struct Level : public RavEngine::World {
             auto lightmapTex = Texture::Manager::Get("Lightmap-0_comp_dir.png");
             auto lightmapDirTex = Texture::Manager::Get("Lightmap-0_comp_light.exr");
             bakedMat->SetBakedEmissivityTexture(lightmapTex);
+            bakedMat->SetBakedDirectionTexture(lightmapDirTex);
 
             auto bakedCubeObj = Instantiate<GameObject>();
             bakedCubeObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedcube"), bakedMat);
