@@ -5,3 +5,5 @@ build/
 deps/physx/physx/include/PxConfig.h
 Testing/
 .mayaSwatches
+*.blend1
+*.blend2

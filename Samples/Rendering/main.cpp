@@ -240,10 +240,11 @@ struct Level : public RavEngine::World {
         }
 
         // baked lighting demo
+        constexpr static renderlayer_t bakedLayer = 0b01;
         {
             auto bakedMat = RavEngine::New<PBRMaterialBakedInstance>(Material::Manager::Get<PBRMaterialBaked>());
-            auto lightmapTex = Texture::Manager::Get("Lightmap-0_comp_dir.png");
-            auto lightmapDirTex = Texture::Manager::Get("Lightmap-0_comp_light.exr");
+            auto lightmapDirTex = Texture::Manager::Get("Lightmap-0_comp_dir.png");
+            auto lightmapTex = Texture::Manager::Get("Lightmap-0_comp_light.exr");
             bakedMat->SetBakedEmissivityTexture(lightmapTex);
             bakedMat->SetBakedDirectionTexture(lightmapDirTex);
 
@@ -252,6 +253,7 @@ struct Level : public RavEngine::World {
             auto& cubeTransform = bakedCubeObj.GetTransform();
             cubeTransform.SetLocalScale({ 0.01 });
             cubeTransform.SetLocalPosition({-20,1,0});
+            bakedCubeObj.SetEntityRenderlayer(bakedLayer); // doesn't exist on any layer the lights illuminate
 #if 0
             auto bakedPlaneObj = Instantiate<GameObject>();
             bakedPlaneObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedplane"), bakedMat);
@@ -303,7 +305,10 @@ struct Level : public RavEngine::World {
         auto& light = lightsEntity.EmplaceComponent<DirectionalLight>();
         light.SetIntensity(4);
         light.SetCastsShadows(true);
-        lightsEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
+        light.SetIlluminationLayers(~bakedLayer);
+        auto& ambientLight = lightsEntity.EmplaceComponent<AmbientLight>();
+        ambientLight.SetIntensity(0.2);
+        ambientLight.SetIlluminationLayers(~bakedLayer);
        
 
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });

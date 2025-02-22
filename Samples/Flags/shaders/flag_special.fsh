@@ -102,7 +102,7 @@ vec3 calcAlt_v2(vec2 uv){
     return resCol;
 }
 
-LitOutput frag()
+LitOutput frag(EnvironmentData envData)
 {
     LitOutput fs_out;
 

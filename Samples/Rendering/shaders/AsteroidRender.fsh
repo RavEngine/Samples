@@ -119,7 +119,7 @@ vec3 rockTexture(in vec2 uv) {
 }
 
 
-LitOutput frag()
+LitOutput frag(EnvironmentData envData)
 {
 	LitOutput mat_out;
 

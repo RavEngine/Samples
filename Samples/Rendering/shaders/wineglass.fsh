@@ -7,7 +7,7 @@ vec3 colors[] = {
     vec3(0,0,0.3)
 };
 
-LitOutput frag()
+LitOutput frag(EnvironmentData envData)
 {
 	LitOutput mat_out;
 
