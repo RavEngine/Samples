@@ -8,7 +8,7 @@ layout(push_constant) uniform UniformBufferObject{
     float time;
 } ubo;
 
-LitOutput frag()
+LitOutput frag(EnvironmentData envData)
 {
     LitOutput fs_out;
 

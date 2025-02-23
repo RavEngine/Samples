@@ -5,7 +5,7 @@ layout(push_constant) uniform UniformBufferObject{
 	float time;
 } ubo;
 
-LitOutput frag()
+LitOutput frag(EnvironmentData envData)
 {
 	LitOutput fs_out;
 	fs_out.color = vec4(v_position / 200,1);

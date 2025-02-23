@@ -102,6 +102,21 @@ struct GlassMatInstance : public MaterialInstance {
     GlassMatInstance(Ref<GlassMat> m) : MaterialInstance(m, priority) {}
 };
 
+struct BakedMat : public LitMaterial {
+    BakedMat() : LitMaterial("bakedlight", PipelineOptions{}, { .requiredAttributes = {
+        .position = true,
+        .normal = true,
+        .tangent = true,
+        .bitangent = true,
+        .uv0 = true,
+        .lightmapUV = true
+        } }) {}
+};
+
+struct BakedMatInstance : public MaterialInstance {
+    BakedMatInstance(Ref<BakedMat> m) : MaterialInstance(m) {}
+};
+
 struct Level : public RavEngine::World {
 
     GameObject camRoot, camHeadUD;
@@ -225,22 +240,27 @@ struct Level : public RavEngine::World {
         }
 
         // baked lighting demo
+        constexpr static renderlayer_t bakedLayer = 0b01;
         {
-            auto bakedMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+            auto bakedMat = RavEngine::New<PBRMaterialBakedInstance>(Material::Manager::Get<PBRMaterialBaked>());
+            auto lightmapDirTex = Texture::Manager::Get("Lightmap-0_comp_dir.png");
             auto lightmapTex = Texture::Manager::Get("Lightmap-0_comp_light.exr");
+            bakedMat->SetBakedEmissivityTexture(lightmapTex);
+            bakedMat->SetBakedDirectionTexture(lightmapDirTex);
 
-            bakedMat->SetAlbedoColor({1,0,0,1});
             auto bakedCubeObj = Instantiate<GameObject>();
             bakedCubeObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedcube"), bakedMat);
             auto& cubeTransform = bakedCubeObj.GetTransform();
             cubeTransform.SetLocalScale({ 0.01 });
             cubeTransform.SetLocalPosition({-20,1,0});
-
+            bakedCubeObj.SetEntityRenderlayer(bakedLayer); // doesn't exist on any layer the lights illuminate
+#if 0
             auto bakedPlaneObj = Instantiate<GameObject>();
             bakedPlaneObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedplane"), bakedMat);
             auto& planeTransform = bakedPlaneObj.GetTransform();
             planeTransform.SetLocalScale({ 0.01 });
             planeTransform.SetLocalPosition({ -20,1,0 });
+#endif
         }
 
         // wine glasses
@@ -285,7 +305,10 @@ struct Level : public RavEngine::World {
         auto& light = lightsEntity.EmplaceComponent<DirectionalLight>();
         light.SetIntensity(4);
         light.SetCastsShadows(true);
-        lightsEntity.EmplaceComponent<AmbientLight>().SetIntensity(0.2);
+        light.SetIlluminationLayers(~bakedLayer);
+        auto& ambientLight = lightsEntity.EmplaceComponent<AmbientLight>();
+        ambientLight.SetIntensity(0.2);
+        ambientLight.SetIlluminationLayers(~bakedLayer);
        
 
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
