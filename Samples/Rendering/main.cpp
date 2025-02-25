@@ -263,6 +263,18 @@ struct Level : public RavEngine::World {
 #endif
         }
 
+        // environment lighting demo 
+        {
+            auto shinyMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>());
+            shinyMat->SetMetallicTint(0.9);
+            shinyMat->SetRoughnessTint(0.1);
+            shinyMat->SetSpecularTint(0.8);
+
+            auto shinyObject = Instantiate<GameObject>();
+            shinyObject.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("sphere"), shinyMat);
+            shinyObject.GetTransform().SetWorldPosition({ -2, 2, 12});
+        }
+
         // wine glasses
 #if ENABLE_TRANSPARENTS
         auto wineglassMeshCol = MeshCollectionStaticManager::Get("wineglass");
@@ -309,6 +321,11 @@ struct Level : public RavEngine::World {
         auto& ambientLight = lightsEntity.EmplaceComponent<AmbientLight>();
         ambientLight.SetIntensity(0.2);
         ambientLight.SetIlluminationLayers(~bakedLayer);
+        auto cubemap = RavEngine::New<CubemapTexture>(512, CubemapTexture::Config{
+                .enableRenderTarget = true,
+                .debugName = "Environment map",
+            });
+        ambientLight.environment = { skybox, cubemap};
        
 
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
