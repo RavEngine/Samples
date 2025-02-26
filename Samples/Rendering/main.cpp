@@ -323,9 +323,10 @@ struct Level : public RavEngine::World {
         ambientLight.SetIlluminationLayers(~bakedLayer);
         auto cubemap = RavEngine::New<CubemapTexture>(512, CubemapTexture::Config{
                 .enableRenderTarget = true,
+                .format = RGL::TextureFormat::RGBA16_Sfloat,
                 .debugName = "Environment map",
             });
-        ambientLight.environment = { skybox, cubemap};
+        ambientLight.environment.emplace(skybox, cubemap);
        
 
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
