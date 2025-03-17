@@ -205,7 +205,7 @@ struct Level : public RavEngine::World {
     Ref<StarMatMaterialInstance> starMaterialInstance;
     ComponentHandle<ParticleEmitter> smokeParticle;
     
-    Level() {
+    Level() {     
 
         constexpr static float floorSize = 20;
         auto floor = Instantiate<GameObject>();
@@ -321,12 +321,19 @@ struct Level : public RavEngine::World {
         auto& ambientLight = lightsEntity.EmplaceComponent<AmbientLight>();
         ambientLight.SetIntensity(0.2);
         ambientLight.SetIlluminationLayers(~bakedLayer);
-        auto cubemap = RavEngine::New<CubemapTexture>(512, CubemapTexture::Config{
-                .enableRenderTarget = true,
-                .format = RGL::TextureFormat::RGBA16_Sfloat,
+        auto envCubemap = RavEngine::New<CubemapTexture>(512, CubemapTexture::Config{
                 .debugName = "Environment map",
+                .format = RGL::TextureFormat::RGBA16_Sfloat,
+                .numMips = 4,
+                .enableRenderTarget = true,
             });
-        ambientLight.environment.emplace(skybox, cubemap);
+        auto irradianceCubemap = RavEngine::New<CubemapTexture>(512, CubemapTexture::Config{
+                .debugName = "Environment map",
+                .format = RGL::TextureFormat::RGBA16_Sfloat,
+                .numMips = 1,
+                .enableRenderTarget = true,
+        });
+        ambientLight.environment.emplace(skybox, envCubemap, irradianceCubemap);
        
 
         lightsEntity.GetTransform().LocalRotateDelta(vector3{ deg_to_rad(45), deg_to_rad(45),0 });
