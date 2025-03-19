@@ -321,18 +321,16 @@ struct Level : public RavEngine::World {
         auto& ambientLight = lightsEntity.EmplaceComponent<AmbientLight>();
         ambientLight.SetIntensity(0.2);
         ambientLight.SetIlluminationLayers(~bakedLayer);
-        auto envCubemap = RavEngine::New<CubemapTexture>(512, CubemapTexture::Config{
-                .debugName = "Environment map",
-                .format = RGL::TextureFormat::RGBA16_Sfloat,
-                .numMips = 4,
-                .enableRenderTarget = true,
-            });
-        auto irradianceCubemap = RavEngine::New<CubemapTexture>(512, CubemapTexture::Config{
-                .debugName = "Environment map",
-                .format = RGL::TextureFormat::RGBA16_Sfloat,
-                .numMips = 1,
-                .enableRenderTarget = true,
-        });
+        CubemapTexture::Config envConfig;
+        envConfig.debugName = "Environment map";
+        envConfig.format = RGL::TextureFormat::RGBA16_Sfloat;
+        envConfig.numMips = 4;
+        envConfig.enableRenderTarget = true;
+        auto envCubemap = RavEngine::New<CubemapTexture>(512, envConfig);
+        
+        envConfig.debugName = "Irradiance map";
+        envConfig.numMips = 1;
+        auto irradianceCubemap = RavEngine::New<CubemapTexture>(512, envConfig);
         ambientLight.environment.emplace(skybox, envCubemap, irradianceCubemap);
        
 
