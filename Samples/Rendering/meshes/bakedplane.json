@@ -1,5 +1,5 @@
 {
-  "file": "SimpleBake.fbx",
-  "mesh": "Quad",
+  "file": "baked_light.glb",
+  "mesh": "Plane",
   "bake_transform" : true
 }
