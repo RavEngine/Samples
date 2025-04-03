@@ -57,10 +57,14 @@ function (add_sample sample_dir)
 	make_directory("${APPNAME}")
 	configure_file("Samples/AppInfo.hpp" "${CMAKE_BINARY_DIR}/${APPNAME}/" @ONLY)
 
-	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp" )
+	file(GLOB TEST_SOURCES "${sample_dir}/*.cpp" "${sample_dir}/*.hpp" "${sample_dir}/*.h" "${CMAKE_BINARY_DIR}/${APPNAME}/*.hpp")
+    
+    if(APPLE)
+        file(GLOB TEST_MM_SOURCES "${sample_dir}/*.mm" )
+    endif()
 
 	# creates a mac app if applicable
-	add_executable("${APPNAME}" ${TEST_SOURCES} ${COMMON_FILES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard")
+	add_executable("${APPNAME}" ${TEST_SOURCES} ${TEST_MM_SOURCES} ${COMMON_FILES} "Samples/logo.png" "Samples/windows.rc" "Samples/iosLaunchScreen.storyboard")
 	
 	target_include_directories("${APPNAME}" PUBLIC
         "${CMAKE_BINARY_DIR}/${APPNAME}"
