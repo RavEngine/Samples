@@ -243,24 +243,19 @@ struct Level : public RavEngine::World {
         constexpr static renderlayer_t bakedLayer = 0b01;
         {
             auto bakedMat = RavEngine::New<PBRMaterialBakedInstance>(Material::Manager::Get<PBRMaterialBaked>());
-            auto lightmapDirTex = Texture::Manager::Get("Lightmap-0_comp_dir.png");
-            auto lightmapTex = Texture::Manager::Get("Lightmap-0_comp_light.exr");
-            bakedMat->SetBakedEmissivityTexture(lightmapTex);
-            bakedMat->SetBakedDirectionTexture(lightmapDirTex);
+            auto lightmapTex = Texture::Manager::Get("bakedshadow.png");
+            bakedMat->SetBakedShadowTexture(lightmapTex);
 
             auto bakedCubeObj = Instantiate<GameObject>();
             bakedCubeObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedcube"), bakedMat);
             auto& cubeTransform = bakedCubeObj.GetTransform();
-            cubeTransform.SetLocalScale({ 0.01 });
             cubeTransform.SetLocalPosition({-20,1,0});
-            bakedCubeObj.SetEntityRenderlayer(bakedLayer); // doesn't exist on any layer the lights illuminate
-#if 0
+
             auto bakedPlaneObj = Instantiate<GameObject>();
             bakedPlaneObj.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("bakedplane"), bakedMat);
             auto& planeTransform = bakedPlaneObj.GetTransform();
-            planeTransform.SetLocalScale({ 0.01 });
             planeTransform.SetLocalPosition({ -20,1,0 });
-#endif
+
         }
 
         // environment lighting demo 

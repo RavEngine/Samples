@@ -1,5 +1,5 @@
 {
-  "file": "SimpleBake.fbx",
+  "file": "baked_light.glb",
   "mesh": "Cube",
   "bake_transform": true
 }
