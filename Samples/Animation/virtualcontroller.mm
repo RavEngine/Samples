@@ -6,11 +6,11 @@
 #if TARGET_OS_IOS
 #import <GameController/GameController.h>
 #import <GameController/GCVirtualController.h>
-#endif
-
-#endif
 
 GCVirtualController *_virtualController;
+#endif
+
+#endif
 
 void InitVirtualController() {
 #if TARGET_OS_IOS
