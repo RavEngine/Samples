@@ -12,6 +12,15 @@
 			#scoreboard{
 				font-size:40dp;
 			}
+      button, input, select, option{
+				focus: auto;
+        nav-up: auto;
+        nav-down: auto;
+        tab-index: auto;
+      }
+      input:focus, select:focus, option:focus, button:focus {
+				border-color: blue;
+      }
 		</style>
 	</head>
 	<body>
@@ -42,6 +51,7 @@
 									Another button
 								</button>
 								<input style="width:100%" value="Type in me!"></input>
+                <input style="width:100%" value="Type in me 2!"></input>
 							</p>
 							<br></br>
 							<p>
