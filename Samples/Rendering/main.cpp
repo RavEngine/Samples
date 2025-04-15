@@ -24,6 +24,8 @@ using namespace std;
 
 // Metal bug on x86 macOS prevents transparency from working
 #define ENABLE_TRANSPARENTS !(__APPLE__ && __x86_64__)
+#define ENABLE_OPAQUES 1
+#define ENABLE_PARTICLES 1
 
 struct RenderingApp : public RavEngine::App {
     void OnStartup(int argc, char** argv) final;
@@ -205,19 +207,9 @@ struct Level : public RavEngine::World {
     Ref<StarMatMaterialInstance> starMaterialInstance;
     ComponentHandle<ParticleEmitter> smokeParticle;
     
-    Level() {     
-
-        constexpr static float floorSize = 20;
-        auto floor = Instantiate<GameObject>();
-        floor.GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
-
+    Level() {
+        constexpr static renderlayer_t bakedLayer = 0b01;
         auto floorMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("quad"));
-        auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>(),2);
-        floorMat->SetAlbedoColor({ 0.5,0.5,0.5,1 });
-        floor.EmplaceComponent<StaticMesh>(floorMesh, floorMat);
-        
-
-        // asteroids
         auto asteroidMeshCol = New<MeshCollectionStatic>(std::initializer_list<MeshCollectionStatic::Entry>{
             {
                 .mesh = MeshAsset::Manager::Get("asteroid_lod0"),
@@ -232,6 +224,17 @@ struct Level : public RavEngine::World {
                 .minDistance = 60,
             },
         });
+#if ENABLE_OPAQUES
+        constexpr static float floorSize = 20;
+        auto floor = Instantiate<GameObject>();
+        floor.GetTransform().SetLocalScale(vector3(floorSize, 1, floorSize));
+
+        auto floorMat = RavEngine::New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>(),2);
+        floorMat->SetAlbedoColor({ 0.5,0.5,0.5,1 });
+        floor.EmplaceComponent<StaticMesh>(floorMesh, floorMat);
+        
+
+        // asteroids
         for (int i = 0; i < 100; i++) {
             auto asteroid = Instantiate<GameObject>();
             asteroid.EmplaceComponent<StaticMesh>(asteroidMeshCol, floorMat);
@@ -240,7 +243,6 @@ struct Level : public RavEngine::World {
         }
 
         // baked lighting demo
-        constexpr static renderlayer_t bakedLayer = 0b01;
         {
             auto bakedMat = RavEngine::New<PBRMaterialBakedInstance>(Material::Manager::Get<PBRMaterialBaked>());
             auto lightmapTex = Texture::Manager::Get("bakedshadow.png");
@@ -269,6 +271,7 @@ struct Level : public RavEngine::World {
             shinyObject.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("sphere"), shinyMat);
             shinyObject.GetTransform().SetWorldPosition({ -2, 2, 12});
         }
+#endif
 
         // wine glasses
 #if ENABLE_TRANSPARENTS
@@ -343,13 +346,15 @@ struct Level : public RavEngine::World {
         };
 
         auto smokeUpdateMat = New<ParticleUpdateMaterialInstance>(New<SmokeParticleUpdateMaterial>());
-
+#if ENABLE_PARTICLES
+#if ENABLE_OPAQUES
         auto& smokeEmitter = smokeParticleEntity.EmplaceComponent<ParticleEmitter>(8192, sizeof(ParticleRenderData), smokeUpdateMat, smokeRenderMat); // number of particles we want
         //smokeEmitter.mode = ParticleEmitter::Mode::Burst;
         smokeEmitter.Play();
         smokeParticle = { smokeParticleEntity };
         smokeEmitter.SetEmissionRate(1000);
         smokeParticleEntity.EmplaceComponent<FlameTag>();
+#endif
 #if ENABLE_TRANSPARENTS
         auto fireParticleEntity = Instantiate<GameObject>();
         auto fireParticleRenderMat = New<FireParticleMaterial>();
@@ -379,17 +384,19 @@ struct Level : public RavEngine::World {
         emitter.Play();
         emitter.SetEmissionRate(50);
 #endif
+#endif
 
         SetupInputs();
-
+#if ENABLE_PARTICLES
         constexpr auto MoveParticleSystem = [](const ParticleEmitter& emitter, const FlameTag& ft, Transform& t) {
             auto time = GetApp()->GetCurrentTime();
             t.SetLocalPosition({ std::sin(time) * 5, 0, 0 });
         };
-        EmplaceSystem<decltype(MoveParticleSystem)>();      
+        EmplaceSystem<decltype(MoveParticleSystem)>();
+#endif
         
         // create the scene
-        
+#if ENABLE_OPAQUES
         auto helmetObj = Instantiate<GameObject>();
         auto helmetMesh = New<MeshCollectionStatic>(MeshAsset::Manager::Get("helmet"));
         auto helmetMat = New<PBRMaterialInstance>(Material::Manager::Get<PBRMaterial>(),1);
@@ -429,6 +436,7 @@ struct Level : public RavEngine::World {
         renderTextureMatInst->SetAlbedoTexture(renderTexture->GetTexture());
         quadEntity.EmplaceComponent<StaticMesh>(MeshCollectionStaticManager::Get("quad"),renderTextureMatInst);
         quadEntity.GetTransform().SetWorldPosition({10,10,0}).SetWorldRotation(vector3{deg_to_rad(90),0,0}).SetLocalScale(5);
+#endif
     }
 
     
@@ -527,11 +535,15 @@ struct Level : public RavEngine::World {
 
     void PreTick(float scale) final {
         fsScale = scale;
+#if ENABLE_OPAQUES
         starMaterialInstance->pushConstantData.applicationTime = GetApp()->GetCurrentTime();
+#endif
     }
 
     void PostTick(float tickrateScale) final {
-        camRoot.GetTransform().LocalTranslateDelta(velvec);
+        if (glm::length(velvec) > 0.01){
+            camRoot.GetTransform().LocalTranslateDelta(velvec);
+        }
         velvec *= 0.9;
 
         auto now = GetApp()->GetCurrentTime();
