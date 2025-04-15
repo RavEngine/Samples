@@ -10,7 +10,9 @@
 class Game : public RavEngine::App{
 public:
     void OnStartup(int argc, char** argv) final{
+#if TARGET_OS_IOS
         InitVirtualController();
+#endif
         
         AddWorld(RavEngine::New<Level>());
             
