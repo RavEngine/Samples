@@ -14,6 +14,7 @@
 #include <RavEngine/Window.hpp>
 #include <RavEngine/StartApp.hpp>
 #include <RavEngine/MeshCollection.hpp>
+#include <RmlUi/Core.h>
 
 using namespace RavEngine;
 using namespace std;

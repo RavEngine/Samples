@@ -9,6 +9,7 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/CameraComponent.hpp>
 #include <chrono>
+#include <RmlUi/Core.h>
 
 using namespace std;
 using namespace RavEngine;

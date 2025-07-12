@@ -5,6 +5,7 @@
 #include "GameWorld.hpp"
 #include <RavEngine/Debug.hpp>
 #include <RavEngine/CameraComponent.hpp>
+#include <RmlUi/Core.h>
 
 using namespace RavEngine;
 using namespace std;

@@ -14,6 +14,7 @@
 #include <RavEngine/Window.hpp>
 #include "AudioMIDI.hpp"
 #include "AudioExporter.hpp"
+#include <RmlUi/Core.h>
 
 using namespace RavEngine;
 using namespace std;

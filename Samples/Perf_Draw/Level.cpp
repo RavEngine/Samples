@@ -9,6 +9,7 @@
 #include <RavEngine/RenderEngine.hpp>
 #include "CustomMaterials.hpp"
 #include <RavEngine/MeshCollection.hpp>
+#include <RmlUi/Core.h>
 
 using namespace std;
 using namespace RavEngine;

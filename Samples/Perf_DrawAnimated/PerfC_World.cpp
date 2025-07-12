@@ -11,6 +11,7 @@
 #include <RavEngine/RenderEngine.hpp>
 #include <RavEngine/MeshCollection.hpp>
 #include <array>
+#include <RmlUi/Core.h>
 
 using namespace RavEngine;
 using namespace std;

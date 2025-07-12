@@ -8,6 +8,7 @@
 #include <RavEngine/GameObject.hpp>
 #include <RavEngine/CameraComponent.hpp>
 #include "Level.hpp"
+#include <RmlUi/Core.h>
 
 using namespace RavEngine;
 using namespace std;

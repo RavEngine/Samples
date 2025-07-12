@@ -11,6 +11,7 @@
 #include <RavEngine/Ref.hpp>
 #include <RavEngine/PhysicsBodyComponent.hpp>
 #include <memory>
+#include <RmlUi/Core.h>
 
 Ref<PBRMaterialInstance> Puck::material;
 using namespace std;
