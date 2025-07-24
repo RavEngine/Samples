@@ -7,3 +7,4 @@ mkdir winarm
 cd winarm
 cmake -Wno-dev -AARM64 ..\..
 cd ..\..
+PAUSE
